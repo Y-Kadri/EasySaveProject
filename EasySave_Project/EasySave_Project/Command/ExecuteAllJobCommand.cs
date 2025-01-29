@@ -8,5 +8,8 @@ namespace EasySave_Project.Command
 {
     public class ExecuteAllJobCommand : ICommand
     {
+        public void Execute()
+        {
+        }
     }
 }

@@ -8,5 +8,6 @@ namespace EasySave_Project.Command
 {
     public interface ICommand
     {
+        public void Execute();
     }
 }

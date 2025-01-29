@@ -8,5 +8,8 @@ namespace EasySave_Project.Model
 {
     public class JobModel
     {
+        private JobSaveStateEnum SaveState { get; set; }
+        private JobSaveTypeEnum SaveType { get; set; }
+
     }
 }

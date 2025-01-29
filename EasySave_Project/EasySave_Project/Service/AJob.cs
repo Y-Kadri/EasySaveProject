@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EasySave_Project.Model
+namespace EasySave_Project.Service
 {
-    public enum JobSaveTypeEnum
+    public abstract class AJob
     {
-        COMPLETE,
-        DIFFERENTIAL
+        public AJob() { }
     }
 }

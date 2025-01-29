@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EasySave_Project
+namespace EasySave_Project.Util
 {
-    public class Main
+    public class ConsoleUtil
     {
     }
 }

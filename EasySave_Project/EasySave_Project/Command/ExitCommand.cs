@@ -8,5 +8,8 @@ namespace EasySave_Project.Command
 {
     public class ExitCommand : ICommand
     {
+        public void Execute()
+        {
+        }
     }
 }
