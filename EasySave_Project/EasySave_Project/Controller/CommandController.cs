@@ -20,19 +20,14 @@ namespace EasySave_Project.Controller
         private readonly ICommand ExitCommand;
         public CommandController()
         {
-            TranslationService = new TranslationService();
-            ConsoleUtil = new ConsoleUtil();
+          
             CreateJobCommand = new CreateJobCommand();
             ExecuteJobCommand = new ExecuteJobCommand();
             ExecuteAllJobCommand = new ExecuteAllJobCommand();
             ExitCommand = new ExitCommand();
         }
-
-        public void ChoiceCommande()
+        public void LaunchCommand(int choice)
         {
-            ConsoleUtil.printTextconsole("1. Créer une tâche de sauvegarde \n2. Exécuter une tâche spécifiquee \n3. Exécuter toutes les tâches \n4. Quitter");
-
-            int choice = ConsoleUtil.GetInputInt();
 
             switch (choice) {
                 case 1:
