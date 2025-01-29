@@ -8,5 +8,9 @@ namespace EasySave_Project.View
 {
     public class ConsoleView
     {
+        public void ChooseLanguage()
+        {
+
+        }
     }
 }
