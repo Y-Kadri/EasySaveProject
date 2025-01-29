@@ -4,5 +4,8 @@
   "option1": "1. Créer une tâche de sauvegarde",
   "option2": "2. Exécuter une tâche spécifique",
   "option3": "3. Exécuter toutes les tâches",
-  "option4": "4. Quitter"
+  "option4": "4. Quitter",
+  "invalidChoice": "Choix invalide",
+  "messageValidtext": "Veuillez entrer un texte valide.",
+  "messageValidInt": "Veuillez entrer un nombre entier valide."
 }

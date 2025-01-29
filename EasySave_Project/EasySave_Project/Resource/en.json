@@ -5,17 +5,7 @@
   "option2": "2. Execute a specific task",
   "option3": "3. Execute all tasks",
   "option4": "4. Exit",
-  "enter_choice": "Enter your choice: ",
-  "enter_task_name": "Enter the name of the backup task: ",
-  "enter_source_dir": "Enter the source directory: ",
-  "enter_target_dir": "Enter the target directory: ",
-  "enter_backup_type": "Enter the backup type (Complete/Differential): ",
-  "task_added": "Backup task added successfully!",
-  "error": "Error: ",
-  "execute_task": "Executing backup task: ",
-  "task_not_found": "Task not found.",
-  "execute_all": "Executing all backup tasks...",
-  "all_completed": "All backups completed!",
-  "goodbye": "Exiting EasySave. Goodbye!",
-  "invalid_choice": "Invalid choice. Please try again."
+  "invalidChoice": "Invalide choice",
+  "messageValidtext": "Please enter a valid text.",
+  "messageValidInt": "Please enter a valid integer."
 }

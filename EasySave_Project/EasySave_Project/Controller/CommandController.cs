@@ -43,7 +43,7 @@ namespace EasySave_Project.Controller
                     ExitCommand.Execute();
                     break;
                 default:
-                    Console.WriteLine("invalid_choice"); //TODO translate
+                    Console.WriteLine(TranslationService.GetInstance().GetText("invalidChoice"));
                     break;
             }
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EasySave_Project.Service;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,7 +25,7 @@ namespace EasySave_Project.Util
                     {
                         return input;
                     }
-                    Console.WriteLine("Veuillez entrer un texte valide."); //TODO prendre le translate
+                    Console.WriteLine(TranslationService.GetInstance().GetText("messageValidtext"));
                 }
                 catch (Exception ex)
                 {
@@ -44,7 +45,7 @@ namespace EasySave_Project.Util
                     {
                         return result;
                     }
-                    Console.WriteLine("Veuillez entrer un nombre entier valide.");  //TODO prendre le translate
+                    Console.WriteLine(TranslationService.GetInstance().GetText("messageValidInt"));
                 }
                 catch (Exception ex)
                 {

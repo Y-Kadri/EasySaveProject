@@ -27,7 +27,7 @@ namespace EasySave_Project.View
 
         public int ChooseLanguage()
         {
-            Console.WriteLine("Choose your language / Choisissez votre langue: \n1. English\n2. Français\nEnter your choice:"); //TODO parcourir 
+            Console.WriteLine("Choose your language / Choisissez votre langue: \n1. English\n2. Français\nEnter your choice:");
             return ConsoleUtil.GetInputInt();
         }
 
