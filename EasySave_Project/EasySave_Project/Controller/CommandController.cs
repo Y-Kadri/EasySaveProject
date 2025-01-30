@@ -6,28 +6,44 @@ using System.Threading.Tasks;
 using System.Transactions;
 using EasySave_Project.Command;
 using EasySave_Project.Service;
+using EasySave_Project.Util;
 
 namespace EasySave_Project.Controller
 {
     public class CommandController
     {
-        private TranslationService TranslationService { get; set; }
-        private List<ICommand> ICommandes;
+        private readonly ICommand CreateJobCommand;
+        private readonly ICommand ExecuteJobCommand;
+        private readonly ICommand ExecuteAllJobCommand;
+        private readonly ICommand ExitCommand;
         public CommandController()
         {
-            TranslationService = new TranslationService();
-            ICommandes = new List<ICommand>();
-            GenerateCommande();
-            
-            ICommandes[0].Execute();
+          
+            CreateJobCommand = new CreateJobCommand();
+            ExecuteJobCommand = new ExecuteJobCommand();
+            ExecuteAllJobCommand = new ExecuteAllJobCommand();
+            ExitCommand = new ExitCommand();
         }
-
-        public void GenerateCommande()
+        public void LaunchCommand(int choice)
         {
-            ICommandes.Add(new CreateJobCommand());
-            ICommandes.Add(new ExecuteJobCommand());
-            ICommandes.Add(new ExecuteAllJobCommand());
-            ICommandes.Add(new ExitCommand());
+
+            switch (choice) {
+                case 1:
+                    CreateJobCommand.Execute();
+                    break;
+                case 2:
+                    ExecuteJobCommand.Execute();
+                    break;
+                case 3:
+                    ExecuteAllJobCommand.Execute();
+                    break;
+                case 4:
+                    ExitCommand.Execute();
+                    break;
+                default:
+                    Console.WriteLine(TranslationService.GetInstance().GetText("invalidChoice"));
+                    break;
+            }
         }
     }
 }

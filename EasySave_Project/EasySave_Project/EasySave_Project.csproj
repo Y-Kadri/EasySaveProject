@@ -7,9 +7,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="Resource\en.json" />
-    <Compile Include="Resource\fr.json" />
-  </ItemGroup>
-
 </Project>

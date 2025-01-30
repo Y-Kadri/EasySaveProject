@@ -1,1 +1,11 @@
-﻿
+{
+  "welcome": "Welcome to EasySave!",
+  "menu": "Menu:",
+  "option1": "1. Create a backup task",
+  "option2": "2. Execute a specific task",
+  "option3": "3. Execute all tasks",
+  "option4": "4. Exit",
+  "invalidChoice": "Invalide choice",
+  "messageValidtext": "Please enter a valid text.",
+  "messageValidInt": "Please enter a valid integer."
+}
