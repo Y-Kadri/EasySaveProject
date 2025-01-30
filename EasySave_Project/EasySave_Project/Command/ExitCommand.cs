@@ -11,5 +11,10 @@ namespace EasySave_Project.Command
         public void Execute()
         {
         }
+        
+        public void GetInstruction()
+        {
+            
+        }
     }
 }
