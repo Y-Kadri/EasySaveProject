@@ -1,11 +1,18 @@
-{
+﻿{
   "welcome": "Welcome to EasySave!",
   "menu": "Menu:",
-  "option1": "1. Create a backup task",
-  "option2": "2. Execute a specific task",
-  "option3": "3. Execute all tasks",
-  "option4": "4. Exit",
+  "option1": "1. Display jobs",
+  "option2": "2. Create a backup task",
+  "option3": "3. Execute a specific task",
+  "option4": "4. Execute all tasks",
+  "option5": "5. Exit",
   "invalidChoice": "Invalide choice",
   "messageValidtext": "Please enter a valid text.",
-  "messageValidInt": "Please enter a valid integer."
+  "messageValidInt": "Please enter a valid integer.",
+  "entrerNom": "Enter a name",
+  "entrerFileSource": "Entre le chemin du fichier source",
+  "entrerFileTarget": "Entre le chemin du fichier cible",
+  "entrerJobType": "Entre le type de job",
+  "jobCree": "Le job a été créé avec succès",
+  "listEmpty" : "The array is empty"
 }

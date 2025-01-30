@@ -13,13 +13,6 @@ namespace EasySave_Project.View
     {
 
         private readonly TranslationService TranslationService;
-        private readonly ConsoleUtil ConsoleUtil;
-
-        public ConsoleView()
-        {
-            ConsoleUtil = new ConsoleUtil();
-        }
-
         public void LaunchApp()
         {
             Console.WriteLine(TranslationService.GetText("welcome"));
@@ -33,10 +26,11 @@ namespace EasySave_Project.View
 
         public int StartJobCommand()
         {
-            ConsoleUtil.printTextconsole(TranslationService.GetInstance().GetText("option1")
+            ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("option1")
                 + "\n" + TranslationService.GetInstance().GetText("option2")
                 + "\n" + TranslationService.GetInstance().GetText("option3")
-                + "\n" + TranslationService.GetInstance().GetText("option4"));
+                + "\n" + TranslationService.GetInstance().GetText("option4")
+                + "\n" + TranslationService.GetInstance().GetText("option5"));
             return ConsoleUtil.GetInputInt();
         }
     }

@@ -22,5 +22,10 @@ namespace EasySave_Project.Model
             this.FileTarget = fileTarget;
             this.SaveType = jobSaveTypeEnum;
         }
+        
+        public override string ToString()
+        {
+            return $"Job {Name} : De {FileSource} vers {FileTarget} datant du {Time} de type {SaveType}";
+        }
     }
 }
