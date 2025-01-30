@@ -12,8 +12,6 @@ namespace EasySave_Project.Controller
 {
     public class CommandController
     {
-        private TranslationService TranslationService;
-        private readonly ConsoleUtil ConsoleUtil;
         private readonly ICommand CreateJobCommand;
         private readonly ICommand ExecuteJobCommand;
         private readonly ICommand ExecuteAllJobCommand;
