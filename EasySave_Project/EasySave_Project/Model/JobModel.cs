@@ -5,6 +5,8 @@ namespace EasySave_Project.Model
     public class JobModel
     {
         // Propriétés publiques
+        public int id { get; set; }
+        
         public JobSaveStateEnum SaveState { get; set; } = JobSaveStateEnum.INACTIVE;
         public JobSaveTypeEnum SaveType { get; set; }
         
@@ -14,6 +16,8 @@ namespace EasySave_Project.Model
         public string FileSize { get; set; } = "0 KB";
         public string FileTransferTime { get; set; } = "0 sec";
         public DateTime Time { get; set; } = DateTime.Now;
+        
+        public JobModel() {}
 
         public JobModel(string name, string fileSource, string fileTarget, JobSaveTypeEnum jobSaveTypeEnum)
         {

@@ -16,9 +16,13 @@ namespace EasySave_Project
 
         static void Main(string[] args)
         {
+            FileUtil.EnsureDirectoryAndFileExist("jobsSetting.json");
             ConsoleView consoleView = new();
             CommandController commandController = new();
-
+            LoadDataService loadDataService = new();
+            
+            loadDataService.LoadJobs();
+            
             int choiceLanguage = consoleView.ChooseLanguage();
 
             while (true)
