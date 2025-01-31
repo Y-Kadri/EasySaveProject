@@ -1,0 +1,36 @@
+name: Build Check
+
+on: [push, pull_request]
+
+env:
+  SOLUTION_PATH: EasySave_Project/EasySave_Project.sln
+  DOTNET_VERSION: '8.0'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }} # Adapter selon la version de .NET utilisée
+      
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.SOLUTION_PATH }}
+      
+      - name: Build project
+        run: dotnet build ${{ env.SOLUTION_PATH }} --no-restore --configuration Release
+
+  protect-branches:
+    needs: build
+    runs-on: ubuntu-latest
+    if: failure()
+    steps:
+      - name: Fail push due to failed build
+        run: |
+          echo "Build failed. Push is not allowed."
+          exit 1
