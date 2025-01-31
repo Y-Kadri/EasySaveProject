@@ -18,11 +18,11 @@ namespace EasySave_Project.Command
         {
             List<JobModel> jobsList = new List<JobModel>
             {
-                new JobModel("Save1", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\testpourcopy", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copy", JobSaveTypeEnum.COMPLETE),
-                new JobModel("Save2", "C:/source2", "D:/backup2", JobSaveTypeEnum.COMPLETE),
-                new JobModel("Save3", "C:/source3", "D:/backup3", JobSaveTypeEnum.COMPLETE),
-                new JobModel("Save4", "C:/source4", "D:/backup4", JobSaveTypeEnum.COMPLETE),
-                new JobModel("Save5", "C:/source5", "D:/backup5", JobSaveTypeEnum.DIFFERENTIAL)
+                new JobModel("Save1", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\testpourcopy", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copy", JobSaveTypeEnum.DIFFERENTIAL, null),
+                new JobModel("Save2", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\testpourcopy", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copy", JobSaveTypeEnum.DIFFERENTIAL, "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copy\\2025_01_31_11_19_02"),
+                new JobModel("Save3", "C:/source3", "D:/backup3", JobSaveTypeEnum.COMPLETE, null),
+                new JobModel("Save4", "C:/source4", "D:/backup4", JobSaveTypeEnum.COMPLETE, null),
+                new JobModel("Save5", "C:/source5", "D:/backup5", JobSaveTypeEnum.DIFFERENTIAL, null)
             };
 
             MethASupp(jobsList); //TODO utiliser getistruction
