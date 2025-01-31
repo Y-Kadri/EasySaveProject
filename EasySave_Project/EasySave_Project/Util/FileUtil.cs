@@ -113,23 +113,32 @@ namespace EasySave_Project.Util
                     // Lire le fichier JSON
                     string jsonString = File.ReadAllText(filePath);
 
-                    // Désérialiser le JSON en un objet de type JobSettings
+                    // Désérialiser le JSON en un objet de type JobSettingsDto
                     JobSettingsDto data = JsonSerializer.Deserialize<JobSettingsDto>(jsonString);
 
                     // Créer un nouveau job à ajouter
                     int newJobId = GetJobIndex();
                     IncrementJobIndex();
 
+                    // Gérer l'énumération SaveState en utilisant Enum.TryParse
+                    JobSaveStateEnum saveState;
+                    if (!Enum.TryParse<JobSaveStateEnum>("INACTIVE", out saveState))
+                    {
+                        // Si l'énumération échoue, gérer l'erreur
+                        Console.WriteLine("Erreur lors de la conversion de SaveState.");
+                        return;
+                    }
+
                     var newJob = new JobModel(name, fileSource, fileTarget, jobSaveTypeEnum)
                     {
                         id = newJobId,
-                        SaveState = JobSaveStateEnum.INACTIVE,
+                        SaveState = saveState,
                         FileSize = "0 KB",
                         FileTransferTime = "0 sec",
                         Time = DateTime.Now
                     };
 
-                    // Ajouter le job à la liste
+                    // Ajouter le job à la liste des jobs
                     data.jobs.Add(newJob);
 
                     // Sérialiser l'objet mis à jour en JSON
