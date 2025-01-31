@@ -7,5 +7,7 @@
   "option4": "4. Exit",
   "invalidChoice": "Invalide choice",
   "messageValidtext": "Please enter a valid text.",
-  "messageValidInt": "Please enter a valid integer."
+  "messageValidInt": "Please enter a valid integer.",
+  "CurrentBackupTasks": "Current Backup Tasks",
+  "enterTaskNumbers": "Enter job number(s) to execute: (e.g., '1-3' for range, '1' or '1;3;4' for specific jobs)"
 }

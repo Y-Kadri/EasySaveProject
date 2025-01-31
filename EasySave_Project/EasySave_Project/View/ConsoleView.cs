@@ -1,4 +1,5 @@
 ﻿using EasySave_Project.Command;
+using EasySave_Project.Model;
 using EasySave_Project.Service;
 using EasySave_Project.Util;
 using System;
@@ -13,12 +14,6 @@ namespace EasySave_Project.View
     {
 
         private readonly TranslationService TranslationService;
-        private readonly ConsoleUtil ConsoleUtil;
-
-        public ConsoleView()
-        {
-            ConsoleUtil = new ConsoleUtil();
-        }
 
         public void LaunchApp()
         {
@@ -38,6 +33,22 @@ namespace EasySave_Project.View
                 + "\n" + TranslationService.GetInstance().GetText("option3")
                 + "\n" + TranslationService.GetInstance().GetText("option4"));
             return ConsoleUtil.GetInputInt();
+        }
+
+        public void ShowJobList(List<JobModel> jobList)
+        {
+            Console.WriteLine(TranslationService.GetInstance().GetText("CurrentBackupTasks"));
+            for (int i = 0; i < jobList.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {jobList[i].Name} (Source: {jobList[i].FileSource}, Target: {jobList[i].FileTarget})");
+            }
+        }
+
+        public string ChoiceJob()
+        {
+            Console.Write(TranslationService.GetInstance().GetText("enterTaskNumbers"));
+            return Console.ReadLine();
+
         }
     }
 }

@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace EasySave_Project.Util
 {
-    public class ConsoleUtil
+    public static class ConsoleUtil
     {
-        public void printTextconsole(string text)
+        public static void printTextconsole(string text)
         {
             Console.WriteLine(text);
         }
 
-        public string GetInputString()
+        public static string GetInputString()
         {
             while (true)
             {
@@ -34,7 +34,7 @@ namespace EasySave_Project.Util
             }
         }
 
-        public int GetInputInt()
+        public static int GetInputInt()
         {
             while (true)
             {
