@@ -1,59 +1,54 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Generic;
 using EasySave_Project.Model;
 using EasySave_Project.Util;
 
 namespace EasySave_Project.Service
 {
+    /// <summary>
+    /// The JobService class provides methods for managing and executing backup jobs.
+    /// </summary>
     public class JobService
     {
+        /// <summary>
+        /// Executes a specific backup job.
+        /// </summary>
+        /// <param name="job">The JobModel object representing the job to execute.</param>
         public void ExecuteOneJob(JobModel job)
         {
-            // Vérifier si le répertoire source existe
+            var translator = TranslationService.GetInstance();
+
+            // Check if the source directory exists
             if (!FileUtil.ExistsDirectory(job.FileSource))
             {
-                Console.WriteLine($"Erreur : Le répertoire source '{job.FileSource}' n'existe pas.");
-                return;
+                Console.WriteLine($"{translator.GetText("directorySourceDoNotExist")} : {job.FileSource}");
+                return; // Exit the method if the source directory does not exist
             }
 
-            Console.WriteLine($"Démarrage de la sauvegarde : {job.Name}");
+            Console.WriteLine($"{translator.GetText("startingBackup")} : {job.Name}");
 
-            // Crée le répertoire de destination s'il n'existe pas
+            // Create the target directory if it doesn't exist
             if (!FileUtil.ExistsDirectory(job.FileTarget))
             {
-                FileUtil.CreateDirectory(job.FileTarget);
+                FileUtil.CreateDirectory(job.FileTarget); // Create target directory
             }
 
-            // Crée un répertoire avec la date et l'heure au format aaaa_mm_jj_hh_mm_ss pour la nouvelle sauvegarde
-            string timestampedBackupDir = Path.Combine(job.FileTarget, DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss"));
-            FileUtil.CreateDirectory(timestampedBackupDir); // Crée le répertoire de destination
+            // Create a timestamped subdirectory for the backup
+            string timestampedBackupDir = FileUtil.CombinePath(job.FileTarget, DateUtil.GetTodayDate(DateUtil.YYYY_MM_DD_HH_MM_SS));
+            FileUtil.CreateDirectory(timestampedBackupDir); // Create backup subdirectory
 
-            // Vérifiez si une sauvegarde complète précédente existe
-            if (job.SaveType == JobSaveTypeEnum.DIFFERENTIAL)
+            // Select the appropriate strategy based on the job type
+            IJobStrategy strategy = job.SaveType switch
             {
-                // Vérifier si LastFullBackupPath est valide
-                if (string.IsNullOrEmpty(job.LastFullBackupPath) || !FileUtil.ExistsDirectory(job.LastFullBackupPath))
-                {
-                    Console.WriteLine("Aucune sauvegarde complète précédente trouvée, exécution d'une sauvegarde complète.");
-                    job.LastFullBackupPath = null; // Mettre à null car la sauvegarde complète n'existe pas
-                    FileUtil.CopyDirectoryComplete(job.FileSource, timestampedBackupDir);
-                    job.LastFullBackupPath = timestampedBackupDir; // Mettre à jour le chemin de la dernière sauvegarde complète
-                }
-                else
-                {
-                    // Effectuer une sauvegarde différentielle
-                    FileUtil.CopyDirectoryDifferential(job.FileSource, timestampedBackupDir, job.LastFullBackupPath);
-                }
-            }
-            else
-            {
-                // Effectuer une sauvegarde complète
-                FileUtil.CopyDirectoryComplete(job.FileSource, timestampedBackupDir);
-                job.LastFullBackupPath = timestampedBackupDir; // Mettre à jour le chemin de la dernière sauvegarde complète
-            }
+                JobSaveTypeEnum.COMPLETE => new JobCompleteService(), // Use complete backup strategy
+                JobSaveTypeEnum.DIFFERENTIAL => new JobDifferencialService(), // Use differential backup strategy
+                _ => throw new InvalidOperationException("Invalid job type") // Throw exception for invalid job type
+            };
 
-            Console.WriteLine($"Sauvegarde terminée : {job.Name}");
+            // Execute the job using the selected strategy
+            strategy.Execute(job, timestampedBackupDir);
+
+            Console.WriteLine($"{translator.GetText("backupCompleted")} : {job.Name}");
         }
-
     }
 }

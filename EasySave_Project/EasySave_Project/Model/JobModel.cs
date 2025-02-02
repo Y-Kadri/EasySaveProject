@@ -15,6 +15,7 @@ public class JobModel
 
     // Propriété ajoutée pour stocker le chemin de la dernière sauvegarde complète
     public string LastFullBackupPath { get; set; }
+    public string LastSaveDifferentialPath { get; set; }
 
     public JobModel(string name, string fileSource, string fileTarget, JobSaveTypeEnum jobSaveTypeEnum, string lastFullBackupPath)
     {
@@ -22,6 +23,6 @@ public class JobModel
         this.FileSource = fileSource;
         this.FileTarget = fileTarget;
         this.SaveType = jobSaveTypeEnum;
-        this.LastFullBackupPath = lastFullBackupPath; //TODO à supprimer peut etre 
+        this.LastFullBackupPath = lastFullBackupPath; 
     }
 }
