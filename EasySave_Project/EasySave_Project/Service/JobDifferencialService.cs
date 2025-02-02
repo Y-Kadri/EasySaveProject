@@ -8,7 +8,7 @@ namespace EasySave_Project.Service
     /// This class implements the IJobStrategy interface and provides
     /// the functionality to execute a differential backup of the specified job.
     /// </summary>
-    public class JobDifferencialService : IJobStrategy
+    public class JobDifferencialService : IJobStrategyService
     {
         /// <summary>
         /// Executes the differential backup job for the given JobModel.

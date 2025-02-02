@@ -11,16 +11,26 @@ namespace EasySave_Project.Service
     public class JobService
     {
 
+        /// <summary>
+        /// Retrieves a list of all backup jobs configured in the system.
+        /// Currently, the jobs are hardcoded for demonstration purposes.
+        /// This method will be modified in the future to retrieve jobs from a persistent storage once the job recovery method is implemented.
+        /// </summary>
+        /// <returns>
+        /// A list of <see cref="JobModel"/> objects representing the configured backup jobs. 
+        /// Each job includes the name, source directory, target directory, type of save (differential or complete), 
+        /// and the path to the last full backup if applicable.
+        /// </returns>
         public List<JobModel> GetAllJob()
         {
             List<JobModel> jobsList = new List<JobModel> //TODO to be modified when the job recovery method exists
-            {
-                new JobModel("Save1", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\testpourcopy", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copy", JobSaveTypeEnum.DIFFERENTIAL, null),
-                new JobModel("Save2", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\testpourcopy", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copy", JobSaveTypeEnum.DIFFERENTIAL, "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copy\\2025_01_31_11_19_02"),
-                new JobModel("Save3", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\testpourcopy", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copyComplete", JobSaveTypeEnum.COMPLETE, null),
-                new JobModel("Save4", "C:/source4", "D:/backup4", JobSaveTypeEnum.COMPLETE, null),
-                new JobModel("Save5", "C:/source5", "D:/backup5", JobSaveTypeEnum.DIFFERENTIAL, null)
-            };
+    {
+        new JobModel("Save1", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\testpourcopy", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copy", JobSaveTypeEnum.DIFFERENTIAL, null),
+        new JobModel("Save2", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\testpourcopy", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copy", JobSaveTypeEnum.DIFFERENTIAL, "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copy\\2025_01_31_11_19_02"),
+        new JobModel("Save3", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\testpourcopy", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copyComplete", JobSaveTypeEnum.COMPLETE, null),
+        new JobModel("Save4", "C:/source4", "D:/backup4", JobSaveTypeEnum.COMPLETE, null),
+        new JobModel("Save5", "C:/source5", "D:/backup5", JobSaveTypeEnum.DIFFERENTIAL, null)
+    };
 
             return jobsList;
         }
@@ -53,7 +63,7 @@ namespace EasySave_Project.Service
             FileUtil.CreateDirectory(timestampedBackupDir); // Create backup subdirectory
 
             // Select the appropriate strategy based on the job type
-            IJobStrategy strategy = job.SaveType switch
+            IJobStrategyService strategy = job.SaveType switch
             {
                 JobSaveTypeEnum.COMPLETE => new JobCompleteService(), // Use complete backup strategy
                 JobSaveTypeEnum.DIFFERENTIAL => new JobDifferencialService(), // Use differential backup strategy

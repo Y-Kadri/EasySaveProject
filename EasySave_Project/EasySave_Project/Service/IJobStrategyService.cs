@@ -7,7 +7,7 @@ namespace EasySave_Project.Service
     /// Implementations of this interface must provide a concrete 
     /// execution method for different types of backup jobs.
     /// </summary>
-    public interface IJobStrategy
+    public interface IJobStrategyService
     {
         /// <summary>
         /// Executes the backup job using the specified job model and target backup directory.
