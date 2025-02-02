@@ -8,7 +8,7 @@ namespace EasySave_Project.Service
     /// This class implements the IJobStrategy interface and provides
     /// the functionality to execute a complete backup of the specified job.
     /// </summary>
-    public class JobCompleteService : AJobStrategyService, IJobStrategy
+    public class JobCompleteService : IJobStrategy
     {
         /// <summary>
         /// Executes the complete backup job for the given JobModel.
