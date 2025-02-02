@@ -16,17 +16,7 @@ namespace EasySave_Project.Command
 
         public void Execute()
         {
-            List<JobModel> jobsList = new List<JobModel> //TODO mettre dans le service
-            {
-                new JobModel("Save1", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\testpourcopy", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copy", JobSaveTypeEnum.DIFFERENTIAL, null),
-                new JobModel("Save2", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\testpourcopy", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copy", JobSaveTypeEnum.DIFFERENTIAL, "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copy\\2025_01_31_11_19_02"),
-                new JobModel("Save3", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\testpourcopy", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copyComplete", JobSaveTypeEnum.COMPLETE, null),
-                new JobModel("Save4", "C:/source4", "D:/backup4", JobSaveTypeEnum.COMPLETE, null),
-                new JobModel("Save5", "C:/source5", "D:/backup5", JobSaveTypeEnum.DIFFERENTIAL, null)
-            };
-            //TODO enlever code mort
-
-            //List<JobModel> jobsList = _jobService.getAllJob();
+            List<JobModel> jobsList = _jobService.GetAllJob();
             _consoleView.ShowJobList(jobsList);
 
 
