@@ -17,20 +17,20 @@ namespace EasySave_Project.Command
 
         public void Execute()
         {
-            List<JobModel> jobs = _jobService.GetJobs();
+            // List<JobModel> jobs = _jobService.GetJobs();
 
-            if (jobs.Count == 0)
-            {
-                Console.WriteLine("Aucun job trouvé.");
-            }
-            else
-            {
-                Console.WriteLine("Liste des jobs :");
-                foreach (var job in jobs)
-                {
-                    Console.WriteLine($"- {job.Name}");
-                }
-            }
+            // if (jobs.Count == 0)
+            // {
+            //     Console.WriteLine("Aucun job trouvé.");
+            // }
+            // else
+            // {
+            //     Console.WriteLine("Liste des jobs :");
+            //     foreach (var job in jobs)
+            //     {
+            //         Console.WriteLine($"- {job.Name}");
+            //     }
+            // }
         }
 
         public void GetInstruction()

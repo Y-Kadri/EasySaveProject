@@ -1,0 +1,17 @@
+{
+  "bindingCulture": {
+    "language": "en"
+  },
+  "language": {
+    "feature": "en"
+  },
+  "unitTestProvider": {
+    "name": "NUnit"
+  },
+  "plugins": [
+    {
+      "name": "SpecFlow.Tools.MsBuild.Generation",
+      "type": "Generator"
+    }
+  ]
+}
