@@ -17,7 +17,7 @@ namespace EasySave_Project.Command
 
         public void Execute()
         {
-            List<JobModel> jobs = _jobService.GetJobs();
+            List<JobModel> jobs = _jobService.GetAllJob();
 
             if (jobs.Count == 0)
             {

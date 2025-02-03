@@ -58,7 +58,7 @@ namespace EasySave_Project.Service
             }
 
             // Create a directory named with job name and ID for this backup
-            string backupDirectoryName = $"{job.Name}_{job.Id}";
+            string backupDirectoryName = $"{job.Name}_{job.id}";
             string backupDir = FileUtil.CombinePath(jobBackupDir, backupDirectoryName);
             FileUtil.CreateDirectory(backupDir);
 
@@ -76,7 +76,8 @@ namespace EasySave_Project.Service
 
             // Execute the job using the selected strategy
             strategy.Execute(job, timestampedBackupDir);
-
+            // Notify observers that the job has been completed
+            job.NotifyObservers();
             Console.WriteLine($"{translator.GetText("backupCompleted")} : {job.Name}");
         }
     }

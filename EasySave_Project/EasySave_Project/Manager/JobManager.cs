@@ -14,7 +14,7 @@ namespace EasySave_Project.Manager
     {
         // Static instance of JobManager (Singleton pattern)
         private static JobManager jobManager = null;
-
+ 
         /// <summary>
         /// List containing all backup jobs.
         /// </summary>
@@ -58,6 +58,10 @@ namespace EasySave_Project.Manager
             {
                 // Create the job using the JobFactory
                 JobModel job = JobFactory.CreateJobModel(name, fileSource, fileTarget, jobSaveTypeEnum);
+
+                // Subscribe to the job with the LogService and StateService observers
+                job.Subscribe(new LogService());
+                job.Subscribe(new StateService());
 
                 // Add the job to the list
                 Jobs.Add(job);
