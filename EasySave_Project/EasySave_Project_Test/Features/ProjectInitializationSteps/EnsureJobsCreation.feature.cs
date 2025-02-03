@@ -35,9 +35,9 @@ namespace EasySave_Project_Test.Features.ProjectInitializationSteps
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en"), "Features/ProjectInitializationSteps", "Project Initialization - Ensure Jobs Creation - Load Jobs from jobsSetting.json", "  As a user of the EasySave application,\r\n  I want to ensure that the jobs are co" +
-                    "rrectly loaded from the \"jobsSetting.json\" file,\r\n  So that the application can " +
-                    "properly manage the job data.", ProgrammingLanguage.CSharp, featureTags);
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en"), "Features/ProjectInitializationSteps", "Project Initialization - Ensure Jobs Creation - Load Jobs from jobsSetting.json", "  As a user of the EasySave application,\n  I want to ensure that the jobs are cor" +
+                    "rectly loaded from the \"jobsSetting.json\" file,\n  So that the application can pr" +
+                    "operly manage the job data.", ProgrammingLanguage.CSharp, featureTags);
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -97,7 +97,7 @@ namespace EasySave_Project_Test.Features.ProjectInitializationSteps
                         "llowing content:", @"{
   ""jobs"": [
     {
-      ""id"": 1,
+      ""Id"": 1,
       ""SaveState"": ""INACTIVE"",
       ""SaveType"": ""COMPLETE"",
       ""Name"": ""Backup Documents"",
@@ -118,7 +118,7 @@ namespace EasySave_Project_Test.Features.ProjectInitializationSteps
                             "Property",
                             "Value"});
                 table1.AddRow(new string[] {
-                            "id",
+                            "Id",
                             "1"});
                 table1.AddRow(new string[] {
                             "SaveState",
