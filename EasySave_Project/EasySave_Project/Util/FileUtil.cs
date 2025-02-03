@@ -3,12 +3,17 @@ using System.IO;
 using System.Text.Json;
 using EasySave_Project.Dto;
 using EasySave_Project.Model;
+using EasySave_Project.Service;
 
 namespace EasySave_Project.Util
 {
     public class FileUtil
     {
-        // Méthode pour s'assurer que le dossier et le fichier existent
+        /// <summary>
+        /// Ensures that the specified directory and file exist. 
+        /// Creates them if they do not exist.
+        /// </summary>
+        /// <param name="fileName">The name of the file to check/create.</param>
         public static void EnsureDirectoryAndFileExist(string fileName)
         {
             string directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySaveSetting");
@@ -16,119 +21,136 @@ namespace EasySave_Project.Util
 
             try
             {
-                // Vérification de l'existence du dossier
+                // Check if the directory exists
                 if (!Directory.Exists(directoryPath))
                 {
+                    // Create the directory if it doesn't exist
                     Directory.CreateDirectory(directoryPath);
-                    Console.WriteLine($"Dossier créé à l'emplacement : {directoryPath}");
+                    ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("directoryCreated"));
                 }
 
-                // Vérification de l'existence du fichier
+                // Check if the file exists
                 if (!File.Exists(filePath))
                 {
-                    File.Create(filePath).Dispose(); // Crée un fichier vide si il n'existe pas encore
-                    Console.WriteLine($"Fichier créé à l'emplacement : {filePath}");
-                    
-                    // Appeler la méthode pour créer et écrire le fichier JSON
+                    // Create the file and dispose of the file handle
+                    File.Create(filePath).Dispose();
+                    ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("fileCreated"));
+                    // Create the default JSON file structure
                     CreateDefaultJsonFile(filePath);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erreur lors de la création du fichier/dossier : {ex.Message}");
+                // Print an error message if an exception occurs
+                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorCreatingDirectoryOrFile") + ex.Message);
             }
         }
 
-        // Méthode pour créer un fichier JSON avec la structure définie
+        /// <summary>
+        /// Creates a default JSON file with an initial structure.
+        /// </summary>
+        /// <param name="filePath">The path of the file to create.</param>
         private static void CreateDefaultJsonFile(string filePath)
         {
-            // Créer un objet anonyme avec la structure désirée
+            // Initial data to be written in the JSON file
             var data = new
             {
-                jobs = new string[] { }, // Liste vide
+                jobs = new string[] { },
                 index = 0
             };
 
-            // Sérialisation de l'objet en JSON
+            // Serialize the data to JSON format
             string jsonString = JsonSerializer.Serialize(data);
 
-            // Écriture du fichier JSON
             try
             {
+                // Write the JSON string to the file
                 File.WriteAllText(filePath, jsonString);
-                Console.WriteLine($"Le fichier JSON a été créé avec succès à : {filePath}");
+                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("jsonFileCreated"));
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erreur lors de l'écriture du fichier JSON : {ex.Message}");
+                // Print an error message if an exception occurs during file writing
+                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorWritingJsonFile") + ex.Message);
             }
         }
 
+        /// <summary>
+        /// Gets the current job index from the JSON file and increments it for a new job.
+        /// </summary>
+        /// <returns>The incremented job index.</returns>
         public static int GetJobIndex()
         {
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySaveSetting", "jobsSetting.json");
 
             try
             {
-                // Vérifier si le fichier existe
+                // Check if the JSON file exists
                 if (File.Exists(filePath))
                 {
+                    // Read the content of the JSON file
                     string jsonString = File.ReadAllText(filePath);
                     JsonDocument doc = JsonDocument.Parse(jsonString);
                     JsonElement root = doc.RootElement;
+
+                    // Try to get the job index from the JSON
                     if (root.TryGetProperty("index", out JsonElement indexElement))
                     {
                         int currentIndex = indexElement.GetInt32();
-                        return currentIndex + 1;
+                        return currentIndex + 1; // Return the incremented index
                     }
                     else
                     {
-                        Console.WriteLine("'index' n'a pas été trouvé dans le fichier JSON.");
-                        return 1;
+                        ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("indexNotFoundInJson"));
+                        return 1; // Default to 1 if index is not found
                     }
                 }
                 else
                 {
-                    // Si le fichier n'existe pas
-                    Console.WriteLine("Le fichier JSON n'existe pas.");
-                    return 1;
+                    ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("jsonFileNotExist"));
+                    return 1; // Default to 1 if file does not exist
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erreur lors de la lecture du fichier JSON : {ex.Message}");
-                return -1;
+                // Print an error message if an exception occurs during reading
+                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorReadingJsonFile") + ex.Message);
+                return -1; // Return -1 to indicate an error
             }
         }
 
+        /// <summary>
+        /// Adds a new job to the JSON file.
+        /// </summary>
+        /// <param name="name">The name of the job.</param>
+        /// <param name="fileSource">The source file path.</param>
+        /// <param name="fileTarget">The target file path.</param>
+        /// <param name="jobSaveTypeEnum">The type of the save job.</param>
         public static void AddJobInFile(string name, string fileSource, string fileTarget, JobSaveTypeEnum jobSaveTypeEnum)
         {
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySaveSetting", "jobsSetting.json");
 
             try
             {
-                // Vérifier si le fichier existe
+                // Check if the JSON file exists
                 if (File.Exists(filePath))
                 {
-                    // Lire le fichier JSON
+                    // Read the content of the JSON file
                     string jsonString = File.ReadAllText(filePath);
-
-                    // Désérialiser le JSON en un objet de type JobSettingsDto
                     JobSettingsDto data = JsonSerializer.Deserialize<JobSettingsDto>(jsonString);
 
-                    // Créer un nouveau job à ajouter
-                    int newJobId = GetJobIndex();
-                    IncrementJobIndex();
+                    int newJobId = GetJobIndex(); // Get the new job index
+                    IncrementJobIndex(); // Increment the job index
 
-                    // Gérer l'énumération SaveState en utilisant Enum.TryParse
+                    // Set the initial state for the new job
                     JobSaveStateEnum saveState;
                     if (!Enum.TryParse<JobSaveStateEnum>("INACTIVE", out saveState))
                     {
-                        // Si l'énumération échoue, gérer l'erreur
-                        Console.WriteLine("Erreur lors de la conversion de SaveState.");
+                        ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorConvertingSaveState"));
                         return;
                     }
 
+                    // Create a new job model
                     var newJob = new JobModel(name, fileSource, fileTarget, jobSaveTypeEnum)
                     {
                         id = newJobId,
@@ -138,62 +160,59 @@ namespace EasySave_Project.Util
                         Time = DateTime.Now
                     };
 
-                    // Ajouter le job à la liste des jobs
-                    data.jobs.Add(newJob);
+                    data.jobs.Add(newJob); // Add the new job to the list
 
-                    // Sérialiser l'objet mis à jour en JSON
+                    // Serialize the updated data back to JSON format
                     string updatedJsonString = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
+                    File.WriteAllText(filePath, updatedJsonString); // Write the updated JSON to the file
 
-                    // Réécrire le fichier avec les données mises à jour
-                    File.WriteAllText(filePath, updatedJsonString);
-
-                    Console.WriteLine("Le job a été ajouté avec succès.");
+                    ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("jobCree"));
                 }
                 else
                 {
-                    Console.WriteLine("Le fichier JSON n'existe pas.");
+                    ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("jsonFileNotExist"));
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erreur lors de l'ajout du job dans le fichier JSON : {ex.Message}");
+                // Print an error message if an exception occurs during adding the job
+                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorAddingJobToJson") + ex.Message);
             }
         }
-        
+
+        /// <summary>
+        /// Increments the job index in the JSON file.
+        /// </summary>
         public static void IncrementJobIndex()
         {
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySaveSetting", "jobsSetting.json");
 
             try
             {
-                // Vérifier si le fichier existe
+                // Check if the JSON file exists
                 if (File.Exists(filePath))
                 {
-                    // Lire le contenu du fichier JSON
+                    // Read the content of the JSON file
                     string jsonString = File.ReadAllText(filePath);
-
-                    // Désérialiser le JSON en un objet de type JobSettings
                     JobSettingsDto data = JsonSerializer.Deserialize<JobSettingsDto>(jsonString);
 
-                    // Incrémenter l'index
-                    data.index++;
+                    data.index++; // Increment the job index
 
-                    // Sérialiser l'objet mis à jour en JSON
+                    // Serialize the updated data back to JSON format
                     string updatedJsonString = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
+                    File.WriteAllText(filePath, updatedJsonString); // Write the updated JSON to the file
 
-                    // Réécrire le fichier avec les données mises à jour
-                    File.WriteAllText(filePath, updatedJsonString);
-
-                    Console.WriteLine($"L'index a été incrémenté à {data.index}.");
+                    ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("indexIncremented") + data.index);
                 }
                 else
                 {
-                    Console.WriteLine("Le fichier JSON n'existe pas.");
+                    ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("jsonFileNotExist"));
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erreur lors de l'incrémentation de l'index dans le fichier JSON : {ex.Message}");
+                // Print an error message if an exception occurs during index incrementing
+                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorIncrementingIndex") + ex.Message);
             }
         }
     }
