@@ -1,0 +1,13 @@
+<diagram program="umletino" version="15.1"><zoom_level>9</zoom_level><help_text>Ex</help_text><element><id>UMLGeneric</id><coordinates><x>450</x><y>252</y><w>90</w><h>27</h></coordinates><panel_attributes>/Users
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>495</x><y>306</y><w>225</w><h>36</h></coordinates><panel_attributes>lt=-&gt;
+Send "Enter your choice"</panel_attributes><additional_attributes>230;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>486</x><y>270</y><w>27</w><h>54</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;10;40</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>486</x><y>306</y><w>18</w><h>117</h></coordinates><panel_attributes>
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>702</x><y>270</y><w>27</w><h>54</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;10;40</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>702</x><y>306</y><w>18</w><h>117</h></coordinates><panel_attributes>
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>666</x><y>252</y><w>90</w><h>27</h></coordinates><panel_attributes>/Main_interface
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>918</x><y>306</y><w>18</w><h>117</h></coordinates><panel_attributes>
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>873</x><y>252</y><w>108</w><h>27</h></coordinates><panel_attributes>/Program
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>918</x><y>270</y><w>27</w><h>54</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;10;40</additional_attributes></element><element><id>Relation</id><coordinates><x>495</x><y>342</y><w>225</w><h>36</h></coordinates><panel_attributes>lt=-&gt;
+Exit choice</panel_attributes><additional_attributes>10;20;230;20</additional_attributes></element><element><id>Relation</id><coordinates><x>711</x><y>369</y><w>225</w><h>36</h></coordinates><panel_attributes>lt=-&gt;
+Send the request</panel_attributes><additional_attributes>10;20;230;20</additional_attributes></element></diagram>
