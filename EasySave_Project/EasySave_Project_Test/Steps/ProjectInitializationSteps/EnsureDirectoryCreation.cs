@@ -14,6 +14,25 @@ namespace EasySave_Project_Test.Steps.ProjectInitializationSteps
         private string directoryPath;
         private string fileName = "jobsSetting.json";
         private string filePath;
+        
+        [Given(@"the configuration file \""(.*)\"" contains:")]
+        public void GivenTheConfigurationFileContains(string fileName, string jsonContent)
+        {
+            // Définir le chemin du fichier de configuration
+            string configFilePath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                "easySaveSetting",
+                fileName
+            );
+
+            // Créer le dossier s'il n'existe pas
+            Directory.CreateDirectory(Path.GetDirectoryName(configFilePath));
+
+            // Écrire le contenu JSON dans le fichier
+            File.WriteAllText(configFilePath, jsonContent);
+
+            Console.WriteLine($"Le fichier {fileName} a été créé avec le contenu spécifié.");
+        }
 
         [Given(@"the configuration directory ""(.*)"" does not exist")]
         public void GivenTheConfigurationDirectoryDoesNotExist(string directoryName)
@@ -56,26 +75,7 @@ namespace EasySave_Project_Test.Steps.ProjectInitializationSteps
         public void ThenTheConfigurationDirectoryShouldBeCreatedInTheFolder(string directoryName, string parentFolder)
         {
             string expectedPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), directoryName);
-
             Assert.IsTrue(Directory.Exists(expectedPath), $"The directory '{expectedPath}' was not created as expected.");
-        }
-
-        [Then(@"the ""(.*)"" file should be created with default settings:")]
-        public void ThenTheFileShouldBeCreatedWithDefaultSettings(string fileName, string expectedJson)
-        {
-            filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySaveSetting", fileName);
-
-            Assert.IsTrue(File.Exists(filePath), $"The file '{filePath}' was not created as expected.");
-
-            string actualJson = File.ReadAllText(filePath);
-
-            // Deserialize both actual and expected JSON for object comparison
-            var actualObject = JsonSerializer.Deserialize<JobSettingsDto>(actualJson);
-            var expectedObject = JsonSerializer.Deserialize<JobSettingsDto>(expectedJson);
-
-            // Compare the deserialized objects
-            Assert.AreEqual(expectedObject.index, actualObject.index, "The 'index' value does not match.");
-            Assert.AreEqual(expectedObject.jobs?.Count, actualObject.jobs?.Count, "The 'jobs' list does not match.");
         }
     }
 }

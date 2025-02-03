@@ -140,7 +140,7 @@ namespace EasySave_Project.Util
                     JobSettingsDto data = JsonSerializer.Deserialize<JobSettingsDto>(jsonString);
 
                     int newJobId = GetJobIndex(); // Get the new job index
-                    IncrementJobIndex(); // Increment the job index
+                    IncrementJobIndex(data); // Increment the job index
 
                     // Set the initial state for the new job
                     JobSaveStateEnum saveState;
@@ -183,7 +183,7 @@ namespace EasySave_Project.Util
         /// <summary>
         /// Increments the job index in the JSON file.
         /// </summary>
-        public static void IncrementJobIndex()
+        public static void IncrementJobIndex(JobSettingsDto data)
         {
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySaveSetting", "jobsSetting.json");
 
@@ -194,8 +194,6 @@ namespace EasySave_Project.Util
                 {
                     // Read the content of the JSON file
                     string jsonString = File.ReadAllText(filePath);
-                    JobSettingsDto data = JsonSerializer.Deserialize<JobSettingsDto>(jsonString);
-
                     data.index++; // Increment the job index
 
                     // Serialize the updated data back to JSON format
