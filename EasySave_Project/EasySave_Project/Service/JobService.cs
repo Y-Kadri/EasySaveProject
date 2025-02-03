@@ -24,13 +24,13 @@ namespace EasySave_Project.Service
         public List<JobModel> GetAllJob()
         {
             List<JobModel> jobsList = new List<JobModel> //TODO to be modified when the job recovery method exists
-    {
-        new JobModel("Save1", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\testpourcopy", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copy", JobSaveTypeEnum.DIFFERENTIAL, null),
-        new JobModel("Save2", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\testpourcopy", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copy", JobSaveTypeEnum.DIFFERENTIAL, "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copy\\2025_01_31_11_19_02"),
-        new JobModel("Save3", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\testpourcopy", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copyComplete", JobSaveTypeEnum.COMPLETE, null),
-        new JobModel("Save4", "C:/source4", "D:/backup4", JobSaveTypeEnum.COMPLETE, null),
-        new JobModel("Save5", "C:/source5", "D:/backup5", JobSaveTypeEnum.DIFFERENTIAL, null)
-    };
+            {
+                new JobModel("Save1", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\testpourcopy", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copy", JobSaveTypeEnum.DIFFERENTIAL, null),
+                new JobModel("Save1", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\testpourcopy", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copy", JobSaveTypeEnum.DIFFERENTIAL, "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copy\\Save1\\2025_02_03_08_42_30"),
+                new JobModel("Save3", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\testpourcopy", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copyComplete", JobSaveTypeEnum.COMPLETE, null),
+                new JobModel("Save4", "C:/source4", "D:/backup4", JobSaveTypeEnum.COMPLETE, null),
+                new JobModel("Save5", "C:/source5", "D:/backup5", JobSaveTypeEnum.DIFFERENTIAL, null)
+            };
 
             return jobsList;
         }
@@ -55,12 +55,19 @@ namespace EasySave_Project.Service
             // Create the target directory if it doesn't exist
             if (!FileUtil.ExistsDirectory(job.FileTarget))
             {
-                FileUtil.CreateDirectory(job.FileTarget); // Create target directory
+                FileUtil.CreateDirectory(job.FileTarget);
             }
 
-            // Create a timestamped subdirectory for the backup
-            string timestampedBackupDir = FileUtil.CombinePath(job.FileTarget, DateUtil.GetTodayDate(DateUtil.YYYY_MM_DD_HH_MM_SS));
-            FileUtil.CreateDirectory(timestampedBackupDir); // Create backup subdirectory
+            // Create a directory for the job inside the target directory
+            string jobBackupDir = FileUtil.CombinePath(job.FileTarget, job.Name);
+            if (!FileUtil.ExistsDirectory(jobBackupDir))
+            {
+                FileUtil.CreateDirectory(jobBackupDir);
+            }
+
+            // Create a timestamped subdirectory for the backup inside the job directory
+            string timestampedBackupDir = FileUtil.CombinePath(jobBackupDir, DateUtil.GetTodayDate(DateUtil.YYYY_MM_DD_HH_MM_SS));
+            FileUtil.CreateDirectory(timestampedBackupDir);
 
             // Select the appropriate strategy based on the job type
             IJobStrategyService strategy = job.SaveType switch

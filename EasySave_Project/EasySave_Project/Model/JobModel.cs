@@ -12,10 +12,8 @@ public class JobModel
     public string FileSize { get; set; } = "0 KB";
     public string FileTransferTime { get; set; } = "0 sec";
     public DateTime Time { get; set; } = DateTime.Now;
-
-    // Propriété ajoutée pour stocker le chemin de la dernière sauvegarde complète
-    public string LastFullBackupPath { get; set; }
-    public string LastSaveDifferentialPath { get; set; }
+    public string LastFullBackupPath { get; set; } = null;
+    public string LastSaveDifferentialPath { get; set; } = null;
 
     public JobModel(string name, string fileSource, string fileTarget, JobSaveTypeEnum jobSaveTypeEnum, string lastFullBackupPath)
     {
@@ -23,6 +21,6 @@ public class JobModel
         this.FileSource = fileSource;
         this.FileTarget = fileTarget;
         this.SaveType = jobSaveTypeEnum;
-        this.LastFullBackupPath = lastFullBackupPath; 
+        this.LastFullBackupPath = lastFullBackupPath; //TODO enlever cette variable du constructeur
     }
 }
