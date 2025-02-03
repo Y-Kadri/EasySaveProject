@@ -8,9 +8,9 @@ namespace EasySave_Library_Log.Utils
     public static class FileUtil
     {
         /// <summary>
-        /// Crée un répertoire si celui-ci n'existe pas.
+        /// Creates a directory if it does not exist.
         /// </summary>
-        /// <param name="directoryPath">Chemin du répertoire à créer.</param>
+        /// <param name="directoryPath">Path of the directory to create.</param>
         public static void CreateDirectoryIfNotExists(string directoryPath)
         {
             if (!Directory.Exists(directoryPath))
@@ -20,38 +20,40 @@ namespace EasySave_Library_Log.Utils
         }
 
         /// <summary>
-        /// Lit le contenu d'un fichier.
+        /// Reads the content of a file.
         /// </summary>
-        /// <param name="filePath">Chemin du fichier à lire.</param>
-        /// <returns>Contenu du fichier sous forme de chaîne.</returns>
+        /// <param name="filePath">Path of the file to read.</param>
+        /// <returns>Content of the file as a string.</returns>
         public static string ReadFromFile(string filePath)
         {
             return File.ReadAllText(filePath);
         }
 
         /// <summary>
-        /// Écrit une chaîne dans un fichier.
+        /// Writes a string to a file.
         /// </summary>
-        /// <param name="filePath">Chemin du fichier dans lequel écrire.</param>
-        /// <param name="content">Contenu à écrire dans le fichier.</param>
+        /// <param name="filePath">Path of the file to write to.</param>
+        /// <param name="content">Content to write to the file.</param>
         public static void WriteToFile(string filePath, string content)
         {
             File.WriteAllText(filePath, content);
         }
 
         /// <summary>
-        /// Combine plusieurs chemins en un seul.
+        /// Combines multiple paths into one.
         /// </summary>
-        /// <param name="paths">Les chemins à combiner.</param>
-        /// <returns>Chemin combiné.</returns>
+        /// <param name="paths">The paths to combine.</param>
+        /// <returns>Combined path.</returns>
         public static string CombinePaths(params string[] paths)
         {
             return Path.Combine(paths);
         }
 
         /// <summary>
-        /// Crée un fichier s'il n'existe pas, en y écrivant du contenu initial.
+        /// Creates a file if it does not exist, writing initial content to it.
         /// </summary>
+        /// <param name="filePath">Path of the file to create.</param>
+        /// <param name="initialContent">Initial content to write to the file.</param>
         public static void CreateFileIfNotExists(string filePath, string initialContent)
         {
             if (!File.Exists(filePath))
