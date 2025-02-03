@@ -1,135 +1,77 @@
 using EasySave_Project.Manager;
 using EasySave_Project.Model;
 using System.Text.Json;
+using EasySave_Project.Dto;
 
 namespace EasySave_Project.Service
 {
     public class LoadDataService
     {
         private JobManager _jobManager;
-        private string _filePath;
 
         public LoadDataService()
         {
-            _jobManager = JobManager.GetInstance();
-            _filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySaveSetting", "jobsSetting.json");
+            this._jobManager = JobManager.GetInstance();
         }
 
         public void LoadJobs()
         {
-            try
-            {
-                if (!File.Exists(_filePath))
-                {
-                    Console.WriteLine("Le fichier JSON n'existe pas.");
-                    return;
-                }
-
-                string jsonString = ReadJsonFile();
-                if (string.IsNullOrEmpty(jsonString)) return;
-
-                List<JobModel> jobs = ParseJson(jsonString);
-                foreach (var job in jobs)
-                {
-                    _jobManager.AddJob(job);
-                }
-
-                Console.WriteLine("Jobs chargés avec succès.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erreur lors du chargement des jobs : {ex.Message}");
-            }
-        }
-
-        private string ReadJsonFile()
-        {
-            try
-            {
-                return File.ReadAllText(_filePath);
-            }
-            catch (IOException ex)
-            {
-                Console.WriteLine($"Erreur de lecture du fichier : {ex.Message}");
-                return string.Empty;
-            }
-        }
-
-        private List<JobModel> ParseJson(string jsonString)
-        {
-            var jobs = new List<JobModel>();
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                "easySaveSetting", "jobsSetting.json");
 
             try
             {
-                using JsonDocument doc = JsonDocument.Parse(jsonString);
-                JsonElement root = doc.RootElement;
-
-                if (root.TryGetProperty("jobs", out JsonElement jobsArray))
+                // Vérifier si le fichier existe
+                if (File.Exists(filePath))
                 {
-                    foreach (JsonElement jobData in jobsArray.EnumerateArray())
+                    // Lire le fichier JSON
+                    string jsonString = File.ReadAllText(filePath);
+
+                    try
                     {
-                        JobModel? job = CreateJobFromJson(jobData);
-                        if (job != null)
+                        // Désérialiser le contenu JSON en JobSettingsDto
+                        JobSettingsDto data = JsonSerializer.Deserialize<JobSettingsDto>(jsonString);
+
+                        if (data != null && data.jobs != null)
                         {
-                            jobs.Add(job);
+                            // Parcourir la liste des jobs dans le DTO
+                            foreach (var jobData in data.jobs)
+                            {
+                                // Créer une instance de JobModel et l'ajouter à la liste de _jobManager
+                                JobModel job = new JobModel(jobData.Name, jobData.FileSource, jobData.FileTarget,
+                                    jobData.SaveType)
+                                {
+                                    id = jobData.id,
+                                    SaveState = jobData.SaveState,
+                                    FileSize = jobData.FileSize,
+                                    FileTransferTime = jobData.FileTransferTime,
+                                    Time = jobData.Time
+                                };
+
+                                _jobManager.AddJob(job);
+                            }
+
+                            Console.WriteLine("Jobs chargés avec succès.");
                         }
+                        else
+                        {
+                            Console.WriteLine(
+                                "Le fichier JSON ne contient pas de propriété 'jobs' ou la liste des jobs est vide.");
+                        }
+                    }
+                    catch (JsonException ex)
+                    {
+                        Console.WriteLine($"Erreur de désérialisation du JSON : {ex.Message}");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Le fichier JSON ne contient pas de propriété 'jobs'.");
+                    Console.WriteLine("Le fichier JSON n'existe pas.");
                 }
-            }
-            catch (JsonException ex)
-            {
-                Console.WriteLine($"Erreur de désérialisation JSON : {ex.Message}");
-            }
-
-            return jobs;
-        }
-
-        private JobModel? CreateJobFromJson(JsonElement jobData)
-        {
-            try
-            {
-                int id = jobData.GetProperty("id").GetInt32();
-                string name = jobData.GetProperty("Name").GetString() ?? "Unnamed";
-                string fileSource = jobData.GetProperty("FileSource").GetString() ?? string.Empty;
-                string fileTarget = jobData.GetProperty("FileTarget").GetString() ?? string.Empty;
-                string fileSize = jobData.GetProperty("FileSize").GetString() ?? "0";
-                string fileTransferTime = jobData.GetProperty("FileTransferTime").GetString() ?? "0";
-
-                if (!Enum.TryParse(jobData.GetProperty("SaveState").GetString(), true, out JobSaveStateEnum saveState))
-                {
-                    Console.WriteLine($"Erreur de conversion de SaveState : '{jobData.GetProperty("SaveState").GetString()}'");
-                    return null;
-                }
-
-                if (!Enum.TryParse(jobData.GetProperty("SaveType").GetString(), true, out JobSaveTypeEnum saveType))
-                {
-                    Console.WriteLine($"Erreur de conversion de SaveType : '{jobData.GetProperty("SaveType").GetString()}'");
-                    return null;
-                }
-
-                if (!DateTime.TryParse(jobData.GetProperty("Time").GetString(), out DateTime time))
-                {
-                    Console.WriteLine($"Erreur de conversion de DateTime : '{jobData.GetProperty("Time").GetString()}'");
-                    return null;
-                }
-
-                return new JobModel(name, fileSource, fileTarget, saveType)
-                {
-                    id = id,
-                    SaveState = saveState,
-                    FileSize = fileSize,
-                    FileTransferTime = fileTransferTime,
-                    Time = time
-                };
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erreur lors de la création du job : {ex.Message}");
-                return null;
+                Console.WriteLine($"Erreur générale lors du chargement des jobs depuis le fichier JSON : {ex.Message}");
             }
         }
     }

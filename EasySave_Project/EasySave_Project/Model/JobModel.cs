@@ -1,4 +1,7 @@
 ﻿using EasySave_Project.Model;
+using System;
+using System.Text.Json.Serialization;
+using EasySave_Project.Util;
 
 namespace EasySave_Project.Model
 {
@@ -7,7 +10,10 @@ namespace EasySave_Project.Model
         // Propriétés publiques
         public int id { get; set; }
         
+        [JsonConverter(typeof(EnumConverter.JsonEnumConverter<JobSaveStateEnum>))]
         public JobSaveStateEnum SaveState { get; set; } = JobSaveStateEnum.INACTIVE;
+        
+        [JsonConverter(typeof(EnumConverter.JsonEnumConverter<JobSaveTypeEnum>))]
         public JobSaveTypeEnum SaveType { get; set; }
         
         public string Name { get; set; }
