@@ -1,4 +1,5 @@
-﻿using EasySave_Project.Util;
+﻿using EasySave_Project.Model;
+using EasySave_Project.Util;
 using System;
 
 namespace EasySave_Project.Service

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using EasySave_Project.Manager;
 using EasySave_Project.Model;
 using EasySave_Project.Util;
 
@@ -23,16 +24,7 @@ namespace EasySave_Project.Service
         /// </returns>
         public List<JobModel> GetAllJob()
         {
-            List<JobModel> jobsList = new List<JobModel> //TODO to be modified when the job recovery method exists
-            {
-                new JobModel("Save1", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\testpourcopy", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copy", JobSaveTypeEnum.DIFFERENTIAL, null),
-                new JobModel("Save1", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\testpourcopy", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copy", JobSaveTypeEnum.DIFFERENTIAL, "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copy\\Save1\\2025_02_03_08_42_30"),
-                new JobModel("Save3", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\testpourcopy", "C:\\Users\\Yanis\\Desktop\\CESI_A3_S5\\GenieLogicielle\\copyComplete", JobSaveTypeEnum.COMPLETE, null),
-                new JobModel("Save4", "C:/source4", "D:/backup4", JobSaveTypeEnum.COMPLETE, null),
-                new JobModel("Save5", "C:/source5", "D:/backup5", JobSaveTypeEnum.DIFFERENTIAL, null)
-            };
-
-            return jobsList;
+            return JobManager.GetInstance().GetAll();
         }
 
         /// <summary>
@@ -65,8 +57,13 @@ namespace EasySave_Project.Service
                 FileUtil.CreateDirectory(jobBackupDir);
             }
 
+            // Create a directory named with job name and ID for this backup
+            string backupDirectoryName = $"{job.Name}_{job.Id}";
+            string backupDir = FileUtil.CombinePath(jobBackupDir, backupDirectoryName);
+            FileUtil.CreateDirectory(backupDir);
+
             // Create a timestamped subdirectory for the backup inside the job directory
-            string timestampedBackupDir = FileUtil.CombinePath(jobBackupDir, DateUtil.GetTodayDate(DateUtil.YYYY_MM_DD_HH_MM_SS));
+            string timestampedBackupDir = FileUtil.CombinePath(backupDir, DateUtil.GetTodayDate(DateUtil.YYYY_MM_DD_HH_MM_SS));
             FileUtil.CreateDirectory(timestampedBackupDir);
 
             // Select the appropriate strategy based on the job type
