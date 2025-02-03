@@ -249,9 +249,9 @@ namespace EasySave_Project.Util
                     }
 
                     // Create a new job model
-                    var newJob = new JobModel(name, fileSource, fileTarget, jobSaveTypeEnum)
+                    var newJob = new JobModel(name, fileSource, fileTarget, jobSaveTypeEnum, null, null)
                     {
-                        id = newJobId,
+                        Id = newJobId,
                         SaveState = saveState,
                         FileSize = "0 KB",
                         FileTransferTime = "0 sec",

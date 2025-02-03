@@ -61,7 +61,7 @@ public class EnsureJobsCreation
             switch (property)
             {
                 case "id":
-                    Assert.AreEqual(int.Parse(expectedValue), job.id, $"The 'id' value does not match.");
+                    Assert.AreEqual(int.Parse(expectedValue), job.Id, $"The 'id' value does not match.");
                     break;
                 case "SaveState":
                     Assert.AreEqual(Enum.Parse<JobSaveStateEnum>(expectedValue, true), job.SaveState, $"The 'SaveState' value does not match.");

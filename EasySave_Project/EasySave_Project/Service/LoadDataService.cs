@@ -39,13 +39,15 @@ namespace EasySave_Project.Service
                             {
                                 // Créer une instance de JobModel et l'ajouter à la liste de _jobManager
                                 JobModel job = new JobModel(jobData.Name, jobData.FileSource, jobData.FileTarget,
-                                    jobData.SaveType)
+                                    jobData.SaveType, jobData.LastSaveDifferentialPath, jobData.LastFullBackupPath)
                                 {
-                                    id = jobData.id,
+                                    Id = jobData.Id,
                                     SaveState = jobData.SaveState,
                                     FileSize = jobData.FileSize,
                                     FileTransferTime = jobData.FileTransferTime,
-                                    Time = jobData.Time
+                                    Time = jobData.Time,
+                                    LastFullBackupPath = jobData.LastFullBackupPath,
+                                    LastSaveDifferentialPath = jobData.LastSaveDifferentialPath
                                 };
 
                                 _jobManager.AddJob(job);

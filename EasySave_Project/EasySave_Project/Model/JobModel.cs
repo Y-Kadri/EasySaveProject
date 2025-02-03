@@ -8,7 +8,7 @@ namespace EasySave_Project.Model
     public class JobModel
     {
         // Propriétés publiques
-        public int id { get; set; }
+        public int Id { get; set; }
         
         [JsonConverter(typeof(EnumConverter.JsonEnumConverter<JobSaveStateEnum>))]
         public JobSaveStateEnum SaveState { get; set; } = JobSaveStateEnum.INACTIVE;
@@ -27,12 +27,15 @@ namespace EasySave_Project.Model
         
         public JobModel() {}
 
-        public JobModel(string name, string fileSource, string fileTarget, JobSaveTypeEnum jobSaveTypeEnum)
+        public JobModel(string name, string fileSource, string fileTarget, JobSaveTypeEnum jobSaveTypeEnum, string LastFullBackupPath, string LastSaveDifferentialPath)
         {
             this.Name = name;
             this.FileSource = fileSource;
             this.FileTarget = fileTarget;
             this.SaveType = jobSaveTypeEnum;
+            this.LastFullBackupPath = LastFullBackupPath;
+            this.LastSaveDifferentialPath = LastSaveDifferentialPath;
+
         }
         
         public override string ToString()

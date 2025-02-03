@@ -91,7 +91,7 @@ namespace EasySave_Project.Manager
 
         public JobModel? GetJobById(int jobId)
         {
-            return Jobs.Find(job => job.id == jobId);
+            return Jobs.Find(job => job.Id == jobId);
         }
     }
 }
