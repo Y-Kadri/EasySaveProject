@@ -1,4 +1,6 @@
-﻿using EasySave_Project.Model;
+﻿using EasySave_Library_Log;
+using EasySave_Library_Log.manager;
+using EasySave_Project.Model;
 using EasySave_Project.Util;
 using System;
 
@@ -56,6 +58,19 @@ namespace EasySave_Project.Service
                     (FileUtil.GetLastWriteTime(sourceFile) > FileUtil.GetLastWriteTime(lastFullBackupFile)))
                 {
                     FileUtil.CopyFile(sourceFile, targetFile, true); // Copy modified file
+
+                    // Calculate file size and transfer time
+                    long fileSize = FileUtil.GetFileSize(sourceFile);
+                    double transferTime = FileUtil.CalculateTransferTime(sourceFile, targetFile);
+
+                    // Log the operation
+                    LogManager.Instance.UpdateState(
+                        jobName: "test",
+                        sourcePath: sourceFile,
+                        targetPath: targetFile,
+                        fileSize: fileSize,
+                        transferTime: transferTime
+                    );
                 }
             }
 

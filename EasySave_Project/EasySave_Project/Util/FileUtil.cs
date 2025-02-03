@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using EasySave_Project.Dto;
 using EasySave_Project.Model;
 using EasySave_Project.Service;
+using static System.Collections.Specialized.BitVector32;
 
 namespace EasySave_Project.Util
 {
@@ -348,6 +350,47 @@ namespace EasySave_Project.Util
         public static string GetDirectoryName(string path)
         {
             return Path.GetDirectoryName(path);
+        }
+
+        /// <summary>
+        /// Obtient la taille d'un fichier en octets.
+        /// </summary>
+        /// <param name="filePath">Le chemin complet du fichier.</param>
+        /// <returns>La taille du fichier en octets, ou -1 si le fichier n'existe pas.</returns>
+        public static long GetFileSize(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                FileInfo fileInfo = new FileInfo(filePath);
+                return fileInfo.Length; // Renvoie la taille en octets
+            }
+            return -1; // Indique que le fichier n'existe pas
+        }
+
+        /// <summary>
+        /// Calcule le temps de transfert entre le fichier source et le fichier cible.
+        /// </summary>
+        /// <param name="sourceFile">Le chemin complet du fichier source.</param>
+        /// <param name="targetFile">Le chemin complet du fichier cible.</param>
+        /// <returns>Le temps de transfert en millisecondes, ou -1 en cas d'erreur.</returns>
+        public static double CalculateTransferTime(string sourceFile, string targetFile)
+        {
+            try
+            {
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start(); // Démarre le chronomètre
+
+                // Copie le fichier
+                CopyFile(sourceFile, targetFile, true); // Appel à la méthode CopyFile
+
+                stopwatch.Stop(); // Arrête le chronomètre
+                return stopwatch.Elapsed.TotalMilliseconds; // Renvoie le temps écoulé en millisecondes
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erreur lors du calcul du temps de transfert : {ex.Message}");
+                return -1; // Indique une erreur
+            }
         }
     }
 }

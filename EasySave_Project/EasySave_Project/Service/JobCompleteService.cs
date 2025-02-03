@@ -1,6 +1,9 @@
-﻿using EasySave_Project.Model;
+﻿using EasySave_Library_Log;
+using EasySave_Project.Model;
 using EasySave_Project.Util;
 using System;
+using EasySave_Library_Log;
+using EasySave_Library_Log.manager;
 
 namespace EasySave_Project.Service
 {
@@ -37,6 +40,19 @@ namespace EasySave_Project.Service
                 string fileName = FileUtil.GetFileName(sourceFile);
                 string targetFile = FileUtil.CombinePath(targetDir, fileName);
                 FileUtil.CopyFile(sourceFile, targetFile, true); // Copy file to target
+
+                // Calculate file size and transfer time
+                long fileSize = FileUtil.GetFileSize(sourceFile);
+                double transferTime = FileUtil.CalculateTransferTime(sourceFile, targetFile);
+
+                // Log the operation
+                LogManager.Instance.UpdateState(
+                    jobName: "test",
+                    sourcePath: sourceFile,
+                    targetPath: targetFile,
+                    fileSize: fileSize,
+                    transferTime: transferTime
+                );
             }
 
             // Recursively copy all subdirectories
