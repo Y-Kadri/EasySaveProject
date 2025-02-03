@@ -25,8 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Features\" />
-      <Folder Include="Steps\" />
+      <ProjectReference Include="..\EasySave_Project\EasySave_Project.csproj" />
     </ItemGroup>
 
 </Project>
