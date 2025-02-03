@@ -392,5 +392,20 @@ namespace EasySave_Project.Util
                 return -1; // Indique une erreur
             }
         }
+
+        /// <summary>
+        /// Calculates the total size of all files in the specified directory.
+        /// </summary>
+        /// <param name="directory">The directory to calculate the total size for.</param>
+        /// <returns>The total size in bytes.</returns>
+        public static long CalculateTotalSize(string directory)
+        {
+            long size = 0;
+            foreach (string file in GetFiles(directory))
+            {
+                size += GetFileSize(file);
+            }
+            return size;
+        }
     }
 }

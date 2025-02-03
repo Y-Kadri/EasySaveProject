@@ -27,7 +27,7 @@ namespace EasySave_Library_Log
         private StateManager()
         {
             // Define the path for the state file
-            string statesDirectory = @"C:\applis\EasySave\States"; // Define your desired path here
+            string statesDirectory = "C:\\Users\\Yanis\\Documents\\TestLogEasySave\\Logs"; // Define your desired path here
             stateFilePath = FileUtil.CombinePaths(statesDirectory, "state.json");
             FileUtil.CreateDirectoryIfNotExists(statesDirectory); // Ensure the directory exists
             FileUtil.CreateFileIfNotExists(stateFilePath, "[]"); // Create the state file if it doesn't exist
