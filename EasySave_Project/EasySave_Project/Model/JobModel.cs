@@ -51,13 +51,18 @@ namespace EasySave_Project.Model
         public DateTime Time { get; set; } = DateTime.Now;
 
         /// <summary>
+        /// Mandatory constructor for .NET JSON Deserialization use
+        /// </summary>
+        public JobModel() { }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="JobModel"/> class.
         /// </summary>
         /// <param name="name">The name of the job.</param>
         /// <param name="fileSource">The source file path.</param>
         /// <param name="fileTarget">The target file path.</param>
         /// <param name="jobSaveTypeEnum">The type of save operation.</param>
-        public JobModel(string name, string fileSource, string fileTarget, JobSaveTypeEnum jobSaveTypeEnum)
+        public JobModel(string name, string fileSource, string fileTarget, JobSaveTypeEnum jobSaveTypeEnum, string LastFullBackupPath, string LastSaveDifferentialPath)
         {
             this.Name = name;
             this.FileSource = fileSource;
