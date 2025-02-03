@@ -81,7 +81,8 @@ namespace EasySave_Project.Service
 
             // Execute the job using the selected strategy
             strategy.Execute(job, timestampedBackupDir);
-
+            // Notify observers that the job has been completed
+            job.NotifyObservers();
             ConsoleUtil.PrintTextconsole($"{translator.GetText("backupCompleted")} : {job.Name}");
 
             //update jobsetting
