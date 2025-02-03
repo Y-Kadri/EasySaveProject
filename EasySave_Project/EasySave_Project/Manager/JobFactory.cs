@@ -11,8 +11,8 @@ namespace EasySave_Project.Manager
             // Vérification des répertoires
             if (Directory.Exists(fileSource) && Directory.Exists(fileTarget))
             {
-                Console.WriteLine($"Répertoires valides : Source = {fileSource}, Cible = {fileTarget}");
-                return new JobModel(name, fileSource, fileTarget, jobSaveTypeEnum);
+                Util.FileUtil.AddJobInFile(name, fileSource, fileTarget,jobSaveTypeEnum);
+                return new JobModel(name, fileSource, fileTarget, jobSaveTypeEnum, null, null);
             }
             else
             {
