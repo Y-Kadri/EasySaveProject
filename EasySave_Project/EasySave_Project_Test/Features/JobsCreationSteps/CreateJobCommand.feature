@@ -124,7 +124,7 @@ Feature: Jobs Creation - Create Job Command - Create new backup job
     {
       "jobs": [
         {
-          "id": 1,
+          "Id": 1,
           "SaveState": "INACTIVE",
           "SaveType": "COMPLETE",
           "Name": "Backup Project",

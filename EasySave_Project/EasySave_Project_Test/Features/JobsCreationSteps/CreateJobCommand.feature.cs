@@ -377,7 +377,7 @@ namespace EasySave_Project_Test.Features.JobsCreationSteps
     testRunner.And("the configuration file \"jobsSetting.json\" should contain:", @"{
   ""jobs"": [
     {
-      ""id"": 1,
+      ""Id"": 1,
       ""SaveState"": ""INACTIVE"",
       ""SaveType"": ""COMPLETE"",
       ""Name"": ""Backup Project"",

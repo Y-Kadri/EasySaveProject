@@ -10,7 +10,7 @@ Feature: Project Initialization - Ensure Jobs Creation - Load Jobs from jobsSett
       {
         "jobs": [
           {
-            "id": 1,
+            "Id": 1,
             "SaveState": "INACTIVE",
             "SaveType": "COMPLETE",
             "Name": "Backup Documents",
@@ -27,7 +27,7 @@ Feature: Project Initialization - Ensure Jobs Creation - Load Jobs from jobsSett
     When I load the jobs from the "jobsSetting.json" file
     Then the job with id 1 should be loaded with the following details:
       | Property          | Value                      |
-      | id               | 1                           |
+      | Id               | 1                           |
       | SaveState        | INACTIVE                    |
       | SaveType         | COMPLETE                    |
       | Name             | Backup Documents            |

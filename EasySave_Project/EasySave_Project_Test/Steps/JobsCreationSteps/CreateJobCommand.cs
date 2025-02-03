@@ -239,7 +239,7 @@ public class CreateJobCommand
                 JobModel actualJobModel = actualConfig.jobs[i];
                 JobModel expectedJobModel = expectedConfig.jobs[i];
                 
-                if (actualJobModel.id != expectedJobModel.id ||
+                if (actualJobModel.Id != expectedJobModel.Id ||
                     actualJobModel.SaveState != expectedJobModel.SaveState ||
                     actualJobModel.SaveType != expectedJobModel.SaveType ||
                     actualJobModel.Name != expectedJobModel.Name ||
