@@ -1,4 +1,8 @@
-﻿using System;
+﻿using EasySave_Project.Model;
+using System;
+using System.Text.Json.Serialization;
+using EasySave_Project.Util;
+using System;
 using System.Collections.Generic;
 using EasySave_Project.Service;
 
@@ -10,17 +14,13 @@ namespace EasySave_Project.Model
     /// </summary>
     public class JobModel
     {
-
-        public int id { get; set; }
-
-        /// <summary>
-        /// The current save state of the job.
-        /// </summary>
+        // Propriétés publiques
+        public int Id { get; set; }
+        
+        [JsonConverter(typeof(EnumConverter.JsonEnumConverter<JobSaveStateEnum>))]
         public JobSaveStateEnum SaveState { get; set; } = JobSaveStateEnum.INACTIVE;
-
-        /// <summary>
-        /// The type of save operation performed by the job.
-        /// </summary>
+        
+        [JsonConverter(typeof(EnumConverter.JsonEnumConverter<JobSaveTypeEnum>))]
         public JobSaveTypeEnum SaveType { get; set; }
 
         /// <summary>
@@ -63,6 +63,9 @@ namespace EasySave_Project.Model
             this.FileSource = fileSource;
             this.FileTarget = fileTarget;
             this.SaveType = jobSaveTypeEnum;
+            this.LastFullBackupPath = LastFullBackupPath;
+            this.LastSaveDifferentialPath = LastSaveDifferentialPath;
+
         }
 
         /// <summary>

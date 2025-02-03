@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using EasySave_Project.Dto;
+using System.Text.Json;
 using EasySave_Project.Manager;
 using EasySave_Project.Model;
 using EasySave_Project.Util;
+using EasySave_Project.View;
 
 namespace EasySave_Project.Service
 {
@@ -58,7 +61,7 @@ namespace EasySave_Project.Service
             }
 
             // Create a directory named with job name and ID for this backup
-            string backupDirectoryName = $"{job.Name}_{job.id}";
+            string backupDirectoryName = $"{job.Name}_{job.Id}";
             string backupDir = FileUtil.CombinePath(jobBackupDir, backupDirectoryName);
             FileUtil.CreateDirectory(backupDir);
 
@@ -74,11 +77,64 @@ namespace EasySave_Project.Service
                 _ => throw new InvalidOperationException("Invalid job type") // Throw exception for invalid job type
             };
 
+            job.LastSaveDifferentialPath = timestampedBackupDir;
+
             // Execute the job using the selected strategy
             strategy.Execute(job, timestampedBackupDir);
             // Notify observers that the job has been completed
             job.NotifyObservers();
-            Console.WriteLine($"{translator.GetText("backupCompleted")} : {job.Name}");
+            ConsoleUtil.PrintTextconsole($"{translator.GetText("backupCompleted")} : {job.Name}");
+
+            //update jobsetting
+            UpdateJobInFile(job);
+        }
+
+        /// <summary>
+        /// Met à jour un job spécifique dans le fichier JSON après modification.
+        /// </summary>
+        /// <param name="updatedJob">Le job mis à jour.</param>
+        private void UpdateJobInFile(JobModel updatedJob)
+        {
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySaveSetting", "jobsSetting.json");
+
+            try
+            {
+                if (!File.Exists(filePath))
+                {
+                    Console.WriteLine("Le fichier JSON n'existe pas.");
+                    return;
+                }
+
+                // Lire le JSON existant
+                string jsonString = File.ReadAllText(filePath);
+                JobSettingsDto data = JsonSerializer.Deserialize<JobSettingsDto>(jsonString);
+
+                if (data == null || data.jobs == null)
+                {
+                    Console.WriteLine("Le fichier JSON est vide ou mal formé.");
+                    return;
+                }
+
+                // Rechercher et mettre à jour le job
+                var jobToUpdate = data.jobs.Find(j => j.Id == updatedJob.Id);
+                if (jobToUpdate != null)
+                {
+                    jobToUpdate.LastFullBackupPath = updatedJob.LastFullBackupPath;
+                    jobToUpdate.LastSaveDifferentialPath = updatedJob.LastSaveDifferentialPath;
+
+                    // Réécrire le JSON avec les nouvelles valeurs
+                    string updatedJsonString = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
+                    File.WriteAllText(filePath, updatedJsonString);
+                }
+                else
+                {
+                    Console.WriteLine("Job non trouvé dans le fichier JSON.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erreur lors de la mise à jour du fichier JSON : {ex.Message}");
+            }
         }
     }
 }
