@@ -32,7 +32,7 @@ namespace EasySave_Project.Service
             }
             else
             {
-                ExecuteDifferentialSave(job.FileSource, backupDir, job.LastFullBackupPath); // Execute differential backup
+                ExecuteDifferentialSave(job, backupDir, job.LastFullBackupPath); // Execute differential backup
             }
         }
 
@@ -41,47 +41,72 @@ namespace EasySave_Project.Service
         /// This method copies only modified files from the source directory
         /// to the target directory based on the last full backup.
         /// </summary>
-        /// <param name="sourceDir">The source directory to backup.</param>
+        /// <param name="job">The JobModel object representing the job.</param>
         /// <param name="targetDir">The target directory where the backup will be stored.</param>
         /// <param name="lastFullBackupDir">The last full backup directory used for comparison.</param>
-        private void ExecuteDifferentialSave(string sourceDir, string targetDir, string lastFullBackupDir)
+        private void ExecuteDifferentialSave(JobModel job, string targetDir, string lastFullBackupDir)
         {
-            // Copy modified files from the source directory
-            foreach (string sourceFile in FileUtil.GetFiles(sourceDir))
+            // Calculer le nombre total de fichiers et la taille totale
+            long totalSize = FileUtil.CalculateTotalSize(job.FileSource);
+            int totalFiles = FileUtil.GetFiles(job.FileSource).Count();
+            int processedFiles = 0;
+            long processedSize = 0;
+
+            // Copier les fichiers modifiés du répertoire source
+            foreach (string sourceFile in FileUtil.GetFiles(job.FileSource))
             {
                 string fileName = FileUtil.GetFileName(sourceFile);
                 string lastFullBackupFile = FileUtil.CombinePath(lastFullBackupDir, fileName);
                 string targetFile = FileUtil.CombinePath(targetDir, fileName);
 
-                // Copy file if it doesn't exist in last backup or is modified
+                // Copier le fichier s'il n'existe pas dans la dernière sauvegarde ou s'il a été modifié
                 if (!FileUtil.ExistsFile(lastFullBackupFile) ||
                     (FileUtil.GetLastWriteTime(sourceFile) > FileUtil.GetLastWriteTime(lastFullBackupFile)))
                 {
-                    FileUtil.CopyFile(sourceFile, targetFile, true); // Copy modified file
+                    FileUtil.CopyFile(sourceFile, targetFile, true); // Copier le fichier modifié
 
-                    // Calculate file size and transfer time
+                    // Calculer la taille du fichier et le temps de transfert
                     long fileSize = FileUtil.GetFileSize(sourceFile);
                     double transferTime = FileUtil.CalculateTransferTime(sourceFile, targetFile);
 
-                    // Log the operation
+                    // Journaliser l'opération
                     LogManager.Instance.UpdateState(
-                        jobName: "test",
+                        jobName: job.Name,
                         sourcePath: sourceFile,
                         targetPath: targetFile,
                         fileSize: fileSize,
                         transferTime: transferTime
                     );
+
+                    // Mettre à jour les fichiers et tailles traités
+                    processedFiles++;
+                    processedSize += fileSize;
+
+                    // Mettre à jour l'état dans le StateManager
+                    StateManager.Instance.UpdateState(new BackupJobState
+                    {
+                        JobName = job.Name,
+                        LastActionTimestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                        JobStatus = job.SaveState.ToString(),
+                        TotalEligibleFiles = totalFiles,
+                        TotalFileSize = totalSize,
+                        Progress = (double)processedFiles / totalFiles * 100,
+                        RemainingFiles = totalFiles - processedFiles,
+                        RemainingFileSize = totalSize - processedSize,
+                        CurrentSourceFilePath = sourceFile,
+                        CurrentDestinationFilePath = targetFile
+                    });
                 }
             }
 
-            // Recursively copy modified subdirectories
-            foreach (string subDir in FileUtil.GetDirectories(sourceDir))
+            // Copier récursivement les sous-répertoires modifiés
+            foreach (string subDir in FileUtil.GetDirectories(job.FileSource))
             {
                 string subDirName = FileUtil.GetDirectoryName(subDir);
                 string lastFullBackupSubDir = FileUtil.CombinePath(lastFullBackupDir, subDirName);
                 string targetSubDir = FileUtil.CombinePath(targetDir, subDirName);
                 FileUtil.CreateDirectory(targetSubDir);
-                ExecuteDifferentialSave(subDir, targetSubDir, lastFullBackupSubDir); // Recursive call
+                ExecuteDifferentialSave(job, targetSubDir, lastFullBackupSubDir); // Appel récursif
             }
         }
     }
