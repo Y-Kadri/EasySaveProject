@@ -1,26 +1,37 @@
 ﻿using EasySave_Project.Model;
 
-public class JobModel
+namespace EasySave_Project.Model
 {
-    // Propriétés publiques
-    public JobSaveStateEnum SaveState { get; set; } = JobSaveStateEnum.INACTIVE;
-    public JobSaveTypeEnum SaveType { get; set; }
-
-    public string Name { get; set; }
-    public string FileSource { get; set; }
-    public string FileTarget { get; set; }
-    public string FileSize { get; set; } = "0 KB";
-    public string FileTransferTime { get; set; } = "0 sec";
-    public DateTime Time { get; set; } = DateTime.Now;
-    public string LastFullBackupPath { get; set; } = null;
-    public string LastSaveDifferentialPath { get; set; } = null;
-
-    public JobModel(string name, string fileSource, string fileTarget, JobSaveTypeEnum jobSaveTypeEnum, string lastFullBackupPath)
+    public class JobModel
     {
-        this.Name = name;
-        this.FileSource = fileSource;
-        this.FileTarget = fileTarget;
-        this.SaveType = jobSaveTypeEnum;
-        this.LastFullBackupPath = lastFullBackupPath; //TODO enlever cette variable du constructeur
+        // Propriétés publiques
+        public int id { get; set; }
+        
+        public JobSaveStateEnum SaveState { get; set; } = JobSaveStateEnum.INACTIVE;
+        public JobSaveTypeEnum SaveType { get; set; }
+        
+        public string Name { get; set; }
+        public string FileSource { get; set; }
+        public string FileTarget { get; set; }
+        public string FileSize { get; set; } = "0 KB";
+        public string FileTransferTime { get; set; } = "0 sec";
+        public string LastFullBackupPath { get; set; } = null;
+        public string LastSaveDifferentialPath { get; set; } = null;
+        public DateTime Time { get; set; } = DateTime.Now;
+        
+        public JobModel() {}
+
+        public JobModel(string name, string fileSource, string fileTarget, JobSaveTypeEnum jobSaveTypeEnum)
+        {
+            this.Name = name;
+            this.FileSource = fileSource;
+            this.FileTarget = fileTarget;
+            this.SaveType = jobSaveTypeEnum;
+        }
+        
+        public override string ToString()
+        {
+            return $"Job {Name} : De {FileSource} vers {FileTarget} datant du {Time} de type {SaveType}";
+        }
     }
 }

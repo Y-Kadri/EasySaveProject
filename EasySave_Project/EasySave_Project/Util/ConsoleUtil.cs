@@ -4,14 +4,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EasySave_Project.Model;
 
 namespace EasySave_Project.Util
 {
     public static class ConsoleUtil
     {
-        public static void printTextconsole(string text)
+        public static void PrintTextconsole(string text)
         {
-            Console.WriteLine(text);
+            string translatedText = TranslationService.GetInstance().GetText(text);
+            Console.WriteLine(!string.IsNullOrWhiteSpace(translatedText) ? translatedText : text);
+        }
+        
+        public static JobSaveTypeEnum GetInputJobSaveTypeEnum()
+        {
+            JobSaveTypeEnum[] enumValues = (JobSaveTypeEnum[])Enum.GetValues(typeof(JobSaveTypeEnum));
+            for (int i = 0; i < enumValues.Length; i++)
+            {
+                Console.WriteLine($"{i}. {enumValues[i]}");
+            }
+            while (true)
+            {
+                int choice = GetInputInt();
+                if (choice >= 0 && choice < enumValues.Length)
+                {
+                    return enumValues[choice];
+                }
+
+                Console.WriteLine(TranslationService.GetInstance().GetText("invalidChoice"));
+            }
         }
 
         public static string GetInputString()

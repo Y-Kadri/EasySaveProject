@@ -41,10 +41,11 @@ namespace EasySave_Project.View
         /// <returns>An integer representing the user's command choice.</returns>
         public int StartJobCommand()
         {
-            ConsoleUtil.printTextconsole(TranslationService.GetInstance().GetText("option1")
+            ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("option1")
                 + "\n" + TranslationService.GetInstance().GetText("option2")
                 + "\n" + TranslationService.GetInstance().GetText("option3")
-                + "\n" + TranslationService.GetInstance().GetText("option4"));
+                + "\n" + TranslationService.GetInstance().GetText("option4")
+                + "\n" + TranslationService.GetInstance().GetText("option5"));
             return ConsoleUtil.GetInputInt();
         }
 
