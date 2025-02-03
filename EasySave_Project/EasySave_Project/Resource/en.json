@@ -18,5 +18,22 @@
   "errorJobCreation": "Error while creating the job:",
   "startingBackup": "Starting backup",
   "backupCompleted": "Backup completed",
-  "directorySourceDoNotExist": "The source directory does not exist"
+  "directorySourceDoNotExist": "The source directory does not exist",
+  "CurrentBackupTasks": "Current backup tasks",
+  "enterTaskNumbers": "Enter the task number(s) to execute: (e.g., '1-3' for a range, '1' or '1;3;4' for specific jobs):",
+  "directoryCreated": "Directory created",
+  "errorCreatingDirectory": "Error creating directory",
+  "fileCopied": "File copied",
+  "errorCopyingFile": "Error copying file",
+  "noPreviousFullBackup": "No previous full backup found",
+  "fileUpdated": "File updated",
+  "fileNotModified": "File not modified",
+  "fileNewCopy": "New file copied",
+  "errorCopyingDirectory": "Error copying directory",
+  "fileUpdatedDifferential": "File updated in differential backup",
+  "directoryLastBackupNotExist": "The last full backup directory does not exist",
+  "errorCopyingDifferential": "Error copying differential backup",
+  "directoryExists": "The directory already exists",
+  "errorGettingFiles": "Error retrieving files in the directory",
+  "errorGettingDirectories": "Error retrieving subdirectories in the directory"
 }

@@ -17,7 +17,7 @@ namespace EasySave_Project.Manager
         
         // Static max jobs in the same time
         public static int MAX_JOB = 5;
-
+ 
         /// <summary>
         /// List containing all backup jobs.
         /// </summary>
@@ -73,6 +73,10 @@ namespace EasySave_Project.Manager
                 // Create the job using the JobFactory
                 JobModel job = JobFactory.CreateJobModel(name, fileSource, fileTarget, jobSaveTypeEnum);
 
+                // Subscribe to the job with the LogService and StateService observers
+                job.Subscribe(new LogService());
+                job.Subscribe(new StateService());
+
                 // Add the job to the list
                 Jobs.Add(job);
 
@@ -105,7 +109,7 @@ namespace EasySave_Project.Manager
 
         public JobModel? GetJobById(int jobId)
         {
-            return Jobs.Find(job => job.id == jobId);
+            return Jobs.Find(job => job.Id == jobId);
         }
     }
 }

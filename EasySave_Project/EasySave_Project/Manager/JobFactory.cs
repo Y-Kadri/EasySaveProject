@@ -12,7 +12,7 @@ namespace EasySave_Project.Manager
             if (Directory.Exists(fileSource) && Directory.Exists(fileTarget))
             {
                 Util.FileUtil.AddJobInFile(name, fileSource, fileTarget,jobSaveTypeEnum);
-                return new JobModel(name, fileSource, fileTarget, jobSaveTypeEnum);
+                return new JobModel(name, fileSource, fileTarget, jobSaveTypeEnum, null, null);
             }
             else
             {
