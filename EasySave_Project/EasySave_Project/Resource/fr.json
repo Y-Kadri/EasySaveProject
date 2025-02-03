@@ -9,10 +9,14 @@
   "invalidChoice": "Choix invalide",
   "messageValidtext": "Veuillez entrer un texte valide.",
   "messageValidInt": "Veuillez entrer un nombre entier valide.",
-  "entrerNom": "Entre un nom",
-  "entrerFileSource": "Entre le chemin du fichier source",
-  "entrerFileTarget": "Entre le chemin du fichier cible",
-  "entrerJobType": "Entre le type de job",
-  "jobCree": "Le job a été créé avec succès",
-  "listEmpty" : "La liste est vide"
+  "entrerNom": "Entrez un nom",
+  "entrerFileSource": "Entrez le chemin du fichier source",
+  "entrerFileTarget": "Entrez le chemin du fichier cible",
+  "entrerJobType": "Entrez le type de job",
+  "jobCree": "Le job a été créé avec succès.",
+  "listEmpty": "La liste des jobs est vide.",
+  "errorJobCreation": "Erreur lors de la création du job :",
+  "startingBackup": "Démarrage de la sauvegarde",
+  "backupCompleted": "Sauvegarde terminée",
+  "directorySourceDoNotExist": "Le répertoire source n'existe pas"
 }

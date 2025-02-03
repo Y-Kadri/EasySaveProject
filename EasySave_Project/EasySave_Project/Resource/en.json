@@ -6,13 +6,17 @@
   "option3": "3. Execute a specific task",
   "option4": "4. Execute all tasks",
   "option5": "5. Exit",
-  "invalidChoice": "Invalide choice",
+  "invalidChoice": "Invalid choice",
   "messageValidtext": "Please enter a valid text.",
   "messageValidInt": "Please enter a valid integer.",
   "entrerNom": "Enter a name",
-  "entrerFileSource": "Entre le chemin du fichier source",
-  "entrerFileTarget": "Entre le chemin du fichier cible",
-  "entrerJobType": "Entre le type de job",
-  "jobCree": "Le job a été créé avec succès",
-  "listEmpty" : "The array is empty"
+  "entrerFileSource": "Enter the source file path",
+  "entrerFileTarget": "Enter the target file path",
+  "entrerJobType": "Enter the job type",
+  "jobCree": "The job has been successfully created.",
+  "listEmpty": "The job list is empty.",
+  "errorJobCreation": "Error while creating the job:",
+  "startingBackup": "Starting backup",
+  "backupCompleted": "Backup completed",
+  "directorySourceDoNotExist": "The source directory does not exist"
 }

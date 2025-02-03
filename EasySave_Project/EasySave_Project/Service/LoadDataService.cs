@@ -7,116 +7,129 @@ namespace EasySave_Project.Service
     public class LoadDataService
     {
         private JobManager _jobManager;
+        private string _filePath;
 
         public LoadDataService()
         {
-            this._jobManager = JobManager.GetInstance();
+            _jobManager = JobManager.GetInstance();
+            _filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySaveSetting", "jobsSetting.json");
         }
 
         public void LoadJobs()
         {
-            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySaveSetting", "jobsSetting.json");
+            try
+            {
+                if (!File.Exists(_filePath))
+                {
+                    Console.WriteLine("Le fichier JSON n'existe pas.");
+                    return;
+                }
+
+                string jsonString = ReadJsonFile();
+                if (string.IsNullOrEmpty(jsonString)) return;
+
+                List<JobModel> jobs = ParseJson(jsonString);
+                foreach (var job in jobs)
+                {
+                    _jobManager.AddJob(job);
+                }
+
+                Console.WriteLine("Jobs chargés avec succès.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erreur lors du chargement des jobs : {ex.Message}");
+            }
+        }
+
+        private string ReadJsonFile()
+        {
+            try
+            {
+                return File.ReadAllText(_filePath);
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"Erreur de lecture du fichier : {ex.Message}");
+                return string.Empty;
+            }
+        }
+
+        private List<JobModel> ParseJson(string jsonString)
+        {
+            var jobs = new List<JobModel>();
 
             try
             {
-                // Vérifier si le fichier existe
-                if (File.Exists(filePath))
+                using JsonDocument doc = JsonDocument.Parse(jsonString);
+                JsonElement root = doc.RootElement;
+
+                if (root.TryGetProperty("jobs", out JsonElement jobsArray))
                 {
-                    // Lire le fichier JSON
-                    string jsonString = File.ReadAllText(filePath);
-
-                    try
+                    foreach (JsonElement jobData in jobsArray.EnumerateArray())
                     {
-                        // Analyser le JSON
-                        using (JsonDocument doc = JsonDocument.Parse(jsonString))
+                        JobModel? job = CreateJobFromJson(jobData);
+                        if (job != null)
                         {
-                            // Accéder à la racine du document (l'objet contenant "jobs")
-                            JsonElement root = doc.RootElement;
-
-                            // Vérifier que "jobs" existe
-                            if (root.TryGetProperty("jobs", out JsonElement jobsArray))
-                            {
-                                // Parcourir la liste des jobs dans le tableau "jobs"
-                                foreach (JsonElement jobData in jobsArray.EnumerateArray())
-                                {
-                                    // Extraire les propriétés du job
-                                    int id = jobData.GetProperty("id").GetInt32();
-
-                                    // Convertir SaveState (une chaîne en énumération)
-                                    JobSaveStateEnum saveState;
-                                    if (Enum.TryParse<JobSaveStateEnum>(jobData.GetProperty("SaveState").GetString(), ignoreCase: true, out saveState))
-                                    {
-                                        Console.WriteLine($"SaveState '{jobData.GetProperty("SaveState").GetString()}' converti avec succès en {saveState}");
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine($"Erreur de conversion de SaveState: '{jobData.GetProperty("SaveState").GetString()}'");
-                                        continue; // Passer à l'itération suivante si la conversion échoue
-                                    }
-
-                                    // Convertir SaveType (une chaîne en énumération)
-                                    JobSaveTypeEnum saveType;
-                                    if (Enum.TryParse<JobSaveTypeEnum>(jobData.GetProperty("SaveType").GetString(), ignoreCase: true, out saveType))
-                                    {
-                                        Console.WriteLine($"SaveType '{jobData.GetProperty("SaveType").GetString()}' converti avec succès en {saveType}");
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine($"Erreur de conversion de SaveType: '{jobData.GetProperty("SaveType").GetString()}'");
-                                        continue; // Passer à l'itération suivante si la conversion échoue
-                                    }
-
-                                    string name = jobData.GetProperty("Name").GetString();
-                                    string fileSource = jobData.GetProperty("FileSource").GetString();
-                                    string fileTarget = jobData.GetProperty("FileTarget").GetString();
-                                    string fileSize = jobData.GetProperty("FileSize").GetString();
-                                    string fileTransferTime = jobData.GetProperty("FileTransferTime").GetString();
-
-                                    // Convertir la date (en vérifiant si elle est bien au format correct)
-                                    if (DateTime.TryParse(jobData.GetProperty("Time").GetString(), out DateTime time))
-                                    {
-                                        Console.WriteLine($"DateTime '{jobData.GetProperty("Time").GetString()}' converti avec succès en {time}");
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine($"Erreur de conversion de DateTime: '{jobData.GetProperty("Time").GetString()}'");
-                                        continue; // Passer à l'itération suivante si la conversion échoue
-                                    }
-
-                                    // Créer une instance de JobModel et l'ajouter à la liste de _jobManager
-                                    JobModel job = new JobModel(name, fileSource, fileTarget, saveType)
-                                    {
-                                        id = id,
-                                        SaveState = saveState,
-                                        FileSize = fileSize,
-                                        FileTransferTime = fileTransferTime,
-                                        Time = time
-                                    };
-
-                                    _jobManager.AddJob(job);
-                                }
-
-                                Console.WriteLine("Jobs chargés avec succès.");
-                            }
-                            else
-                            {
-                                Console.WriteLine("Le fichier JSON ne contient pas de propriété 'jobs'.");
-                            }
+                            jobs.Add(job);
                         }
-                    }
-                    catch (JsonException ex)
-                    {
-                        Console.WriteLine($"Erreur de désérialisation manuelle : {ex.Message}");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Le fichier JSON n'existe pas.");
+                    Console.WriteLine("Le fichier JSON ne contient pas de propriété 'jobs'.");
                 }
+            }
+            catch (JsonException ex)
+            {
+                Console.WriteLine($"Erreur de désérialisation JSON : {ex.Message}");
+            }
+
+            return jobs;
+        }
+
+        private JobModel? CreateJobFromJson(JsonElement jobData)
+        {
+            try
+            {
+                int id = jobData.GetProperty("id").GetInt32();
+                string name = jobData.GetProperty("Name").GetString() ?? "Unnamed";
+                string fileSource = jobData.GetProperty("FileSource").GetString() ?? string.Empty;
+                string fileTarget = jobData.GetProperty("FileTarget").GetString() ?? string.Empty;
+                string fileSize = jobData.GetProperty("FileSize").GetString() ?? "0";
+                string fileTransferTime = jobData.GetProperty("FileTransferTime").GetString() ?? "0";
+
+                if (!Enum.TryParse(jobData.GetProperty("SaveState").GetString(), true, out JobSaveStateEnum saveState))
+                {
+                    Console.WriteLine($"Erreur de conversion de SaveState : '{jobData.GetProperty("SaveState").GetString()}'");
+                    return null;
+                }
+
+                if (!Enum.TryParse(jobData.GetProperty("SaveType").GetString(), true, out JobSaveTypeEnum saveType))
+                {
+                    Console.WriteLine($"Erreur de conversion de SaveType : '{jobData.GetProperty("SaveType").GetString()}'");
+                    return null;
+                }
+
+                if (!DateTime.TryParse(jobData.GetProperty("Time").GetString(), out DateTime time))
+                {
+                    Console.WriteLine($"Erreur de conversion de DateTime : '{jobData.GetProperty("Time").GetString()}'");
+                    return null;
+                }
+
+                return new JobModel(name, fileSource, fileTarget, saveType)
+                {
+                    id = id,
+                    SaveState = saveState,
+                    FileSize = fileSize,
+                    FileTransferTime = fileTransferTime,
+                    Time = time
+                };
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erreur générale lors du chargement des jobs depuis le fichier JSON : {ex.Message}");
+                Console.WriteLine($"Erreur lors de la création du job : {ex.Message}");
+                return null;
             }
         }
     }
