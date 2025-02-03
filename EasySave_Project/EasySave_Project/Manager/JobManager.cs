@@ -20,6 +20,11 @@ namespace EasySave_Project.Manager
             return jobManager;
         }
 
+        public void AddJob(JobModel jobModel)
+        {
+            this.Jobs.Add(jobModel);
+        }
+
         public JobModel CreateAndAddJob(string name, string fileSource, string fileTarget, JobSaveTypeEnum jobSaveTypeEnum)
         {
             try
