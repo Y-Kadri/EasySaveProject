@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using EasySave_Project.Manager;
 using EasySave_Project.Model;
+using EasySave_Project.Service;
+using EasySave_Project.Util;
 using EasySave_Project.View;
 
 namespace EasySave_Project.Command
@@ -36,19 +38,19 @@ namespace EasySave_Project.Command
             {
                 // Prompt user for the job name
                 Util.ConsoleUtil.PrintTextconsole("entrerNom");
-                string name = Util.ConsoleUtil.GetInputString();
+                string name = ConsoleUtil.GetInputString();
 
                 // Prompt user for the source file path
                 Util.ConsoleUtil.PrintTextconsole("entrerFileSource");
-                string fileSource = Util.ConsoleUtil.GetInputString();
+                string fileSource = ConsoleUtil.GetInputString();
 
                 // Prompt user for the target file path
                 Util.ConsoleUtil.PrintTextconsole("entrerFileTarget");
-                string fileTarget = Util.ConsoleUtil.GetInputString();
+                string fileTarget = ConsoleUtil.GetInputString();
 
                 // Prompt user for the job type (Complete or Differential)
                 Util.ConsoleUtil.PrintTextconsole("entrerJobType");
-                JobSaveTypeEnum jobSaveTypeEnum = Util.ConsoleUtil.GetInputJobSaveTypeEnum();
+                JobSaveTypeEnum jobSaveTypeEnum = ConsoleUtil.GetInputJobSaveTypeEnum();
 
                 // Get the singleton instance of JobManager
                 JobManager jobMana = JobManager.GetInstance();
@@ -57,7 +59,7 @@ namespace EasySave_Project.Command
                 jobMana.CreateAndAddJob(name, fileSource, fileTarget, jobSaveTypeEnum);
 
                 // Notify user that the job was successfully created
-                Util.ConsoleUtil.PrintTextconsole("jobCree");
+                ConsoleUtil.PrintTextconsole("jobCree");
 
                 break; // Exit the loop after successfully creating the job
             }
@@ -68,7 +70,7 @@ namespace EasySave_Project.Command
         /// </summary>
         public void GetInstruction()
         {
-            Console.WriteLine("Create Job Command");
+            ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("createJobCommand"));
         }
     }
 }
