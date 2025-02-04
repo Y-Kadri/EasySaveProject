@@ -1,6 +1,7 @@
 ﻿using EasySave_Project.Manager;
 using EasySave_Project.Model;
 using EasySave_Project.Service;
+using EasySave_Project.Util;
 using EasySave_Project.View;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace EasySave_Project.Command
 
         public void GetInstruction()
         {
-            //TODO to be considered when refactoring
+            ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("executeallJobCommand"));
         }
     }
 }
