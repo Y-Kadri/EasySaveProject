@@ -37,5 +37,6 @@
   "errorGettingFiles": "Error retrieving files in the directory",
   "errorGettingDirectories": "Error retrieving subdirectories in the directory",
   "createJobCommand": "Create job command",
-  "executeJobCommand": "Execution of one or more jobs"
+  "executeJobCommand": "Execution of one or more jobs",
+  "executeallJobCommand": "Execution of all jobs"
 }
