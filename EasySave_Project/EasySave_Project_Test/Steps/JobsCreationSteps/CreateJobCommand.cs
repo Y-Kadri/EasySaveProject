@@ -168,8 +168,12 @@ public class CreateJobCommand
     [Then(@"The job was in the config file")]
     public void ThenTheJobWasInTheConfigFile()
     {
-        string configFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySaveSetting/jobsSetting.json");
-        
+        string configFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySave/easySaveSetting/jobsSetting.json");
+
+
+        jobsSetting.json
+
+
         if (!File.Exists(configFilePath))
         {
             throw new Exception("The configuration file does not exist.");
@@ -207,7 +211,7 @@ public class CreateJobCommand
     [Then(@"the configuration file \""(.*)\"" should contain:")]
     public void ThenTheConfigurationFileShouldContain(string configFileName, string expectedJson)
     {
-        string configFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySaveSetting/" + configFileName);
+        string configFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySave/easySaveSetting/" + configFileName);
 
         if (!File.Exists(configFilePath))
         {
@@ -266,7 +270,7 @@ public class CreateJobCommand
     public void ThenTheFileShouldBeCreatedWithSettings(string fileName, string expectedJson)
     {
         // Construction du chemin vers le fichier
-        string configFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySaveSetting", fileName);
+        string configFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySave", "easySaveSetting", fileName);
 
         // Vérifier si le fichier existe
         if (!File.Exists(configFilePath))

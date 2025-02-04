@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace EasySave_Project.Util;
 
-public class EnumConverter
+public class EnumConverterUtil
 {
     public class JsonEnumConverter<T> : JsonConverter<T> where T : struct, Enum
     {
