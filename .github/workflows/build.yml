@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 env:
   SOLUTION_PATH: EasySave_Project/EasySave_Project.sln
-  FOLDER_TEST_PATH:  EasySave_Project/EasySave_Project_Test
+  FOLDER_TEST_PATH:  EasySave_Project_Test
   DOTNET_VERSION: '8.0'
 
 jobs:
