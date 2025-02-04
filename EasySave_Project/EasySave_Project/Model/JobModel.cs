@@ -16,10 +16,10 @@ namespace EasySave_Project.Model
         // Propriétés publiques
         public int Id { get; set; }
         
-        [JsonConverter(typeof(EnumConverter.JsonEnumConverter<JobSaveStateEnum>))]
+        [JsonConverter(typeof(EnumConverterUtil.JsonEnumConverter<JobSaveStateEnum>))]
         public JobSaveStateEnum SaveState { get; set; } = JobSaveStateEnum.INACTIVE;
         
-        [JsonConverter(typeof(EnumConverter.JsonEnumConverter<JobSaveTypeEnum>))]
+        [JsonConverter(typeof(EnumConverterUtil.JsonEnumConverter<JobSaveTypeEnum>))]
         public JobSaveTypeEnum SaveType { get; set; }
 
         public string Name { get; set; }
