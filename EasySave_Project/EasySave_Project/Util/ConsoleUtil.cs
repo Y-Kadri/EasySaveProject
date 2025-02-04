@@ -1,28 +1,42 @@
 ﻿using EasySave_Project.Service;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using EasySave_Project.Model;
 
 namespace EasySave_Project.Util
 {
+    /// <summary>
+    /// Utility class for handling console input and output.
+    /// Provides methods for printing translated messages and retrieving user input.
+    /// </summary>
     public static class ConsoleUtil
     {
-        public static void PrintTextconsole(string text)
+        private static readonly TranslationService _translator = TranslationService.GetInstance();
+
+        /// <summary>
+        /// Prints a translated message to the console.
+        /// If no translation is available, it prints the original text.
+        /// </summary>
+        /// <param name="textKey">The translation key to fetch the translated message.</param>
+        public static void PrintTextconsole(string textKey)
         {
-            string translatedText = TranslationService.GetInstance().GetText(text);
-            Console.WriteLine(!string.IsNullOrWhiteSpace(translatedText) ? translatedText : text);
+            Console.WriteLine(_translator.GetText(textKey));
         }
-        
+
+        /// <summary>
+        /// Displays a list of job save types and retrieves the user's choice.
+        /// Ensures valid input before returning the selected enum value.
+        /// </summary>
+        /// <returns>The selected <see cref="JobSaveTypeEnum"/> value.</returns>
         public static JobSaveTypeEnum GetInputJobSaveTypeEnum()
         {
             JobSaveTypeEnum[] enumValues = (JobSaveTypeEnum[])Enum.GetValues(typeof(JobSaveTypeEnum));
+
+            // Display available job save types
             for (int i = 0; i < enumValues.Length; i++)
             {
                 Console.WriteLine($"{i}. {enumValues[i]}");
             }
+
             while (true)
             {
                 int choice = GetInputInt();
@@ -31,10 +45,15 @@ namespace EasySave_Project.Util
                     return enumValues[choice];
                 }
 
-                Console.WriteLine(TranslationService.GetInstance().GetText("invalidChoice"));
+                PrintTextconsole("invalidChoice");
             }
         }
 
+        /// <summary>
+        /// Reads a valid non-empty string input from the console.
+        /// Repeats the prompt if the input is empty or invalid.
+        /// </summary>
+        /// <returns>A valid non-empty string.</returns>
         public static string GetInputString()
         {
             while (true)
@@ -46,15 +65,20 @@ namespace EasySave_Project.Util
                     {
                         return input;
                     }
-                    Console.WriteLine(TranslationService.GetInstance().GetText("messageValidtext"));
+                    PrintTextconsole("messageValidtext");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Erreur lors de la lecture de la console: {ex.Message}"); //TODO prendre le translate
+                    Console.WriteLine($"{_translator.GetText("errorReadingJsonFile")} {ex.Message}");
                 }
             }
         }
 
+        /// <summary>
+        /// Reads a valid integer input from the console.
+        /// Ensures that the user enters a numeric value before returning it.
+        /// </summary>
+        /// <returns>A valid integer input from the user.</returns>
         public static int GetInputInt()
         {
             while (true)
@@ -66,11 +90,11 @@ namespace EasySave_Project.Util
                     {
                         return result;
                     }
-                    Console.WriteLine(TranslationService.GetInstance().GetText("messageValidInt"));
+                    PrintTextconsole("messageValidInt");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Erreur lors de la lecture de la console: {ex.Message}");  //TODO prendre le translate
+                    Console.WriteLine($"{_translator.GetText("errorReadingJsonFile")} {ex.Message}");
                 }
             }
         }
