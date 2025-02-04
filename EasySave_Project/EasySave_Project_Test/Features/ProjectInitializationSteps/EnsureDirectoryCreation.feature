@@ -5,9 +5,9 @@ Feature: Project Initialization - Ensure Directory Creation - Verify Configurati
   So that the application settings are properly saved.
 
   Scenario: Verify the creation of the configuration directory if it does not exist
-    Given the configuration directory "easySaveSetting" does not exist
+    Given the configuration directory "easySave/easySaveSetting" does not exist
     When I initialize the project for the first time
-    Then the configuration directory "easySaveSetting" should be created in the "Documents" folder
+    Then the configuration directory "easySave/easySaveSetting" should be created in the "Documents" folder
 
   Scenario: Verify the creation of the jobsSetting.json file with settings
     Given the configuration file "jobsSetting.json" does not exist
