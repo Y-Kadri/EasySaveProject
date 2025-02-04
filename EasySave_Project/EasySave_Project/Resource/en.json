@@ -38,5 +38,6 @@
   "errorGettingDirectories": "Error retrieving subdirectories in the directory",
   "createJobCommand": "Create job command",
   "executeJobCommand": "Execution of one or more jobs",
-  "executeallJobCommand": "Execution of all jobs"
+  "executeallJobCommand": "Execution of all jobs",
+  "exitApplicationCommand":  "Leaving..."
 }
