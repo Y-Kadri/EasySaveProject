@@ -52,7 +52,7 @@ namespace EasySave_Project.Util
         /// <param name="fileName">The name of the file to check/create.</param>
         public static void EnsureDirectoryAndFileExist(string fileName)
         {
-            string directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySaveSetting");
+            string directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySave", "easySaveSetting");
             string filePath = Path.Combine(directoryPath, fileName);
             string message;
 
@@ -186,7 +186,8 @@ namespace EasySave_Project.Util
         /// <returns>The incremented job index.</returns>
         public static int GetJobIndex()
         {
-            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySaveSetting", "jobsSetting.json");
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                 "easySave", "easySaveSetting", "jobsSetting.json");
             string message;
 
             try
@@ -261,7 +262,8 @@ namespace EasySave_Project.Util
         /// <param name="jobSaveTypeEnum">The type of the save job.</param>
         public static void AddJobInFile(string name, string fileSource, string fileTarget, JobSaveTypeEnum jobSaveTypeEnum)
         {
-            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySaveSetting", "jobsSetting.json");
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                 "easySave", "easySaveSetting", "jobsSetting.json");
             string message;
 
             try
@@ -347,7 +349,8 @@ namespace EasySave_Project.Util
         /// </summary>
         public static void IncrementJobIndex(JobSettingsDto data)
         {
-            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySaveSetting", "jobsSetting.json");
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                 "easySave", "easySaveSetting", "jobsSetting.json");
 
             try
             {

@@ -46,5 +46,7 @@
   "errorConvertingSaveState": "Erreur lors de la conversion de l'état de sauvegarde.",
   "errorAddingJobToJson": "Erreur lors de l'ajout du job au fichier JSON : ",
   "indexIncremented": "L'index a été incrémenté à : ",
-  "errorIncrementingIndex": "Erreur lors de l'incrémentation de l'index : "
+  "errorIncrementingIndex": "Erreur lors de l'incrémentation de l'index : ",
+  "createJobCommand": "Création d'un travail",
+  "executeJobCommand": "Exécution d'un ou plusieurs travaux"
 }
