@@ -26,7 +26,8 @@ namespace EasySave_Library_Log.manager
         private LogManager()
         {
             // Defines the log file path
-            string logsDirectory = "C:\\Users\\Yanis\\Documents\\TestLogEasySave\\Logs";
+            string logsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                 "easySave", "Logs");
             logFilePath = FileUtil.CombinePaths(logsDirectory, $"{DateTime.Now:yyyy-MM-dd}.json");
             FileUtil.CreateDirectoryIfNotExists(logsDirectory);
             FileUtil.CreateFileIfNotExists(logFilePath, "[]"); // Initializes the file if it does not exist

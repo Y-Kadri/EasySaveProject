@@ -2,6 +2,7 @@ using EasySave_Project.Manager;
 using EasySave_Project.Model;
 using System.Text.Json;
 using EasySave_Project.Dto;
+using EasySave_Project.Util;
 
 namespace EasySave_Project.Service
 {
@@ -17,27 +18,27 @@ namespace EasySave_Project.Service
         public void LoadJobs()
         {
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                "easySaveSetting", "jobsSetting.json");
+                 "easySave", "easySaveSetting", "jobsSetting.json");
 
             try
             {
-                // Vérifier si le fichier existe
+                // Check if the JSON file exists
                 if (File.Exists(filePath))
                 {
-                    // Lire le fichier JSON
+                    // Read the JSON file
                     string jsonString = File.ReadAllText(filePath);
 
                     try
                     {
-                        // Désérialiser le contenu JSON en JobSettingsDto
+                        // Deserialize the JSON content into JobSettingsDto
                         JobSettingsDto data = JsonSerializer.Deserialize<JobSettingsDto>(jsonString);
 
                         if (data != null && data.jobs != null)
                         {
-                            // Parcourir la liste des jobs dans le DTO
+                            // Iterate through the list of jobs in the DTO
                             foreach (var jobData in data.jobs)
                             {
-                                // Créer une instance de JobModel et l'ajouter à la liste de _jobManager
+                                // Create a JobModel instance and add it to the _jobManager list
                                 JobModel job = new JobModel(jobData.Name, jobData.FileSource, jobData.FileTarget,
                                     jobData.SaveType, jobData.LastSaveDifferentialPath, jobData.LastFullBackupPath)
                                 {
@@ -53,27 +54,27 @@ namespace EasySave_Project.Service
                                 _jobManager.AddJob(job);
                             }
 
-                            Console.WriteLine("Jobs chargés avec succès.");
+                            ConsoleUtil.PrintTextconsole("Jobs successfully loaded.");
                         }
                         else
                         {
-                            Console.WriteLine(
-                                "Le fichier JSON ne contient pas de propriété 'jobs' ou la liste des jobs est vide.");
+                            ConsoleUtil.PrintTextconsole(
+                                "The JSON file does not contain a 'jobs' property or the job list is empty.");
                         }
                     }
                     catch (JsonException ex)
                     {
-                        Console.WriteLine($"Erreur de désérialisation du JSON : {ex.Message}");
+                        ConsoleUtil.PrintTextconsole($"JSON deserialization error: {ex.Message}");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Le fichier JSON n'existe pas.");
+                    ConsoleUtil.PrintTextconsole("The JSON file does not exist.");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erreur générale lors du chargement des jobs depuis le fichier JSON : {ex.Message}");
+                ConsoleUtil.PrintTextconsole($"General error while loading jobs from the JSON file: {ex.Message}");
             }
         }
     }

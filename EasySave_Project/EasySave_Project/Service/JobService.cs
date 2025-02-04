@@ -42,7 +42,7 @@ namespace EasySave_Project.Service
             }
 
             // Create a job-specific backup directory
-            string jobBackupDir = FileUtil.CombinePath(job.FileTarget, job.Name);
+            string jobBackupDir = FileUtil.CombinePath(job.FileTarget, job.Name + "_" + job.Id);
             if (!FileUtil.ExistsDirectory(jobBackupDir))
             {
                 FileUtil.CreateDirectory(jobBackupDir);
