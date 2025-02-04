@@ -61,7 +61,6 @@ namespace EasySave_Project.Service
 
             // Execute the job using the selected strategy
             strategy.Execute(job, timestampedBackupDir);
-            job.NotifyObservers(); // Notify observers of completion
 
             // Update job state to END after execution
             job.SaveState = JobSaveStateEnum.END;
