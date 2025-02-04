@@ -58,7 +58,7 @@ jobs:
           regex: '^(hotfix|release|feature|main|develop)\[.+\] : .+'
 
   notify-discord:
-    if: failure() # Cette étape s'exécute uniquement si une étape précédente échoue
+    if: failure()
     runs-on: ubuntu-latest
     steps:
       - name: Send Discord notification
