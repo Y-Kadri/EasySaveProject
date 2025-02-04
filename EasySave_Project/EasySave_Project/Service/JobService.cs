@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using EasySave_Library_Log;
+using EasySave_Library_Log.manager;
 using EasySave_Project.Dto;
 using EasySave_Project.Manager;
 using EasySave_Project.Model;
@@ -20,15 +21,19 @@ namespace EasySave_Project.Service
         public void ExecuteOneJob(JobModel job)
         {
             var translator = TranslationService.GetInstance();
+            string message;
 
             // Check if the source directory exists
             if (!FileUtil.ExistsDirectory(job.FileSource))
             {
-                Console.WriteLine($"{translator.GetText("directorySourceDoNotExist")} : {job.FileSource}");
+                message = $"{translator.GetText("directorySourceDoNotExist")} : {job.FileSource}";
+                ConsoleUtil.PrintTextconsole(message);
+                LogManager.Instance.AddMessage(message);
                 return; // Exit if source directory does not exist
             }
-
-            Console.WriteLine($"{translator.GetText("startingBackup")} : {job.Name}");
+            message = $"{translator.GetText("directorySourceDoNotExist")} : {job.FileSource}";
+            ConsoleUtil.PrintTextconsole(message);
+            LogManager.Instance.AddMessage(message);
 
             // Create target directory if it doesn't exist
             if (!FileUtil.ExistsDirectory(job.FileTarget))
@@ -66,7 +71,9 @@ namespace EasySave_Project.Service
             job.SaveState = JobSaveStateEnum.END;
             StateManager.Instance.UpdateState(CreateBackupJobState(job, 100, string.Empty, string.Empty));
 
-            ConsoleUtil.PrintTextconsole($"{translator.GetText("backupCompleted")} : {job.Name}");
+            message = $"{translator.GetText("backupCompleted")} : {job.Name}";
+            ConsoleUtil.PrintTextconsole(message);
+            LogManager.Instance.AddMessage(message);
 
             // Update job settings
             UpdateJobInFile(job);

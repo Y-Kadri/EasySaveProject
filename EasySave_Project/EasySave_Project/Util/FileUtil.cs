@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
+using EasySave_Library_Log.manager;
 using EasySave_Project.Dto;
 using EasySave_Project.Model;
 using EasySave_Project.Service;
@@ -15,17 +16,22 @@ namespace EasySave_Project.Util
         public static void CreateDirectory(string path)
         {
             var translator = TranslationService.GetInstance();
+            string message;
             try
             {
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
-                    Console.WriteLine($"{translator.GetText("directoryCreated")}: {path}");
+                    message = $"{translator.GetText("directoryCreated")}: {path}";
+                    ConsoleUtil.PrintTextconsole(message);
+                    LogManager.Instance.AddMessage(message);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{translator.GetText("errorCreatingDirectory")}: '{path}' - {ex.Message}");
+                message = $"{translator.GetText("errorCreatingDirectory")}: '{path}' - {ex.Message}";
+                ConsoleUtil.PrintTextconsole(message);
+                LogManager.Instance.AddMessage(message);
             }
         }
 
@@ -48,6 +54,7 @@ namespace EasySave_Project.Util
         {
             string directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySaveSetting");
             string filePath = Path.Combine(directoryPath, fileName);
+            string message;
 
             try
             {
@@ -56,7 +63,9 @@ namespace EasySave_Project.Util
                 {
                     // Create the directory if it doesn't exist
                     Directory.CreateDirectory(directoryPath);
-                    ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("directoryCreated"));
+                    message = TranslationService.GetInstance().GetText("directoryCreated");
+                    ConsoleUtil.PrintTextconsole(message);
+                    LogManager.Instance.AddMessage(message);
                 }
 
                 // Check if the file exists
@@ -64,7 +73,9 @@ namespace EasySave_Project.Util
                 {
                     // Create the file and dispose of the file handle
                     File.Create(filePath).Dispose();
-                    ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("fileCreated"));
+                    message = TranslationService.GetInstance().GetText("fileCreated");
+                    ConsoleUtil.PrintTextconsole(message);
+                    LogManager.Instance.AddMessage(message);
                     // Create the default JSON file structure
                     CreateDefaultJsonFile(filePath);
                 }
@@ -72,7 +83,9 @@ namespace EasySave_Project.Util
             catch (Exception ex)
             {
                 // Print an error message if an exception occurs
-                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorCreatingDirectoryOrFile") + ex.Message);
+                message = TranslationService.GetInstance().GetText("errorCreatingDirectoryOrFile") + ex.Message;
+                ConsoleUtil.PrintTextconsole(message);
+                LogManager.Instance.AddMessage(message);
             }
         }
 
@@ -86,14 +99,19 @@ namespace EasySave_Project.Util
         public static void CopyFile(string sourceFile, string destinationFile, bool overwrite)
         {
             var translator = TranslationService.GetInstance();
+            string message;
             try
             {
                 File.Copy(sourceFile, destinationFile, overwrite);
-                Console.WriteLine($"{translator.GetText("fileCopied")}: {sourceFile} -> {destinationFile}");
+                message = $"{translator.GetText("fileCopied")}: {sourceFile} -> {destinationFile}";
+                ConsoleUtil.PrintTextconsole(message);
+                LogManager.Instance.AddMessage(message);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{translator.GetText("errorCopyingFile")}: '{sourceFile}' - {ex.Message}");
+                message = $"{translator.GetText("errorCopyingFile")}: '{sourceFile}' - {ex.Message}";
+                ConsoleUtil.PrintTextconsole(message);
+                LogManager.Instance.AddMessage(message);
             }
         }
 
@@ -132,17 +150,22 @@ namespace EasySave_Project.Util
 
             // Serialize the data to JSON format
             string jsonString = JsonSerializer.Serialize(data);
+            string message;
 
             try
             {
                 // Write the JSON string to the file
                 File.WriteAllText(filePath, jsonString);
-                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("jsonFileCreated"));
+                message = TranslationService.GetInstance().GetText("jsonFileCreated");
+                ConsoleUtil.PrintTextconsole(message);
+                LogManager.Instance.AddMessage(message);
             }
             catch (Exception ex)
             {
                 // Print an error message if an exception occurs during file writing
-                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorWritingJsonFile") + ex.Message);
+                message = TranslationService.GetInstance().GetText("errorWritingJsonFile") + ex.Message;
+                ConsoleUtil.PrintTextconsole(message);
+                LogManager.Instance.AddMessage(message);
             }
         }
 
@@ -164,6 +187,7 @@ namespace EasySave_Project.Util
         public static int GetJobIndex()
         {
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySaveSetting", "jobsSetting.json");
+            string message;
 
             try
             {
@@ -183,20 +207,26 @@ namespace EasySave_Project.Util
                     }
                     else
                     {
-                        ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("indexNotFoundInJson"));
+                        message = TranslationService.GetInstance().GetText("indexNotFoundInJson");
+                        ConsoleUtil.PrintTextconsole(message);
+                        LogManager.Instance.AddMessage(message);
                         return 1; // Default to 1 if index is not found
                     }
                 }
                 else
                 {
-                    ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("jsonFileNotExist"));
+                    message = TranslationService.GetInstance().GetText("jsonFileNotExist");
+                    ConsoleUtil.PrintTextconsole(message);
+                    LogManager.Instance.AddMessage(message);
                     return 1; // Default to 1 if file does not exist
                 }
             }
             catch (Exception ex)
             {
                 // Print an error message if an exception occurs during reading
-                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorReadingJsonFile") + ex.Message);
+                message = TranslationService.GetInstance().GetText("errorReadingJsonFile") + ex.Message;
+                ConsoleUtil.PrintTextconsole(message);
+                LogManager.Instance.AddMessage(message);
                 return -1; // Return -1 to indicate an error
             }
         }
@@ -208,13 +238,16 @@ namespace EasySave_Project.Util
         /// <returns>An enumerable collection of file paths.</returns>
         public static IEnumerable<string> GetFiles(string path)
         {
+            string message;
             try
             {
                 return Directory.GetFiles(path);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{TranslationService.GetInstance().GetText("errorCopyingDirectory")}: '{path}' - {ex.Message}");
+                message = $"{TranslationService.GetInstance().GetText("errorCopyingDirectory")}: '{path}' - {ex.Message}";
+                ConsoleUtil.PrintTextconsole(message);
+                LogManager.Instance.AddMessage(message);
                 return new string[0]; // Returns an empty array in case of error
             }
         }
@@ -229,6 +262,7 @@ namespace EasySave_Project.Util
         public static void AddJobInFile(string name, string fileSource, string fileTarget, JobSaveTypeEnum jobSaveTypeEnum)
         {
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySaveSetting", "jobsSetting.json");
+            string message;
 
             try
             {
@@ -246,7 +280,9 @@ namespace EasySave_Project.Util
                     JobSaveStateEnum saveState;
                     if (!Enum.TryParse<JobSaveStateEnum>("INACTIVE", out saveState))
                     {
-                        ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorConvertingSaveState"));
+                        message = TranslationService.GetInstance().GetText("errorConvertingSaveState");
+                        ConsoleUtil.PrintTextconsole(message);
+                        LogManager.Instance.AddMessage(message);
                         return;
                     }
 
@@ -266,17 +302,23 @@ namespace EasySave_Project.Util
                     string updatedJsonString = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
                     File.WriteAllText(filePath, updatedJsonString); // Write the updated JSON to the file
 
-                    ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("jobCree"));
+                    message = TranslationService.GetInstance().GetText("jobCree");
+                    ConsoleUtil.PrintTextconsole(message);
+                    LogManager.Instance.AddMessage(message);
                 }
                 else
                 {
-                    ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("jsonFileNotExist"));
+                    message = TranslationService.GetInstance().GetText("jsonFileNotExist");
+                    ConsoleUtil.PrintTextconsole(message);
+                    LogManager.Instance.AddMessage(message);
                 }
             }
             catch (Exception ex)
             {
                 // Print an error message if an exception occurs during adding the job
-                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorAddingJobToJson") + ex.Message);
+                message = TranslationService.GetInstance().GetText("errorAddingJobToJson") + ex.Message;
+                ConsoleUtil.PrintTextconsole(message);
+                LogManager.Instance.AddMessage(message);
             }
         }
 
@@ -293,7 +335,9 @@ namespace EasySave_Project.Util
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{TranslationService.GetInstance().GetText("errorGettingDirectories")}: '{path}' - {ex.Message}");
+                string message = $"{TranslationService.GetInstance().GetText("errorGettingDirectories")}: '{path}' - {ex.Message}";
+                ConsoleUtil.PrintTextconsole(message);
+                LogManager.Instance.AddMessage(message);
                 return new string[0]; // Returns an empty array in case of error
             }
         }
@@ -379,10 +423,6 @@ namespace EasySave_Project.Util
             {
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start(); // Démarre le chronomètre
-
-                // Copie le fichier
-                CopyFile(sourceFile, targetFile, true); // Appel à la méthode CopyFile
-
                 stopwatch.Stop(); // Arrête le chronomètre
                 return stopwatch.Elapsed.TotalMilliseconds; // Renvoie le temps écoulé en millisecondes
             }
