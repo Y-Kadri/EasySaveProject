@@ -21,7 +21,7 @@ namespace EasySave_Project_Test.Steps.ProjectInitializationSteps
             // Définir le chemin du fichier de configuration
             string configFilePath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                "easySaveSetting",
+                "easySave/easySaveSetting",
                 fileName
             );
 
@@ -51,7 +51,7 @@ namespace EasySave_Project_Test.Steps.ProjectInitializationSteps
         [Given(@"the configuration file ""(.*)"" does not exist")]
         public void GivenTheConfigurationFileDoesNotExist(string fileName)
         {
-            directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySaveSetting");
+            directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySave/easySaveSetting");
             filePath = Path.Combine(directoryPath, fileName);
 
             if (File.Exists(filePath))

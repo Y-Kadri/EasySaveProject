@@ -44,6 +44,10 @@ namespace EasySave_Project.Manager
         /// <param name="jobModel">The job to add.</param>
         public void AddJob(JobModel jobModel)
         {
+            if (Jobs.Count > MAX_JOB)
+            {
+                throw new ArgumentException("Cannot create more than 5 jobs");
+            }
             this.Jobs.Add(jobModel); // Add job to the list
         }
 

@@ -5,7 +5,7 @@ Feature: Project Initialization - Ensure Jobs Creation - Load Jobs from jobsSett
   So that the application can properly manage the job data.
 
   Scenario: Verify that jobs are loaded from the jobsSetting.json file if it exists
-    Given the "jobsSetting.json" file exists in the "easySaveSetting" directory with the following content:
+    Given the "jobsSetting.json" file exists in the "easySave/easySaveSetting" directory with the following content:
       """
       {
         "jobs": [
