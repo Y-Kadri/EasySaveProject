@@ -38,8 +38,7 @@ jobs:
     needs: build
     steps:
       - name: Run test
-        working-directory: ${{ env.FOLDER_TEST_PATH }}
-        run: dotnet test
+        run: dotnet test ${{ env.FOLDER_TEST_PATH }}
 
   commit_message_validation:
     runs-on: ubuntu-latest
