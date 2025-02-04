@@ -1,4 +1,6 @@
-﻿using EasySave_Project.Model;
+﻿using EasySave_Library_Log;
+using EasySave_Library_Log.manager;
+using EasySave_Project.Model;
 using EasySave_Project.Util;
 using System;
 
@@ -21,16 +23,19 @@ namespace EasySave_Project.Service
         {
             var translator = TranslationService.GetInstance();
 
-            // Check for previous full backup
+            // Check for the last full backup
             if (string.IsNullOrEmpty(job.LastFullBackupPath) || !FileUtil.ExistsDirectory(job.LastFullBackupPath))
             {
-                Console.WriteLine($"{translator.GetText("noPreviousFullBackup")}");
-                job.LastFullBackupPath = null; // Reset last full backup path
-                new JobCompleteService().Execute(job, backupDir); // Perform a complete backup
+                string message = translator.GetText("noPreviousFullBackup");
+                ConsoleUtil.PrintTextconsole(message);
+                LogManager.Instance.AddMessage(message);
+
+                job.LastFullBackupPath = null; // Reset full backup path
+                new JobCompleteService().Execute(job, backupDir); // Perform a full backup
             }
             else
             {
-                ExecuteDifferentialSave(job.FileSource, backupDir, job.LastFullBackupPath); // Execute differential backup
+                ExecuteDifferentialSave(job, backupDir, job.LastFullBackupPath); // Perform a differential backup
             }
         }
 
@@ -39,35 +44,77 @@ namespace EasySave_Project.Service
         /// This method copies only modified files from the source directory
         /// to the target directory based on the last full backup.
         /// </summary>
-        /// <param name="sourceDir">The source directory to backup.</param>
+        /// <param name="job">The JobModel representing the backup job.</param>
         /// <param name="targetDir">The target directory where the backup will be stored.</param>
         /// <param name="lastFullBackupDir">The last full backup directory used for comparison.</param>
-        private void ExecuteDifferentialSave(string sourceDir, string targetDir, string lastFullBackupDir)
+        private void ExecuteDifferentialSave(JobModel job, string targetDir, string lastFullBackupDir)
         {
-            // Copy modified files from the source directory
-            foreach (string sourceFile in FileUtil.GetFiles(sourceDir))
+            string message;
+            message = $"Starting differential backup for {job.Name}";
+            LogManager.Instance.AddMessage(message);
+            ConsoleUtil.PrintTextconsole(message);
+
+            // Calculate the total number of files and total size
+            long totalSize = FileUtil.CalculateTotalSize(job.FileSource);
+            int totalFiles = FileUtil.GetFiles(job.FileSource).Count();
+            int processedFiles = 0;
+            long processedSize = 0;
+
+            // Copy modified files
+            foreach (string sourceFile in FileUtil.GetFiles(job.FileSource))
             {
                 string fileName = FileUtil.GetFileName(sourceFile);
                 string lastFullBackupFile = FileUtil.CombinePath(lastFullBackupDir, fileName);
                 string targetFile = FileUtil.CombinePath(targetDir, fileName);
 
-                // Copy file if it doesn't exist in last backup or is modified
-                if (!FileUtil.ExistsFile(lastFullBackupFile) ||
-                    (FileUtil.GetLastWriteTime(sourceFile) > FileUtil.GetLastWriteTime(lastFullBackupFile)))
+                // Check if the file needs to be copied
+                if (!FileUtil.ExistsFile(lastFullBackupFile) || FileUtil.GetLastWriteTime(sourceFile) > FileUtil.GetLastWriteTime(lastFullBackupFile))
                 {
-                    FileUtil.CopyFile(sourceFile, targetFile, true); // Copy modified file
+                    FileUtil.CopyFile(sourceFile, targetFile, true);
+
+                    long fileSize = FileUtil.GetFileSize(sourceFile);
+                    double transferTime = FileUtil.CalculateTransferTime(sourceFile, targetFile);
+
+                    message = $"File {fileName} copied from {sourceFile} to {targetFile}";
+                    ConsoleUtil.PrintTextconsole(message);
+                    LogManager.Instance.AddMessage(message);
+
+                    LogManager.Instance.UpdateState(job.Name, sourceFile, targetFile, fileSize, transferTime);
+
+                    processedFiles++;
+                    processedSize += fileSize;
+
+                    // Update state in StateManager
+                    StateManager.Instance.UpdateState(new BackupJobState
+                    {
+                        JobName = job.Name,
+                        LastActionTimestamp = DateUtil.GetTodayDate(DateUtil.YYYY_MM_DD_HH_MM_SS),
+                        JobStatus = job.SaveState.ToString(),
+                        TotalEligibleFiles = totalFiles,
+                        TotalFileSize = totalSize,
+                        Progress = (double)processedFiles / totalFiles * 100,
+                        RemainingFiles = totalFiles - processedFiles,
+                        RemainingFileSize = totalSize - processedSize,
+                        CurrentSourceFilePath = sourceFile,
+                        CurrentDestinationFilePath = targetFile
+                    });
                 }
             }
 
             // Recursively copy modified subdirectories
-            foreach (string subDir in FileUtil.GetDirectories(sourceDir))
+            foreach (string subDir in FileUtil.GetDirectories(job.FileSource))
             {
                 string subDirName = FileUtil.GetDirectoryName(subDir);
                 string lastFullBackupSubDir = FileUtil.CombinePath(lastFullBackupDir, subDirName);
                 string targetSubDir = FileUtil.CombinePath(targetDir, subDirName);
+
                 FileUtil.CreateDirectory(targetSubDir);
-                ExecuteDifferentialSave(subDir, targetSubDir, lastFullBackupSubDir); // Recursive call
+                ExecuteDifferentialSave(job, targetSubDir, lastFullBackupSubDir);
             }
+
+            string endMessage = $"Differential backup {job.Name} completed.";
+            ConsoleUtil.PrintTextconsole(endMessage);
+            LogManager.Instance.AddMessage(endMessage);
         }
     }
 }

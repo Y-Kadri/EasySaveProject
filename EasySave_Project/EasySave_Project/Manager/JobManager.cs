@@ -73,10 +73,6 @@ namespace EasySave_Project.Manager
                 // Create the job using the JobFactory
                 JobModel job = JobFactory.CreateJobModel(name, fileSource, fileTarget, jobSaveTypeEnum);
 
-                // Subscribe to the job with the LogService and StateService observers
-                job.Subscribe(new LogService());
-                job.Subscribe(new StateService());
-
                 // Add the job to the list
                 Jobs.Add(job);
 
