@@ -46,26 +46,16 @@ jobs:
       #       -Dsonar.organization=ton-organisation
       #       -Dsonar.host.url=https://sonarcloud.io
 
-  validate-commit-message:
+  
+  commit_message_validation:
     runs-on: ubuntu-latest
-
+    name: Commit Message Validation
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Validate commit message format
-        run: |
-          # Récupérer le dernier message de commit
-          COMMIT_MESSAGE=$(git log -1 --pretty=%B)
-      
-          # Définir les types autorisés
-          TYPES="hotfix|release|feature|main|develop"
-      
-          # Vérifier le format du message avec grep
-          echo "$COMMIT_MESSAGE" | grep -Eq "^($TYPES)\[.+\] : .+" || {
-            echo "Erreur : Le message de commit doit respecter le format '<type>[nom-de-branch] : \"message\"'."
-            echo "Types autorisés : hotfix, release, feature, main, develop."
-            exit 1
+      - uses: actions/checkout@v3
+      - id: verify_commit_message
+        uses: uptownaravi/verify-commit-message-action@v2
+        with:
+          regex: '^(hotfix|release|feature|main|develop)\[.+\] : .+'
 
   notify-discord:
     if: failure() # Cette étape s'exécute uniquement si une étape précédente échoue
