@@ -170,10 +170,6 @@ public class CreateJobCommand
     {
         string configFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySave/easySaveSetting/jobsSetting.json");
 
-
-        jobsSetting.json
-
-
         if (!File.Exists(configFilePath))
         {
             throw new Exception("The configuration file does not exist.");
