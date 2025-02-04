@@ -48,5 +48,6 @@
   "indexIncremented": "L'index a été incrémenté à : ",
   "errorIncrementingIndex": "Erreur lors de l'incrémentation de l'index : ",
   "createJobCommand": "Création d'un travail",
-  "executeJobCommand": "Exécution d'un ou plusieurs travaux"
+  "executeJobCommand": "Exécution d'un ou plusieurs travaux",
+  "executeallJobCommand": "Execution de tous les travaux"
 }
