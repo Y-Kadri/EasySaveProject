@@ -33,6 +33,14 @@ jobs:
       - name: Build project
         run: dotnet build ${{ env.SOLUTION_PATH }} --no-restore --configuration Release
 
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Run test
+        working-directory: ${{ env.FOLDER_TEST_PATH }}
+        run: dotnet test
+
   commit_message_validation:
     runs-on: ubuntu-latest
     name: Commit Message Validation
