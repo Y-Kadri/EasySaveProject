@@ -16,7 +16,7 @@ namespace EasySave_Project.Command
 
         public void Execute()
         {
-            List<JobModel> jobsList = _jobService.GetAllJob();
+            List<JobModel> jobsList = _jobService.GetAllJobs();
             _consoleView.ShowJobList(jobsList);
 
 

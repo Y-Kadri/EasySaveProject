@@ -10,7 +10,6 @@ namespace EasySave_Project.Model
 {
     /// <summary>
     /// Represents a backup job that can be observed for changes.
-    /// Implements the observer pattern to notify registered observers when its state changes.
     /// </summary>
     public class JobModel
     {
@@ -22,12 +21,6 @@ namespace EasySave_Project.Model
         
         [JsonConverter(typeof(EnumConverter.JsonEnumConverter<JobSaveTypeEnum>))]
         public JobSaveTypeEnum SaveType { get; set; }
-
-        /// <summary>
-        /// List of observers subscribed to this job.
-        /// </summary>
-        private List<JobObserverService> _observers = new List<JobObserverService>();
-
 
         public string Name { get; set; }
 
@@ -74,68 +67,12 @@ namespace EasySave_Project.Model
         }
 
         /// <summary>
-        /// Subscribes an observer to this job's notifications.
-        /// </summary>
-        /// <param name="observer">The observer to subscribe.</param>
-        /// <returns>A disposable object to unsubscribe the observer.</returns>
-        public IDisposable Subscribe(JobObserverService observer)
-        {
-            if (!_observers.Contains(observer))
-            {
-                _observers.Add(observer);
-            }
-            return new Unsubscriber(_observers, observer);
-        }
-
-        /// <summary>
-        /// Notifies all subscribed observers about a change in the job's state.
-        /// </summary>
-        public void NotifyObservers()
-        {
-            foreach (var observer in _observers)
-            {
-                observer.OnNext(this);
-            }
-        }
-
-        /// <summary>
         /// Returns a string representation of the job.
         /// </summary>
         /// <returns>A formatted string describing the job.</returns>
         public override string ToString()
         {
             return $"Job {Name} : From {FileSource} to {FileTarget}, created on {Time}, type: {SaveType}";
-        }
-
-        /// <summary>
-        /// Helper class to handle unsubscription from job notifications.
-        /// </summary>
-        private class Unsubscriber : IDisposable
-        {
-            private List<JobObserverService> _observers;
-            private JobObserverService _observer;
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="Unsubscriber"/> class.
-            /// </summary>
-            /// <param name="observers">The list of subscribed observers.</param>
-            /// <param name="observer">The observer to remove when disposed.</param>
-            public Unsubscriber(List<JobObserverService> observers, JobObserverService observer)
-            {
-                _observers = observers;
-                _observer = observer;
-            }
-
-            /// <summary>
-            /// Unsubscribes the observer when disposed.
-            /// </summary>
-            public void Dispose()
-            {
-                if (_observer != null && _observers.Contains(_observer))
-                {
-                    _observers.Remove(_observer);
-                }
-            }
         }
     }
 }
