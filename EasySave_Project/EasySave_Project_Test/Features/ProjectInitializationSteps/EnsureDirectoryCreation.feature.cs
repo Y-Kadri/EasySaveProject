@@ -95,14 +95,14 @@ namespace EasySave_Project_Test.Features.ProjectInitializationSteps
             {
                 this.ScenarioStart();
 #line 8
-    testRunner.Given("the configuration directory \"easySaveSetting\" does not exist", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("the configuration directory \"easySave/easySaveSetting\" does not exist", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 9
     testRunner.When("I initialize the project for the first time", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 10
-    testRunner.Then("the configuration directory \"easySaveSetting\" should be created in the \"Documents" +
-                        "\" folder", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+    testRunner.Then("the configuration directory \"easySave/easySaveSetting\" should be created in the \"" +
+                        "Documents\" folder", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
