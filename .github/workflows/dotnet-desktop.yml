@@ -1,4 +1,4 @@
-name: Build Check
+name: Build and Quality Check
 
 on: [push, pull_request]
 
@@ -17,20 +17,90 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }} # Adapter selon la version de .NET utilisée
-      
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
       - name: Restore dependencies
         run: dotnet restore ${{ env.SOLUTION_PATH }}
-      
+
       - name: Build project
         run: dotnet build ${{ env.SOLUTION_PATH }} --no-restore --configuration Release
 
-  protect-branches:
-    needs: build
+      - name: Run tests
+        run: dotnet test ${{ env.SOLUTION_PATH }} --no-restore --configuration Release
+
+      # - name: SonarCloud Scan
+      #   uses: sonarsource/sonarcloud-github-action@master
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #   with:
+      #     args: >
+      #       -Dsonar.projectKey=ton-projet
+      #       -Dsonar.organization=ton-organisation
+      #       -Dsonar.host.url=https://sonarcloud.io
+
+  validate-commit-message:
     runs-on: ubuntu-latest
-    if: failure()
+
     steps:
-      - name: Fail push due to failed build
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate commit message format
         run: |
-          echo "Build failed. Push is not allowed."
-          exit 1
+          # Récupérer le dernier message de commit
+          COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+
+          # Définir les types autorisés
+          TYPES="hotfix|release|feature|main|develop"
+
+          # Expression régulière pour vérifier le format du message
+          if [[ ! "$COMMIT_MESSAGE" =~ ^($TYPES)\[.+\] : .+ ]]; then
+            echo "Erreur : Le message de commit doit respecter le format '<type>[nom-de-branch] : \"message\"'."
+            echo "Types autorisés : hotfix, release, feature, main, develop."
+            exit 1
+          fi
+
+  notify-discord:
+    if: failure() # Cette étape s'exécute uniquement si une étape précédente échoue
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Discord notification
+        run: |
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            -d '{
+                  "username": "CI/CD Pipeline",
+                  "avatar_url": "https://cdn-icons-png.flaticon.com/512/5968/5968322.png",
+                  "embeds": [{
+                    "title": "🚨 La pipeline a échoué !",
+                    "description": "Une erreur s'est produite lors de l'exécution de la pipeline sur la branche `${{ github.ref_name }}`.",
+                    "color": 16711680,
+                    "fields": [
+                      {
+                        "name": "Nom du Workflow",
+                        "value": "${{ github.workflow }}"
+                      },
+                      {
+                        "name": "Job échoué",
+                        "value": "${{ github.job }}"
+                      },
+                      {
+                        "name": "Erreur",
+                        "value": "Vérifiez les logs dans l'action GitHub."
+                      },
+                      {
+                        "name": "Lien vers les logs",
+                        "value": "[Voir les détails](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+                      }
+                    ]
+                  }]
+                }' \
+            ${{ secrets.DISCORD_WEBHOOK_URL }}

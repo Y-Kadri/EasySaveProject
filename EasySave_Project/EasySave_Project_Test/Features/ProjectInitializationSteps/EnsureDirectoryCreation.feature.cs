@@ -109,12 +109,12 @@ namespace EasySave_Project_Test.Features.ProjectInitializationSteps
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Verify the creation of the jobsSetting.json file with default settings")]
-        public void VerifyTheCreationOfTheJobsSetting_JsonFileWithDefaultSettings()
+        [NUnit.Framework.DescriptionAttribute("Verify the creation of the jobsSetting.json file with settings")]
+        public void VerifyTheCreationOfTheJobsSetting_JsonFileWithSettings()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verify the creation of the jobsSetting.json file with default settings", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verify the creation of the jobsSetting.json file with settings", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 12
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -132,7 +132,7 @@ namespace EasySave_Project_Test.Features.ProjectInitializationSteps
     testRunner.When("I initialize the project", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 15
-    testRunner.Then("the \"jobsSetting.json\" file should be created with default settings:", "{\n  \"jobs\": [],\n  \"index\": 0\n}", ((TechTalk.SpecFlow.Table)(null)), "Then ");
+    testRunner.Then("the \"jobsSetting.json\" file should be created with settings:", "{\n  \"jobs\": [],\n  \"index\": 0\n}", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

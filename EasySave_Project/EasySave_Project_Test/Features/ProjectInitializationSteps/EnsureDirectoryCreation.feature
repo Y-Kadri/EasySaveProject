@@ -9,10 +9,10 @@ Feature: Project Initialization - Ensure Directory Creation - Verify Configurati
     When I initialize the project for the first time
     Then the configuration directory "easySaveSetting" should be created in the "Documents" folder
 
-  Scenario: Verify the creation of the jobsSetting.json file with default settings
+  Scenario: Verify the creation of the jobsSetting.json file with settings
     Given the configuration file "jobsSetting.json" does not exist
     When I initialize the project
-    Then the "jobsSetting.json" file should be created with default settings:
+    Then the "jobsSetting.json" file should be created with settings:
       """
       {
         "jobs": [],

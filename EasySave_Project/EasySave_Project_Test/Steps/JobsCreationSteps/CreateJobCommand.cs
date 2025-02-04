@@ -275,13 +275,41 @@ public class CreateJobCommand
         }
 
         // Lire le contenu du fichier
-        string actualJson = File.ReadAllText(configFilePath).Trim();
-        expectedJson = expectedJson.Trim();
+        string jsonContent = File.ReadAllText(configFilePath);
 
-        // Comparer directement les chaînes de caractères
-        if (actualJson != expectedJson)
+        // Désérialiser le contenu JSON
+        JobSettingsDto actualConfig = JsonConvert.DeserializeObject<JobSettingsDto>(jsonContent);
+        JobSettingsDto expectedConfig = JsonConvert.DeserializeObject<JobSettingsDto>(expectedJson);
+
+        if (actualConfig.index != expectedConfig.index)
         {
-            throw new Exception($"Le contenu du fichier ne correspond pas au contenu attendu.\nAttendu : {expectedJson}\nObtenu : {actualJson}");
+            throw new Exception("Index are different");
+        }
+
+        if (actualConfig.jobs.Count != expectedConfig.jobs.Count)
+        {
+            throw new Exception("Jobs count are different");
+        }
+        
+        // Comparer les propriétés statiques
+        for (int i = 0; i < actualConfig.jobs.Count; i++)
+        {
+            JobModel actualJobModel = actualConfig.jobs[i];
+            JobModel expectedJobModel = expectedConfig.jobs[i];
+                
+            if (actualJobModel.Id != expectedJobModel.Id ||
+                actualJobModel.SaveState != expectedJobModel.SaveState ||
+                actualJobModel.SaveType != expectedJobModel.SaveType ||
+                actualJobModel.Name != expectedJobModel.Name ||
+                actualJobModel.FileSource != expectedJobModel.FileSource ||
+                actualJobModel.FileTarget != expectedJobModel.FileTarget ||
+                actualJobModel.FileSize != expectedJobModel.FileSize ||
+                actualJobModel.FileTransferTime != expectedJobModel.FileTransferTime)
+            {
+                throw new Exception($"Mismatch found at job index {i}. " +
+                                    $"Expected: {expectedJobModel}, " +
+                                    $"Actual: {actualJobModel}");
+            }
         }
 
         Console.WriteLine($"Le fichier {fileName} correspond au contenu attendu.");
