@@ -50,5 +50,15 @@
   "createJobCommand": "Création d'un travail",
   "executeJobCommand": "Exécution d'un ou plusieurs travaux",
   "executeallJobCommand": "Execution de tous les travaux",
-  "exitApplicationCommand": "Entrain de quitter"
+  "exitApplicationCommand": "Entrain de quitter",
+  "displayJobCommand": "Commande affichage des traveaux",
+  "errorReadingConsoleInput": "Erreur lors de la lecture de l'entrée de la console :",
+  "job": "Travail",
+  "from": "De",
+  "to": "à",
+  "createdOn": "créé le",
+  "type": "type",
+  "startingBackUpComplete": "Starting complete backup for",
+  "backupComplet": "Sauvegarde complète pour"
+
 }
