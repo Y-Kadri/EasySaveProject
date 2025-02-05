@@ -135,7 +135,7 @@ Feature: Jobs Creation - Create Job Command - Create new backup job
           "Time": "2025-02-03T14:14:12.695169+01:00"
         }
       ],
-      "index": 3
+      "index": 1
     }
     """
   # Scenario 8: Verify the system limits the number of jobs to 5
