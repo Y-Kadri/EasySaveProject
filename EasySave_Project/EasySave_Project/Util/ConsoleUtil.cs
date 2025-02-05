@@ -10,8 +10,6 @@ namespace EasySave_Project.Util
     /// </summary>
     public static class ConsoleUtil
     {
-        private static readonly TranslationService _translator = TranslationService.GetInstance();
-
         /// <summary>
         /// Prints a translated message to the console.
         /// If no translation is available, it prints the original text.
@@ -19,7 +17,7 @@ namespace EasySave_Project.Util
         /// <param name="textKey">The translation key to fetch the translated message.</param>
         public static void PrintTextconsole(string textKey)
         {
-            Console.WriteLine(_translator.GetText(textKey));
+            Console.WriteLine(TranslationService.GetInstance().GetText(textKey));
         }
 
         /// <summary>
@@ -69,7 +67,7 @@ namespace EasySave_Project.Util
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"{_translator.GetText("errorReadingJsonFile")} {ex.Message}");
+                    Console.WriteLine($"{TranslationService.GetInstance().GetText("errorReadingJsonFile")} {ex.Message}");
                 }
             }
         }
@@ -94,7 +92,7 @@ namespace EasySave_Project.Util
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"{_translator.GetText("errorReadingJsonFile")} {ex.Message}");
+                    Console.WriteLine($"{TranslationService.GetInstance().GetText("errorReadingJsonFile")} {ex.Message}");
                 }
             }
         }
