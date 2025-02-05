@@ -37,6 +37,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Build project
+        run: dotnet build ${{ env.SOLUTION_PATH }} --no-restore --configuration Release
+
       - name: Run test
         run: dotnet test ${{ env.SOLUTION_PATH }}
 
