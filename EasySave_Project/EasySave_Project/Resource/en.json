@@ -46,5 +46,7 @@
   "from": "From",
   "to": "to",
   "createdOn": "created on",
-  "type": "type"
+  "type": "type",
+  "startingBackUpComplete": "Starting complete backup for",
+  "backupComplet": "Complete backup for"
 }

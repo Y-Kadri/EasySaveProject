@@ -57,5 +57,8 @@
   "from": "De",
   "to": "à",
   "createdOn": "créé le",
-  "type": "type"
+  "type": "type",
+  "startingBackUpComplete": "Starting complete backup for",
+  "backupComplet": "Sauvegarde complète pour"
+
 }
