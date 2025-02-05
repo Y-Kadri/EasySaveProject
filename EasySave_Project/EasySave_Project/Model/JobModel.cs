@@ -72,7 +72,21 @@ namespace EasySave_Project.Model
         /// <returns>A formatted string describing the job.</returns>
         public override string ToString()
         {
-            return $"Job {Name} : From {FileSource} to {FileTarget}, created on {Time}, type: {SaveType}";
+            var translationService = TranslationService.GetInstance();
+            return string.Format(
+                "{0} {1} : {2} {3} {4} {5}, {6} {7}, {8}: {9}",
+                translationService.GetText("job"),
+                Name,
+                translationService.GetText("from"),
+                FileSource,
+                translationService.GetText("to"),
+                FileTarget,
+                translationService.GetText("createdOn"),
+                Time,
+                translationService.GetText("type"),
+                SaveType
+            );
         }
+
     }
 }

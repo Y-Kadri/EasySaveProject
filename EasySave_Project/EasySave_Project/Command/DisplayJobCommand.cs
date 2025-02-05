@@ -1,5 +1,7 @@
 using EasySave_Project.Manager;
 using EasySave_Project.Model;
+using EasySave_Project.Service;
+using EasySave_Project.Util;
 using EasySave_Project.View;
 
 namespace EasySave_Project.Command
@@ -31,14 +33,14 @@ namespace EasySave_Project.Command
             if (_jobManager.Jobs.Count == 0)
             {
                 // Notify user that the job list is empty
-                Util.ConsoleUtil.PrintTextconsole("listEmpty");
+                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("listEmpty"));
                 return; // Exit the method if there are no jobs
             }
 
             // Iterate through the list of jobs and display each job
             foreach (JobModel job in _jobManager.Jobs)
             {
-                Util.ConsoleUtil.PrintTextconsole(job.ToString()); // Print the job details
+                ConsoleUtil.PrintTextconsole(job.ToString()); // Print the job details
             }
         }
 
@@ -47,7 +49,7 @@ namespace EasySave_Project.Command
         /// </summary>
         public void GetInstruction()
         {
-            Console.WriteLine("Display Job Command"); // Indicate the purpose of this command
+            ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("displayJobCommand"));
         }
     }
 }

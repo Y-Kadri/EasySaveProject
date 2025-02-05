@@ -21,7 +21,8 @@ namespace EasySave_Project.Service
         /// <param name="backupDir">The directory where the backup will be stored.</param>
         public void Execute(JobModel job, string backupDir)
         {
-            string message = $"Starting complete backup for {job.Name}";
+            string message = TranslationService.GetInstance().GetText("startingBackUpComplete") + job.Name;
+           
             ConsoleUtil.PrintTextconsole(message);
             LogManager.Instance.AddMessage(message);
 
@@ -29,7 +30,7 @@ namespace EasySave_Project.Service
 
             job.LastFullBackupPath = backupDir; // Update the last full backup path
 
-            message = $"Complete backup for {job.Name} finished successfully.";
+            message = TranslationService.GetInstance().GetText("backupComplet") + " " + job.Name;
             ConsoleUtil.PrintTextconsole(message);
             LogManager.Instance.AddMessage(message);
         }

@@ -39,5 +39,14 @@
   "createJobCommand": "Create job command",
   "executeJobCommand": "Execution of one or more jobs",
   "executeallJobCommand": "Execution of all jobs",
-  "exitApplicationCommand":  "Leaving..."
+  "exitApplicationCommand": "Leaving...",
+  "displayJobCommand": "Display job command",
+  "errorReadingConsoleInput": "Error reading console input:",
+  "job": "Job",
+  "from": "From",
+  "to": "to",
+  "createdOn": "created on",
+  "type": "type",
+  "startingBackUpComplete": "Starting complete backup for",
+  "backupComplet": "Complete backup for"
 }
