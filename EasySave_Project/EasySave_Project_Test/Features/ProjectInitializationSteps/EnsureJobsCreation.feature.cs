@@ -93,11 +93,11 @@ namespace EasySave_Project_Test.Features.ProjectInitializationSteps
             {
                 this.ScenarioStart();
 #line 8
-    testRunner.Given("the \"jobsSetting.json\" file exists in the \"easySaveSetting\" directory with the fo" +
-                        "llowing content:", @"{
+    testRunner.Given("the \"jobsSetting.json\" file exists in the \"easySave/easySaveSetting\" directory wi" +
+                        "th the following content:", @"{
   ""jobs"": [
     {
-      ""id"": 1,
+      ""Id"": 1,
       ""SaveState"": ""INACTIVE"",
       ""SaveType"": ""COMPLETE"",
       ""Name"": ""Backup Documents"",
@@ -118,7 +118,7 @@ namespace EasySave_Project_Test.Features.ProjectInitializationSteps
                             "Property",
                             "Value"});
                 table1.AddRow(new string[] {
-                            "id",
+                            "Id",
                             "1"});
                 table1.AddRow(new string[] {
                             "SaveState",

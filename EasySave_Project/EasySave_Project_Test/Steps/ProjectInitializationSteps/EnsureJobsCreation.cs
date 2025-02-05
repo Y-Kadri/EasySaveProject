@@ -60,7 +60,7 @@ public class EnsureJobsCreation
 
             switch (property)
             {
-                case "id":
+                case "Id":
                     Assert.AreEqual(int.Parse(expectedValue), job.Id, $"The 'id' value does not match.");
                     break;
                 case "SaveState":
