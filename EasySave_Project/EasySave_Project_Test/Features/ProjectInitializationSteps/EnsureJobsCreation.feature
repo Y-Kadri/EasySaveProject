@@ -5,12 +5,12 @@ Feature: Project Initialization - Ensure Jobs Creation - Load Jobs from jobsSett
   So that the application can properly manage the job data.
 
   Scenario: Verify that jobs are loaded from the jobsSetting.json file if it exists
-    Given the "jobsSetting.json" file exists in the "easySaveSetting" directory with the following content:
+    Given the "jobsSetting.json" file exists in the "easySave/easySaveSetting" directory with the following content:
       """
       {
         "jobs": [
           {
-            "id": 1,
+            "Id": 1,
             "SaveState": "INACTIVE",
             "SaveType": "COMPLETE",
             "Name": "Backup Documents",
@@ -27,7 +27,7 @@ Feature: Project Initialization - Ensure Jobs Creation - Load Jobs from jobsSett
     When I load the jobs from the "jobsSetting.json" file
     Then the job with id 1 should be loaded with the following details:
       | Property          | Value                      |
-      | id               | 1                           |
+      | Id               | 1                           |
       | SaveState        | INACTIVE                    |
       | SaveType         | COMPLETE                    |
       | Name             | Backup Documents            |

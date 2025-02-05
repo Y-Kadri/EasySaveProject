@@ -400,3 +400,7 @@ FodyWeavers.xsd
 *.sln.iml
 
 .idea/
+
+.tools/
+coverage-report/
+.DS_Store
