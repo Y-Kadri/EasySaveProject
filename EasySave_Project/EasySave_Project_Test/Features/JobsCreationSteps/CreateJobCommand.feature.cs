@@ -35,8 +35,8 @@ namespace EasySave_Project_Test.Features.JobsCreationSteps
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en"), "Features/JobsCreationSteps", "Jobs Creation - Create Job Command - Create new backup job", "  As a user of the EasySave application,\n  I want to create a new backup job\n  So" +
-                    " that I can save files with the desired configurations", ProgrammingLanguage.CSharp, featureTags);
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en"), "Features/JobsCreationSteps", "Jobs Creation - Create Job Command - Create new backup job", "  As a user of the EasySave application,\r\n  I want to create a new backup job\r\n  " +
+                    "So that I can save files with the desired configurations", ProgrammingLanguage.CSharp, featureTags);
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -92,7 +92,7 @@ namespace EasySave_Project_Test.Features.JobsCreationSteps
             {
                 this.ScenarioStart();
 #line 9
-    testRunner.Given("the configuration file \"jobsSetting.json\" contains:", "{\n  \"jobs\": [],\n  \"index\": 0\n}", ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("the configuration file \"jobsSetting.json\" contains:", "{\r\n  \"jobs\": [],\r\n  \"index\": 0\r\n}", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 16
     testRunner.And("I am on the job creation screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -137,7 +137,7 @@ namespace EasySave_Project_Test.Features.JobsCreationSteps
             {
                 this.ScenarioStart();
 #line 26
-    testRunner.Given("the configuration file \"jobsSetting.json\" contains:", "{\n  \"jobs\": [],\n  \"index\": 0\n}", ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("the configuration file \"jobsSetting.json\" contains:", "{\r\n  \"jobs\": [],\r\n  \"index\": 0\r\n}", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 33
     testRunner.And("I am on the job creation screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -179,7 +179,7 @@ namespace EasySave_Project_Test.Features.JobsCreationSteps
             {
                 this.ScenarioStart();
 #line 42
-    testRunner.Given("the configuration file \"jobsSetting.json\" contains:", "{\n  \"jobs\": [],\n  \"index\": 0\n}", ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("the configuration file \"jobsSetting.json\" contains:", "{\r\n  \"jobs\": [],\r\n  \"index\": 0\r\n}", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 49
     testRunner.And("I am on the job creation screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -221,7 +221,7 @@ namespace EasySave_Project_Test.Features.JobsCreationSteps
             {
                 this.ScenarioStart();
 #line 59
-    testRunner.Given("the configuration file \"jobsSetting.json\" contains:", "{\n  \"jobs\": [],\n  \"index\": 0\n}", ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("the configuration file \"jobsSetting.json\" contains:", "{\r\n  \"jobs\": [],\r\n  \"index\": 0\r\n}", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 66
     testRunner.And("I am on the job creation screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -263,7 +263,7 @@ namespace EasySave_Project_Test.Features.JobsCreationSteps
             {
                 this.ScenarioStart();
 #line 75
-    testRunner.Given("the configuration file \"jobsSetting.json\" contains:", "{\n  \"jobs\": [],\n  \"index\": 0\n}", ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("the configuration file \"jobsSetting.json\" contains:", "{\r\n  \"jobs\": [],\r\n  \"index\": 0\r\n}", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 82
     testRunner.And("I am on the job creation screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -305,7 +305,7 @@ namespace EasySave_Project_Test.Features.JobsCreationSteps
             {
                 this.ScenarioStart();
 #line 91
-    testRunner.Given("the configuration file \"jobsSetting.json\" contains:", "{\n  \"jobs\": [],\n  \"index\": 0\n}", ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("the configuration file \"jobsSetting.json\" contains:", "{\r\n  \"jobs\": [],\r\n  \"index\": 0\r\n}", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 98
     testRunner.And("I am on the job creation screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -350,7 +350,7 @@ namespace EasySave_Project_Test.Features.JobsCreationSteps
             {
                 this.ScenarioStart();
 #line 108
-    testRunner.Given("the configuration file \"jobsSetting.json\" contains:", "{\n  \"jobs\": [],\n  \"index\": 0\n}", ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("the configuration file \"jobsSetting.json\" contains:", "{\r\n  \"jobs\": [],\r\n  \"index\": 0\r\n}", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 115
     testRunner.And("I am on the job creation screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -421,7 +421,7 @@ namespace EasySave_Project_Test.Features.JobsCreationSteps
             {
                 this.ScenarioStart();
 #line 143
-    testRunner.Given("the configuration file \"jobsSetting.json\" contains:", "{\n  \"jobs\": [],\n  \"index\": 0\n}", ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("the configuration file \"jobsSetting.json\" contains:", "{\r\n  \"jobs\": [],\r\n  \"index\": 0\r\n}", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 150
     testRunner.And("I am on the job creation screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");

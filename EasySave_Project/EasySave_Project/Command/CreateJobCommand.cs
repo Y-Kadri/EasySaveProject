@@ -17,17 +17,6 @@ namespace EasySave_Project.Command
     /// </summary>
     public class CreateJobCommand : ICommand
     {
-        // Console view instance to interact with the user
-        private ConsoleView _consoleView;
-
-        /// <summary>
-        /// Constructor initializes the ConsoleView instance.
-        /// </summary>
-        public CreateJobCommand()
-        {
-            _consoleView = new ConsoleView();
-        }
-
         /// <summary>
         /// Executes the command to create a new job.
         /// It prompts the user for job details and adds the job to JobManager.
@@ -37,19 +26,19 @@ namespace EasySave_Project.Command
             while (true) // Infinite loop to ensure correct input
             {
                 // Prompt user for the job name
-                Util.ConsoleUtil.PrintTextconsole("entrerNom");
+                ConsoleUtil.PrintTextconsole("entrerNom");
                 string name = ConsoleUtil.GetInputString();
 
                 // Prompt user for the source file path
-                Util.ConsoleUtil.PrintTextconsole("entrerFileSource");
+                ConsoleUtil.PrintTextconsole("entrerFileSource");
                 string fileSource = ConsoleUtil.GetInputString();
 
                 // Prompt user for the target file path
-                Util.ConsoleUtil.PrintTextconsole("entrerFileTarget");
+                ConsoleUtil.PrintTextconsole("entrerFileTarget");
                 string fileTarget = ConsoleUtil.GetInputString();
 
                 // Prompt user for the job type (Complete or Differential)
-                Util.ConsoleUtil.PrintTextconsole("entrerJobType");
+                ConsoleUtil.PrintTextconsole("entrerJobType");
                 JobSaveTypeEnum jobSaveTypeEnum = ConsoleUtil.GetInputJobSaveTypeEnum();
 
                 // Get the singleton instance of JobManager
