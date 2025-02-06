@@ -71,7 +71,7 @@ jobs:
       - id: verify_commit_message
         uses: uptownaravi/verify-commit-message-action@v2
         with:
-          regex: '^(hotfix|release|feature|main|develop)\[.+\] : .+'
+          regex: '^(Merge.*|((hotfix|release|feature|main|develop)\[.+\] : .+))$'
   
   sonar:
     name: Sonar Cloud

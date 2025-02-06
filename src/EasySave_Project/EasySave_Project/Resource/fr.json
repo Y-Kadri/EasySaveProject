@@ -58,7 +58,9 @@
   "to": "à",
   "createdOn": "créé le",
   "type": "type",
-  "startingBackUpComplete": "Starting complete backup for",
-  "backupComplet": "Sauvegarde complète pour"
+  "startingBackUpComplete": "Lancement du travail pour",
+  "backupComplet": "Sauvegarde complète pour",
+  "jobNameCannotBeEmpty": "Le nom du job ne peut pas être vide",
+  "maxJobLimitReached": "Impossible de créer plus de 5 jobs"
 
 }
