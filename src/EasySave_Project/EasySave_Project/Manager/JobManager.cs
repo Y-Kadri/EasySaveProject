@@ -38,13 +38,18 @@ namespace EasySave_Project.Manager
             return jobManager; // Return the singleton instance
         }
 
+        public static void Destroy()
+        {
+            jobManager = null;
+        }
+
         /// <summary>
         /// Adds a new job to the job list.
         /// </summary>
         /// <param name="jobModel">The job to add.</param>
         public void AddJob(JobModel jobModel)
         {
-            if (Jobs.Count > MAX_JOB)
+            if (Jobs.Count >= MAX_JOB)
             {
                 throw new ArgumentException("Cannot create more than 5 jobs");
             }
@@ -69,7 +74,7 @@ namespace EasySave_Project.Manager
                     throw new ArgumentException("Job name cannot be empty");
                 }
 
-                if (Jobs.Count > MAX_JOB)
+                if (Jobs.Count >= MAX_JOB)
                 {
                     throw new ArgumentException("Cannot create more than 5 jobs");
                 }
