@@ -23,6 +23,7 @@ namespace EasySave_Project.Service
         {
             var translator = TranslationService.GetInstance();
 
+
             // Check for the last full backup
             if (string.IsNullOrEmpty(job.LastFullBackupPath) || !FileUtil.ExistsDirectory(job.LastFullBackupPath))
             {
@@ -36,7 +37,10 @@ namespace EasySave_Project.Service
             else
             {
                 ExecuteDifferentialSave(job, backupDir, job.LastFullBackupPath); // Perform a differential backup
+                
             }
+
+            job.LastSaveDifferentialPath = backupDir;
         }
 
         /// <summary>
