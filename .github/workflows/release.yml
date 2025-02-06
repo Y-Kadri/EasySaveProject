@@ -9,6 +9,9 @@ env:
   SOLUTION_PATH: src/EasySave_Project/EasySave_Project.sln
   DOTNET_VERSION: '8.0'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
