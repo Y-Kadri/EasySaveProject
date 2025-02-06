@@ -84,9 +84,6 @@ namespace EasySave_Project.Manager
 
                 // Add the job to the list
                 Jobs.Add(job);
-
-                // Display success message
-                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("jobCree"));
                 return job; // Return the created job
             }
             catch (ArgumentException ex)
