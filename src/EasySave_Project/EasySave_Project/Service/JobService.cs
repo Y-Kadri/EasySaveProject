@@ -31,9 +31,6 @@ namespace EasySave_Project.Service
                 LogManager.Instance.AddMessage(message);
                 return; // Exit if source directory does not exist
             }
-            message = $"{translator.GetText("directorySourceDoNotExist")} : {job.FileSource}";
-            ConsoleUtil.PrintTextconsole(message);
-            LogManager.Instance.AddMessage(message);
 
             // Create target directory if it doesn't exist
             if (!FileUtil.ExistsDirectory(job.FileTarget))
