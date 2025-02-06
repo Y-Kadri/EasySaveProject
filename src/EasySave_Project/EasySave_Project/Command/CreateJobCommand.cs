@@ -47,9 +47,6 @@ namespace EasySave_Project.Command
                 // Create and add the job using the provided user input
                 jobMana.CreateAndAddJob(name, fileSource, fileTarget, jobSaveTypeEnum);
 
-                // Notify user that the job was successfully created
-                ConsoleUtil.PrintTextconsole("jobCree");
-
                 break; // Exit the loop after successfully creating the job
             }
         }

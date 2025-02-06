@@ -63,7 +63,7 @@ namespace EasySave_Project.Model
             this.SaveType = jobSaveTypeEnum;
             this.LastFullBackupPath = LastFullBackupPath;
             this.LastSaveDifferentialPath = LastSaveDifferentialPath;
-
+            this.Id = FileUtil.GetCurrentJobIndex();
         }
 
         /// <summary>

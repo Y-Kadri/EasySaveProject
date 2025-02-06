@@ -97,9 +97,62 @@ namespace EasySave_Project.Service
             };
         }
 
+        /// <summary>
+        /// Met à jour un job spécifique dans le fichier JSON après modification.
+        /// </summary>
+        /// <param name="updatedJob">Le job mis à jour.</param>
         private void UpdateJobInFile(JobModel updatedJob)
         {
-            // Logic for updating job settings in JSON
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easysave", "easySaveSetting", "jobsSetting.json");
+            var translator = TranslationService.GetInstance();
+            string message;
+
+            try
+            {
+                if (!File.Exists(filePath))
+                {
+                    message = $"{translator.GetText("jsonFileNotExist")}";
+                    ConsoleUtil.PrintTextconsole(message);
+                    LogManager.Instance.AddMessage(message);
+                    return;
+                }
+
+                // Lire le JSON existant
+                string jsonString = File.ReadAllText(filePath);
+                JobSettingsDto data = JsonSerializer.Deserialize<JobSettingsDto>(jsonString);
+
+                if (data == null || data.jobs == null)
+                {
+                    message = $"{translator.GetText("errorReadingJsonFile")}";
+                    ConsoleUtil.PrintTextconsole(message);
+                    LogManager.Instance.AddMessage(message);
+                    return;
+                }
+
+                // Rechercher et mettre à jour le job
+                var jobToUpdate = data.jobs.Find(j => j.Id == updatedJob.Id);
+                if (jobToUpdate != null)
+                {
+                    jobToUpdate.LastFullBackupPath = updatedJob.LastFullBackupPath;
+                    jobToUpdate.LastSaveDifferentialPath = updatedJob.LastSaveDifferentialPath;
+
+                    // Réécrire le JSON avec les nouvelles valeurs
+                    string updatedJsonString = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
+                    File.WriteAllText(filePath, updatedJsonString);
+                }
+                else
+                {
+                    message = $"{translator.GetText("indexNotFoundInJson")}";
+                    ConsoleUtil.PrintTextconsole(message);
+                    LogManager.Instance.AddMessage(message);
+                }
+            }
+            catch (Exception ex)
+            {
+                message = $"{translator.GetText("errorWritingJsonFile")} {ex.Message}";
+                ConsoleUtil.PrintTextconsole(message);
+                LogManager.Instance.AddMessage(message);
+            }
         }
     }
 }
