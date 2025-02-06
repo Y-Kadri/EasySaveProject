@@ -233,6 +233,56 @@ namespace EasySave_Project.Util
         }
 
         /// <summary>
+        /// Gets the current job index from the JSON file.
+        /// </summary>
+        /// <returns>The current job index, or 0 if not found.</returns>
+        public static int GetCurrentJobIndex()
+        {
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                 "easySave", "easySaveSetting", "jobsSetting.json");
+            string message;
+
+            try
+            {
+                // Check if the JSON file exists
+                if (!File.Exists(filePath))
+                {
+                    message = TranslationService.GetInstance().GetText("jsonFileNotExist");
+                    ConsoleUtil.PrintTextconsole(message);
+                    LogManager.Instance.AddMessage(message);
+                    return 0; // Return 0 if file does not exist
+                }
+
+                // Read the content of the JSON file
+                string jsonString = File.ReadAllText(filePath);
+                JsonDocument doc = JsonDocument.Parse(jsonString);
+                JsonElement root = doc.RootElement;
+
+                // Try to get the "index" property
+                if (root.TryGetProperty("index", out JsonElement indexElement))
+                {
+                    return indexElement.GetInt32(); // Return the current index
+                }
+                else
+                {
+                    message = TranslationService.GetInstance().GetText("indexNotFoundInJson");
+                    ConsoleUtil.PrintTextconsole(message);
+                    LogManager.Instance.AddMessage(message);
+                    return 0; // Default to 0 if index is not found
+                }
+            }
+            catch (Exception ex)
+            {
+                // Print an error message if an exception occurs during reading
+                message = TranslationService.GetInstance().GetText("errorReadingJsonFile") + ex.Message;
+                ConsoleUtil.PrintTextconsole(message);
+                LogManager.Instance.AddMessage(message);
+                return -1; // Return -1 to indicate an error
+            }
+        }
+
+
+        /// <summary>
         /// Retrieves all files in the specified directory.
         /// </summary>
         /// <param name="path">The path of the directory to retrieve files from.</param>

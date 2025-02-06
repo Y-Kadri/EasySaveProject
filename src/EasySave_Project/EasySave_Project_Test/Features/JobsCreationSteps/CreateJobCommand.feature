@@ -147,7 +147,7 @@ Feature: Jobs Creation - Create Job Command - Create new backup job
       "index": 0
     }
     """
-    And I am on the job creation screen
+    And I am <ScreenState> the job creation screen
 
     When I enter "<JobName>" as the job name
     And I enter "/tmp" as the source path
@@ -157,10 +157,10 @@ Feature: Jobs Creation - Create Job Command - Create new backup job
     Then <ExpectedResult>
 
     Examples:
-      | JobName          | ExpectedResult                                 |
-      | Backup Project 1 | I should see a success message "Job created successfully" |
-      | Backup Project 2 | I should see a success message "Job created successfully" |
-      | Backup Project 3 | I should see a success message "Job created successfully" |
-      | Backup Project 4 | I should see a success message "Job created successfully" |
-      | Backup Project 5 | I should see a success message "Job created successfully" |
-      | Backup Project 6 | I should see an error message "Cannot create more than 5 jobs" |
+      | JobName          | ScreenState | ExpectedResult                                 |
+      | Backup Project 1 | on          | I should see a success message "Job created successfully" |
+      | Backup Project 2 | already on  | I should see a success message "Job created successfully" |
+      | Backup Project 3 | already on  | I should see a success message "Job created successfully" |
+      | Backup Project 4 | already on  | I should see a success message "Job created successfully" |
+      | Backup Project 5 | already on  | I should see a success message "Job created successfully" |
+      | Backup Project 6 | already on  | I should see an error message "Cannot create more than 5 jobs" |

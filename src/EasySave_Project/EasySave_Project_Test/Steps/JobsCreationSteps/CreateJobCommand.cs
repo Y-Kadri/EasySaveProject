@@ -18,13 +18,13 @@ public class CreateJobCommand
     private string _successMessage;
     private string _errorMessage;
     private bool _isJobCreated;
+    private bool _isNecessary = false;
 
 
     [BeforeScenario]
     public void ClearJobsBeforeScenario()
     {
         _jobManager = JobManager.GetInstance();
-
         // Clear the jobs list before most scenarios
         if (ScenarioContext.Current.ScenarioInfo.Title != "Create up to 5 jobs successfully and fail on the 6th")
         {
@@ -35,6 +35,15 @@ public class CreateJobCommand
     // Step definition: Given I am on the job creation screen
     [Given(@"I am on the job creation screen")]
     public void GivenIAmOnTheJobCreationScreen()
+    {
+        // Logic to simulate being on the job creation screen.
+        // Could be initializing necessary objects if needed
+        JobManager.Destroy();
+        _jobManager = JobManager.GetInstance();
+    }
+    
+    [Given(@"I am already on the job creation screen")]
+    public void GivenIAmAlreadyOnTheJobCreationScreen()
     {
         // Logic to simulate being on the job creation screen.
         // Could be initializing necessary objects if needed
@@ -76,6 +85,11 @@ public class CreateJobCommand
     [Then(@"I should see a success message ""(.*)""")]
     public void ThenIShouldSeeASuccessMessage(string expectedMessage)
     {
+        if (_jobName == "Backup Project 5")
+        {
+            var a = 12;
+        }
+        
         // Simulate job creation process
         var createdJob = _jobManager.CreateAndAddJob(_jobName, _fileSource, _fileTarget, _jobSaveTypeEnum);
         _isJobCreated = createdJob != null;
