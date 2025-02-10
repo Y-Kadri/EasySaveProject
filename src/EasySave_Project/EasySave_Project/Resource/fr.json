@@ -61,6 +61,7 @@
   "startingBackUpComplete": "Lancement du travail pour",
   "backupComplet": "Sauvegarde complète pour",
   "jobNameCannotBeEmpty": "Le nom du job ne peut pas être vide",
-  "maxJobLimitReached": "Impossible de créer plus de 5 jobs"
+  "maxJobLimitReached": "Impossible de créer plus de 5 jobs",
+  "enterLogFormatChoose": "Veuillez choisir le format du journal :"
 
 }
