@@ -14,9 +14,6 @@ namespace EasySave_Project.Manager
     {
         // Static instance of JobManager (Singleton pattern)
         private static JobManager jobManager = null;
-        
-        // Static max jobs in the same time
-        public static int MAX_JOB = 5;
  
         /// <summary>
         /// List containing all backup jobs.
@@ -49,10 +46,6 @@ namespace EasySave_Project.Manager
         /// <param name="jobModel">The job to add.</param>
         public void AddJob(JobModel jobModel)
         {
-            if (Jobs.Count >= MAX_JOB)
-            {
-                throw new ArgumentException("Cannot create more than 5 jobs");
-            }
             this.Jobs.Add(jobModel); // Add job to the list
         }
 
@@ -72,11 +65,6 @@ namespace EasySave_Project.Manager
                 if (string.IsNullOrEmpty(name))
                 {
                     throw new ArgumentException(TranslationService.GetInstance().GetText("jobNameCannotBeEmpty"));
-                }
-
-                if (Jobs.Count >= MAX_JOB)
-                {
-                    throw new ArgumentException(TranslationService.GetInstance().GetText("maxJobLimitReached"));
                 }
 
                 // Create the job using the JobFactory

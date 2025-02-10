@@ -138,8 +138,8 @@ Feature: Jobs Creation - Create Job Command - Create new backup job
       "index": 1
     }
     """
-  # Scenario 8: Verify the system limits the number of jobs to 5
-  Scenario Outline: Create up to 5 jobs successfully and fail on the 6th
+  # Scenario 8: Verify there is no longer system limits of 5 jobs
+  Scenario Outline: Can now create more than 5 jobs (release V.2)
     Given the configuration file "jobsSetting.json" contains:
     """
     {
@@ -163,4 +163,4 @@ Feature: Jobs Creation - Create Job Command - Create new backup job
       | Backup Project 3 | already on  | I should see a success message "Job created successfully" |
       | Backup Project 4 | already on  | I should see a success message "Job created successfully" |
       | Backup Project 5 | already on  | I should see a success message "Job created successfully" |
-      | Backup Project 6 | already on  | I should see an error message "Cannot create more than 5 jobs" |
+      | Backup Project 6 | already on  | I should see a success message "Job created successfully" |
