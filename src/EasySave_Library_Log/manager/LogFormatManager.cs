@@ -30,7 +30,7 @@ namespace EasySave_Library_Log.manager
         /// <summary>
         /// The current format of the log entries (JSON or XML).
         /// </summary>
-        public LogFormat Format { get; private set; } = LogFormat.XML;
+        public LogFormat Format { get; private set; } = LogFormat.JSON;
 
         /// <summary>
         /// Private constructor to prevent instantiation from outside.
