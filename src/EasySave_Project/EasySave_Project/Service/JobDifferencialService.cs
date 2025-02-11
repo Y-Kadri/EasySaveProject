@@ -76,55 +76,8 @@ namespace EasySave_Project.Service
                 // Check if the file needs to be copied
                 if (!FileUtil.ExistsFile(lastFullBackupFile) || FileUtil.GetLastWriteTime(sourceFile) > FileUtil.GetLastWriteTime(lastFullBackupFile))
                 {
-                    FileUtil.CopyFile(sourceFile, targetFile, true);
+                    long fileSize = HandleFileOperation(sourceFile, targetFile, job);
 
-                    string formatFile = FileUtil.GetFileExtension(sourceFile);
-                    bool shouldEncrypt = IsEncryptedFileFormat(formatFile);
-
-                    Stopwatch stopwatch = new Stopwatch();
-                    double elapsedTime;
-
-                    // If encryption option is enabled, encrypt the file after copying
-                    if (shouldEncrypt)
-                    {
-                        try
-                        {
-                            stopwatch.Start();
-                            FileUtil.EncryptFile(targetFile, "Cesi2004@+");
-                            message = $"{translator.GetText("fileCopiedAndEncrypted")}: {sourceFile} -> {targetFile}";
-                            stopwatch.Stop();
-                            elapsedTime = stopwatch.ElapsedMilliseconds;
-                        }
-                        catch (Exception ex)
-                        {
-                            elapsedTime = -1;
-                        }
-                      
-                    }
-                    else
-                    {
-                        message = $"{translator.GetText("fileCopied")}: {sourceFile} -> {targetFile}";
-                        elapsedTime = 0;
-                    }
-
-
-                    ConsoleUtil.PrintTextconsole(message);  // Display the message in the console
-                    LogManager.Instance.AddMessage(message); // Add the message to the log
-
-                    long fileSize = FileUtil.GetFileSize(sourceFile);
-                    double transferTime = FileUtil.CalculateTransferTime(sourceFile, targetFile);
-
-                    message = $"File {fileName} copied from {sourceFile} to {targetFile}";
-                    ConsoleUtil.PrintTextconsole(message);
-                    LogManager.Instance.AddMessage(message);
-
-                    if (shouldEncrypt)
-                    {
-                        LogManager.Instance.UpdateState(job.Name, sourceFile, targetFile, fileSize, transferTime, elapsedTime);
-                    } else
-                    {
-                        LogManager.Instance.UpdateState(job.Name, sourceFile, targetFile, fileSize, transferTime, 0.0);
-                    }
 
                     processedFiles++;
                     processedSize += fileSize;
