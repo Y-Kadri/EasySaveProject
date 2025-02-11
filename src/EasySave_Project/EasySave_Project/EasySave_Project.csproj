@@ -5,16 +5,60 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
   </PropertyGroup>
 
   <ItemGroup>
     <None Update="Resource\*.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <AvaloniaResource Include="Assets\**" />
+      <Folder Include="ViewModels\Components\" />
   </ItemGroup>
+
+  <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.2.1" />
+        <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.2.1" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.2.1" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.1" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.1" />
+        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+        <PackageReference Include="Avalonia.Diagnostics" Version="11.2.1">
+            <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+            <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+        <PackageReference Include="ReactiveUI" Version="20.1.63" />
+        <PackageReference Include="Semi.Avalonia" Version="11.2.1.4" />
+        <PackageReference Include="Semi.Avalonia.DataGrid" Version="11.2.1.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <UpToDateCheckInput Remove="Views\Layout\Base.axaml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Views\Pages\SettingPage.axaml.cs">
+        <DependentUpon>SettingPage.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Pages\JobsPage.axaml.cs">
+        <DependentUpon>JobsPage.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Pages\LogsPage.axaml.cs">
+        <DependentUpon>LogsPage.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Pages\AddJobsPage.axaml.cs">
+        <DependentUpon>AddJobsPage.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
 
 </Project>
