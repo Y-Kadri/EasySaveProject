@@ -3,7 +3,7 @@ using EasySave_Library_Log.manager;
 using EasySave_Project.Model;
 using EasySave_Project.Util;
 using System;
-
+using CryptoSoft;
 namespace EasySave_Project.Service
 {
     /// <summary>
@@ -36,8 +36,7 @@ namespace EasySave_Project.Service
             }
             else
             {
-                ExecuteDifferentialSave(job, backupDir, job.LastFullBackupPath); // Perform a differential backup
-                
+               ExecuteDifferentialSave(job, backupDir, job.LastFullBackupPath); // Perform a differential backup
             }
 
             job.LastSaveDifferentialPath = backupDir;
@@ -74,7 +73,7 @@ namespace EasySave_Project.Service
                 // Check if the file needs to be copied
                 if (!FileUtil.ExistsFile(lastFullBackupFile) || FileUtil.GetLastWriteTime(sourceFile) > FileUtil.GetLastWriteTime(lastFullBackupFile))
                 {
-                    FileUtil.CopyFile(sourceFile, targetFile, true);
+                    FileUtil.CopyFile(sourceFile, targetFile, true, true);
 
                     long fileSize = FileUtil.GetFileSize(sourceFile);
                     double transferTime = FileUtil.CalculateTransferTime(sourceFile, targetFile);
@@ -122,3 +121,5 @@ namespace EasySave_Project.Service
         }
     }
 }
+
+          

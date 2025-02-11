@@ -57,7 +57,7 @@ namespace EasySave_Project.Service
                 string fileName = FileUtil.GetFileName(sourceFile);
                 string targetFile = FileUtil.CombinePath(targetDir, fileName);
 
-                FileUtil.CopyFile(sourceFile, targetFile, true); // Copy file to target
+                FileUtil.CopyFile(sourceFile, targetFile,true, true); // Copy file to target
 
                 // Calculate file size and transfer time
                 long fileSize = FileUtil.GetFileSize(sourceFile);
