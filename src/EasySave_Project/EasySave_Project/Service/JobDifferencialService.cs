@@ -11,7 +11,7 @@ namespace EasySave_Project.Service
     /// This class implements the IJobStrategy interface and provides
     /// the functionality to execute a differential backup of the specified job.
     /// </summary>
-    public class JobDifferencialService : IJobStrategyService
+    public class JobDifferencialService : AJobStrategyService
     {
         /// <summary>
         /// Executes the differential backup job for the given JobModel.
@@ -19,6 +19,7 @@ namespace EasySave_Project.Service
         /// </summary>
         /// <param name="job">The JobModel object representing the job to execute.</param>
         /// <param name="backupDir">The directory where the backup will be stored.</param>
+        override
         public void Execute(JobModel job, string backupDir)
         {
             var translator = TranslationService.GetInstance();

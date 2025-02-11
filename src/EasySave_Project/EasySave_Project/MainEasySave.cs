@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EasySave_Library_Log;
+using EasySave_Library_Log.manager;
 using EasySave_Project.Controller;
 using EasySave_Project.Model;
 using EasySave_Project.Service;
@@ -23,26 +24,40 @@ namespace EasySave_Project
             LoadDataService loadDataService = new();
             
             loadDataService.LoadJobs();
+
+
             
             int choiceLanguage = consoleView.ChooseLanguage();
 
+            switch (choiceLanguage)
+            {
+                case 1:
+                    TranslationService.SetLanguage(LanguageEnum.EN);
+                    break;
+                case 2:
+                    TranslationService.SetLanguage(LanguageEnum.FR);
+                    break;
+                default:
+                    TranslationService.SetLanguage(LanguageEnum.EN);
+                    break;
+            }
+            
+            
+            int choiceLogFormat = consoleView.ChooseLogFormat();
+
+            switch (choiceLogFormat)
+            {
+                case 1:
+                    LogFormatManager.Instance.SetLogFormat(LogFormatManager.LogFormat.JSON);
+                    break;
+                case 2:
+                    LogFormatManager.Instance.SetLogFormat(LogFormatManager.LogFormat.XML);
+                    break;
+            }
+
             while (true)
             {
-                switch (choiceLanguage)
-                {
-                    case 1:
-                        TranslationService.SetLanguage(LanguageEnum.EN);
-                        break;
-                    case 2:
-                        TranslationService.SetLanguage(LanguageEnum.FR);
-                        break;
-                    default:
-                        TranslationService.SetLanguage(LanguageEnum.EN);
-                        break;
-                }
-
                 int choice = consoleView.StartJobCommand();
-
                 commandController.LaunchCommand(choice);
             }
         }

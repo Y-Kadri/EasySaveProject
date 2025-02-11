@@ -5,7 +5,8 @@
   "option2": "2. Créer une tâche de sauvegarde",
   "option3": "3. Exécuter une tâche spécifique",
   "option4": "4. Exécuter toutes les tâches",
-  "option5": "5. Quitter",
+  "option5": "5. Ajouter un format de fichier à crypter",
+  "option6": "6. Quitter",
   "invalidChoice": "Choix invalide",
   "messageValidtext": "Veuillez entrer un texte valide.",
   "messageValidInt": "Veuillez entrer un nombre entier valide.",
@@ -41,7 +42,6 @@
   "errorCreatingDirectoryOrFile": "Erreur lors de la création du répertoire ou du fichier : ",
   "errorWritingJsonFile": "Erreur lors de l'écriture du fichier JSON : ",
   "indexNotFoundInJson": "'index' non trouvé dans le fichier JSON.",
-  "jsonFileNotExist": "Le fichier JSON n'existe pas.",
   "errorReadingJsonFile": "Erreur lors de la lecture du fichier JSON : ",
   "errorConvertingSaveState": "Erreur lors de la conversion de l'état de sauvegarde.",
   "errorAddingJobToJson": "Erreur lors de l'ajout du job au fichier JSON : ",
@@ -61,6 +61,10 @@
   "startingBackUpComplete": "Lancement du travail pour",
   "backupComplet": "Sauvegarde complète pour",
   "jobNameCannotBeEmpty": "Le nom du job ne peut pas être vide",
-  "maxJobLimitReached": "Impossible de créer plus de 5 jobs"
-
+  "maxJobLimitReached": "Impossible de créer plus de 5 jobs",
+  "enterLogFormatChoose": "Veuillez choisir le format du journal :",
+  "formatAdded": "Le format a été ajouté avec succès : ",
+  "jsonFileNotExist": "Le fichier JSON n'existe pas.",
+  "errorAddingFormat": "Erreur lors de l'ajout du format : ",
+  "errorReadingFormat": "Erreur lors de la lecture des formats de fichier cryptés : "
 }

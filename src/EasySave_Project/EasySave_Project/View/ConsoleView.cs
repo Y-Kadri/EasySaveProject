@@ -22,7 +22,7 @@ namespace EasySave_Project.View
         /// </summary>
         public void LaunchApp()
         {
-            Console.WriteLine(TranslationService.GetInstance().GetText("welcome"));
+            ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("welcome"));
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace EasySave_Project.View
         /// <returns>An integer representing the user's language choice.</returns>
         public int ChooseLanguage()
         {
-            Console.WriteLine("Choose your language / Choisissez votre langue: \n1. English\n2. Français\nEnter your choice:");
+            ConsoleUtil.PrintTextconsole("Choose your language / Choisissez votre langue: \n1. English\n2. Français\nEnter your choice:");
             return ConsoleUtil.GetInputInt();
         }
 
@@ -45,7 +45,8 @@ namespace EasySave_Project.View
                 + "\n" + TranslationService.GetInstance().GetText("option2")
                 + "\n" + TranslationService.GetInstance().GetText("option3")
                 + "\n" + TranslationService.GetInstance().GetText("option4")
-                + "\n" + TranslationService.GetInstance().GetText("option5"));
+                + "\n" + TranslationService.GetInstance().GetText("option5")
+                + "\n" + TranslationService.GetInstance().GetText("option6"));
             return ConsoleUtil.GetInputInt();
         }
 
@@ -55,10 +56,10 @@ namespace EasySave_Project.View
         /// <param name="jobList">A list of JobModel objects representing backup jobs.</param>
         public void ShowJobList(List<JobModel> jobList)
         {
-            Console.WriteLine(TranslationService.GetInstance().GetText("CurrentBackupTasks"));
+            ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("CurrentBackupTasks"));
             for (int i = 0; i < jobList.Count; i++)
             {
-                Console.WriteLine($"{i + 1}. {jobList[i].Name} (Source: {jobList[i].FileSource}, Target: {jobList[i].FileTarget})");
+                ConsoleUtil.PrintTextconsole($"{i + 1}. {jobList[i].Name} (Source: {jobList[i].FileSource}, Target: {jobList[i].FileTarget})");
             }
         }
 
@@ -70,6 +71,12 @@ namespace EasySave_Project.View
         {
             Console.Write(TranslationService.GetInstance().GetText("enterTaskNumbers"));
             return Console.ReadLine();
+        }
+
+        public int ChooseLogFormat()
+        {
+            ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("enterLogFormatChoose") + " (1 : JSON, 2 : XML)");
+            return ConsoleUtil.GetInputInt();
         }
     }
 }

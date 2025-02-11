@@ -12,13 +12,14 @@ namespace EasySave_Project.Service
     /// This class implements the IJobStrategy interface and provides
     /// the functionality to execute a full backup of the specified job.
     /// </summary>
-    public class JobCompleteService : IJobStrategyService
+    public class JobCompleteService : AJobStrategyService
     {
         /// <summary>
         /// Executes the complete backup job for the given JobModel.
         /// </summary>
         /// <param name="job">The JobModel object representing the job to execute.</param>
         /// <param name="backupDir">The directory where the backup will be stored.</param>
+        override
         public void Execute(JobModel job, string backupDir)
         {
             string message = TranslationService.GetInstance().GetText("startingBackUpComplete") + job.Name;

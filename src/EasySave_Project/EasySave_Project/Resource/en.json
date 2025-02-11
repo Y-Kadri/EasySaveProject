@@ -5,7 +5,8 @@
   "option2": "2. Create a backup task",
   "option3": "3. Execute a specific task",
   "option4": "4. Execute all tasks",
-  "option5": "5. Exit",
+  "option5": "5. Add a file format to encrypt",
+  "option6": "6. Exit",
   "invalidChoice": "Invalid choice",
   "messageValidtext": "Please enter a valid text.",
   "messageValidInt": "Please enter a valid integer.",
@@ -50,5 +51,10 @@
   "startingBackUpComplete": "Starting complete backup for",
   "backupComplet": "Complete backup for",
   "jobNameCannotBeEmpty": "The job name cannot be empty",
-  "maxJobLimitReached": "Cannot create more than 5 jobs"
+  "maxJobLimitReached": "Cannot create more than 5 jobs",
+  "enterLogFormatChoose": "Please choose the log format:",
+  "formatAdded": "The format has been successfully added: ",
+  "jsonFileNotExist": "The JSON file does not exist.",
+  "errorAddingFormat": "Error adding the format: ",
+  "errorReadingFormat": "Error reading the encrypted file formats: "
 }
