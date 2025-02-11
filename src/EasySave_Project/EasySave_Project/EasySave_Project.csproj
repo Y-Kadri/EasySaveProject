@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\EasySave_Library_Log\EasySave_Library_Log.csproj" />
+    <ProjectReference Include="..\..\CryptoSoft\CryptoSoft.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

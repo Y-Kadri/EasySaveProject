@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
+using CryptoSoft;
 using EasySave_Library_Log.manager;
 using EasySave_Project.Dto;
 using EasySave_Project.Model;
@@ -96,22 +99,49 @@ namespace EasySave_Project.Util
         /// <param name="sourceFile">The path of the file to copy.</param>
         /// <param name="destinationFile">The path where the file will be copied.</param>
         /// <param name="overwrite">Indicates whether to overwrite the destination file if it exists.</param>
-        public static void CopyFile(string sourceFile, string destinationFile, bool overwrite)
+        public static void CopyFile(string sourceFile, string destinationFile, bool overwrite, bool shouldEncrypt)
         {
             var translator = TranslationService.GetInstance();
             string message;
             try
             {
+                // Copy the file to the destination, depending on the 'overwrite' parameter (to overwrite or not)
                 File.Copy(sourceFile, destinationFile, overwrite);
-                message = $"{translator.GetText("fileCopied")}: {sourceFile} -> {destinationFile}";
-                ConsoleUtil.PrintTextconsole(message);
-                LogManager.Instance.AddMessage(message);
+
+                // If encryption option is enabled, encrypt the file after copying
+                if (shouldEncrypt)
+                {
+                    EncryptFile(destinationFile, "Cesi2004@+");
+                    message = $"{translator.GetText("fileCopiedAndEncrypted")}: {sourceFile} -> {destinationFile}";
+                }
+                else
+                {
+                    message = $"{translator.GetText("fileCopied")}: {sourceFile} -> {destinationFile}";
+                }
+
+                ConsoleUtil.PrintTextconsole(message);  // Display the message in the console
+                LogManager.Instance.AddMessage(message); // Add the message to the log
             }
             catch (Exception ex)
             {
+                // In case of an error during the copy, display the error message
                 message = $"{translator.GetText("errorCopyingFile")}: '{sourceFile}' - {ex.Message}";
-                ConsoleUtil.PrintTextconsole(message);
-                LogManager.Instance.AddMessage(message);
+                ConsoleUtil.PrintTextconsole(message);  // Display the error message in the console
+                LogManager.Instance.AddMessage(message); // Add the error message to the log
+            }
+        }
+
+        private static void EncryptFile(string filePath, string key)
+        {
+            try
+            {
+                var fileManager = new FileManager(filePath, key);
+                fileManager.TransformFile();
+            }
+            catch (Exception ex)
+            {
+                ConsoleUtil.PrintTextconsole($"Erreur lors du cryptage du fichier: {ex.Message}");
+                LogManager.Instance.AddMessage($"Erreur lors du cryptage du fichier: {ex.Message}");
             }
         }
 
