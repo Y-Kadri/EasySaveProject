@@ -21,6 +21,7 @@ namespace EasySave_Project.Controller
             Commands.Add(new CreateJobCommand());
             Commands.Add(new ExecuteJobCommand());
             Commands.Add(new ExecuteAllJobCommand());
+            Commands.Add(new UpdateCryptoExtensionsCommand());
             Commands.Add(new ExitCommand());
         }
         public void LaunchCommand(int choice)
