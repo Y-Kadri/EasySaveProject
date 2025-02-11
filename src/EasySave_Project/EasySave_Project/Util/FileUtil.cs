@@ -99,7 +99,7 @@ namespace EasySave_Project.Util
         /// <param name="sourceFile">The path of the file to copy.</param>
         /// <param name="destinationFile">The path where the file will be copied.</param>
         /// <param name="overwrite">Indicates whether to overwrite the destination file if it exists.</param>
-        public static void CopyFile(string sourceFile, string destinationFile, bool overwrite, bool shouldEncrypt)
+        public static void CopyFile(string sourceFile, string destinationFile, bool overwrite)
         {
             var translator = TranslationService.GetInstance();
             string message;
@@ -107,20 +107,6 @@ namespace EasySave_Project.Util
             {
                 // Copy the file to the destination, depending on the 'overwrite' parameter (to overwrite or not)
                 File.Copy(sourceFile, destinationFile, overwrite);
-
-                // If encryption option is enabled, encrypt the file after copying
-                if (shouldEncrypt)
-                {
-                    EncryptFile(destinationFile, "Cesi2004@+");
-                    message = $"{translator.GetText("fileCopiedAndEncrypted")}: {sourceFile} -> {destinationFile}";
-                }
-                else
-                {
-                    message = $"{translator.GetText("fileCopied")}: {sourceFile} -> {destinationFile}";
-                }
-
-                ConsoleUtil.PrintTextconsole(message);  // Display the message in the console
-                LogManager.Instance.AddMessage(message); // Add the message to the log
             }
             catch (Exception ex)
             {
@@ -131,7 +117,7 @@ namespace EasySave_Project.Util
             }
         }
 
-        private static void EncryptFile(string filePath, string key)
+        public static void EncryptFile(string filePath, string key)
         {
             try
             {
@@ -631,6 +617,16 @@ namespace EasySave_Project.Util
                 return new List<string>(); // Return an empty list if an error occurs
             }
             return encryptedList;
+        }
+
+        /// <summary>
+        /// Retrieves the file extension from the given file path.
+        /// </summary>
+        /// <param name="filePath">The path of the file.</param>
+        /// <returns>The file extension, or an empty string if the file has no extension.</returns>
+        public static string GetFileExtension(string filePath)
+        {
+            return Path.GetExtension(filePath); // Returns the extension (including the dot)
         }
     }
 }
