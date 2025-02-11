@@ -6,4 +6,5 @@ public class JobSettingsDto
 {
     public List<JobModel> jobs { get; set; }
     public int index { get; set; }
+    public List<string> EncryptedFileExtensions { get; set; } 
 }
