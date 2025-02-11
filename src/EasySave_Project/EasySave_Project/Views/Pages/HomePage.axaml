@@ -1,0 +1,23 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:pages="clr-namespace:EasySave_Project.ViewModels.Pages"
+                xmlns:components="clr-namespace:EasySave_Project.Views.Components"
+             x:Class="EasySave_Project.Views.Pages.HomePage"
+             x:DataType="pages:HomePageViewModel"> <!-- Ajout de x:DataType ici -->
+
+    <Grid Background="#0D2B4D" ColumnDefinitions="*,*,*,*" RowDefinitions="Auto" Margin="10">
+    
+        <!-- Première carte -->
+        <components:HomeCard Grid.Column="0" />
+    
+        <!-- Deuxième carte -->
+        <components:HomeCard Grid.Column="1" />
+    
+        <!-- Troisième carte -->
+        <components:HomeCard Grid.Column="2" />
+    
+        <!-- Quatrième carte -->
+        <components:HomeCard Grid.Column="3" />
+    
+    </Grid>
+</UserControl>

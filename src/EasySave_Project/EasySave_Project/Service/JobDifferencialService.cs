@@ -3,6 +3,7 @@ using EasySave_Library_Log.manager;
 using EasySave_Project.Model;
 using EasySave_Project.Util;
 using System;
+using System.Linq;
 
 namespace EasySave_Project.Service
 {
@@ -13,6 +14,8 @@ namespace EasySave_Project.Service
     /// </summary>
     public class JobDifferencialService : IJobStrategyService
     {
+        public event Action<double> OnProgressChanged;
+        
         /// <summary>
         /// Executes the differential backup job for the given JobModel.
         /// If there is no previous full backup, it performs a complete backup instead.
@@ -87,6 +90,8 @@ namespace EasySave_Project.Service
 
                     processedFiles++;
                     processedSize += fileSize;
+                    
+                    double progress = (double)processedFiles / totalFiles * 100;
 
                     // Update state in StateManager
                     StateManager.Instance.UpdateState(new BackupJobState
@@ -96,12 +101,15 @@ namespace EasySave_Project.Service
                         JobStatus = job.SaveState.ToString(),
                         TotalEligibleFiles = totalFiles,
                         TotalFileSize = totalSize,
-                        Progress = (double)processedFiles / totalFiles * 100,
+                        Progress = progress,
                         RemainingFiles = totalFiles - processedFiles,
                         RemainingFileSize = totalSize - processedSize,
                         CurrentSourceFilePath = sourceFile,
                         CurrentDestinationFilePath = targetFile
                     });
+                    
+                    // **Déclenchement du callback pour mettre à jour la progression**
+                    OnProgressChanged?.Invoke(progress);
                 }
             }
 
