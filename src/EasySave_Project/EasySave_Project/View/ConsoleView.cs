@@ -45,7 +45,8 @@ namespace EasySave_Project.View
                 + "\n" + TranslationService.GetInstance().GetText("option2")
                 + "\n" + TranslationService.GetInstance().GetText("option3")
                 + "\n" + TranslationService.GetInstance().GetText("option4")
-                + "\n" + TranslationService.GetInstance().GetText("option5"));
+                + "\n" + TranslationService.GetInstance().GetText("option5")
+                + "\n" + TranslationService.GetInstance().GetText("option6"));
             return ConsoleUtil.GetInputInt();
         }
 

@@ -43,7 +43,6 @@ namespace EasySave_Project
             }
             
             
-            
             int choiceLogFormat = consoleView.ChooseLogFormat();
 
             switch (choiceLogFormat)
@@ -58,10 +57,7 @@ namespace EasySave_Project
 
             while (true)
             {
-               
-
                 int choice = consoleView.StartJobCommand();
-
                 commandController.LaunchCommand(choice);
             }
         }
