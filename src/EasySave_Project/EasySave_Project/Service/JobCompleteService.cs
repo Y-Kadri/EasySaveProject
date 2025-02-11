@@ -3,6 +3,7 @@ using EasySave_Library_Log.manager;
 using EasySave_Project.Model;
 using EasySave_Project.Util;
 using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace EasySave_Project.Service
@@ -47,10 +48,12 @@ namespace EasySave_Project.Service
         private void ExecuteCompleteSave(string sourceDir, string targetDir, JobModel job)
         {
             var files = FileUtil.GetFiles(sourceDir);
+            TranslationService translator = TranslationService.GetInstance();
             int totalFiles = files.Count();
             int processedFiles = 0;
             long totalSize = FileUtil.CalculateTotalSize(sourceDir); // Use the new method
             long processedSize = 0;
+            string message;
 
             // Copy all files from the source directory
             foreach (string sourceFile in files)
@@ -58,7 +61,36 @@ namespace EasySave_Project.Service
                 string fileName = FileUtil.GetFileName(sourceFile);
                 string targetFile = FileUtil.CombinePath(targetDir, fileName);
 
-                FileUtil.CopyFile(sourceFile, targetFile,true, true); // Copy file to target
+                FileUtil.CopyFile(sourceFile, targetFile,true); // Copy file to target
+
+                string formatFile = FileUtil.GetFileExtension(sourceFile);
+                bool shouldEncrypt = IsEncryptedFileFormat(formatFile);
+
+                Stopwatch stopwatch = new Stopwatch();
+                double elapsedTime;
+
+                // If encryption option is enabled, encrypt the file after copying
+                if (shouldEncrypt)
+                {
+                    try
+                    {
+                        stopwatch.Start();
+                        FileUtil.EncryptFile(targetFile, "Cesi2004@+");
+                        message = $"{translator.GetText("fileCopiedAndEncrypted")}: {sourceFile} -> {targetFile}";
+                        stopwatch.Stop();
+                        elapsedTime = stopwatch.ElapsedMilliseconds;
+                    }
+                    catch (Exception ex)
+                    {
+                        elapsedTime = -1;
+                    }
+
+                }
+                else
+                {
+                    message = $"{translator.GetText("fileCopied")}: {sourceFile} -> {targetFile}";
+                    elapsedTime = 0;
+                }
 
                 // Calculate file size and transfer time
                 long fileSize = FileUtil.GetFileSize(sourceFile);
@@ -70,7 +102,8 @@ namespace EasySave_Project.Service
                     sourcePath: sourceFile,
                     targetPath: targetFile,
                     fileSize: fileSize,
-                    transferTime: transferTime
+                    transferTime: transferTime,
+                    encryptionTime: elapsedTime
                 );
 
                 // Update processed files and sizes
