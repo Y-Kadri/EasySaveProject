@@ -66,5 +66,12 @@
   "formatAdded": "Le format a été ajouté avec succès : ",
   "jsonFileNotExist": "Le fichier JSON n'existe pas.",
   "errorAddingFormat": "Erreur lors de l'ajout du format : ",
-  "errorReadingFormat": "Erreur lors de la lecture des formats de fichier cryptés : "
+  "errorReadingFormat": "Erreur lors de la lecture des formats de fichier cryptés : ",
+  "retrieveEncryptedFileExtensions": "Récupération de la liste actuelle des extensions de fichiers cryptés.",
+  "displayCurrentEncryptedFormats": "Formats de fichiers cryptés actuels :",
+  "noEncryptedFormatsSet": "Aucun format de fichier crypté n'est actuellement défini.",
+  "promptEnterFileFormat": "Entrez le format de fichier à ajouter (par exemple, 'txt' ou 'pdf') :",
+  "invalidFileFormat": "Format invalide. Veuillez entrer une extension de fichier valide.",
+  "addFormatToSettings": "Ajout du format aux paramètres de cryptage.",
+  "enterCryptoExtensionsInstruction": "Veuillez choisir le format du journal pour la mise à jour des extensions de cryptage."
 }
