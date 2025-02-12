@@ -16,6 +16,7 @@ namespace EasySave_Project.Command
     {
         private readonly JobService _jobService = new JobService();
         private readonly ConsoleView _consoleView = new ConsoleView();
+        private readonly TranslationService translator = TranslationService.GetInstance();
 
         /// <summary>
         /// Executes the command to update the list of file formats that can be encrypted.
@@ -24,34 +25,23 @@ namespace EasySave_Project.Command
         public void Execute()
         {
             // Retrieve the current list of encrypted file extensions
+            ConsoleUtil.PrintTextconsole(translator.GetText("retrieveEncryptedFileExtensions"));
             List<string> currentFormats = _jobService.GetEncryptedFileExtensions();
 
-            // Display the current formats if not empty
-            if (currentFormats != null && currentFormats.Count > 0)
-            {
-                ConsoleUtil.PrintTextconsole("Current encrypted file formats:");
-                foreach (var format in currentFormats)
-                {
-                    ConsoleUtil.PrintTextconsole(format);
-                }
-            }
-            else
-            {
-                ConsoleUtil.PrintTextconsole("No encrypted file formats are currently set.");
-            }
+            _consoleView.ShowCurrentFormatCrypt(currentFormats);
 
-            // Prompt the user for a new format to add
-            ConsoleUtil.PrintTextconsole("Enter the file format to add (e.g., 'txt' or 'pdf'):");
-            string inputFormat = Console.ReadLine()?.Trim();
+
+            string inputFormat = _consoleView.formatWrited();
 
             if (!string.IsNullOrWhiteSpace(inputFormat))
             {
                 // Add the new format to the settings
+                ConsoleUtil.PrintTextconsole(translator.GetText("addFormatToSettings"));
                 _jobService.AddFormatToEasySaveSettingsForScryptFile(inputFormat);
             }
             else
             {
-                ConsoleUtil.PrintTextconsole("Invalid format. Please enter a valid file extension.");
+                ConsoleUtil.PrintTextconsole(translator.GetText("invalidFileFormat"));
             }
         }
 
@@ -61,7 +51,7 @@ namespace EasySave_Project.Command
         public void GetInstruction()
         {
             // Get the translated instruction text for updating crypto extensions
-            ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("enterLogFormatChoose"));
+            ConsoleUtil.PrintTextconsole(translator.GetText("enterCryptoExtensionsInstruction"));
         }
     }
 }

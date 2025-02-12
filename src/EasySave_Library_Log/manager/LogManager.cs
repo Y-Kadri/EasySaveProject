@@ -54,7 +54,7 @@ namespace EasySave_Library_Log.manager
         /// <param name="targetPath">The target file path.</param>
         /// <param name="fileSize">The size of the file being copied.</param>
         /// <param name="transferTime">The time taken to transfer the file.</param>
-        public void UpdateState(string jobName, string sourcePath, string targetPath, long fileSize, double transferTime, int? encryptionTime = null)
+        public void UpdateState(string jobName, string sourcePath, string targetPath, long fileSize, double transferTime, double? encryptionTime = null)
         {
             lock (_lock)
             {
@@ -135,7 +135,7 @@ namespace EasySave_Library_Log.manager
         public double TransferTime { get; set; }
 
         [XmlElement("EncryptionTime")]
-        public int EncryptionTime { get; set; }
+        public double EncryptionTime { get; set; }
 
         [XmlArray("Messages")]
         [XmlArrayItem("Message")]

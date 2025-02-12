@@ -11,8 +11,8 @@
   "messageValidtext": "Please enter a valid text.",
   "messageValidInt": "Please enter a valid integer.",
   "entrerNom": "Enter a name",
-  "entrerFileSource": "Enter the source file path",
-  "entrerFileTarget": "Enter the target file path",
+  "entrerFileSource": "Enter the source directory path",
+  "entrerFileTarget": "Enter the target directory path",
   "entrerJobType": "Enter the job type",
   "jobCree": "The job has been successfully created.",
   "listEmpty": "The job list is empty.",
@@ -56,5 +56,12 @@
   "formatAdded": "The format has been successfully added: ",
   "jsonFileNotExist": "The JSON file does not exist.",
   "errorAddingFormat": "Error adding the format: ",
-  "errorReadingFormat": "Error reading the encrypted file formats: "
+  "errorReadingFormat": "Error reading the encrypted file formats: ",
+  "retrieveEncryptedFileExtensions": "Retrieving the current list of encrypted file extensions.",
+  "displayCurrentEncryptedFormats": "Current encrypted file formats:",
+  "noEncryptedFormatsSet": "No encrypted file formats are currently set.",
+  "promptEnterFileFormat": "Enter the file format to add (e.g., 'txt' or 'pdf'):",
+  "invalidFileFormat": "Invalid format. Please enter a valid file extension.",
+  "addFormatToSettings": "Adding the format to encryption settings.",
+  "enterCryptoExtensionsInstruction": "Please choose the log format for updating encryption extensions."
 }

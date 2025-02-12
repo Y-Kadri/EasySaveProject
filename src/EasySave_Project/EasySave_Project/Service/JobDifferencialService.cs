@@ -3,7 +3,8 @@ using EasySave_Library_Log.manager;
 using EasySave_Project.Model;
 using EasySave_Project.Util;
 using System;
-
+using CryptoSoft;
+using System.Diagnostics;
 namespace EasySave_Project.Service
 {
     /// <summary>
@@ -37,8 +38,7 @@ namespace EasySave_Project.Service
             }
             else
             {
-                ExecuteDifferentialSave(job, backupDir, job.LastFullBackupPath); // Perform a differential backup
-                
+               ExecuteDifferentialSave(job, backupDir, job.LastFullBackupPath); // Perform a differential backup
             }
 
             job.LastSaveDifferentialPath = backupDir;
@@ -55,6 +55,7 @@ namespace EasySave_Project.Service
         private void ExecuteDifferentialSave(JobModel job, string targetDir, string lastFullBackupDir)
         {
             string message;
+            TranslationService translator = TranslationService.GetInstance();
             message = $"Starting differential backup for {job.Name}";
             LogManager.Instance.AddMessage(message);
             ConsoleUtil.PrintTextconsole(message);
@@ -75,16 +76,8 @@ namespace EasySave_Project.Service
                 // Check if the file needs to be copied
                 if (!FileUtil.ExistsFile(lastFullBackupFile) || FileUtil.GetLastWriteTime(sourceFile) > FileUtil.GetLastWriteTime(lastFullBackupFile))
                 {
-                    FileUtil.CopyFile(sourceFile, targetFile, true);
+                    long fileSize = HandleFileOperation(sourceFile, targetFile, job);
 
-                    long fileSize = FileUtil.GetFileSize(sourceFile);
-                    double transferTime = FileUtil.CalculateTransferTime(sourceFile, targetFile);
-
-                    message = $"File {fileName} copied from {sourceFile} to {targetFile}";
-                    ConsoleUtil.PrintTextconsole(message);
-                    LogManager.Instance.AddMessage(message);
-
-                    LogManager.Instance.UpdateState(job.Name, sourceFile, targetFile, fileSize, transferTime);
 
                     processedFiles++;
                     processedSize += fileSize;
@@ -123,3 +116,5 @@ namespace EasySave_Project.Service
         }
     }
 }
+
+          
