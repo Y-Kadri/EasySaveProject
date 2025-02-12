@@ -1,14 +1,17 @@
 using Avalonia.Controls;
+using EasySave_Project.Service;
 using ReactiveUI;
 
 namespace EasySave_Project.ViewModels.Pages
 {
     public class HomePageViewModel : ReactiveObject
     {
+        
+        public string Title { get; set; }
+        
         public HomePageViewModel()
         {
-            // Exemple de contenu à insérer dans la carte
-            // Création des HomeCards avec icône, titre et contenu dynamique
+            Title = TranslationService.GetInstance().GetText("HomePageTitle");
         }
     }
 }

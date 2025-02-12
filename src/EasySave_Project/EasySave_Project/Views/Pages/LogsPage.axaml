@@ -1,7 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:pages="clr-namespace:EasySave_Project.ViewModels.Pages"
-                xmlns:components="clr-namespace:EasySave_Project.Views.Components"
+             xmlns:components="clr-namespace:EasySave_Project.Views.Components"
              x:Class="EasySave_Project.Views.Pages.LogsPage"
              x:DataType="pages:LogsPageViewModel"> <!-- Ajout de x:DataType ici -->
 
