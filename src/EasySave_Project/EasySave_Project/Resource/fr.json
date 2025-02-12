@@ -73,5 +73,6 @@
   "promptEnterFileFormat": "Entrez le format de fichier à ajouter (par exemple, 'txt' ou 'pdf') :",
   "invalidFileFormat": "Format invalide. Veuillez entrer une extension de fichier valide.",
   "addFormatToSettings": "Ajout du format aux paramètres de cryptage.",
-  "enterCryptoExtensionsInstruction": "Veuillez choisir le format du journal pour la mise à jour des extensions de cryptage."
+  "enterCryptoExtensionsInstruction": "Veuillez choisir le format du journal pour la mise à jour des extensions de cryptage.",
+  "errorReadingFolder": "Erreur d'accès au dossier : "
 }
