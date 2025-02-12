@@ -65,17 +65,87 @@ namespace EasySave_Project.Service
         /// <param name="totalSize">Total size of the files to be backed up.</param>
         /// <param name="processedFiles">Reference to the number of processed files.</param>
         /// <param name="processedSize">Reference to the total size of processed files.</param>
+        /// <summary>
+        /// Starts the differential backup for the given job and performs the backup
+        /// by copying only modified files and directories based on the last full backup.
+        /// </summary>
+        /// <param name="job">The JobModel representing the backup job.</param>
+        /// <param name="fileSource">The source directory to back up.</param>
+        /// <param name="targetDir">The target directory where the backup will be stored.</param>
+        /// <param name="lastFullBackupDir">The directory of the last full backup.</param>
+        /// <param name="totalFiles">Total number of files to be processed.</param>
+        /// <param name="totalSize">Total size of the files to be backed up.</param>
+        /// <param name="processedFiles">Reference to the number of processed files.</param>
+        /// <param name="processedSize">Reference to the total size of processed files.</param>
         private void ExecuteDifferentialSave(JobModel job, string fileSource, string targetDir, string lastFullBackupDir, int totalFiles, long totalSize, ref int processedFiles, ref long processedSize)
         {
-            string message;
-            TranslationService translator = TranslationService.GetInstance();
-            message = $"Starting differential backup for {job.Name}";
+            // Log the start of the backup
+            string message = $"Starting differential backup for {job.Name}";
             LogManager.Instance.AddMessage(message);
             ConsoleUtil.PrintTextconsole(message);
 
-            bool directoryModified = false; // Flag to check if any file in the directory is modified
+            // Calculate total files and size to be copied
+            (int filesToCopyCount, long filesToCopySize) = CalculateFilesToCopy(fileSource, lastFullBackupDir);
 
-            // Copy modified files in the main directory
+            // Update total files and size variables
+            totalFiles = filesToCopyCount;
+            totalSize = filesToCopySize;
+
+            // Copy modified files
+            CopyModifiedFiles(job, fileSource, targetDir, lastFullBackupDir, ref processedFiles, ref processedSize, totalFiles, totalSize);
+
+            // Handle subdirectories
+            HandleSubdirectories(job, fileSource, targetDir, lastFullBackupDir, ref processedFiles, ref processedSize, totalFiles, totalSize);
+
+            // Log completion of the backup
+            string endMessage = $"Differential backup {job.Name} completed.";
+            ConsoleUtil.PrintTextconsole(endMessage);
+            LogManager.Instance.AddMessage(endMessage);
+        }
+
+        /// <summary>
+        /// Calculates the number of files to be copied and their total size, based on whether the files have been modified
+        /// or are missing compared to the last full backup.
+        /// </summary>
+        /// <param name="fileSource">The source directory to scan for files.</param>
+        /// <param name="lastFullBackupDir">The directory of the last full backup for comparison.</param>
+        /// <returns>A tuple containing the count of files to copy and their total size.</returns>
+        private (int filesToCopyCount, long filesToCopySize) CalculateFilesToCopy(string fileSource, string lastFullBackupDir)
+        {
+            int filesToCopyCount = 0;
+            long filesToCopySize = 0;
+
+            foreach (string sourceFile in FileUtil.GetFiles(fileSource))
+            {
+                string relativePath = FileUtil.GetRelativePath(fileSource, sourceFile);
+                string lastFullBackupFile = FileUtil.CombinePath(lastFullBackupDir, relativePath);
+
+                // Check if the file needs to be copied (modified or missing)
+                if (!FileUtil.ExistsFile(lastFullBackupFile) || FileUtil.GetLastWriteTime(sourceFile) > FileUtil.GetLastWriteTime(lastFullBackupFile))
+                {
+                    // Increment the count and size for files that need to be copied
+                    filesToCopyCount++;
+                    filesToCopySize += FileUtil.GetFileSize(sourceFile);
+                }
+            }
+
+            return (filesToCopyCount, filesToCopySize);
+        }
+
+        /// <summary>
+        /// Copies the modified files from the source directory to the target directory,
+        /// and updates the processed files and size counts.
+        /// </summary>
+        /// <param name="job">The JobModel representing the backup job.</param>
+        /// <param name="fileSource">The source directory to back up.</param>
+        /// <param name="targetDir">The target directory where the backup will be stored.</param>
+        /// <param name="lastFullBackupDir">The directory of the last full backup.</param>
+        /// <param name="processedFiles">Reference to the number of processed files.</param>
+        /// <param name="processedSize">Reference to the total size of processed files.</param>
+        /// <param name="totalFiles">Total number of files to be processed.</param>
+        /// <param name="totalSize">Total size of the files to be backed up.</param>
+        private void CopyModifiedFiles(JobModel job, string fileSource, string targetDir, string lastFullBackupDir, ref int processedFiles, ref long processedSize, int totalFiles, long totalSize)
+        {
             foreach (string sourceFile in FileUtil.GetFiles(fileSource))
             {
                 string relativePath = FileUtil.GetRelativePath(fileSource, sourceFile);
@@ -86,7 +156,7 @@ namespace EasySave_Project.Service
                 string targetFileDirectory = Path.GetDirectoryName(targetFile);
                 FileUtil.CreateDirectory(targetFileDirectory);
 
-                // Check if the file needs to be copied
+                // Only copy the file if it is modified or doesn't exist in the full backup
                 if (!FileUtil.ExistsFile(lastFullBackupFile) || FileUtil.GetLastWriteTime(sourceFile) > FileUtil.GetLastWriteTime(lastFullBackupFile))
                 {
                     long fileSize = HandleFileOperation(sourceFile, targetFile, job);
@@ -95,26 +165,24 @@ namespace EasySave_Project.Service
                     processedSize += fileSize;
 
                     // Update state in StateManager
-                    StateManager.Instance.UpdateState(new BackupJobState
-                    {
-                        JobName = job.Name,
-                        LastActionTimestamp = DateUtil.GetTodayDate(DateUtil.YYYY_MM_DD_HH_MM_SS),
-                        JobStatus = job.SaveState.ToString(),
-                        TotalEligibleFiles = totalFiles,
-                        TotalFileSize = totalSize,
-                        Progress = (double)processedFiles / totalFiles * 100,
-                        RemainingFiles = totalFiles - processedFiles,
-                        RemainingFileSize = totalSize - processedSize,
-                        CurrentSourceFilePath = sourceFile,
-                        CurrentDestinationFilePath = targetFile
-                    });
-
-                    // Mark that the directory is modified
-                    directoryModified = true;
+                    UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFile, targetFile);
                 }
             }
+        }
 
-            // Copy modified subdirectories
+        /// <summary>
+        /// Handles the subdirectories of the source directory, checking and copying modified subdirectories and their files.
+        /// </summary>
+        /// <param name="job">The JobModel representing the backup job.</param>
+        /// <param name="fileSource">The source directory to back up.</param>
+        /// <param name="targetDir">The target directory where the backup will be stored.</param>
+        /// <param name="lastFullBackupDir">The directory of the last full backup.</param>
+        /// <param name="processedFiles">Reference to the number of processed files.</param>
+        /// <param name="processedSize">Reference to the total size of processed files.</param>
+        /// <param name="totalFiles">Total number of files to be processed.</param>
+        /// <param name="totalSize">Total size of the files to be backed up.</param>
+        private void HandleSubdirectories(JobModel job, string fileSource, string targetDir, string lastFullBackupDir, ref int processedFiles, ref long processedSize, int totalFiles, long totalSize)
+        {
             foreach (string subDir in FileUtil.GetDirectories(fileSource))
             {
                 string newTargetDir = FileUtil.CombinePath(targetDir, FileUtil.GetFileName(subDir));
@@ -124,16 +192,7 @@ namespace EasySave_Project.Service
                 if (FileUtil.ExistsDirectory(newLastFullBackupDir))
                 {
                     // Check for any modified files in the subdirectory
-                    bool subDirModified = false;
-                    foreach (string subFile in FileUtil.GetFiles(subDir))
-                    {
-                        string lastFullBackupSubFile = FileUtil.CombinePath(newLastFullBackupDir, FileUtil.GetFileName(subFile));
-                        if (!FileUtil.ExistsFile(lastFullBackupSubFile) || FileUtil.GetLastWriteTime(subFile) > FileUtil.GetLastWriteTime(lastFullBackupSubFile))
-                        {
-                            subDirModified = true;
-                            break; // No need to continue checking this subdirectory
-                        }
-                    }
+                    bool subDirModified = CheckSubdirectoryModification(subDir, newLastFullBackupDir);
 
                     // If the subdirectory has any modified files or the directory itself is modified
                     if (subDirModified || FileUtil.GetLastWriteTime(subDir) > FileUtil.GetLastWriteTime(newLastFullBackupDir))
@@ -147,11 +206,52 @@ namespace EasySave_Project.Service
                     ExecuteDifferentialSave(job, subDir, newTargetDir, string.Empty, totalFiles, totalSize, ref processedFiles, ref processedSize);
                 }
             }
+        }
 
-            // Log completion of the backup
-            string endMessage = $"Differential backup {job.Name} completed.";
-            ConsoleUtil.PrintTextconsole(endMessage);
-            LogManager.Instance.AddMessage(endMessage);
+        /// <summary>
+        /// Checks if any files in a subdirectory have been modified compared to the last full backup.
+        /// </summary>
+        /// <param name="subDir">The subdirectory to check.</param>
+        /// <param name="lastFullBackupSubDir">The corresponding subdirectory in the last full backup.</param>
+        /// <returns>True if any files in the subdirectory are modified, otherwise false.</returns>
+        private bool CheckSubdirectoryModification(string subDir, string lastFullBackupSubDir)
+        {
+            foreach (string subFile in FileUtil.GetFiles(subDir))
+            {
+                string lastFullBackupSubFile = FileUtil.CombinePath(lastFullBackupSubDir, FileUtil.GetFileName(subFile));
+                if (!FileUtil.ExistsFile(lastFullBackupSubFile) || FileUtil.GetLastWriteTime(subFile) > FileUtil.GetLastWriteTime(lastFullBackupSubFile))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Updates the backup state in the StateManager during the backup process.
+        /// </summary>
+        /// <param name="job">The JobModel representing the backup job.</param>
+        /// <param name="processedFiles">The current number of processed files.</param>
+        /// <param name="processedSize">The current total size of processed files.</param>
+        /// <param name="totalFiles">Total number of files to be processed.</param>
+        /// <param name="totalSize">Total size of the files to be backed up.</param>
+        /// <param name="currentSourceFilePath">The path of the current source file being processed.</param>
+        /// <param name="currentDestinationFilePath">The path of the destination file being processed.</param>
+        private void UpdateBackupState(JobModel job, int processedFiles, long processedSize, int totalFiles, long totalSize, string currentSourceFilePath, string currentDestinationFilePath)
+        {
+            StateManager.Instance.UpdateState(new BackupJobState
+            {
+                JobName = job.Name,
+                LastActionTimestamp = DateUtil.GetTodayDate(DateUtil.YYYY_MM_DD_HH_MM_SS),
+                JobStatus = job.SaveState.ToString(),
+                TotalEligibleFiles = totalFiles,
+                TotalFileSize = totalSize,
+                Progress = (double)processedFiles / totalFiles * 100,
+                RemainingFiles = totalFiles - processedFiles,
+                RemainingFileSize = totalSize - processedSize,
+                CurrentSourceFilePath = currentSourceFilePath,
+                CurrentDestinationFilePath = currentDestinationFilePath
+            });
         }
     }
 }
