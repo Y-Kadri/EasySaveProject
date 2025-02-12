@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using EasySave_Project.Manager;
 using EasySave_Project.Model;
+using EasySave_Project.Service;
 using EasySave_Project.ViewModels.Pages;
 using EasySave_Project.Views.Components;
 
@@ -19,9 +20,11 @@ public partial class AddJobsPage : UserControl, IPage
     
     public void reload()
     {
+        string aucundossier = TranslationService.GetInstance().GetText("NoFolderSelected");
+        
         JobName.Text = "";
-        SelectedFileSourcePath.Text = "Aucun dossier sélectionné";
-        SelectedFileTargetPath.Text = "Aucun dossier sélectionné";
+        SelectedFileSourcePath.Text = aucundossier;
+        SelectedFileTargetPath.Text = aucundossier;
         FirstType.IsChecked = false;
         SecondType.IsChecked = false;
         DataContext = new AddJobsPageViewModel();
@@ -30,8 +33,6 @@ public partial class AddJobsPage : UserControl, IPage
 
     private void valide(object sender, RoutedEventArgs e)
     {
-        
-        
         // Récupère le nom saisi
         string name = JobName.Text;
 
@@ -47,7 +48,8 @@ public partial class AddJobsPage : UserControl, IPage
         }
         else
         {
-            Toastr.ShowNotification("Erreur : Aucune option de type sélectionnée.", NotificationContainer);
+            string message = TranslationService.GetInstance().GetText("ErrorNoTypeSelected");
+            Toastr.ShowNotification(message, NotificationContainer);
             return;
         }
 
@@ -58,19 +60,22 @@ public partial class AddJobsPage : UserControl, IPage
         // Vérifie que les champs ne sont pas vides
         if (string.IsNullOrWhiteSpace(name))
         {
-            Toastr.ShowNotification("Erreur : Veuillez remplir le nom.",NotificationContainer);
+            string message = TranslationService.GetInstance().GetText("ErrorNoName");
+            Toastr.ShowNotification(message,NotificationContainer);
             return;
         }
 
-        if (source == "Aucun dossier sélectionné" || string.IsNullOrWhiteSpace(source))
+        if (source == TranslationService.GetInstance().GetText("NoFolderSelected") || string.IsNullOrWhiteSpace(source))
         {
-            Toastr.ShowNotification("Erreur : Le dossier source n'a pas été sélectionné.",NotificationContainer);
+            string message = TranslationService.GetInstance().GetText("ErrorNoSourceFolder");
+            Toastr.ShowNotification(message,NotificationContainer);
             return;
         }
 
-        if (target == "Aucun dossier sélectionné" || string.IsNullOrWhiteSpace(target))
+        if (target == TranslationService.GetInstance().GetText("NoFolderSelected") || string.IsNullOrWhiteSpace(target))
         {
-            Toastr.ShowNotification("Erreur : Le dossier cible n'a pas été sélectionné.",NotificationContainer);
+            string message = TranslationService.GetInstance().GetText("ErrorNoTargetFolder");
+            Toastr.ShowNotification(message, NotificationContainer);
             return;
         }
         
@@ -78,14 +83,15 @@ public partial class AddJobsPage : UserControl, IPage
         JobManager.GetInstance().CreateAndAddJob(name, source, target, type);
         
         // Affiche une notification de succès
-        Toastr.ShowNotification("Le job a été ajouté avec succès.",NotificationContainer, "Success");
+        string messageSuccess = TranslationService.GetInstance().GetText("JobAddedSuccess");
+        Toastr.ShowNotification(messageSuccess, NotificationContainer, "Success");
     }
 
     private async void OnOpenFolderTargetDialogClick(object sender, RoutedEventArgs e)
     {
         var dialog = new OpenFolderDialog
         {
-            Title = "Sélectionner un dossier"
+            Title = TranslationService.GetInstance().GetText("ChooseFolder")
         };
 
         // Récupère la fenêtre parente du UserControl
@@ -98,12 +104,10 @@ public partial class AddJobsPage : UserControl, IPage
             if (!string.IsNullOrEmpty(result))
             {
                 SelectedFileTargetPath.Text = result;  // Affiche le chemin du dossier dans le TextBlock
-                Console.WriteLine($"Dossier sélectionné : {result}");  // Log le chemin absolu dans la console
             }
             else
             {
-                SelectedFileTargetPath.Text = "Aucun dossier sélectionné";
-                Console.WriteLine("Aucun dossier sélectionné.");
+                SelectedFileTargetPath.Text = TranslationService.GetInstance().GetText("NoFolderSelected");
             }
         }
     }
@@ -112,7 +116,7 @@ public partial class AddJobsPage : UserControl, IPage
     {
         var dialog = new OpenFolderDialog
         {
-            Title = "Sélectionner un dossier"
+            Title =  TranslationService.GetInstance().GetText("ChooseFolder")
         };
 
         // Récupère la fenêtre parente du UserControl
@@ -125,12 +129,10 @@ public partial class AddJobsPage : UserControl, IPage
             if (!string.IsNullOrEmpty(result))
             {
                 SelectedFileSourcePath.Text = result;  // Affiche le chemin du dossier dans le TextBlock
-                Console.WriteLine($"Dossier sélectionné : {result}");  // Log le chemin absolu dans la console
             }
             else
             {
-                SelectedFileSourcePath.Text = "Aucun dossier sélectionné";
-                Console.WriteLine("Aucun dossier sélectionné.");
+                SelectedFileSourcePath.Text = TranslationService.GetInstance().GetText("NoFolderSelected");
             }
         }
     }

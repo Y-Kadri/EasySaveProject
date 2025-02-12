@@ -19,7 +19,7 @@
     </Canvas>
         
     <!-- Titre -->
-        <TextBlock FontSize="32" FontWeight="Bold" Text="Ajouter un job" HorizontalAlignment="Center"/>
+        <TextBlock FontSize="32" FontWeight="Bold" Text="{Binding AddAJob}" HorizontalAlignment="Center"/>
 
         <!-- Formulaire -->
         <Grid ColumnDefinitions="1*,1*" RowDefinitions="Auto,Auto,Auto">
@@ -27,7 +27,7 @@
             <!-- Champ de texte pour le nom -->
             <TextBox Grid.Column="0"
                      Grid.Row="0"
-                     Watermark="Enter name"
+                     Watermark="{Binding EnterName}"
                      Margin="30"
                      Height="40"
                      HorizontalAlignment="Stretch"
@@ -35,33 +35,33 @@
             
             <!-- Options Radio -->
             <StackPanel Margin="30" Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
-                <RadioButton GroupName="JobType" Content="Complète" x:Name="FirstType"/>
-                <RadioButton GroupName="JobType" Content="Différentiel" x:Name="SecondType"/>
+                <RadioButton GroupName="JobType" Content="{Binding Complete}" x:Name="FirstType"/>
+                <RadioButton GroupName="JobType" Content="{Binding Differential}" x:Name="SecondType"/>
             </StackPanel>
 
             <!-- Sélection dossier source -->
             <StackPanel Margin="30" Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Spacing="20" VerticalAlignment="Center">
-                <Button Content="Choisir un dossier source" 
+                <Button Content="{Binding ChooseASourceFolder}" 
                         Click="OnOpenFolderSourceDialogClick" 
                         Width="200" Height="40"/>
                 <TextBlock x:Name="SelectedFileSourcePath" 
-                           Text="Aucun dossier sélectionné" 
+                           Text="{Binding NoFolderSelected}" 
                            VerticalAlignment="Center"/>
             </StackPanel>
 
             <!-- Sélection dossier cible -->
             <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" Spacing="20" Margin="30" VerticalAlignment="Center">
-                <Button Content="Choisir un dossier cible" 
+                <Button Content="{Binding ChooseADestinationFolder}" 
                         Click="OnOpenFolderTargetDialogClick" 
                         Width="200" Height="40"/>
                 <TextBlock x:Name="SelectedFileTargetPath" 
-                           Text="Aucun dossier sélectionné" 
+                           Text="{Binding NoFolderSelected}" 
                            VerticalAlignment="Center"/>
             </StackPanel>
 
         </Grid>
     
-        <Button Classes="Large" Content="Ajouter" Click="valide"></Button>
+        <Button Classes="Large" Content="{Binding Add}" Click="valide"></Button>
     
     </StackPanel>
     

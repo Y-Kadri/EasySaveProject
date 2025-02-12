@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using EasySave_Project.Model;
+using EasySave_Project.Service;
 using EasySave_Project.ViewModels.Layout;
 using EasySave_Project.Views.Pages;
 
@@ -22,10 +23,15 @@ public partial class BaseLayout : UserControl
         pages.Add(new HomePage());
         pages.Add(new JobsPage());
         pages.Add(new LogsPage());
-        pages.Add(new SettingPage());
+        pages.Add(new SettingPage(this));
         pages.Add(new AddJobsPage());
         
         ContentArea.Content = pages[0];
+    }
+    
+    public void reload()
+    {
+        DataContext = new BaseLayoutViewModel();
     }
     
     public void LoadPage(object sender, RoutedEventArgs e)
