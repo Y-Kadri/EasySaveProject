@@ -226,33 +226,6 @@ namespace EasySave_Project.Service
             }
             return false;
         }
-
-        /// <summary>
-        /// Updates the backup state in the StateManager during the backup process.
-        /// </summary>
-        /// <param name="job">The JobModel representing the backup job.</param>
-        /// <param name="processedFiles">The current number of processed files.</param>
-        /// <param name="processedSize">The current total size of processed files.</param>
-        /// <param name="totalFiles">Total number of files to be processed.</param>
-        /// <param name="totalSize">Total size of the files to be backed up.</param>
-        /// <param name="currentSourceFilePath">The path of the current source file being processed.</param>
-        /// <param name="currentDestinationFilePath">The path of the destination file being processed.</param>
-        private void UpdateBackupState(JobModel job, int processedFiles, long processedSize, int totalFiles, long totalSize, string currentSourceFilePath, string currentDestinationFilePath)
-        {
-            StateManager.Instance.UpdateState(new BackupJobState
-            {
-                JobName = job.Name,
-                LastActionTimestamp = DateUtil.GetTodayDate(DateUtil.YYYY_MM_DD_HH_MM_SS),
-                JobStatus = job.SaveState.ToString(),
-                TotalEligibleFiles = totalFiles,
-                TotalFileSize = totalSize,
-                Progress = (double)processedFiles / totalFiles * 100,
-                RemainingFiles = totalFiles - processedFiles,
-                RemainingFileSize = totalSize - processedSize,
-                CurrentSourceFilePath = currentSourceFilePath,
-                CurrentDestinationFilePath = currentDestinationFilePath
-            });
-        }
     }
 }
 
