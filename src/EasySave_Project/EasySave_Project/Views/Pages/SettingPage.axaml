@@ -1,23 +1,37 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:pages="clr-namespace:EasySave_Project.ViewModels.Pages"
-                xmlns:components="clr-namespace:EasySave_Project.Views.Components"
+             xmlns:components="clr-namespace:EasySave_Project.Views.Components"
              x:Class="EasySave_Project.Views.Pages.SettingPage"
              x:DataType="pages:SettingPageViewModel"> <!-- Ajout de x:DataType ici -->
 
-    <Grid Background="#0D2B4D" ColumnDefinitions="*,*,*,*" RowDefinitions="Auto" Margin="10">
+    <Grid Background="#0D2B4D" ColumnDefinitions="*,*,*" RowDefinitions="Auto" Margin="10">
+        <!-- Langue -->
+        <StackPanel Margin="30" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
+            <TextBlock Text="{Binding SelectLanguage}" VerticalAlignment="Center"/>
+            <!-- RadioButton pour le français -->
+            <RadioButton GroupName="SettingLangue" Content="{Binding French}" x:Name="FirstLangue" 
+                         Checked="OnLanguageChanged"/>
     
-        <!-- Première carte -->
-        <components:HomeCard Grid.Column="0" />
-    
-        <!-- Deuxième carte -->
-        <components:HomeCard Grid.Column="1" />
-    
-        <!-- Troisième carte -->
-        <components:HomeCard Grid.Column="2" />
-    
-        <!-- Quatrième carte -->
-        <components:HomeCard Grid.Column="3" />
+            <!-- RadioButton pour l'anglais -->
+            <RadioButton GroupName="SettingLangue" Content="{Binding English}" x:Name="SecondLangue" 
+                         Checked="OnLanguageChanged"/>
+        </StackPanel>
+        
+        <!-- Format -->
+        <StackPanel Margin="30" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
+            <TextBlock Text="{Binding ChooseLogsFormat}" VerticalAlignment="Center"/>
+            <RadioButton GroupName="SettingFormat" Content="{Binding Json}" x:Name="FirstFormat"/>
+            <RadioButton GroupName="SettingFormat" Content="{Binding Xml}" x:Name="SecondFormat"/>
+        </StackPanel>
+        
+        <!-- Notification --> 
+        <Canvas Grid.Column="2" Panel.ZIndex="9">
+            <StackPanel x:Name="NotificationContainer"
+                        Canvas.Right="0" 
+                        Canvas.Top="0"
+                        Spacing="10" />
+        </Canvas>
     
     </Grid>
 </UserControl>

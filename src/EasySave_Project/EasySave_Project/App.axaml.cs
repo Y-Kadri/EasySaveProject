@@ -1,10 +1,12 @@
 using System;
+using System.IO;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
 using Avalonia.Markup.Xaml;
+using EasySave_Project.Model;
 using EasySave_Project.Service;
 using EasySave_Project.Util;
 using EasySave_Project.ViewModels;
@@ -20,8 +22,10 @@ public partial class App : Application
         
            
         FileUtil.EnsureDirectoryAndFileExist("jobsSetting.json");
+        FileUtil.InitSetting();
         LoadDataService loadDataService = new();
         loadDataService.LoadJobs();
+        TranslationService.InitSetting();
     }
 
     public override void OnFrameworkInitializationCompleted()

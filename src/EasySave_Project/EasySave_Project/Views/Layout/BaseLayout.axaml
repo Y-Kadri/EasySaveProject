@@ -29,10 +29,10 @@
                             Spacing="20"
                             VerticalAlignment="Center"
                             Grid.Column="1">
-                    <Button Content="Home" Foreground="White" Background="Transparent" Tag="0" Click="LoadPage" Padding="10" Cursor="Hand"/>
-                    <Button Content="Jobs" Foreground="White" Background="Transparent" Tag="1" Click="LoadPage" Padding="10" Cursor="Hand"/>
-                    <Button Content="Logs" Foreground="White" Background="Transparent" Tag="2" Click="LoadPage" Padding="10" Cursor="Hand"/>
-                    <Button Content="Setting" Foreground="White" Background="Transparent" Tag="3" Click="LoadPage" Padding="10" Cursor="Hand"/>
+                    <Button Content="{Binding Home}" Foreground="White" Background="Transparent" Tag="0" Click="LoadPage" Padding="10" Cursor="Hand"/>
+                    <Button Content="{Binding Jobs}" Foreground="White" Background="Transparent" Tag="1" Click="LoadPage" Padding="10" Cursor="Hand"/>
+                    <Button Content="{Binding Logs}" Foreground="White" Background="Transparent" Tag="2" Click="LoadPage" Padding="10" Cursor="Hand"/>
+                    <Button Content="{Binding Settings}" Foreground="White" Background="Transparent" Tag="3" Click="LoadPage" Padding="10" Cursor="Hand"/>
                 </StackPanel>
 
                 <!-- Date dynamique -->
