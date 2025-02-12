@@ -75,7 +75,7 @@ namespace EasySave_Project.Service
 
             bool directoryModified = false; // Flag to check if any file in the directory is modified
 
-            // Copy modified files
+            // Copy modified files in the main directory
             foreach (string sourceFile in FileUtil.GetFiles(fileSource))
             {
                 string relativePath = FileUtil.GetRelativePath(fileSource, sourceFile);
@@ -120,53 +120,39 @@ namespace EasySave_Project.Service
                 string newTargetDir = FileUtil.CombinePath(targetDir, FileUtil.GetFileName(subDir));
                 string newLastFullBackupDir = FileUtil.CombinePath(lastFullBackupDir, FileUtil.GetFileName(subDir));
 
-
-                if (!FileUtil.ExistsDirectory(newLastFullBackupDir) || FileUtil.GetLastWriteTime(subDir) > FileUtil.GetLastWriteTime(newLastFullBackupDir))
+                // Check if the last full backup directory exists
+                if (FileUtil.ExistsDirectory(newLastFullBackupDir))
                 {
-                    ExecuteDifferentialSave(job, subDir, newTargetDir, newLastFullBackupDir, totalFiles, totalSize, ref processedFiles, ref processedSize);
-                }
-
-
-
-                /*string relativePath = FileUtil.GetRelativePath(job.FileSource, subDir);
-                string targetSubDir = FileUtil.CombinePath(targetDir, relativePath);
-                string lastFullBackupSubDir = FileUtil.CombinePath(lastFullBackupDir, relativePath);
-
-                // Ensure the subdirectory exists before proceeding
-                if (!FileUtil.ExistsDirectory(lastFullBackupSubDir))
-                {
-                    continue; // Skip if the last full backup directory doesn't exist
-                }
-
-                // Check if any file or subdirectory has been modified in this directory
-                bool subDirModified = false;
-                foreach (string subFile in FileUtil.GetFiles(subDir))
-                {
-                    string lastFullBackupSubFile = FileUtil.CombinePath(lastFullBackupSubDir, FileUtil.GetFileName(subFile));
-
-                    if (!FileUtil.ExistsFile(lastFullBackupSubFile) || FileUtil.GetLastWriteTime(subFile) > FileUtil.GetLastWriteTime(lastFullBackupSubFile))
+                    // Check for any modified files in the subdirectory
+                    bool subDirModified = false;
+                    foreach (string subFile in FileUtil.GetFiles(subDir))
                     {
-                        subDirModified = true;
-                        break; // No need to continue checking this subdirectory
+                        string lastFullBackupSubFile = FileUtil.CombinePath(newLastFullBackupDir, FileUtil.GetFileName(subFile));
+                        if (!FileUtil.ExistsFile(lastFullBackupSubFile) || FileUtil.GetLastWriteTime(subFile) > FileUtil.GetLastWriteTime(lastFullBackupSubFile))
+                        {
+                            subDirModified = true;
+                            break; // No need to continue checking this subdirectory
+                        }
+                    }
+
+                    // If the subdirectory has any modified files or the directory itself is modified
+                    if (subDirModified || FileUtil.GetLastWriteTime(subDir) > FileUtil.GetLastWriteTime(newLastFullBackupDir))
+                    {
+                        ExecuteDifferentialSave(job, subDir, newTargetDir, newLastFullBackupDir, totalFiles, totalSize, ref processedFiles, ref processedSize);
                     }
                 }
-
-                // Proceed with the subdirectory only if modified
-                if (subDirModified)
+                else
                 {
-                    FileUtil.CreateDirectory(targetSubDir);
-
-                    // Proceed with the differential save on the subdirectory
-                    ExecuteDifferentialSave(job, targetSubDir, lastFullBackupSubDir, totalFiles, totalSize, ref processedFiles, ref processedSize);
+                    // If the last full backup does not exist for this subdir, copy it completely
+                    ExecuteDifferentialSave(job, subDir, newTargetDir, string.Empty, totalFiles, totalSize, ref processedFiles, ref processedSize);
                 }
             }
 
+            // Log completion of the backup
             string endMessage = $"Differential backup {job.Name} completed.";
             ConsoleUtil.PrintTextconsole(endMessage);
-            LogManager.Instance.AddMessage(endMessage);*/
-            }
+            LogManager.Instance.AddMessage(endMessage);
         }
-
     }
 }
 
