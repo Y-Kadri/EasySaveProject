@@ -5,19 +5,18 @@
              x:Class="EasySave_Project.Views.Pages.LogsPage"
              x:DataType="pages:LogsPageViewModel"> <!-- Ajout de x:DataType ici -->
 
-    <Grid Background="#0D2B4D" ColumnDefinitions="*,*,*,*" RowDefinitions="Auto" Margin="10">
+    <StackPanel Orientation="Vertical" Spacing="20" Margin="10">
+        <TextBlock Classes="Secondary" 
+                   FontSize="32"
+                   FontWeight="Bold" Grid.Column="0" Text="{Binding AllLogs}" VerticalAlignment="Center"/>
+        <TreeView ItemsSource="{Binding Nodes}">
+            <TreeView.ItemTemplate>
+                <TreeDataTemplate ItemsSource="{Binding SubNodes}">
+                    <TextBlock Text="{Binding Title}" />
+                </TreeDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+    </StackPanel>
     
-        <!-- Première carte -->
-        <components:HomeCard Grid.Column="0" />
     
-        <!-- Deuxième carte -->
-        <components:HomeCard Grid.Column="1" />
-    
-        <!-- Troisième carte -->
-        <components:HomeCard Grid.Column="2" />
-    
-        <!-- Quatrième carte -->
-        <components:HomeCard Grid.Column="3" />
-    
-    </Grid>
 </UserControl>
