@@ -88,7 +88,7 @@ public partial class JobsPage : UserControl, IPage
         }
     }
     
-    public void reload()
+    public void Reload()
     {
         DataContext = new JobsPageViewModel();
     }

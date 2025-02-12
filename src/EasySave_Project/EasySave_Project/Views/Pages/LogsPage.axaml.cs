@@ -13,7 +13,7 @@ public partial class LogsPage : UserControl, IPage
         DataContext = new LogsPageViewModel(); 
     }
     
-    public void reload()
+    public void Reload()
     {
         DataContext = new LogsPageViewModel();
     }
