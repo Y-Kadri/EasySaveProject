@@ -74,20 +74,7 @@ namespace EasySave_Project.Service
                 processedFiles++;
                 processedSize += fileSize;
 
-                // Update backup job state globally
-                StateManager.Instance.UpdateState(new BackupJobState
-                {
-                    JobName = job.Name,
-                    LastActionTimestamp = DateUtil.GetTodayDate(DateUtil.YYYY_MM_DD_HH_MM_SS),
-                    JobStatus = job.SaveState.ToString(),
-                    TotalEligibleFiles = totalFiles,
-                    TotalFileSize = totalSize,
-                    Progress = (double)processedFiles / totalFiles * 100, // Calculate global progress
-                    RemainingFiles = totalFiles - processedFiles,
-                    RemainingFileSize = totalSize - processedSize,
-                    CurrentSourceFilePath = sourceFile,
-                    CurrentDestinationFilePath = targetFile
-                });
+                UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFile, targetFile);
             }
 
             // Recursively process subdirectories
