@@ -16,6 +16,7 @@ namespace EasySave_Project.View
     /// </summary>
     public class ConsoleView
     {
+        private readonly TranslationService translator = TranslationService.GetInstance();
 
         /// <summary>
         /// Launches the application by displaying a welcome message.
@@ -41,12 +42,12 @@ namespace EasySave_Project.View
         /// <returns>An integer representing the user's command choice.</returns>
         public int StartJobCommand()
         {
-            ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("option1")
-                + "\n" + TranslationService.GetInstance().GetText("option2")
-                + "\n" + TranslationService.GetInstance().GetText("option3")
-                + "\n" + TranslationService.GetInstance().GetText("option4")
-                + "\n" + TranslationService.GetInstance().GetText("option5")
-                + "\n" + TranslationService.GetInstance().GetText("option6"));
+            ConsoleUtil.PrintTextconsole(translator.GetText("option1")
+                + "\n" + translator.GetText("option2")
+                + "\n" + translator.GetText("option3")
+                + "\n" + translator.GetText("option4")
+                + "\n" + translator.GetText("option5")
+                + "\n" + translator.GetText("option6"));
             return ConsoleUtil.GetInputInt();
         }
 
@@ -56,7 +57,7 @@ namespace EasySave_Project.View
         /// <param name="jobList">A list of JobModel objects representing backup jobs.</param>
         public void ShowJobList(List<JobModel> jobList)
         {
-            ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("CurrentBackupTasks"));
+            ConsoleUtil.PrintTextconsole(translator.GetText("CurrentBackupTasks"));
             for (int i = 0; i < jobList.Count; i++)
             {
                 ConsoleUtil.PrintTextconsole($"{i + 1}. {jobList[i].Name} (Source: {jobList[i].FileSource}, Target: {jobList[i].FileTarget})");
@@ -69,14 +70,37 @@ namespace EasySave_Project.View
         /// <returns>A string representing the user's input.</returns>
         public string ChoiceJob()
         {
-            Console.Write(TranslationService.GetInstance().GetText("enterTaskNumbers"));
+            Console.Write(translator.GetText("enterTaskNumbers"));
             return Console.ReadLine();
         }
 
         public int ChooseLogFormat()
         {
-            ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("enterLogFormatChoose") + " (1 : JSON, 2 : XML)");
+            ConsoleUtil.PrintTextconsole(translator.GetText("enterLogFormatChoose") + " (1 : JSON, 2 : XML)");
             return ConsoleUtil.GetInputInt();
+        }
+
+        public void ShowCurrentFormatCrypt(List<string> currentFormats)
+        {
+            // Display the current formats if not empty
+            if (currentFormats != null && currentFormats.Count > 0)
+            {
+                ConsoleUtil.PrintTextconsole(translator.GetText("displayCurrentEncryptedFormats"));
+                foreach (var format in currentFormats)
+                {
+                    ConsoleUtil.PrintTextconsole(format);
+                }
+            } else
+            {
+                ConsoleUtil.PrintTextconsole(translator.GetText("noEncryptedFormatsSet"));
+            }
+        }
+
+        public string formatWrited()
+        {
+            // Prompt the user for a new format to add
+            ConsoleUtil.PrintTextconsole(translator.GetText("promptEnterFileFormat"));
+            return Console.ReadLine()?.Trim();
         }
     }
 }
