@@ -628,5 +628,59 @@ namespace EasySave_Project.Util
         {
             return Path.GetExtension(filePath); // Returns the extension (including the dot)
         }
+
+        /// <summary>
+        /// Retrieves all files from a directory, including its subdirectories recursively.
+        /// </summary>
+        /// <param name="directoryPath">The path of the source directory.</param>
+        /// <returns>A list of full file paths found in the directory and its subdirectories.</returns>
+        public static List<string> GetFilesRecursively(string directoryPath)
+        {
+            List<string> files = new List<string>();
+
+            try
+            {
+                // Get all files in the current directory
+                files.AddRange(Directory.GetFiles(directoryPath));
+
+                // Recursively get files from subdirectories
+                foreach (string subDir in Directory.GetDirectories(directoryPath))
+                {
+                    files.AddRange(GetFilesRecursively(subDir));
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorReadingFolder") + ex.Message);
+            }
+
+            return files;
+        }
+
+        /// <summary>
+        /// Gets the relative path of a file or directory based on the provided root directory.
+        /// </summary>
+        /// <param name="rootDir">The root directory to base the relative path on.</param>
+        /// <param name="fullPath">The full path of the file or directory.</param>
+        /// <returns>The relative path from the root directory to the specified file or directory.</returns>
+        public static string GetRelativePath(string rootDir, string fullPath)
+        {
+            // Ensure the paths are normalized and absolute
+            var rootDirectoryInfo = new DirectoryInfo(rootDir);
+            var fullPathInfo = new FileInfo(fullPath);
+
+            // Ensure the full path belongs to the root directory
+            if (!fullPathInfo.FullName.StartsWith(rootDirectoryInfo.FullName, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new ArgumentException("The full path must be within the root directory.", nameof(fullPath));
+            }
+
+            // Calculate the relative path
+            Uri rootUri = new Uri(rootDirectoryInfo.FullName + Path.DirectorySeparatorChar);
+            Uri fullPathUri = new Uri(fullPathInfo.FullName);
+            Uri relativeUri = rootUri.MakeRelativeUri(fullPathUri);
+
+            return Uri.UnescapeDataString(relativeUri.ToString().Replace('/', Path.DirectorySeparatorChar));
+        }
     }
 }
