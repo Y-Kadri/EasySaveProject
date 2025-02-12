@@ -90,5 +90,6 @@
   "errorUpdatingLanguage" : "Error updating language",
   "formatUpdated" : "Format updated",
   "errorFormatLanguage" : "Error updating format",
-  "AllLogs" : "All Logs"
+  "AllLogs" : "All Logs",
+  "HomePageTitle" : "Welcome to EasySave!"
 }
