@@ -69,6 +69,8 @@ namespace EasySave_Project.Service
             Stopwatch stopwatch = new Stopwatch();
             double elapsedTime = 0;
 
+            string message;
+
             // If encryption option is enabled, encrypt the file after copying
             if (shouldEncrypt)
             {
@@ -76,7 +78,7 @@ namespace EasySave_Project.Service
                 {
                     stopwatch.Start();
                     FileUtil.EncryptFile(targetFile, "Cesi2004@+");
-                    string message = $"{translator.GetText("fileCopiedAndEncrypted")}: {sourceFile} -> {targetFile}";
+                    message = $"{translator.GetText("fileCopiedAndEncrypted")}: {sourceFile} -> {targetFile}";
                     stopwatch.Stop();
                     elapsedTime = stopwatch.ElapsedMilliseconds;
 
@@ -86,13 +88,15 @@ namespace EasySave_Project.Service
                 }
                 catch (Exception ex)
                 {
-                    ConsoleUtil.PrintTextconsole($"{translator.GetText("errorEncrypting")}: {ex.Message}");
+                    message = $"{translator.GetText("errorEncrypting")}: {ex.Message}";
+                    ConsoleUtil.PrintTextconsole(message);
+                    LogManager.Instance.AddMessage(message);
                     elapsedTime = -1;
                 }
             }
             else
             {
-                string message = $"{translator.GetText("fileCopied")}: {sourceFile} -> {targetFile}";
+                message = $"{translator.GetText("fileCopied")}: {sourceFile} -> {targetFile}";
                 ConsoleUtil.PrintTextconsole(message);
                 LogManager.Instance.AddMessage(message);
             }
