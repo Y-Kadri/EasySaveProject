@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
+using CryptoSoft;
 using EasySave_Library_Log.manager;
 using EasySave_Project.Dto;
 using EasySave_Project.Model;
@@ -102,16 +105,29 @@ namespace EasySave_Project.Util
             string message;
             try
             {
+                // Copy the file to the destination, depending on the 'overwrite' parameter (to overwrite or not)
                 File.Copy(sourceFile, destinationFile, overwrite);
-                message = $"{translator.GetText("fileCopied")}: {sourceFile} -> {destinationFile}";
-                ConsoleUtil.PrintTextconsole(message);
-                LogManager.Instance.AddMessage(message);
             }
             catch (Exception ex)
             {
+                // In case of an error during the copy, display the error message
                 message = $"{translator.GetText("errorCopyingFile")}: '{sourceFile}' - {ex.Message}";
-                ConsoleUtil.PrintTextconsole(message);
-                LogManager.Instance.AddMessage(message);
+                ConsoleUtil.PrintTextconsole(message);  // Display the error message in the console
+                LogManager.Instance.AddMessage(message); // Add the error message to the log
+            }
+        }
+
+        public static void EncryptFile(string filePath, string key)
+        {
+            try
+            {
+                var fileManager = new FileManager(filePath, key);
+                fileManager.TransformFile();
+            }
+            catch (Exception ex)
+            {
+                ConsoleUtil.PrintTextconsole($"Erreur lors du cryptage du fichier: {ex.Message}");
+                LogManager.Instance.AddMessage($"Erreur lors du cryptage du fichier: {ex.Message}");
             }
         }
 
@@ -601,6 +617,16 @@ namespace EasySave_Project.Util
                 return new List<string>(); // Return an empty list if an error occurs
             }
             return encryptedList;
+        }
+
+        /// <summary>
+        /// Retrieves the file extension from the given file path.
+        /// </summary>
+        /// <param name="filePath">The path of the file.</param>
+        /// <returns>The file extension, or an empty string if the file has no extension.</returns>
+        public static string GetFileExtension(string filePath)
+        {
+            return Path.GetExtension(filePath); // Returns the extension (including the dot)
         }
     }
 }

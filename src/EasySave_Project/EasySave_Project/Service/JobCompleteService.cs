@@ -3,6 +3,7 @@ using EasySave_Library_Log.manager;
 using EasySave_Project.Model;
 using EasySave_Project.Util;
 using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace EasySave_Project.Service
@@ -47,31 +48,19 @@ namespace EasySave_Project.Service
         private void ExecuteCompleteSave(string sourceDir, string targetDir, JobModel job)
         {
             var files = FileUtil.GetFiles(sourceDir);
+            TranslationService translator = TranslationService.GetInstance();
             int totalFiles = files.Count();
             int processedFiles = 0;
             long totalSize = FileUtil.CalculateTotalSize(sourceDir); // Use the new method
             long processedSize = 0;
+            string message;
 
             // Copy all files from the source directory
             foreach (string sourceFile in files)
             {
                 string fileName = FileUtil.GetFileName(sourceFile);
                 string targetFile = FileUtil.CombinePath(targetDir, fileName);
-
-                FileUtil.CopyFile(sourceFile, targetFile, true); // Copy file to target
-
-                // Calculate file size and transfer time
-                long fileSize = FileUtil.GetFileSize(sourceFile);
-                double transferTime = FileUtil.CalculateTransferTime(sourceFile, targetFile);
-
-                // Log the operation
-                LogManager.Instance.UpdateState(
-                    jobName: job.Name,
-                    sourcePath: sourceFile,
-                    targetPath: targetFile,
-                    fileSize: fileSize,
-                    transferTime: transferTime
-                );
+                long fileSize = HandleFileOperation(sourceFile, targetFile, job);
 
                 // Update processed files and sizes
                 processedFiles++;
