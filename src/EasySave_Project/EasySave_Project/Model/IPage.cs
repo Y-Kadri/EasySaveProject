@@ -2,5 +2,5 @@ namespace EasySave_Project.Model;
 
 public interface IPage
 {
-    void reload();
+    void Reload();
 }

@@ -13,7 +13,7 @@ public partial class HomePage : UserControl, IPage
         DataContext = new HomePageViewModel(); 
     }
     
-    public void reload()
+    public void Reload()
     {
         DataContext = new HomePageViewModel();
     }

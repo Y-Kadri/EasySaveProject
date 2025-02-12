@@ -41,7 +41,7 @@ public partial class BaseLayout : UserControl
             // Récupère l'index à partir de la propriété Tag
             if (int.TryParse(button.Tag?.ToString(), out int index))
             {
-                pages[index].reload();
+                pages[index].Reload();
                 ContentArea.Content = pages[index];
             }
         }

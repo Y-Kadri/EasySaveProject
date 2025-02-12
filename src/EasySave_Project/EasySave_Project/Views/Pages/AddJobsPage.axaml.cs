@@ -18,7 +18,7 @@ public partial class AddJobsPage : UserControl, IPage
         DataContext = new AddJobsPageViewModel(); 
     }
     
-    public void reload()
+    public void Reload()
     {
         string aucundossier = TranslationService.GetInstance().GetText("NoFolderSelected");
         
