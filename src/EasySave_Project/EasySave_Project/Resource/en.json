@@ -93,5 +93,10 @@
   "AllLogs" : "All Logs",
   "HomePageTitle" : "Welcome to EasySave!",
   "LogsFormatChangeSuccess" : "Logs format changed successfully",
-  "LogsFormatChangeError" : "Error changing logs format"
+  "LogsFormatChangeError" : "Error changing logs format",
+  "Timestamp" : "Timestamp",
+  "SourcePath" : "Source Path",
+  "TargetPath" : "Target Path",
+  "FileSize" : "File Size",
+  "TransferTime" : "Transfer Time"
 }

@@ -104,5 +104,10 @@
   "AllLogs" : "Tous les journaux",
   "HomePageTitle" : "Bienvenue dans EasySave!",
   "LogsFormatChangeSuccess" : "Format des journaux modifié avec succès",
-  "LogsFormatChangeError" : "Erreur lors de la modification du format des journaux"
+  "LogsFormatChangeError" : "Erreur lors de la modification du format des journaux",
+  "Timestamp" : "Horodatage",
+  "SourcePath" : "Répertoire source",
+  "TargetPath" : "Répertoire cible",
+  "FileSize" : "Taille du fichier",
+  "TransferTime" : "Temps de transfert"
 }
