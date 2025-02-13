@@ -153,22 +153,23 @@ namespace EasySave_Project.Service
         }
 
         /// <summary>
-        /// Retrieves the list of encrypted file extensions from the settings file.
+        /// Retrieves a list from the settings file based on the provided key.
         /// </summary>
-        /// <returns>A list of encrypted file extensions (e.g., [".txt", ".pdf"]).</returns>
-        public List<string> GetEncryptedFileExtensions()
+        /// <param name="key">The key to retrieve the list for (e.g., "EncryptedFileExtensions" or "PriorityBusinessProcess").</param>
+        /// <returns>A list of values (e.g., file extensions, business processes).</returns>
+        public List<string> GetJobSettingsList(string key)
         {
             try
             {
-                // Call the FileUtil method to retrieve encrypted file extensions
-                List<string> encryptedExtensions = FileUtil.GetEncryptedFileExtensions();
+                // Call the utility method to retrieve the list based on the key
+                List<string> settingsList = FileUtil.GetJobSettingsList(key);
 
-                return encryptedExtensions; // Return the list of encrypted file extensions
+                return settingsList; // Return the list
             }
             catch (Exception ex)
             {
                 // Handle the exception and print an error message
-                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorReadingFormat") + ex.Message);
+                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("error" + key) + ex.Message);
                 return new List<string>(); // Return an empty list in case of an error
             }
         }
@@ -176,22 +177,23 @@ namespace EasySave_Project.Service
         /// <summary>
         /// Adds a file format to the list of encrypted file extensions.
         /// </summary>
-        /// <param name="format">The file extension to add (e.g., "txt" or "pdf").</param>
-        public void AddFormatToEasySaveSettingsForScryptFile(string format)
+        /// <param name="key">The file extension to add (e.g., "txt" or "pdf").</param>
+        public void AddValueToJobSettingsList(string key, string value)
         {
             try
             {
                 // Call the utility method to add the format to settings
-                FileUtil.AddFormatToEasySaveSettingsForScryptFile(format);
+                FileUtil.AddValueToJobSettingsList(key, value);
 
                 // Print success message
-                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("formatAdded") + format);
+                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("elementAdded") + " " + value);
             }
             catch (Exception ex)
             {
                 // Handle the exception and print an error message
-                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorAddingFormat") + ex.Message);
+                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorAddingElement") + ex.Message);
             }
         }
+
     }
 }

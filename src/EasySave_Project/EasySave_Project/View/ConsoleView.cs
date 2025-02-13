@@ -47,7 +47,8 @@ namespace EasySave_Project.View
                 + "\n" + translator.GetText("option3")
                 + "\n" + translator.GetText("option4")
                 + "\n" + translator.GetText("option5")
-                + "\n" + translator.GetText("option6"));
+                + "\n" + translator.GetText("option6")
+                + "\n" + translator.GetText("option7"));
             return ConsoleUtil.GetInputInt();
         }
 
@@ -96,11 +97,29 @@ namespace EasySave_Project.View
             }
         }
 
-        public string formatWrited()
+        public string ElementWrited(string msg)
         {
             // Prompt the user for a new format to add
-            ConsoleUtil.PrintTextconsole(translator.GetText("promptEnterFileFormat"));
+            ConsoleUtil.PrintTextconsole(translator.GetText(msg));
             return Console.ReadLine()?.Trim();
         }
+
+        public void ShowCurrentPriorityBusinessProcess(List<string> currentProcess)
+        {
+            // Display the current formats if not empty
+            if (currentProcess != null && currentProcess.Count > 0)
+            {
+                ConsoleUtil.PrintTextconsole(translator.GetText("displayCurrentProcess"));
+                foreach (var p in currentProcess)
+                {
+                    ConsoleUtil.PrintTextconsole(p);
+                }
+            }
+            else
+            {
+                ConsoleUtil.PrintTextconsole(translator.GetText("noProcessSet"));
+            }
+        }
+
     }
 }

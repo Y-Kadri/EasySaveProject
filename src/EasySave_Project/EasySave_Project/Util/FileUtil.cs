@@ -523,11 +523,12 @@ namespace EasySave_Project.Util
         /// </summary>
         /// <param name="data">The JobSettingsDto object to check and update.</param>
         /// <param name="settingFilePath">The path to the settings JSON file.</param>
-        private static void EnsureEncryptedFileExtensionsExists(JobSettingsDto data, string settingFilePath)
+        private static void EnsureKeyExists(JobSettingsDto data, string settingFilePath, string key)
         {
-            if (data?.EncryptedFileExtensions == null)
+            var property = typeof(JobSettingsDto).GetProperty(key);
+            if (property != null && property.GetValue(data) == null)
             {
-                data.EncryptedFileExtensions = new List<string>();
+                property.SetValue(data, new List<string>());
                 string updatedJsonString = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
                 File.WriteAllText(settingFilePath, updatedJsonString); // Write the updated JSON to the file
             }
@@ -535,11 +536,12 @@ namespace EasySave_Project.Util
 
 
         /// <summary>
-        /// Adds a file format to the list of encrypted file extensions in the provided JobSettingsDto object.
-        /// If the format is not already present, it is added to the list and the changes are saved to the JSON file.
+        /// Adds a value to a specified list in the JobSettingsDto object.
+        /// If the value is not already present, it is added to the list and the changes are saved to the JSON file.
         /// </summary>
-        /// <param name="format">The file extension to add (e.g., "txt" or ".pdf").</param>
-        public static void AddFormatToEasySaveSettingsForScryptFile(string format)
+        /// <param name="key">The property name of the list (e.g., "EncryptedFileExtensions" or "PriorityBusinessProcess").</param>
+        /// <param name="value">The value to add (e.g., ".txt", ".pdf", "notepad.exe").</param>
+        public static void AddValueToJobSettingsList(string key, string value)
         {
             // Define the file path for the settings JSON file
             string settingFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
@@ -554,45 +556,50 @@ namespace EasySave_Project.Util
                     string jsonString = File.ReadAllText(settingFilePath);
                     JobSettingsDto data = JsonSerializer.Deserialize<JobSettingsDto>(jsonString);
 
-                    // Ensure the format starts with a dot (".")
-                    if (!string.IsNullOrWhiteSpace(format) && !format.StartsWith("."))
+                    // Ensure the specified list key exists
+                    EnsureKeyExists(data, settingFilePath, key);
+
+                    // Retrieve the list dynamically
+                    var property = typeof(JobSettingsDto).GetProperty(key);
+                    if (property != null && property.GetValue(data) is List<string> list)
                     {
-                        format = "." + format; // Add a dot if missing
+                        // Ensure the value starts with a dot if it's a file extension
+                        if (key == "EncryptedFileExtensions" && !string.IsNullOrWhiteSpace(value) && !value.StartsWith('.'))
+                        {
+                            value = "." + value;
+                        }
+                        // Add the value if it's not already in the list
+                        if (!list.Contains(value))
+                        {
+                            list.Add(value);
+                            // Serialize the updated data back to JSON format
+                            string updatedJsonString = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
+                            File.WriteAllText(settingFilePath, updatedJsonString); // Write the updated JSON to the file
+                        }
                     }
-
-                    // Ensure the EncryptedFileExtensions key exists
-                    EnsureEncryptedFileExtensionsExists(data, settingFilePath);
-
-                    // Add the format if it's not already in the list
-                    if (!data.EncryptedFileExtensions.Contains(format))
-                    {
-                        data.EncryptedFileExtensions.Add(format);
-                    }
-
-                    // Serialize the updated data back to JSON format
-                    string updatedJsonString = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
-                    File.WriteAllText(settingFilePath, updatedJsonString); // Write the updated JSON to the file
                 }
             }
             catch (Exception ex)
             {
-                // Print error message if an exception occurs during format addition
+                // Print error message if an exception occurs
                 ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorAddingFormat") + ex.Message);
             }
         }
 
+
         /// <summary>
-        /// Retrieves the list of encrypted file extensions from the provided JobSettingsDto object.
+        /// Retrieves a specified list from the JobSettingsDto object.
         /// If the list is not present or empty, it returns an empty list.
         /// </summary>
-        /// <returns>A list of encrypted file extensions (e.g., [".txt", ".pdf"]).</returns>
-        public static List<string> GetEncryptedFileExtensions()
+        /// <param name="key">The property name of the list (e.g., "EncryptedFileExtensions" or "PriorityBusinessProcess").</param>
+        /// <returns>A list of values stored in the specified property.</returns>
+        public static List<string> GetJobSettingsList(string key)
         {
             // Define the file path for the settings JSON file
             string settingFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                 "easySave", "easySaveSetting", "jobsSetting.json");
 
-           List<string> encryptedList = new List<string>();
+            List<string> retrievedList = [];
 
             try
             {
@@ -602,22 +609,25 @@ namespace EasySave_Project.Util
                     // Read the content of the JSON file
                     string jsonString = File.ReadAllText(settingFilePath);
                     JobSettingsDto data = JsonSerializer.Deserialize<JobSettingsDto>(jsonString);
+                    // Ensure the specified list key exists
+                    EnsureKeyExists(data, settingFilePath, key);
 
-                    // Ensure the EncryptedFileExtensions key exists
-                    EnsureEncryptedFileExtensionsExists(data, settingFilePath);
-
-                    // Return the list of encrypted file extensions
-                    encryptedList = data.EncryptedFileExtensions;
+                    // Retrieve the list dynamically
+                    var property = typeof(JobSettingsDto).GetProperty(key);
+                    if (property != null && property.GetValue(data) is List<string> list)
+                    {
+                        retrievedList = list;
+                    }
                 }
             }
             catch (Exception ex)
             {
                 // Print error message if an exception occurs
                 ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorReadingFormat") + ex.Message);
-                return new List<string>(); // Return an empty list if an error occurs
             }
-            return encryptedList;
+            return retrievedList;
         }
+
 
         /// <summary>
         /// Retrieves the file extension from the given file path.
