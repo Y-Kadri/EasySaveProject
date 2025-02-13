@@ -70,8 +70,8 @@ namespace EasySave_Project.Service
 
         public static void InitSetting()
         {
-            SetLanguage(FileUtil.GetSetting().language);
-            EasySave_Library_Log.manager.LogFormatManager.Instance.SetLogFormat(FileUtil.GetSetting().logFormat);
+            SetLanguage(SettingUtil.GetSetting().language);
+            EasySave_Library_Log.manager.LogFormatManager.Instance.SetLogFormat(SettingUtil.GetSetting().logFormat);
         }
         
     }

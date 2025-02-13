@@ -102,5 +102,7 @@
   "formatUpdated" : "Format mis à jour",
   "errorFormatLanguage" : "Erreur lors de la mise à jour du format",
   "AllLogs" : "Tous les journaux",
-  "HomePageTitle" : "Bienvenue dans EasySave!"
+  "HomePageTitle" : "Bienvenue dans EasySave!",
+  "LogsFormatChangeSuccess" : "Format des journaux modifié avec succès",
+  "LogsFormatChangeError" : "Erreur lors de la modification du format des journaux"
 }
