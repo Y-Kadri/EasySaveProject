@@ -17,7 +17,7 @@
   "fileCopied": "Fichier copié",
   "errorCopyingFile": "Erreur lors de la copie du fichier",
   "directorySourceDoNotExist": "Le répertoire source n'existe pas",
-  "startingBackup": "Démarrage de la sauvegarde",
+  "startingBackup": "Démarrage de la sauvegarde pour : ",
   "backupCompleted": "Sauvegarde terminée",
   "noPreviousFullBackup": "Aucune sauvegarde complète précédente trouvée",
   "fileUpdated": "Fichier mis à jour",

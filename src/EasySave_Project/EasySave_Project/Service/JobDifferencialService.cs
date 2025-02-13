@@ -5,6 +5,7 @@ using EasySave_Project.Util;
 using System;
 using CryptoSoft;
 using System.Diagnostics;
+using System.Globalization;
 namespace EasySave_Project.Service
 {
     /// <summary>
@@ -60,7 +61,7 @@ namespace EasySave_Project.Service
         private void ExecuteDifferentialSave(JobModel job, string fileSource, string targetDir, string lastFullBackupDir, ref int processedFiles, ref long processedSize)
         {
             // Log the start of the backup process
-            string message = $"Starting differential backup for {job.Name}";
+            string message = TranslationService.GetInstance().GetText("startingBackup") + job.Name;
             LogManager.Instance.AddMessage(message);
             ConsoleUtil.PrintTextconsole(message);
 
@@ -71,9 +72,9 @@ namespace EasySave_Project.Service
             CopyModifiedFiles(job, filesToCopy, targetDir, ref processedFiles, ref processedSize, filesToCopyCount, filesToCopySize);
 
             // Log the completion of the backup
-            string endMessage = $"Differential backup {job.Name} completed.";
-            ConsoleUtil.PrintTextconsole(endMessage);
-            LogManager.Instance.AddMessage(endMessage);
+            message = TranslationService.GetInstance().GetText("backupCompleted") + job.Name;
+            ConsoleUtil.PrintTextconsole(message);
+            LogManager.Instance.AddMessage(message);
         }
 
         /// <summary>
@@ -151,63 +152,6 @@ namespace EasySave_Project.Service
                 // Update the backup state
                 UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFile, targetFile);
             }
-        }
-
-        /// <summary>
-        /// Handles the subdirectories of the source directory, checking and copying modified subdirectories and their files.
-        /// </summary>
-        /// <param name="job">The JobModel representing the backup job.</param>
-        /// <param name="fileSource">The source directory to back up.</param>
-        /// <param name="targetDir">The target directory where the backup will be stored.</param>
-        /// <param name="lastFullBackupDir">The directory of the last full backup.</param>
-        /// <param name="processedFiles">Reference to the number of processed files.</param>
-        /// <param name="processedSize">Reference to the total size of processed files.</param>
-        /// <param name="totalFiles">Total number of files to be processed.</param>
-        /// <param name="totalSize">Total size of the files to be backed up.</param>
-       /* private void HandleSubdirectories(JobModel job, string fileSource, string targetDir, string lastFullBackupDir, ref int processedFiles, ref long processedSize, int totalFiles, long totalSize)
-        {
-            foreach (string subDir in FileUtil.GetDirectories(fileSource))
-            {
-                string newTargetDir = FileUtil.CombinePath(targetDir, FileUtil.GetFileName(subDir));
-                string newLastFullBackupDir = FileUtil.CombinePath(lastFullBackupDir, FileUtil.GetFileName(subDir));
-
-                // Check if the last full backup directory exists
-                if (FileUtil.ExistsDirectory(newLastFullBackupDir))
-                {
-                    // Check for any modified files in the subdirectory
-                    bool subDirModified = CheckSubdirectoryModification(subDir, newLastFullBackupDir);
-
-                    // If the subdirectory has any modified files or the directory itself is modified
-                    if (subDirModified || FileUtil.GetLastWriteTime(subDir) > FileUtil.GetLastWriteTime(newLastFullBackupDir))
-                    {
-                        ExecuteDifferentialSave(job, subDir, newTargetDir, newLastFullBackupDir, totalFiles, totalSize, ref processedFiles, ref processedSize);
-                    }
-                }
-                else
-                {
-                    // If the last full backup does not exist for this subdir, copy it completely
-                    ExecuteDifferentialSave(job, subDir, newTargetDir, string.Empty, totalFiles, totalSize, ref processedFiles, ref processedSize);
-                }
-            }
-        }*/
-
-        /// <summary>
-        /// Checks if any files in a subdirectory have been modified compared to the last full backup.
-        /// </summary>
-        /// <param name="subDir">The subdirectory to check.</param>
-        /// <param name="lastFullBackupSubDir">The corresponding subdirectory in the last full backup.</param>
-        /// <returns>True if any files in the subdirectory are modified, otherwise false.</returns>
-        private bool CheckSubdirectoryModification(string subDir, string lastFullBackupSubDir)
-        {
-            foreach (string subFile in FileUtil.GetFiles(subDir))
-            {
-                string lastFullBackupSubFile = FileUtil.CombinePath(lastFullBackupSubDir, FileUtil.GetFileName(subFile));
-                if (!FileUtil.ExistsFile(lastFullBackupSubFile) || FileUtil.GetLastWriteTime(subFile) > FileUtil.GetLastWriteTime(lastFullBackupSubFile))
-                {
-                    return true;
-                }
-            }
-            return false;
         }
     }
 }
