@@ -70,5 +70,6 @@
     "addProcessToSettings": "Adding the process to the settings.",
     "displayCurrentProcess": "Current business processes: ",
     "promptEnterBusinessProcess": "Enter the business process to add (e.g., 'calculatrice') :",
-    "errorReadingFolder": "Error accessing folder: "
+    "errorReadingFolder": "Error accessing folder: ",
+    "interuptJob": "Backup interrupted due to the following business process: "
 }

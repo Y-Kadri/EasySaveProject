@@ -38,6 +38,17 @@ namespace EasySave_Project.Service
                 FileUtil.CreateDirectory(job.FileTarget);
             }
 
+            var processes = FileUtil.GetJobSettingsList("PriorityBusinessProcess");
+            (bool isRunning, string PName) = ProcessUtil.IsProcessRunning(processes);
+            if (isRunning)
+            {
+                string Pmessage = TranslationService.GetInstance().GetText("interuptJob") + " " + PName;
+                ConsoleUtil.PrintTextconsole(Pmessage);
+                job.SaveState = JobSaveStateEnum.SKIP;
+                StateManager.Instance.UpdateState(CreateBackupJobState(job, 0, job.FileSource, string.Empty));
+                return;
+            }
+
             // Create a job-specific backup directory
             string jobBackupDir = FileUtil.CombinePath(job.FileTarget, job.Name + "_" + job.Id);
             if (!FileUtil.ExistsDirectory(jobBackupDir))
