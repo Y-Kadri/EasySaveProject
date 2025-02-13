@@ -35,6 +35,10 @@ namespace EasySave_Project.ViewModels.Pages
         public string ChooseLogsFormat { get; private set; }
         public string Json { get; private set; }
         public string Xml { get; private set; }
+        
+        public string Add { get; private set; }
+        public string FileExtensionsToEncrypt { get; private set; }
+        public string MonitoredBusinessSoftware { get; private set; }
 
         // Constructeur qui prend un callback pour notifier la vue
         public SettingPageViewModel()
@@ -47,6 +51,9 @@ namespace EasySave_Project.ViewModels.Pages
             ChooseLogsFormat = _translationService.GetText("ChooseLogsFormat");
             Json = _translationService.GetText("Json");
             Xml = _translationService.GetText("Xml");
+            Add = _translationService.GetText("Add");
+            FileExtensionsToEncrypt = _translationService.GetText("FileExtensionsToEncrypt");
+            MonitoredBusinessSoftware = _translationService.GetText("MonitoredBusinessSoftware");
             
             EncryptedFileExtensions = new ObservableCollection<string>(SettingUtil.GetList("EncryptedFileExtensions"));
             PriorityBusinessProcess = new ObservableCollection<string>(SettingUtil.GetList("PriorityBusinessProcess"));

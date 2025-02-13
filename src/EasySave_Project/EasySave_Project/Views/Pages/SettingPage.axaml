@@ -26,15 +26,16 @@
         </StackPanel>
         
         <StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="Extensions de fichiers à crypter" FontWeight="Bold" />
+            <TextBlock Text="{Binding FileExtensionsToEncrypt}" FontWeight="Bold" />
             <TextBox x:Name="ExtensionInput" Width="200" Watermark="Ex: .txt" />
-            <Button Content="Ajouter" Click="AddEncryptedFileExtensions_Click"/>
+            <Button Content="{Binding Add}" Click="AddEncryptedFileExtensions_Click"/>
             <ListBox ItemsSource="{Binding EncryptedFileExtensions}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{Binding}" Width="150"/>
-                            <Button Content="Supprimer" Click="RemoveEncryptedFileExtensions_Click"/>
+                            <Button Content="🗑"
+                                    Tag="{Binding}" Click="RemoveEncryptedFileExtensions_Click"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -42,15 +43,16 @@
         </StackPanel>
         
         <StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="Logiciels métier surveillés" FontWeight="Bold" Margin="10,20,0,0"/>
+            <TextBlock Text="{Binding MonitoredBusinessSoftware}" FontWeight="Bold" Margin="10,20,0,0"/>
             <TextBox x:Name="SoftwareInput" Width="200" Watermark="Ex: Photoshop.exe"/>
-            <Button Content="Ajouter" Click="AddPriorityBusinessProcess_Click"/>
+            <Button Content="{Binding Add}" Click="AddPriorityBusinessProcess_Click"/>
             <ListBox ItemsSource="{Binding PriorityBusinessProcess}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{Binding}" Width="150"/>
-                            <Button Content="Supprimer" Click="RemovePriorityBusinessProcess_Click"/>
+                            <Button Content="🗑"
+                                    Tag="{Binding}" Click="RemovePriorityBusinessProcess_Click"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

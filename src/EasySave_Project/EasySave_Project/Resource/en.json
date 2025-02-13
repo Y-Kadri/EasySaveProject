@@ -98,5 +98,8 @@
   "SourcePath" : "Source Path",
   "TargetPath" : "Target Path",
   "FileSize" : "File Size",
-  "TransferTime" : "Transfer Time"
+  "TransferTime" : "Transfer Time",
+  "Delete" : "Delete",
+  "FileExtensionsToEncrypt" : "File extensions to encrypt",
+  "MonitoredBusinessSoftware" : "Monitored business software"
 }

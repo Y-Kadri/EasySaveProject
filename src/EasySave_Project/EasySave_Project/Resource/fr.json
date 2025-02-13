@@ -109,5 +109,8 @@
   "SourcePath" : "Répertoire source",
   "TargetPath" : "Répertoire cible",
   "FileSize" : "Taille du fichier",
-  "TransferTime" : "Temps de transfert"
+  "TransferTime" : "Temps de transfert",
+  "Delete" : "Supprimer",
+  "FileExtensionsToEncrypt" : "Extensions de fichiers à crypter",
+  "MonitoredBusinessSoftware" : "Logiciels métier surveillés"
 }
