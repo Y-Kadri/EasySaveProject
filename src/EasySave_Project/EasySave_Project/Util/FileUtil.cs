@@ -312,9 +312,6 @@ namespace EasySave_Project.Util
             }
             catch (Exception ex)
             {
-                message = $"{TranslationService.GetInstance().GetText("errorCopyingDirectory")}: '{path}' - {ex.Message}";
-                ConsoleUtil.PrintTextconsole(message);
-                LogManager.Instance.AddMessage(message);
                 return new string[0]; // Returns an empty array in case of error
             }
         }

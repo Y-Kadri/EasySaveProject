@@ -6,5 +6,6 @@
         ACTIVE,
         INACTIVE,
         SKIP,
+        CANCEL,
     }
 }
