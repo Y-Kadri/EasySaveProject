@@ -29,6 +29,9 @@ namespace EasySave_Project.Service
                 message = $"{translator.GetText("directorySourceDoNotExist")} : {job.FileSource}";
                 ConsoleUtil.PrintTextconsole(message);
                 LogManager.Instance.AddMessage(message);
+                LogManager.Instance.UpdateState(job.Name, job.FileSource, job.FileTarget, 0, 0, 0);
+                job.SaveState = JobSaveStateEnum.CANCEL;
+                StateManager.Instance.UpdateState(CreateBackupJobState(job, 0, job.FileSource, string.Empty));
                 return; // Exit if source directory does not exist
             }
 
