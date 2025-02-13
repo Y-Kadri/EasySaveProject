@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using EasySave_Library_Log.manager;
 using EasySave_Project.Model;
 using EasySave_Project.ViewModels.Pages;
 using EasySave_Project.Views.Components;
@@ -16,8 +17,6 @@ namespace EasySave_Project.Views.Pages
         {
             InitializeComponent();
             _baseLayout = baseLayout;
-
-            // Passer la méthode NotifyCallback au ViewModel
             _settingPageViewModel = new SettingPageViewModel();
             DataContext = _settingPageViewModel;
         }
@@ -48,6 +47,34 @@ namespace EasySave_Project.Views.Pages
                 
                 // Appel de ChangeLanguage et décomposition du tuple
                 var (message, status) = _settingPageViewModel.ChangeLanguage(lang);
+
+                // Affichage de la notification avec les valeurs récupérées
+                Toastr.ShowNotification(message, NotificationContainer, status);
+                Update();
+            }
+        }
+        
+        private void OnLogsFormatChanged(object? sender, RoutedEventArgs e)
+        {
+            if (sender is RadioButton selectedRadioButton)
+            {
+                LogFormatManager.LogFormat logsFormat;
+
+                if (selectedRadioButton == FirstFormat)
+                {
+                    logsFormat = LogFormatManager.LogFormat.JSON;
+                }
+                else if (selectedRadioButton == SecondFormat)
+                {
+                    logsFormat = LogFormatManager.LogFormat.XML;
+                }
+                else
+                {
+                    return;
+                }
+                
+                // Appel de ChangeLogsFormat et décomposition du tuple
+                var (message, status) = _settingPageViewModel.ChangeLogsFormat(logsFormat);
 
                 // Affichage de la notification avec les valeurs récupérées
                 Toastr.ShowNotification(message, NotificationContainer, status);

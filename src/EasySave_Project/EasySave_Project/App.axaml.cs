@@ -22,7 +22,7 @@ public partial class App : Application
         
            
         FileUtil.EnsureDirectoryAndFileExist("jobsSetting.json");
-        FileUtil.InitSetting();
+        SettingUtil.InitSetting();
         LoadDataService loadDataService = new();
         loadDataService.LoadJobs();
         TranslationService.InitSetting();

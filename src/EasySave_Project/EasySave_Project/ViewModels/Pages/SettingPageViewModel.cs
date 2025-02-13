@@ -1,9 +1,7 @@
-using System;
-using Avalonia.Controls;
+using EasySave_Library_Log.manager;
 using EasySave_Project.Model;
 using EasySave_Project.Service;
 using EasySave_Project.Util;
-using EasySave_Project.Views.Components;
 using ReactiveUI;
 
 namespace EasySave_Project.ViewModels.Pages
@@ -50,7 +48,7 @@ namespace EasySave_Project.ViewModels.Pages
         // Méthode pour changer la langue et appeler la notification
         public  (string message, string status) ChangeLanguage(LanguageEnum lang)
         {
-            if (FileUtil.SettingChangeLanguage(lang))
+            if (SettingUtil.SettingChangeLanguage(lang))
             {
                 TranslationService.SetLanguage(lang);
                 _message = _translationService.GetText("LanguageChangeSuccess");
@@ -63,6 +61,22 @@ namespace EasySave_Project.ViewModels.Pages
             }
 
             // Appeler le callback pour afficher la notification dans la vue
+            return (_message, _status);
+        }
+
+        public (string message, string status) ChangeLogsFormat(LogFormatManager.LogFormat logsFormat)
+        {
+            if (SettingUtil.SettingChangeFormat(logsFormat))
+            {
+                _message = _translationService.GetText("LogsFormatChangeSuccess");
+                _status = "Success";
+            }
+            else
+            {
+                _message = _translationService.GetText("LogsFormatChangeError");
+                _status = "Error";
+            }
+
             return (_message, _status);
         }
     }

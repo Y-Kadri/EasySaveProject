@@ -91,5 +91,7 @@
   "formatUpdated" : "Format updated",
   "errorFormatLanguage" : "Error updating format",
   "AllLogs" : "All Logs",
-  "HomePageTitle" : "Welcome to EasySave!"
+  "HomePageTitle" : "Welcome to EasySave!",
+  "LogsFormatChangeSuccess" : "Logs format changed successfully",
+  "LogsFormatChangeError" : "Error changing logs format"
 }
