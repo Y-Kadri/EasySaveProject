@@ -5,7 +5,7 @@
              x:Class="EasySave_Project.Views.Pages.SettingPage"
              x:DataType="pages:SettingPageViewModel"> <!-- Ajout de x:DataType ici -->
 
-    <Grid Background="#0D2B4D" ColumnDefinitions="*,*,*" RowDefinitions="Auto" Margin="10">
+    <Grid Background="#0D2B4D" ColumnDefinitions="*,*,*" RowDefinitions="*,*" Margin="10">
         <!-- Langue -->
         <StackPanel Margin="30" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
             <TextBlock Text="{Binding SelectLanguage}" VerticalAlignment="Center"/>
@@ -25,6 +25,38 @@
             <RadioButton GroupName="SettingFormat" Content="{Binding Xml}" x:Name="SecondFormat" Checked="OnLogsFormatChanged"/>
         </StackPanel>
         
+        <StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Extensions de fichiers à crypter" FontWeight="Bold" />
+            <TextBox x:Name="ExtensionInput" Width="200" Watermark="Ex: .txt" />
+            <Button Content="Ajouter" Click="AddEncryptedFileExtensions_Click"/>
+            <ListBox ItemsSource="{Binding EncryptedFileExtensions}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding}" Width="150"/>
+                            <Button Content="Supprimer" Click="RemoveEncryptedFileExtensions_Click"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+        
+        <StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Logiciels métier surveillés" FontWeight="Bold" Margin="10,20,0,0"/>
+            <TextBox x:Name="SoftwareInput" Width="200" Watermark="Ex: Photoshop.exe"/>
+            <Button Content="Ajouter" Click="AddPriorityBusinessProcess_Click"/>
+            <ListBox ItemsSource="{Binding PriorityBusinessProcess}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding}" Width="150"/>
+                            <Button Content="Supprimer" Click="RemovePriorityBusinessProcess_Click"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+        
         <!-- Notification --> 
         <Canvas Grid.Column="2" Panel.ZIndex="9">
             <StackPanel x:Name="NotificationContainer"
@@ -35,4 +67,6 @@
         </Canvas>
     
     </Grid>
+        
+
 </UserControl>
