@@ -80,5 +80,6 @@
     "addProcessToSettings": "Ajout du processus aux paramètres.",
     "displayCurrentProcess": "Processus métier actuels: ",
     "promptEnterBusinessProcess": "Entrez le processus métier à ajouter (par exemple, 'calculatrice' ) :",
-    "errorReadingFolder": "Erreur d'accès au dossier : "
+    "errorReadingFolder": "Erreur d'accès au dossier : ",
+    "interuptJob":  "Interruption de la sauvegarde à cause du processus métier suivant : "
 }
