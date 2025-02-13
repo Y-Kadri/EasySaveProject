@@ -82,10 +82,46 @@ namespace EasySave_Project.Views.Pages
             }
         }
 
-        public void Update()
+        private void Update()
         {
             Reload();
             _baseLayout.reload();
+        }
+        
+        private void AddEncryptedFileExtensions_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ExtensionInput.Text))
+            {
+                _settingPageViewModel.AddEncryptedFileExtensions(ExtensionInput.Text);
+                ExtensionInput.Text = "";
+                Reload();
+            }
+        }
+
+        private void RemoveEncryptedFileExtensions_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            var extension = (string)button.DataContext;
+            _settingPageViewModel.RemoveEncryptedFileExtensions(extension);
+            Reload();
+        }
+
+        private void AddPriorityBusinessProcess_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(SoftwareInput.Text))
+            {
+                _settingPageViewModel.AddPriorityBusinessProcess(SoftwareInput.Text);
+                SoftwareInput.Text = "";
+                Reload();
+            }
+        }
+
+        private void RemovePriorityBusinessProcess_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            var software = (string)button.DataContext;
+            _settingPageViewModel.RemovPriorityBusinessProcess(software);
+            Reload();
         }
     }
 }

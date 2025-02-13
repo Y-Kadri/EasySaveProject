@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using EasySave_Library_Log.manager;
 using EasySave_Project.Model;
 using EasySave_Project.Service;
@@ -9,6 +10,9 @@ namespace EasySave_Project.ViewModels.Pages
     public class SettingPageViewModel : ReactiveObject
     {
         private readonly TranslationService _translationService;
+        
+        public ObservableCollection<string> EncryptedFileExtensions { get; }
+        public ObservableCollection<string> PriorityBusinessProcess { get; }
 
         private string _message;
         private string _status;
@@ -43,6 +47,65 @@ namespace EasySave_Project.ViewModels.Pages
             ChooseLogsFormat = _translationService.GetText("ChooseLogsFormat");
             Json = _translationService.GetText("Json");
             Xml = _translationService.GetText("Xml");
+            
+            EncryptedFileExtensions = new ObservableCollection<string>(SettingUtil.GetList("EncryptedFileExtensions"));
+            PriorityBusinessProcess = new ObservableCollection<string>(SettingUtil.GetList("PriorityBusinessProcess"));
+        }
+        
+        public void AddEncryptedFileExtensions(string extension)
+        {
+            if (SettingUtil.AddToList("EncryptedFileExtensions", extension))
+            {
+                EncryptedFileExtensions.Add(extension);
+                this.RaisePropertyChanged(nameof(EncryptedFileExtensions));
+                Message = "Extension ajoutée avec succès.";
+            }
+            else
+            {
+                Message = "Erreur lors de l'ajout.";
+            }
+        }
+        
+        public void AddPriorityBusinessProcess(string software)
+        {
+            if (SettingUtil.AddToList("PriorityBusinessProcess", software))
+            {
+                PriorityBusinessProcess.Add(software);
+                this.RaisePropertyChanged(nameof(PriorityBusinessProcess));
+                Message = "Logiciel ajouté avec succès.";
+            }
+            else
+            {
+                Message = "Erreur lors de l'ajout.";
+            }
+        }
+
+        public void RemovPriorityBusinessProcess(string software)
+        {
+            if (SettingUtil.RemoveFromList("PriorityBusinessProcess", software))
+            {
+                PriorityBusinessProcess.Remove(software);
+                this.RaisePropertyChanged(nameof(PriorityBusinessProcess));
+                Message = "Logiciel supprimé avec succès.";
+            }
+            else
+            {
+                Message = "Erreur lors de la suppression.";
+            }
+        }
+
+        public void RemoveEncryptedFileExtensions(string extension)
+        {
+            if (SettingUtil.RemoveFromList("EncryptedFileExtensions", extension))
+            {
+                EncryptedFileExtensions.Remove(extension);
+                this.RaisePropertyChanged(nameof(EncryptedFileExtensions));
+                Message = "Extension supprimée avec succès.";
+            }
+            else
+            {
+                Message = "Erreur lors de la suppression.";
+            }
         }
 
         // Méthode pour changer la langue et appeler la notification

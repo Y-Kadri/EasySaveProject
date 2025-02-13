@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using EasySave_Library_Log.manager;
@@ -21,6 +22,63 @@ public static class SettingUtil
     public static bool SettingChangeFormat(EasySave_Library_Log.manager.LogFormatManager.LogFormat format)
     {
         return UpdateSetting(settings => settings.logFormat = format, "formatUpdated", "errorFormatLanguage");
+    }
+    
+    public static bool AddToList(string key, string value)
+    {
+        var settings = GetSetting();
+        if (settings == null) return false;
+
+        switch (key)
+        {
+            case "EncryptedFileExtensions":
+                if (!settings.EncryptedFileExtensions.Contains(value))
+                    settings.EncryptedFileExtensions.Add(value);
+                break;
+
+            case "PriorityBusinessProcess":
+                if (!settings.PriorityBusinessProcess.Contains(value))
+                    settings.PriorityBusinessProcess.Add(value);
+                break;
+
+            default:
+                return false;
+        }
+
+        return SaveSettings(settings, "itemAdded", "errorAddingItem");
+    }
+
+    public static bool RemoveFromList(string key, string value)
+    {
+        var settings = GetSetting();
+        if (settings == null) return false;
+
+        switch (key)
+        {
+            case "EncryptedFileExtensions":
+                settings.EncryptedFileExtensions.Remove(value);
+                break;
+
+            case "PriorityBusinessProcess":
+                settings.PriorityBusinessProcess.Remove(value);
+                break;
+
+            default:
+                return false;
+        }
+
+        return SaveSettings(settings, "itemRemoved", "errorRemovingItem");
+    }
+
+    public static List<string> GetList(string key)
+    {
+        var settings = GetSetting();
+        return key switch
+        {
+            "EncryptedFileExtensions" => settings?.EncryptedFileExtensions ?? new List<string>(),
+            "PriorityBusinessProcess" => settings?.PriorityBusinessProcess ?? new List<string>(),
+            _ => new List<string>()
+        };
     }
 
     public static void InitSetting()
