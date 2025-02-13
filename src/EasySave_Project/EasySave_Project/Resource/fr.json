@@ -79,5 +79,6 @@
     "retrievePriorityBusinessProcess": "Retrieving the current list of prioritized business process.",
     "addProcessToSettings": "Ajout du processus aux paramètres.",
     "displayCurrentProcess": "Processus métier actuels: ",
-    "promptEnterBusinessProcess": "Entrez le processus métier à ajouter (par exemple, 'calculatrice' ) :"
+    "promptEnterBusinessProcess": "Entrez le processus métier à ajouter (par exemple, 'calculatrice' ) :",
+    "errorReadingFolder": "Erreur d'accès au dossier : "
 }
