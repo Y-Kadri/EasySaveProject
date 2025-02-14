@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:pages="clr-namespace:EasySave_Project.ViewModels.Pages"
+             xmlns:components="clr-namespace:EasySave_Project.Views.Components"
+             x:Class="EasySave_Project.Views.Pages.LogsPage"
+             x:DataType="pages:LogsPageViewModel"> <!-- Ajout de x:DataType ici -->
+
+    <ScrollViewer>
+        <StackPanel Orientation="Vertical" Spacing="20" Margin="10">
+            <TextBlock Classes="Secondary" 
+                       FontSize="32"
+                       FontWeight="Bold" Grid.Column="0" Text="{Binding AllLogs}" VerticalAlignment="Center"/>
+            <TreeView ItemsSource="{Binding Nodes}">
+                <TreeView.ItemTemplate>
+                    <TreeDataTemplate ItemsSource="{Binding SubNodes}">
+                        <TextBlock Text="{Binding Title}" />
+                    </TreeDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+        </StackPanel>
+    </ScrollViewer>
+    
+    
+</UserControl>
