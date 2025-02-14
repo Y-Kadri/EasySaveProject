@@ -5,18 +5,20 @@
              x:Class="EasySave_Project.Views.Pages.LogsPage"
              x:DataType="pages:LogsPageViewModel"> <!-- Ajout de x:DataType ici -->
 
-    <StackPanel Orientation="Vertical" Spacing="20" Margin="10">
-        <TextBlock Classes="Secondary" 
-                   FontSize="32"
-                   FontWeight="Bold" Grid.Column="0" Text="{Binding AllLogs}" VerticalAlignment="Center"/>
-        <TreeView ItemsSource="{Binding Nodes}">
-            <TreeView.ItemTemplate>
-                <TreeDataTemplate ItemsSource="{Binding SubNodes}">
-                    <TextBlock Text="{Binding Title}" />
-                </TreeDataTemplate>
-            </TreeView.ItemTemplate>
-        </TreeView>
-    </StackPanel>
+    <ScrollViewer>
+        <StackPanel Orientation="Vertical" Spacing="20" Margin="10">
+            <TextBlock Classes="Secondary" 
+                       FontSize="32"
+                       FontWeight="Bold" Grid.Column="0" Text="{Binding AllLogs}" VerticalAlignment="Center"/>
+            <TreeView ItemsSource="{Binding Nodes}">
+                <TreeView.ItemTemplate>
+                    <TreeDataTemplate ItemsSource="{Binding SubNodes}">
+                        <TextBlock Text="{Binding Title}" />
+                    </TreeDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+        </StackPanel>
+    </ScrollViewer>
     
     
 </UserControl>
