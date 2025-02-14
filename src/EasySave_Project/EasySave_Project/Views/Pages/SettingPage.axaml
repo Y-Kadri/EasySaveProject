@@ -44,7 +44,7 @@
         
         <StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Text="{Binding MonitoredBusinessSoftware}" FontWeight="Bold" Margin="10,20,0,0"/>
-            <TextBox x:Name="SoftwareInput" Width="200" Watermark="Ex: Photoshop.exe"/>
+            <TextBox x:Name="SoftwareInput" Width="200" Watermark="Ex: Calculator"/>
             <Button Content="{Binding Add}" Click="AddPriorityBusinessProcess_Click"/>
             <ListBox ItemsSource="{Binding PriorityBusinessProcess}">
                 <ListBox.ItemTemplate>

@@ -131,5 +131,9 @@
     "TransferTime" : "Temps de transfert",
     "Delete" : "Supprimer",
     "FileExtensionsToEncrypt" : "Extensions de fichiers à crypter",
-    "MonitoredBusinessSoftware" : "Logiciels métier surveillés"
+    "MonitoredBusinessSoftware" : "Logiciels métier surveillés",
+    "ErrorSelectOneJobMin" : "Erreur : sélectionner au moins un travail",
+    "TheJob" : "Le travail",
+    "successfullyCompleted" : "terminé avec succès",
+    "failed" : "à échoué"
 }

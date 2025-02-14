@@ -6,6 +6,7 @@ using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using EasySave_Project.Model;
+using EasySave_Project.Service;
 using EasySave_Project.ViewModels.Pages;
 using EasySave_Project.Views.Components;
 using EasySave_Project.Views.Layout;
@@ -15,10 +16,13 @@ namespace EasySave_Project.Views.Pages;
 public partial class JobsPage : UserControl, IPage
 {
 
+    private TranslationService _translationService;
+
     public JobsPage()
     {
         InitializeComponent();
-        DataContext = new JobsPageViewModel(); 
+        DataContext = new JobsPageViewModel();
+        _translationService = TranslationService.GetInstance();
     }
 
     private async void Execute(object sender, RoutedEventArgs e)
@@ -38,7 +42,8 @@ public partial class JobsPage : UserControl, IPage
         // Vérifier si des jobs sont sélectionnés
         if (selectedJobs.Count == 0)
         {
-            Toastr.ShowNotification("Erreur : Veuillez sélectionner au moins un job.", NotificationContainer);
+            string message = _translationService.GetText("ErrorSelectOneJobMin");
+            Toastr.ShowNotification(message, NotificationContainer);
             return;
         }
 
