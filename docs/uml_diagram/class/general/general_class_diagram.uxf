@@ -1,80 +1,1265 @@
-<diagram program="umletino" version="15.1"><zoom_level>9</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>747</x><y>117</y><w>90</w><h>27</h></coordinates><panel_attributes>MainEasySave</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>747</x><y>261</y><w>90</w><h>45</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
-ICommand</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>441</x><y>378</y><w>162</w><h>27</h></coordinates><panel_attributes>CreateJobCommand</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>621</x><y>378</y><w>162</w><h>27</h></coordinates><panel_attributes>ExecuteJobCommand</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>801</x><y>378</y><w>162</w><h>27</h></coordinates><panel_attributes>ExecuteAllJobCommand</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1161</x><y>378</y><w>162</w><h>27</h></coordinates><panel_attributes>ExitCommand</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>828</x><y>270</y><w>432</w><h>126</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;460;10;460;120</additional_attributes></element><element><id>Relation</id><coordinates><x>513</x><y>270</y><w>252</w><h>126</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>260;10;10;10;10;120</additional_attributes></element><element><id>Relation</id><coordinates><x>693</x><y>297</y><w>99</w><h>99</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>90;10;90;30;10;30;10;90</additional_attributes></element><element><id>Relation</id><coordinates><x>801</x><y>297</y><w>81</w><h>99</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;10;30;70;30;70;90</additional_attributes></element><element><id>UMLClass</id><coordinates><x>720</x><y>189</y><w>144</w><h>27</h></coordinates><panel_attributes>CommandController</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>783</x><y>135</y><w>126</w><h>72</h></coordinates><panel_attributes>lt=&lt;-
-m1=1..1
-r1=commandController</panel_attributes><additional_attributes>10;60;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>783</x><y>207</y><w>81</w><h>72</h></coordinates><panel_attributes>lt=&lt;-
-m1=*
-r1=commands</panel_attributes><additional_attributes>10;60;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>990</x><y>189</y><w>144</w><h>36</h></coordinates><panel_attributes>&lt;&lt;Sealed&gt;&gt;
-TranslationService</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>855</x><y>189</y><w>153</w><h>45</h></coordinates><panel_attributes>lt=&lt;-
-m1=1..1
-r1=translationService</panel_attributes><additional_attributes>150;20;10;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>477</x><y>450</y><w>90</w><h>54</h></coordinates><panel_attributes>&lt;&lt;Sealed&gt;&gt;
-JobManager</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>306</x><y>477</y><w>90</w><h>36</h></coordinates><panel_attributes>&lt;&lt;Static&gt;&gt;
-JobFactory</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>747</x><y>450</y><w>90</w><h>54</h></coordinates><panel_attributes>
-JobService</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>513</x><y>396</y><w>54</w><h>72</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;60;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>477</x><y>540</y><w>90</w><h>27</h></coordinates><panel_attributes>JobModel</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>387</x><y>477</y><w>108</w><h>36</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;20;100;20</additional_attributes></element><element><id>Relation</id><coordinates><x>513</x><y>495</y><w>45</w><h>63</h></coordinates><panel_attributes>lt=&lt;-
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <help_text>Space for diagram notes</help_text>
+  <zoom_level>5</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>295</x>
+      <y>260</y>
+      <w>50</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>MainEasySave</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>405</x>
+      <y>335</y>
+      <w>80</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Sealed&gt;&gt;
+TranslationService</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>145</x>
+      <y>445</y>
+      <w>50</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Sealed&gt;&gt;
+JobManager</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>50</x>
+      <y>460</y>
+      <w>50</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Static&gt;&gt;
+JobFactory</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>295</x>
+      <y>445</y>
+      <w>50</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>
+JobService</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>145</x>
+      <y>495</y>
+      <w>50</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>JobModel</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>95</x>
+      <y>460</y>
+      <w>60</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;20.0;100.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>165</x>
+      <y>470</y>
+      <w>30</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
 m1=0..5
-r1=jobs</panel_attributes><additional_attributes>10;50;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>333</x><y>504</y><w>162</w><h>72</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;Creates&gt;&gt;</panel_attributes><additional_attributes>160;60;10;60;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>576</x><y>603</y><w>90</w><h>36</h></coordinates><panel_attributes>&lt;&lt;Enum&gt;&gt;
-JobSaveType</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>558</x><y>549</y><w>117</w><h>72</h></coordinates><panel_attributes>lt=&lt;-
+r1=jobs</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>65</x>
+      <y>475</y>
+      <w>90</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;Creates&gt;&gt;</panel_attributes>
+    <additional_attributes>160.0;60.0;10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>200</x>
+      <y>530</y>
+      <w>50</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Enum&gt;&gt;
+JobSaveType</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>190</x>
+      <y>500</y>
+      <w>70</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
 m1=1..1
-r1=jobType</panel_attributes><additional_attributes>70;60;70;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>918</x><y>486</y><w>108</w><h>36</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
-IJobStrategyService</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1053</x><y>576</y><w>162</w><h>27</h></coordinates><panel_attributes>JobCompleteService</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>873</x><y>576</y><w>162</w><h>27</h></coordinates><panel_attributes>JobDifferencielService</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1017</x><y>486</y><w>90</w><h>108</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;80;10;80;100</additional_attributes></element><element><id>Relation</id><coordinates><x>954</x><y>513</y><w>27</w><h>81</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;70</additional_attributes></element><element><id>UMLClass</id><coordinates><x>495</x><y>189</y><w>189</w><h>27</h></coordinates><panel_attributes>ConsoleView</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>558</x><y>117</y><w>207</w><h>90</h></coordinates><panel_attributes>lt=&lt;-
+r1=jobType</panel_attributes>
+    <additional_attributes>70.0;60.0;70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>390</x>
+      <y>465</y>
+      <w>60</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+IJobStrategyService</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>465</x>
+      <y>515</y>
+      <w>90</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>JobCompleteService</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>365</x>
+      <y>515</y>
+      <w>90</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>JobDifferencielService</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>445</x>
+      <y>465</y>
+      <w>50</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;10.0;80.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>410</x>
+      <y>480</y>
+      <w>15</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>75</x>
+      <y>535</y>
+      <w>50</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Enum&gt;&gt;
+JobSaveState</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>90</x>
+      <y>505</y>
+      <w>80</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
 m1=1..1
-r1=consoleView</panel_attributes><additional_attributes>10;80;10;10;210;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>351</x><y>612</y><w>90</w><h>36</h></coordinates><panel_attributes>&lt;&lt;Enum&gt;&gt;
-JobSaveState</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>378</x><y>558</y><w>144</w><h>72</h></coordinates><panel_attributes>lt=&lt;-
+r1=jobSaveState</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;30.0;140.0;30.0;140.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>525</x>
+      <y>335</y>
+      <w>105</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Static&gt;&gt;
+LanguageEnumExtensions</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>410</x>
+      <y>290</y>
+      <w>70</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Enum&gt;&gt;
+LanguageEnum</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>440</x>
+      <y>305</y>
+      <w>45</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
 m1=1..1
-r1=jobSaveState</panel_attributes><additional_attributes>10;60;10;30;140;30;140;10</additional_attributes></element><element><id>Relation</id><coordinates><x>675</x><y>387</y><w>90</w><h>117</h></coordinates><panel_attributes>lt=&lt;-
-m1=1..1
-r1=jobService</panel_attributes><additional_attributes>80;100;30;100;30;10</additional_attributes></element><element><id>Relation</id><coordinates><x>801</x><y>396</y><w>81</w><h>72</h></coordinates><panel_attributes>lt=&lt;-
-m1=1..1
-r1=jobService</panel_attributes><additional_attributes>10;60;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>648</x><y>207</y><w>99</w><h>189</h></coordinates><panel_attributes>lt=&lt;-
-m1=1.1
-r1=_consoleView</panel_attributes><additional_attributes>20;10;20;70;10;70;10;90;20;90;20;190</additional_attributes></element><element><id>Relation</id><coordinates><x>567</x><y>342</y><w>288</w><h>54</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>300;40;300;10;160;10;160;20;140;20;140;10;10;10;10;40</additional_attributes></element><element><id>Relation</id><coordinates><x>828</x><y>342</y><w>387</w><h>54</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;10;30;10;30;20;50;20;50;10;210;10;210;20;230;20;230;10;410;10;410;40</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1062</x><y>99</y><w>144</w><h>36</h></coordinates><panel_attributes>&lt;&lt;Static&gt;&gt;
-LanguageEnumExtensions</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>936</x><y>99</y><w>90</w><h>36</h></coordinates><panel_attributes>&lt;&lt;Enum&gt;&gt;
-LanguageEnum</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>999</x><y>126</y><w>72</w><h>81</h></coordinates><panel_attributes>lt=&lt;-
-m1=1..1
-r1=__Language__</panel_attributes><additional_attributes>10;10;10;70</additional_attributes></element><element><id>Relation</id><coordinates><x>1089</x><y>126</y><w>54</w><h>81</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;10;10;70</additional_attributes></element><element><id>Relation</id><coordinates><x>558</x><y>477</y><w>207</w><h>36</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;20;210;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>378</x><y>261</y><w>108</w><h>36</h></coordinates><panel_attributes>&lt;&lt;Static&gt;&gt;
-ConsoleUtil</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>810</x><y>639</y><w>108</w><h>36</h></coordinates><panel_attributes>&lt;&lt;Static&gt;&gt;
-FileUtil</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>918</x><y>432</y><w>108</w><h>36</h></coordinates><panel_attributes>&lt;&lt;Static&gt;&gt;
-DateUtil</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>414</x><y>189</y><w>99</w><h>90</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>20;80;20;20;90;20</additional_attributes></element><element><id>Relation</id><coordinates><x>810</x><y>495</y><w>54</w><h>162</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;160;10;70;20;70;20;50;10;50;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>558</x><y>513</y><w>387</w><h>54</h></coordinates><panel_attributes>&lt;&lt;use&gt;&gt;
-lt=&lt;&lt;&lt;&lt;.</panel_attributes><additional_attributes>10;40;410;40;410;10</additional_attributes></element><element><id>Relation</id><coordinates><x>828</x><y>477</y><w>108</w><h>36</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>100;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>882</x><y>594</y><w>54</w><h>63</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;50;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>909</x><y>594</y><w>198</w><h>81</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;70;200;70;200;10</additional_attributes></element><element><id>Relation</id><coordinates><x>828</x><y>450</y><w>108</w><h>45</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>100;10;80;10;80;30;10;30</additional_attributes></element><element><id>UMLClass</id><coordinates><x>927</x><y>747</y><w>162</w><h>36</h></coordinates><panel_attributes>&lt;&lt;Sealed&gt;&gt;
-LogManager</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>711</x><y>747</y><w>162</w><h>36</h></coordinates><panel_attributes>&lt;&lt;Sealed&gt;&gt;
-StateManager</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>774</x><y>594</y><w>405</w><h>243</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;210;10;250;430;250;430;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1026</x><y>702</y><w>54</w><h>63</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;50;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>774</x><y>702</y><w>54</w><h>63</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;50;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>774</x><y>495</y><w>36</w><h>234</h></coordinates><panel_attributes>lt=.
-</panel_attributes><additional_attributes>10;240;10;70;20;70;20;50;10;50;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>972</x><y>594</y><w>36</w><h>135</h></coordinates><panel_attributes>lt=.
-</panel_attributes><additional_attributes>10;130;10;80;20;80;20;60;10;60;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>972</x><y>693</y><w>162</w><h>36</h></coordinates><panel_attributes>lt=.
-</panel_attributes><additional_attributes>10;20;160;20</additional_attributes></element><element><id>Relation</id><coordinates><x>1107</x><y>594</y><w>27</w><h>135</h></coordinates><panel_attributes>lt=.
-</panel_attributes><additional_attributes>10;130;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>900</x><y>666</y><w>54</w><h>117</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>30;110;10;110;10;10</additional_attributes></element><element><id>UMLPackage</id><coordinates><x>495</x><y>702</y><w>684</w><h>261</h></coordinates><panel_attributes>EasySave_Library_Log (DLL)
+r1=__Language__</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>335</y>
+      <w>55</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>90.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>190</x>
+      <y>460</y>
+      <w>115</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;20.0;210.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>330</x>
+      <y>550</y>
+      <w>60</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Static&gt;&gt;
+FileUtil</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>390</x>
+      <y>435</y>
+      <w>60</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Static&gt;&gt;
+DateUtil</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>330</x>
+      <y>470</y>
+      <w>35</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;160.0;10.0;70.0;20.0;70.0;20.0;50.0;10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>190</x>
+      <y>480</y>
+      <w>215</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;use&gt;&gt;
+lt=&lt;&lt;&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;40.0;410.0;40.0;410.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>340</x>
+      <y>460</y>
+      <w>60</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>100.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>370</x>
+      <y>525</y>
+      <w>35</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>385</x>
+      <y>525</y>
+      <w>110</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;70.0;200.0;70.0;200.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>340</x>
+      <y>445</y>
+      <w>60</w>
+      <h>25</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>100.0;10.0;80.0;10.0;80.0;30.0;10.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>395</x>
+      <y>610</y>
+      <w>90</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Sealed&gt;&gt;
+LogManager</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>275</x>
+      <y>610</y>
+      <w>90</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Sealed&gt;&gt;
+StateManager</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>310</x>
+      <y>525</y>
+      <w>225</w>
+      <h>135</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;210.0;10.0;250.0;430.0;250.0;430.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>450</x>
+      <y>585</y>
+      <w>35</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>310</x>
+      <y>585</y>
+      <w>35</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>310</x>
+      <y>470</y>
+      <w>20</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=.
+</panel_attributes>
+    <additional_attributes>10.0;240.0;10.0;70.0;20.0;70.0;20.0;50.0;10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>420</x>
+      <y>525</y>
+      <w>20</w>
+      <h>75</h>
+    </coordinates>
+    <panel_attributes>lt=.
+</panel_attributes>
+    <additional_attributes>10.0;130.0;10.0;80.0;20.0;80.0;20.0;60.0;10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>420</x>
+      <y>580</y>
+      <w>90</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=.
+</panel_attributes>
+    <additional_attributes>10.0;20.0;160.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>495</x>
+      <y>525</y>
+      <w>15</w>
+      <h>75</h>
+    </coordinates>
+    <panel_attributes>lt=.
+</panel_attributes>
+    <additional_attributes>10.0;130.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>565</y>
+      <w>35</w>
+      <h>65</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>30.0;110.0;10.0;110.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>155</x>
+      <y>585</y>
+      <w>380</w>
+      <h>145</h>
+    </coordinates>
+    <panel_attributes>EasySave_Library_Log (DLL)
 --
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>504</x><y>747</y><w>162</w><h>36</h></coordinates><panel_attributes>&lt;&lt;Static&gt;&gt;
-FileUtil</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>657</x><y>747</y><w>72</w><h>36</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;20;60;20</additional_attributes></element><element><id>Relation</id><coordinates><x>576</x><y>774</y><w>423</w><h>90</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;10;10;80;440;80;440;60;450;60;450;40;440;40;440;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>747</x><y>9</y><w>90</w><h>36</h></coordinates><panel_attributes>LoadDataService</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>783</x><y>36</y><w>108</w><h>99</h></coordinates><panel_attributes>lt=&lt;-
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>160</x>
+      <y>610</y>
+      <w>90</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Static&gt;&gt;
+FileUtil</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>245</x>
+      <y>610</y>
+      <w>40</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;20.0;60.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>200</x>
+      <y>625</y>
+      <w>235</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0;440.0;80.0;440.0;60.0;450.0;60.0;450.0;40.0;440.0;40.0;440.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>295</x>
+      <y>200</y>
+      <w>80</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>LoadDataService</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>315</x>
+      <y>215</y>
+      <w>70</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
 m1=1..1
-r1=loadDataService</panel_attributes><additional_attributes>10;10;10;90</additional_attributes></element><element><id>Relation</id><coordinates><x>342</x><y>27</y><w>423</w><h>459</h></coordinates><panel_attributes>lt=&lt;-
+r1=loadDataService</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>70</x>
+      <y>210</y>
+      <w>235</w>
+      <h>255</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
 m1=1..1
-r1=_jobManager</panel_attributes><additional_attributes>150;480;10;480;10;10;450;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>981</x><y>378</y><w>162</w><h>27</h></coordinates><panel_attributes>DisplayJobCommand</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1053</x><y>342</y><w>27</w><h>54</h></coordinates><panel_attributes>lt=-
-</panel_attributes><additional_attributes>10;40;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>828</x><y>396</y><w>225</w><h>81</h></coordinates><panel_attributes>lt=&lt;-
-m1=1..1
-r1=jobService</panel_attributes><additional_attributes>10;60;70;60;70;30;230;30;230;10</additional_attributes></element><element><id>Relation</id><coordinates><x>828</x><y>288</y><w>216</w><h>108</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;220;10;220;100</additional_attributes></element><element><id>UMLClass</id><coordinates><x>243</x><y>360</y><w>90</w><h>27</h></coordinates><panel_attributes>JobSettingsDto
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>279</x><y>0</y><w>486</w><h>378</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;400;10;20;520;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>702</x><y>882</y><w>126</w><h>27</h></coordinates><panel_attributes>BackupJobState
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>711</x><y>774</y><w>54</w><h>126</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>20;120;20;90;30;90;30;70;20;70;20;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1026</x><y>882</y><w>108</w><h>27</h></coordinates><panel_attributes>LogEntry
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1017</x><y>774</y><w>54</w><h>126</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>20;120;20;60;30;60;30;40;20;40;20;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>864</x><y>882</y><w>117</w><h>27</h></coordinates><panel_attributes>LogManager
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>918</x><y>900</y><w>180</w><h>63</h></coordinates><panel_attributes>lt=&lt;-
+r1=_jobManager</panel_attributes>
+    <additional_attributes>150.0;480.0;10.0;480.0;10.0;10.0;450.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>395</y>
+      <w>65</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>JobSettingsDto
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>35</x>
+      <y>195</y>
+      <w>270</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;400.0;10.0;20.0;520.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>270</x>
+      <y>685</y>
+      <w>70</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>BackupJobState
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>275</x>
+      <y>625</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>20.0;120.0;20.0;90.0;30.0;90.0;30.0;70.0;20.0;70.0;20.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>450</x>
+      <y>685</y>
+      <w>60</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>LogEntry
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>445</x>
+      <y>625</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>20.0;120.0;20.0;60.0;30.0;60.0;30.0;40.0;20.0;40.0;20.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>360</x>
+      <y>685</y>
+      <w>65</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>LogManager
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>390</x>
+      <y>695</y>
+      <w>100</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
 m1=0..*
-r1=Messages</panel_attributes><additional_attributes>10;10;10;40;180;40;180;10</additional_attributes></element><element><id>Relation</id><coordinates><x>279</x><y>378</y><w>279</w><h>315</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;Use&gt;&gt;</panel_attributes><additional_attributes>290;210;290;330;10;330;10;10</additional_attributes></element></diagram>
+r1=Messages</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0;180.0;40.0;180.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>35</x>
+      <y>405</y>
+      <w>155</w>
+      <h>175</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;Use&gt;&gt;</panel_attributes>
+    <additional_attributes>290.0;210.0;290.0;330.0;10.0;330.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>315</x>
+      <y>270</y>
+      <w>35</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>275</x>
+      <y>300</y>
+      <w>85</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>App.axaml</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>275</x>
+      <y>340</y>
+      <w>85</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>SettingUtil</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>315</x>
+      <y>310</y>
+      <w>35</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>355</x>
+      <y>300</y>
+      <w>60</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>100.0;90.0;60.0;90.0;60.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>260</x>
+      <y>305</y>
+      <w>105</w>
+      <h>255</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>190.0;490.0;190.0;180.0;10.0;180.0;10.0;10.0;30.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>355</x>
+      <y>340</y>
+      <w>275</w>
+      <h>290</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>260.0;560.0;490.0;560.0;490.0;70.0;40.0;70.0;40.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>420</x>
+      <y>210</y>
+      <w>50</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>MainWindow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>500</x>
+      <y>210</y>
+      <w>50</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>BaseLayout</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>590</x>
+      <y>175</y>
+      <w>50</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>HomePage</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>590</x>
+      <y>205</y>
+      <w>50</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>JobsPage</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>355</x>
+      <y>220</y>
+      <w>135</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1=mainWindow</panel_attributes>
+    <additional_attributes>170.0;10.0;170.0;100.0;10.0;100.0;10.0;160.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>465</x>
+      <y>210</y>
+      <w>45</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>545</x>
+      <y>175</y>
+      <w>55</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>90.0;10.0;40.0;10.0;40.0;80.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>590</x>
+      <y>235</y>
+      <w>50</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>LogsPage</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>590</x>
+      <y>265</y>
+      <w>50</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>SettingPage</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>590</x>
+      <y>295</y>
+      <w>50</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>AddJobsPage</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>545</x>
+      <y>210</y>
+      <w>55</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>545</x>
+      <y>210</y>
+      <w>55</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>90.0;60.0;40.0;60.0;40.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>545</x>
+      <y>210</y>
+      <w>55</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>90.0;120.0;40.0;120.0;40.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>545</x>
+      <y>210</y>
+      <w>55</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>90.0;180.0;40.0;180.0;40.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>685</x>
+      <y>110</y>
+      <w>65</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>Toastr</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>745</x>
+      <y>175</y>
+      <w>95</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>HomePageViewModel</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>745</x>
+      <y>205</y>
+      <w>100</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>JobsPageViewModel</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>745</x>
+      <y>235</y>
+      <w>100</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>LogsPageViewModel</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>745</x>
+      <y>265</y>
+      <w>100</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>SettingPageViewModel</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>745</x>
+      <y>295</y>
+      <w>100</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>AddJobsPageViewModel</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>635</x>
+      <y>170</y>
+      <w>120</w>
+      <h>25</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1=homePageViewModel</panel_attributes>
+    <additional_attributes>220.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>635</x>
+      <y>200</y>
+      <w>120</w>
+      <h>25</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1=jobsPageViewModel</panel_attributes>
+    <additional_attributes>220.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>635</x>
+      <y>235</y>
+      <w>120</w>
+      <h>25</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1=logsPageViewModel</panel_attributes>
+    <additional_attributes>220.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>635</x>
+      <y>260</y>
+      <w>120</w>
+      <h>25</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1=settingPageViewModel</panel_attributes>
+    <additional_attributes>220.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>635</x>
+      <y>295</y>
+      <w>120</w>
+      <h>25</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1=addJobsPageViewModel</panel_attributes>
+    <additional_attributes>220.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>635</x>
+      <y>115</y>
+      <w>60</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>100.0;10.0;50.0;10.0;50.0;120.0;10.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>635</x>
+      <y>115</y>
+      <w>60</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>100.0;10.0;50.0;10.0;50.0;180.0;10.0;180.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>635</x>
+      <y>115</y>
+      <w>60</w>
+      <h>135</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>100.0;10.0;50.0;10.0;50.0;250.0;10.0;250.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>635</x>
+      <y>115</y>
+      <w>60</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>100.0;10.0;50.0;10.0;50.0;300.0;10.0;300.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>635</x>
+      <y>115</y>
+      <w>55</w>
+      <h>195</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>90.0;10.0;50.0;10.0;50.0;370.0;10.0;370.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>175</y>
+      <w>460</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;320.0;10.0;290.0;900.0;300.0;900.0;10.0;720.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>205</y>
+      <w>460</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;260.0;10.0;230.0;900.0;240.0;900.0;10.0;730.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>235</y>
+      <w>460</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;200.0;10.0;170.0;900.0;180.0;900.0;10.0;730.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>265</y>
+      <w>460</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;140.0;10.0;110.0;900.0;120.0;900.0;10.0;730.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>295</y>
+      <w>460</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;50.0;900.0;60.0;900.0;10.0;730.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>315</x>
+      <y>215</y>
+      <w>635</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1=jobService</panel_attributes>
+    <additional_attributes>10.0;460.0;10.0;310.0;1250.0;310.0;1250.0;30.0;960.0;30.0;960.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>860</x>
+      <y>385</y>
+      <w>70</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>DTO
+--
+bg=gray
+fg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>840</x>
+      <y>240</y>
+      <w>70</w>
+      <h>165</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>120.0;310.0;110.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>245</y>
+      <w>410</w>
+      <h>375</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;730.0;610.0;730.0;800.0;10.0;730.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>490</x>
+      <y>270</y>
+      <w>405</w>
+      <h>360</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;700.0;610.0;700.0;790.0;10.0;710.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>355</x>
+      <y>270</y>
+      <w>405</w>
+      <h>95</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;170.0;110.0;20.0;780.0;40.0;790.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>180</x>
+      <y>305</y>
+      <w>450</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;280.0;880.0;10.0</additional_attributes>
+  </element>
+</diagram>
