@@ -36,7 +36,7 @@ namespace EasySave_Project.Service
             try
             {
                 // Retrieve the list of encrypted file formats
-                List<string> encryptedFormats = FileUtil.GetEncryptedFileExtensions();
+                List<string> encryptedFormats = FileUtil.GetJobSettingsList("EncryptedFileExtensions");
 
                 // Check if the format exists in the list
                 return encryptedFormats != null && encryptedFormats.Contains(format);
