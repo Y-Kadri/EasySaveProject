@@ -47,7 +47,8 @@ namespace EasySave_Project.View
                 + "\n" + translator.GetText("option3")
                 + "\n" + translator.GetText("option4")
                 + "\n" + translator.GetText("option5")
-                + "\n" + translator.GetText("option6"));
+                + "\n" + translator.GetText("option6")
+                + "\n" + translator.GetText("option7"));
             return ConsoleUtil.GetInputInt();
         }
 
@@ -74,15 +75,22 @@ namespace EasySave_Project.View
             return Console.ReadLine();
         }
 
+        /// <summary>
+        /// Prompts the user to choose a log format (JSON or XML) and returns the selected option.
+        /// </summary>
+        /// <returns>An integer representing the selected log format (1 for JSON, 2 for XML).</returns>
         public int ChooseLogFormat()
         {
             ConsoleUtil.PrintTextconsole(translator.GetText("enterLogFormatChoose") + " (1 : JSON, 2 : XML)");
             return ConsoleUtil.GetInputInt();
         }
 
+        /// <summary>
+        /// Displays the currently set encrypted formats, if any exist.
+        /// </summary>
+        /// <param name="currentFormats">A list of currently set encrypted formats.</param>
         public void ShowCurrentFormatCrypt(List<string> currentFormats)
         {
-            // Display the current formats if not empty
             if (currentFormats != null && currentFormats.Count > 0)
             {
                 ConsoleUtil.PrintTextconsole(translator.GetText("displayCurrentEncryptedFormats"));
@@ -90,17 +98,43 @@ namespace EasySave_Project.View
                 {
                     ConsoleUtil.PrintTextconsole(format);
                 }
-            } else
+            }
+            else
             {
                 ConsoleUtil.PrintTextconsole(translator.GetText("noEncryptedFormatsSet"));
             }
         }
 
-        public string formatWrited()
+        /// <summary>
+        /// Prompts the user for an input message and returns the trimmed string.
+        /// </summary>
+        /// <param name="msg">The message key for translation.</param>
+        /// <returns>A trimmed string entered by the user.</returns>
+        public string ElementWrited(string msg)
         {
-            // Prompt the user for a new format to add
-            ConsoleUtil.PrintTextconsole(translator.GetText("promptEnterFileFormat"));
+            ConsoleUtil.PrintTextconsole(translator.GetText(msg));
             return Console.ReadLine()?.Trim();
         }
+
+        /// <summary>
+        /// Displays the current priority business processes if any are set.
+        /// </summary>
+        /// <param name="currentProcess">A list of priority business processes.</param>
+        public void ShowCurrentPriorityBusinessProcess(List<string> currentProcess)
+        {
+            if (currentProcess != null && currentProcess.Count > 0)
+            {
+                ConsoleUtil.PrintTextconsole(translator.GetText("displayCurrentProcess"));
+                foreach (var p in currentProcess)
+                {
+                    ConsoleUtil.PrintTextconsole(p);
+                }
+            }
+            else
+            {
+                ConsoleUtil.PrintTextconsole(translator.GetText("noProcessSet"));
+            }
+        }
+
     }
 }
