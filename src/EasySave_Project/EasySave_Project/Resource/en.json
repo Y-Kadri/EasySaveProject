@@ -71,5 +71,7 @@
     "displayCurrentProcess": "Current business processes: ",
     "promptEnterBusinessProcess": "Enter the business process to add (e.g., 'calculatrice') :",
     "errorReadingFolder": "Error accessing folder: ",
-    "interuptJob": "Backup interrupted due to the following business process: "
+    "interuptJob": "Backup interrupted due to the following business process: ",
+    "indexIncremented": "The index has been incremented to : ",
+    "errorIncrementingIndex": "Error when incrementing index : "
 }
