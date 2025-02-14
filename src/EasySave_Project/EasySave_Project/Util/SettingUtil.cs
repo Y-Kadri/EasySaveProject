@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using DynamicData;
 using EasySave_Library_Log.manager;
 using EasySave_Project.Dto;
 using EasySave_Project.Model;
@@ -33,7 +34,7 @@ public static class SettingUtil
         {
             case "EncryptedFileExtensions":
                 if (!settings.EncryptedFileExtensions.Contains(value))
-                    settings.EncryptedFileExtensions.Add(value);
+                    settings.EncryptedFileExtensions.Add(checkFormat(value, settings.EncryptedFileExtensions));
                 break;
 
             case "PriorityBusinessProcess":
@@ -47,6 +48,21 @@ public static class SettingUtil
 
         return SaveSettings(settings, "itemAdded", "errorAddingItem");
     }
+
+    /// <summary>
+    /// Adds a value to a specified list in the JobSettingsDto object.
+    /// If the value is not already present, it is added to the list and the changes are saved to the JSON file.
+    /// </summary>
+    /// <param name="value">The value to add (e.g., ".txt", ".pdf", "notepad.exe").</param>
+    public static string checkFormat(string value, List<string> list)
+    { 
+        if (!string.IsNullOrWhiteSpace(value) && !value.StartsWith('.'))
+        {
+            value = "." + value;
+        }
+        return value;
+    }
+
 
     public static bool RemoveFromList(string key, string value)
     {
