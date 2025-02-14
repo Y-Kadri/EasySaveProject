@@ -123,5 +123,9 @@
     "TransferTime" : "Transfer Time",
     "Delete" : "Delete",
     "FileExtensionsToEncrypt" : "File extensions to encrypt",
-    "MonitoredBusinessSoftware" : "Monitored business software"
+    "MonitoredBusinessSoftware" : "Monitored business software",
+    "ErrorSelectOneJobMin" : "Error: select at least one job",
+    "TheJob" : "The job",
+    "successfullyCompleted" : "successfully completed",
+    "failed" : "failed"
 }

@@ -53,8 +53,8 @@ namespace EasySave_Project.ViewModels.Pages
 
                 // Affiche un pop-up dès que le job est terminé
                 string notificationMessage = success
-                    ? $"Le job '{job.Name}' s'est terminé avec succès."
-                    : $"Le job '{job.Name}' a échoué : {message}";
+                    ? $"{TranslationService.GetInstance().GetText("TheJob")} '{job.Name}' {TranslationService.GetInstance().GetText("successfullyCompleted")} "
+                    : $"{TranslationService.GetInstance().GetText("TheJob")} '{job.Name}' {TranslationService.GetInstance().GetText("failed")} : {message}";
 
                 string notificationType = success ? "Success" : "Error";
 
