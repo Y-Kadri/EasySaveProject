@@ -27,6 +27,11 @@ namespace EasySave_Library_Log.manager
         /// </summary>
         private LogManager()
         {
+           initFolders();
+        }
+
+        private void initFolders()
+        {
             string logsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySave", "Logs");
             string fileExtension = LogFormatManager.Instance.Format == LogFormatManager.LogFormat.JSON ? ".json" : ".xml";
             logFilePath = FileUtil.CombinePaths(logsDirectory, $"{DateTime.Now:yyyy-MM-dd}{fileExtension}");
@@ -85,6 +90,7 @@ namespace EasySave_Library_Log.manager
             {
                 try
                 {
+                    initFolders();
                     if (LogFormatManager.Instance.Format == LogFormatManager.LogFormat.JSON)
                     {
                         string jsonString = FileUtil.ReadFromFile(logFilePath);

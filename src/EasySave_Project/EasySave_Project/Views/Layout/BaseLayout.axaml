@@ -1,0 +1,51 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="EasySave_Project.Views.Layout.BaseLayout"
+             xmlns:viewModels="clr-namespace:EasySave_Project.ViewModels"
+             xmlns:local="clr-namespace:EasySave_Project.Views"
+             xmlns:layout="clr-namespace:EasySave_Project.ViewModels.Layout"
+             x:DataType="layout:BaseLayoutViewModel">
+
+    <!-- Liaison explicite au ViewModel -->
+    <UserControl.DataContext>
+        <layout:BaseLayoutViewModel />
+    </UserControl.DataContext>
+
+    <DockPanel>
+
+        <!-- Header similaire au HTML -->
+        <Border Background="#041232" Height="60" DockPanel.Dock="Top" Padding="10">
+            <Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center">
+
+                <!-- Logo -->
+                <TextBlock Text="EasySaveProject"
+                           Foreground="White"
+                           FontSize="18"
+                           VerticalAlignment="Center" />
+
+                <!-- Navigation Links -->
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Spacing="20"
+                            VerticalAlignment="Center"
+                            Grid.Column="1">
+                    <Button Content="{Binding Home}" Foreground="White" Background="Transparent" Tag="0" Click="LoadPage" Padding="10" Cursor="Hand"/>
+                    <Button Content="{Binding Jobs}" Foreground="White" Background="Transparent" Tag="1" Click="LoadPage" Padding="10" Cursor="Hand"/>
+                    <Button Content="{Binding Logs}" Foreground="White" Background="Transparent" Tag="2" Click="LoadPage" Padding="10" Cursor="Hand"/>
+                    <Button Content="{Binding Settings}" Foreground="White" Background="Transparent" Tag="3" Click="LoadPage" Padding="10" Cursor="Hand"/>
+                </StackPanel>
+
+                <!-- Date dynamique -->
+                <TextBlock Text="{Binding CurrentDate}"
+                           Foreground="White"
+                           FontSize="16"
+                           VerticalAlignment="Center"
+                           Grid.Column="2" />
+            </Grid>
+        </Border>
+
+        <!-- Contenu dynamique -->
+        <ContentControl x:Name="ContentArea" Background="#0d2b4d"/>
+        
+    </DockPanel>
+</UserControl>
