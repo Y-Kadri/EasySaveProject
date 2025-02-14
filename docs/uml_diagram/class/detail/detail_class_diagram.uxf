@@ -1,0 +1,516 @@
+<diagram program="umletino" version="15.1"><zoom_level>7</zoom_level><help_text>Space for diagram notes
+--
++Text : string
+--
+</help_text><element><id>UMLClass</id><coordinates><x>1267</x><y>1211</y><w>175</w><h>112</h></coordinates><panel_attributes>&lt;&lt;Sealed&gt;&gt;
+TranslationService
+--
+__-translations : Dictionary&lt;string, string&gt;__
+__-_lock : Object__
+--
+-TranslationService()
+__+GetInstance() : TranslationService__
+__+SetLanguage(LanguageEnum) : void__
+-LoadTranslations() : void
+__+GetText(string) : string__
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>679</x><y>1428</y><w>147</w><h>126</h></coordinates><panel_attributes>&lt;&lt;Sealed&gt;&gt;
+JobManager
+--
+__-jobManager : JobManager = null__
+__+MAX_JOB : in =55__
+--
+__+GetInstance() : JobManager__
++AddJob(JobModel) : void
++CreateAndAddJob(string, string, string, 
+JobSaveTypeEnum) : JobModel
++GetAll() : List&lt;JobModel&gt;
++GetJobById(int) : JobModel?
+
+
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>357</x><y>1533</y><w>280</w><h>56</h></coordinates><panel_attributes>JobSettingsDto
+--
+--
+__+CreateJobModel(string, string, string, JobSaveTypeEnum) : JobModel__</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>938</x><y>1470</y><w>210</w><h>105</h></coordinates><panel_attributes>JobService
+--
+--
++GetAllJobs() : List&lt;JobModel&gt;
++ExecuteOneJob(JobModel) : void
+-CreateBackupJobState(JobModel, double, string, 
+string) : BackupJobState 
+-UpdateJobInFile(JobModle) : void
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>700</x><y>1596</y><w>154</w><h>175</h></coordinates><panel_attributes>JobModel
+--
++Id : int
++SaveState : JobSaveStateEnum
++SaveType : JobSaveTypeEnum
++Name : string
++FileSource: string
++FileTarget : string
++FileSize: string
++FileTransferTime : string
++LastFullBackupPath : string
++LastSaveDifferentialPath : string
++Time : DateTime
+--
++JobModel()
++JobModel(string, string, string, JobSaveTypeEnum, string) 
++ToString() : string
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>630</x><y>1547</y><w>77</w><h>42</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;40;90;40;90;10</additional_attributes></element><element><id>Relation</id><coordinates><x>728</x><y>1547</y><w>35</w><h>63</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..5
+r1=jobs</panel_attributes><additional_attributes>10;70;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>588</x><y>1582</y><w>126</w><h>63</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..*
+r1=jobs
+</panel_attributes><additional_attributes>160;60;10;60;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>805</x><y>1806</y><w>98</w><h>56</h></coordinates><panel_attributes>&lt;&lt;Enum&gt;&gt;
+JobSaveType
+--
+COMPLETE
+DIFFERENTIAL
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>833</x><y>1764</y><w>49</w><h>56</h></coordinates><panel_attributes>lt=&lt;-
+m1=1..1
+r1=jobType</panel_attributes><additional_attributes>10;60;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1274</x><y>1470</y><w>147</w><h>63</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+IJobStrategyService
+--
+--
+Execute(JobModel, string) : void</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>686</x><y>1806</y><w>91</w><h>63</h></coordinates><panel_attributes>&lt;&lt;Enum&gt;&gt;
+JobSaveState
+--
+END
+ACTIVE
+INACTIVE</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>714</x><y>1764</y><w>70</w><h>56</h></coordinates><panel_attributes>lt=&lt;-
+m1=1..1
+r1=jobSaveState</panel_attributes><additional_attributes>10;60;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1386</x><y>1106</y><w>189</w><h>56</h></coordinates><panel_attributes>&lt;&lt;Static&gt;&gt;
+LanguageEnumExtensions
+--
+--
+__+GetLanguagePath(LanguageEnum) : string__</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1225</x><y>1106</y><w>70</w><h>56</h></coordinates><panel_attributes>&lt;&lt;Enum&gt;&gt;
+LanguageEnum
+--
+FR
+EN</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1274</x><y>1155</y><w>56</w><h>70</h></coordinates><panel_attributes>lt=&lt;-
+m1=1..1
+r1=__Language__</panel_attributes><additional_attributes>10;10;10;80</additional_attributes></element><element><id>Relation</id><coordinates><x>1407</x><y>1155</y><w>42</w><h>70</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;10;10;80</additional_attributes></element><element><id>Relation</id><coordinates><x>819</x><y>1505</y><w>133</w><h>28</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;20;170;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>574</x><y>1106</y><w>210</w><h>84</h></coordinates><panel_attributes>&lt;&lt;Static&gt;&gt;
+ConsoleUtil
+--
+--
+__+PrintTextconsole(string) : void__
+__+GetInputJobSaveTypeEnum() : JobSaveTypeEnum__
+__+GetInputString() : string__
+__+GetInputInt() : int__
+
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1267</x><y>1393</y><w>154</w><h>56</h></coordinates><panel_attributes>&lt;&lt;Static&gt;&gt;
+DateUtil
+--
+__+YYYY_MM_DD_HH_MM_SS : string__
+--
+__+GetTodayDate(string) : string</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1141</x><y>1519</y><w>119</w><h>231</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>120;310;120;50;130;50;130;30;120;30;120;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>847</x><y>1526</y><w>448</w><h>98</h></coordinates><panel_attributes>&lt;&lt;use&gt;&gt;
+lt=&lt;&lt;&lt;&lt;.</panel_attributes><additional_attributes>10;120;480;120;480;30;620;30;620;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1141</x><y>1491</y><w>147</w><h>28</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>190;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>1246</x><y>1659</y><w>42</w><h>91</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;110;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1288</x><y>1694</y><w>175</w><h>105</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;130;230;130;230;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1141</x><y>1400</y><w>140</w><h>105</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>180;10;140;10;140;130;10;130</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1295</x><y>2142</y><w>196</w><h>133</h></coordinates><panel_attributes>&lt;&lt;Sealed&gt;&gt;
+LogManager
+--
+__-instance :  readonly Lazy&lt;LogManager&gt;
+-_lock : readonly  object
+-logFilePath: string
+-messageBuffer : List&lt;string&gt; messageBuffer
+--
+-LogManager()
++AddMessage(string) : void*
++UpdateState(string, string, string, long) : void
+-SaveToFile(LogEntry) : void
+
+
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>966</x><y>2142</y><w>126</w><h>98</h></coordinates><panel_attributes>&lt;&lt;Sealed&gt;&gt;
+StateManager
+--
+__-instance :  readonly Lazy&lt;StateManager&gt;
+-_lock : readonly  object
+-stateFilePath : string
+--
+-StateManager()
+__+Instance : StateManager__
++UpdateState(BackupJobState) : void
+
+
+
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1015</x><y>1701</y><w>553</w><h>679</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>20;770;20;910;10;910;10;930;20;930;20;950;760;950;760;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1386</x><y>1876</y><w>42</w><h>280</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;380;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>987</x><y>1568</y><w>28</w><h>581</h></coordinates><panel_attributes>lt=.
+</panel_attributes><additional_attributes>10;810;10;70;20;70;20;50;10;50;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1316</x><y>1659</y><w>28</w><h>238</h></coordinates><panel_attributes>lt=.
+</panel_attributes><additional_attributes>10;320;10;190;20;190;20;170;10;170;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1316</x><y>1869</y><w>168</w><h>28</h></coordinates><panel_attributes>lt=.
+</panel_attributes><additional_attributes>10;20;220;20</additional_attributes></element><element><id>Relation</id><coordinates><x>1463</x><y>1694</y><w>21</w><h>203</h></coordinates><panel_attributes>lt=.
+</panel_attributes><additional_attributes>10;270;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1260</x><y>2044</y><w>49</w><h>126</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>50;160;10;160;10;10</additional_attributes></element><element><id>UMLPackage</id><coordinates><x>707</x><y>2100</y><w>805</w><h>427</h></coordinates><panel_attributes>EasySave_Library_Log (DLL)
+--
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>742</x><y>2142</y><w>175</w><h>98</h></coordinates><panel_attributes>&lt;&lt;Static&gt;&gt;
+FileUtil
+--
+--
+__+CreateDirectoryIfNotExists(strnig) : void__
+__+ReadFromFile(string) : string__
+__+WriteToFile(string, string) : void__
+__+CombinePaths(params string[]) : string__
+__+CreateFileIfNotExists(string, string) : void__</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>910</x><y>2142</y><w>70</w><h>28</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;20;80;20</additional_attributes></element><element><id>Relation</id><coordinates><x>826</x><y>2233</y><w>553</w><h>126</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;10;10;160;770;160;770;60</additional_attributes></element><element><id>UMLClass</id><coordinates><x>812</x><y>945</y><w>119</w><h>56</h></coordinates><panel_attributes>LoadDataService
+--
+--
++LoadDataService()
++LoadJobs() : void
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>553</x><y>987</y><w>273</w><h>476</h></coordinates><panel_attributes>lt=&lt;-
+m1=1..1
+r1=_jobManager</panel_attributes><additional_attributes>180;650;10;650;10;10;370;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>595</x><y>1687</y><w>70</w><h>42</h></coordinates><panel_attributes>JobSettingsDto
+--
++index : int
+--
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1120</x><y>2184</y><w>140</w><h>133</h></coordinates><panel_attributes>BackupJobState
+--
++JobName : string
++LastActionTimestamp : string
++JobStatus : string
++TotalEligibleFiles : int
++TotalFileSize : long
++Progress : double
++RemainingFiles : int
++RemainingFileSize : long
++CurrentSourceFilePath: string
++CurrentSourceFilePath: string
+--</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1050</x><y>2233</y><w>84</w><h>63</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>100;70;10;70;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1274</x><y>2401</y><w>161</w><h>119</h></coordinates><panel_attributes>LogEntry
+--
++Timestamp : string
++JobName : string
++SourcePath : string
++TargetPath : string
++FileSize : long
++TransferTime : double
++EncryptionTime : double
+
+--</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1169</x><y>2422</y><w>119</w><h>35</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..*
+r1=Messages</panel_attributes><additional_attributes>10;20;150;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1050</x><y>2408</y><w>126</w><h>42</h></coordinates><panel_attributes>LogManager
+--
++Text : string
+--</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1400</x><y>2268</y><w>42</w><h>147</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;190;10;150;20;150;20;130;10;130;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>658</x><y>1687</y><w>56</w><h>35</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..*
+r1=jobs</panel_attributes><additional_attributes>60;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>448</x><y>966</y><w>378</w><h>581</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;810;10;10;520;10</additional_attributes></element><element><id>Relation</id><coordinates><x>168</x><y>910</y><w>1169</w><h>875</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;1230;20;20;1390;20;1390;60;1650;60;1650;430</additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>1771</y><w>301</w><h>182</h></coordinates><panel_attributes>SettingUtil
+--
+__- directoryPath : string__
+__- filePath : string__
+--
+__+ bool(LanguageEnum) : bool__
+__+bool(LogFormatManager.LogFormat) : bool__
+__+ bool(string, string) : bool__
+__+ bool(string, string) : bool__
+__+ List&lt;string&gt;(string) : List&lt;string&gt;__
+__+ void() : void__
+__+ AppSettingDto?() : AppSettingDto?__
+__- AppSettingDto?__ : AppSettingDto?__
+__- bool(AppSettingDto, string, string) : bool__
+__- bool(Action&lt;AppSettingDto&gt;, string, string) : bool__
+__- void() : void__
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>294</x><y>1778</y><w>105</w><h>84</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>100;100;100;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>343</x><y>1848</y><w>336</w><h>91</h></coordinates><panel_attributes>AppSettingDto
+--
+__- language : LanguageEnum__
+__- logFormat : LogFormatManager.LogFormat__
+__- EncryptedFileExtensions : List&lt;string&gt;__
+__- PriorityBusinessProcess : List&lt;string&gt;__
+--
+__+ AppSettingDto(LanguageEnum, LogFormatManager.LogFormat) : AppSettingDto__
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>203</x><y>1687</y><w>371</w><h>70</h></coordinates><panel_attributes>EnumConverterUtil
+--
+__+ class JsonEnumConverter&lt;T&gt; : JsonConverter&lt;T&gt;__
+--
+__+ T(Read(ref Utf8JsonReader, Type, JsonSerializerOptions)) : T__
+__+ void(Write(Utf8JsonWriter, T, JsonSerializerOptions)) : void__
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>427</x><y>1652</y><w>287</w><h>49</h></coordinates><panel_attributes>lt=.&gt;
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>390;20;10;20;10;50</additional_attributes></element><element><id>Relation</id><coordinates><x>399</x><y>1750</y><w>42</w><h>112</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;10;10;140</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1470</x><y>1463</y><w>259</w><h>77</h></coordinates><panel_attributes>AJobStrategyService
+--
+--
++IsEncryptedFileFormat(string) : bool
++HandleFileOperation(string, string, JobModel) : long
++UpdateBackupState(JobModel, int, long, string, string) : void
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1386</x><y>1610</y><w>182</w><h>91</h></coordinates><panel_attributes>JobDifferencielService
+--
+--
+-ExecuteDifferentialSave(jobModel,
+string, string) : void
+-CalculateFilesToCopy(string, string) : 
+(int, long, List&lt;string&gt;)
+-CopyModifiedFiles(JobModel, List&lt;string&gt;, 
+string, ref int, red long, int, long)
+
+
+
+
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1239</x><y>1610</y><w>126</w><h>56</h></coordinates><panel_attributes>JobCompleteService
+--
+--
++ExecuteCompleteSave(string,
+ string, JobModel)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1302</x><y>1533</y><w>231</w><h>91</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>310;10;310;60;10;60;10;110</additional_attributes></element><element><id>Relation</id><coordinates><x>1561</x><y>1533</y><w>77</w><h>126</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>90;10;90;160;10;160</additional_attributes></element><element><id>Relation</id><coordinates><x>1414</x><y>1498</y><w>70</w><h>21</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;80;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1099</x><y>1736</y><w>196</w><h>315</h></coordinates><panel_attributes>&lt;&lt;Static&gt;&gt;
+FileUtil
+--
+--
+__+CreateDirectory(string) : void__
+__+ExistsDirectory(string) : bool__
+__+EnsureDirectoryAndFileExist(string) : void__
+__+CopyFile(string, string, bool) : void__
+__+ExistsFile(string) : bool__
+__+GetFileName(string) : string__
+__-CreateDefaultJsonFile(string) : void__
+__+CombinePath(string, string) : string__
+__+GetJobIndex() : int__
+__+GetFiles(string) : IEnumerable&lt;string&gt;__
+__+AddJobInFile(string, string, string, __
+__JobSaveTypeEnum) : void__
+__+GetDirectories(string) :  IEnumerable&lt;string&gt;__
+__+IncrementJobIndex(JobSettingsDto) : void__
+__+GetLastWriteTime(string) : DateTime__
+__+GetDirectoryName(strnig) : string__
+__+GetFileSize(string) : long__
+__+CalculateTransferTime(string, string) : double__
+__+CalculateTotalSize(string) : long__
+__-EnsureKeyExists(JobSettingsDto, string, string) 
+: void__
+__+AddValueToJobSettingsList(string, string) : void__
+__+GetJobSettingsList(string) : List&lt;string&gt;__
+__+GetFileExtension(string) : string__
+__+GetFilesRecursively(string) : List&lt;string&gt;__
+__GetRelativePath(string, string) : string__
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>966</x><y>497</y><w>70</w><h>35</h></coordinates><panel_attributes>MainWindow
+--
++ MainWindow() : void
+--</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>910</x><y>525</y><w>147</w><h>686</h></coordinates><panel_attributes>lt=&lt;-
+m1=1..1
+r1=mainWindow</panel_attributes><additional_attributes>120;10;120;900;10;900;10;960</additional_attributes></element><element><id>Relation</id><coordinates><x>861</x><y>994</y><w>84</w><h>161</h></coordinates><panel_attributes>lt=&lt;-
+m1=1..1
+r1=loadDataService</panel_attributes><additional_attributes>10;10;10;210</additional_attributes></element><element><id>UMLClass</id><coordinates><x>833</x><y>1141</y><w>70</w><h>21</h></coordinates><panel_attributes>MainEasySave</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>861</x><y>1155</y><w>42</w><h>56</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;60;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>805</x><y>1197</y><w>119</w><h>21</h></coordinates><panel_attributes>App.axaml</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>861</x><y>1211</y><w>42</w><h>56</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;60;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>805</x><y>1253</y><w>119</w><h>21</h></coordinates><panel_attributes>SettingUtil</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>784</x><y>1204</y><w>329</w><h>567</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>450;790;320;790;320;770;280;770;280;790;160;790;160;600;180;600;180;570;160;570;160;470;180;470;180;430;160;430;160;180;10;180;10;10;30;10</additional_attributes></element><element><id>Relation</id><coordinates><x>917</x><y>1197</y><w>364</w><h>63</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>500;70;300;70;300;50;260;50;260;70;60;70;60;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1106</x><y>497</y><w>196</w><h>133</h></coordinates><panel_attributes>BaseLayout
+--
+- pages : List&lt;IPage&gt;
+--
++ BaseLayout() : void
++ reload() : void
++ LoadPage(object, RoutedEventArgs) : void
++ SetContent(Control) : void
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1400</x><y>77</y><w>133</w><h>49</h></coordinates><panel_attributes>HomePage
+--
+--
++ HomePage() : void
++ Reload() : void
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1379</x><y>308</y><w>203</w><h>119</h></coordinates><panel_attributes>JobsPage
+--
+- _translationService : TranslationService
+--
++ JobsPage() : void
++ Execute(object, RoutedEventArgs) : void
++ UpdateJobProgress(JobModel, double) : void
++ OnAddJobClick(object, RoutedEventArgs) : void
++ Reload() : void
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1295</x><y>98</y><w>119</w><h>420</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>150;10;80;10;80;580;10;580</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1407</x><y>504</y><w>112</w><h>49</h></coordinates><panel_attributes>LogsPage
+--
+--
++ LogsPage() : void
++ Reload() : void</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1379</x><y>574</y><w>224</w><h>217</h></coordinates><panel_attributes>SettingPage
+--
+- _baseLayout : BaseLayout
+- _settingPageViewModel : SettingPageViewModel
+--
++ SettingPage(BaseLayout) : void
++ Reload() : void
++ OnLanguageChanged(object, RoutedEventArgs) : void
++ OnLogsFormatChanged(object, RoutedEventArgs) 
+: void
++ Update() : void
++ AddEncryptedFileExtensions_Click(object, 
+RoutedEventArgs) : void
++ RemoveEncryptedFileExtensions_Click(object, 
+RoutedEventArgs) : void
++ AddPriorityBusinessProcess_Click(object, 
+RoutedEventArgs) : void
++ RemovePriorityBusinessProcess_Click(object, 
+RoutedEventArgs) : void
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1442</x><y>924</y><w>175</w><h>119</h></coordinates><panel_attributes>AddJobsPage
+--
+--
++AddJobsPage()
++Reload() : void
+-valide(object, RouteEventArg) : void
+[async];OnOpenFolderTargetDialogClick(
+object, RoutedEventArg) : void
+-valide(object, RouteEventArg) : void
+[async];OnOpenFolderSourceDialogClick(
+object, RoutedEventArg) : void
+
+
+
+
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1204</x><y>252</y><w>252</w><h>259</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>340;80;340;40;230;40;230;10;160;10;160;40;10;40;10;350</additional_attributes></element><element><id>Relation</id><coordinates><x>1295</x><y>497</y><w>126</w><h>56</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>160;60;80;60;80;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1344</x><y>588</y><w>49</w><h>21</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>50;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1295</x><y>497</y><w>280</w><h>441</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>380;610;380;550;80;550;80;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1624</x><y>21</y><w>126</w><h>42</h></coordinates><panel_attributes>Toastr
+--
+--
++ ShowNotification() : void
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1708</x><y>77</y><w>168</w><h>56</h></coordinates><panel_attributes>HomePageViewModel
+--
++ Title : string
+--
++ HomePageViewModel() : void
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1701</x><y>154</y><w>441</w><h>175</h></coordinates><panel_attributes>JobsPageViewModel
+--
++ Jobs : ObservableCollection&lt;JobModel&gt;
++ JobService : JobService
++ AllJobs : string
++ AddAJob : string
++ Run : string
++ Name : string
++ Source : string
++ Destination : string
++ Type : string
++ Progress : string
++ Results : string
+--
++ JobsPageViewModel() : void
++ ExecuteJobsAsync(List&lt;JobModel&gt;, Action&lt;JobModel, double&gt;, Action&lt;string, string&gt;) : Task&lt;(bool, string)&gt;
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1701</x><y>350</y><w>224</w><h>203</h></coordinates><panel_attributes>LogsPageViewModel
+--
++ Nodes : ObservableCollection&lt;LogNode&gt;
++ AllLogs : string
++ Timestamp : string
++ SourcePath : string
++ TargetPath : string
++ FileSize : string
++ TransferTime : string
++ EncryptionTime : string
+--
++ LogsPageViewModel() : void
+- LoadLogs() : void
+- AddLogFileToTree(string) : void
+- DeserializeLogs(string) : List&lt;LogDataDto&gt;
+- DeserializeXmlManually(string) : List&lt;LogDataDto&gt;
+- CreateJobNode(LogDataDto) : LogNode
+- CreateMessageNode(List&lt;MessageDto&gt;) : LogNode
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1701</x><y>567</y><w>189</w><h>280</h></coordinates><panel_attributes>SettingPageViewModel
+--
+- _translationService : TranslationService
++ EncryptedFileExtensions : ObservableCollection&lt;string&gt;
++ PriorityBusinessProcess : ObservableCollection&lt;string&gt;
+- _message : string
+- _status : string
++ Message : string
++ Status : string
++ SelectLanguage : string
++ French : string
++ English : string
++ ChooseLogsFormat : string
++ Json : string
++ Xml : string
++ Add : string
++ FileExtensionsToEncrypt : string
++ MonitoredBusinessSoftware : string
+--
++ SettingPageViewModel() : void
++ AddEncryptedFileExtensions() : void
++ AddPriorityBusinessProcess() : void
++ RemovPriorityBusinessProcess() : void
++ RemoveEncryptedFileExtensions() : void
++ ChangeLanguage() : (string, string)
++ ChangeLogsFormat() : (string, string)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1736</x><y>875</y><w>147</w><h>126</h></coordinates><panel_attributes>AddJobsPageViewModel
+--
++EnterName : string
++Complete: string
++Differential: string
++ChooseASourceFolder: string
++ChooseADestinationFolder: string
++NoFolderSelected: string
++Add: string
++AddAJob: string
+--
++AddJobsPageViewModel()
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1526</x><y>105</y><w>196</w><h>35</h></coordinates><panel_attributes>lt=&lt;-
+m1=1..1
+r1=homePageViewModel</panel_attributes><additional_attributes>260;20;150;20;150;10;130;10;130;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>1575</x><y>294</y><w>140</w><h>42</h></coordinates><panel_attributes>lt=&lt;-
+m1=1..1
+r1=jobsPageViewModel</panel_attributes><additional_attributes>180;30;90;30;90;10;60;10;60;30;10;30</additional_attributes></element><element><id>Relation</id><coordinates><x>1512</x><y>525</y><w>203</w><h>42</h></coordinates><panel_attributes>lt=&lt;-
+m1=1..1
+r1=logsPageViewModel</panel_attributes><additional_attributes>270;30;180;30;180;10;140;10;140;30;10;30</additional_attributes></element><element><id>Relation</id><coordinates><x>1596</x><y>588</y><w>119</w><h>35</h></coordinates><panel_attributes>lt=&lt;-
+m1=1..1
+r1=settingPageViewModel</panel_attributes><additional_attributes>150;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>1610</x><y>924</y><w>140</w><h>35</h></coordinates><panel_attributes>lt=&lt;-
+m1=1..1
+r1=addJobsPageViewModel</panel_attributes><additional_attributes>180;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>1463</x><y>21</y><w>175</w><h>70</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>230;20;10;20;10;80</additional_attributes></element><element><id>Relation</id><coordinates><x>1575</x><y>56</y><w>84</w><h>322</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>70;10;70;440;10;440</additional_attributes></element><element><id>Relation</id><coordinates><x>1512</x><y>56</y><w>147</w><h>483</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>160;10;160;670;10;670</additional_attributes></element><element><id>Relation</id><coordinates><x>1596</x><y>56</y><w>63</w><h>539</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>40;10;40;750;10;750</additional_attributes></element><element><id>Relation</id><coordinates><x>1316</x><y>0</y><w>504</w><h>1225</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>30;1730;30;1300;10;1300;10;1220;30;1220;30;730;10;730;10;710;30;710;30;10;700;10;700;110</additional_attributes></element><element><id>Relation</id><coordinates><x>1918</x><y>539</y><w>105</w><h>567</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..*
+r1=Logs</panel_attributes><additional_attributes>102;790;100;270;110;270;110;250;100;250;100;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1981</x><y>1092</y><w>203</w><h>112</h></coordinates><panel_attributes>LogDataDto
+--
++ Timestamp : DateTime {get; set;}
++ JobName : string {get; set;}
++ SourcePath : string {get; set;}
++ TargetPath : string {get; set;}
++ FileSize : long {get; set;}
++ TransferTime : double {get; set;}
++ Messages : List&lt;MessageDto&gt; {get; set;}
++ EncryptionTime : double {get; set;}
+--</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1974</x><y>1253</y><w>133</w><h>35</h></coordinates><panel_attributes>MessageDto
+--
++ Text : string {get; set;}
+--</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>2009</x><y>1197</y><w>56</w><h>70</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..*
+r1=Messages</panel_attributes><additional_attributes>10;80;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1988</x><y>455</y><w>196</w><h>63</h></coordinates><panel_attributes>LogNode
+--
++ Title : string
++ SubNodes : ObservableCollection&lt;LogNode&gt;
+--
++ LogNode() : void
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1918</x><y>525</y><w>196</w><h>581</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..*
+r1=Entries</panel_attributes><additional_attributes>222;810;220;290;230;290;230;270;220;270;220;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1918</x><y>448</y><w>84</w><h>28</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>100;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>1484</x><y>546</y><w>455</w><h>1687</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;2370;70;2370;70;2390;100;2390;100;2370;450;2370;440;670;610;670;600;10;630;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1484</x><y>686</y><w>476</w><h>1589</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;2230;70;2230;70;2250;100;2250;100;2230;510;2230;500;500;660;500;660;10;580;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1029</x><y>497</y><w>91</w><h>21</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>110;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1106</x><y>315</y><w>1113</w><h>1169</h></coordinates><panel_attributes>lt=&lt;-
+m1=1..1
+r1=jobService</panel_attributes><additional_attributes>10;1650;10;1090;290;1090;290;1070;350;1070;350;1090;1570;1080;1570;10;1480;10</additional_attributes></element><element><id>Relation</id><coordinates><x>518</x><y>882</y><w>1036</w><h>630</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>230;880;10;880;10;20;1460;20;1460;60</additional_attributes></element><element><id>Relation</id><coordinates><x>140</x><y>840</y><w>1631</w><h>945</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;1330;20;40;1720;40;1720;20;1740;20;1740;40;2310;30;2310;10</additional_attributes></element><element><id>Relation</id><coordinates><x>917</x><y>1260</y><w>875</w><h>931</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>830;1290;880;1290;880;1310;920;1310;920;1290;1200;1290;1200;160;300;170;300;150;260;150;260;170;50;170;50;10;10;10</additional_attributes></element></diagram>
