@@ -45,6 +45,7 @@ namespace EasySave_Library_Log
             {
                 try
                 {
+                    FileUtil.CreateFileIfNotExists(stateFilePath, LogFormatManager.Instance.Format == LogFormatManager.LogFormat.JSON ? "[]" : "<States></States>"); // Create the state file if it doesn't exist
                     if (LogFormatManager.Instance.Format == LogFormatManager.LogFormat.JSON)
                     {
                         string jsonString = FileUtil.ReadFromFile(stateFilePath);
