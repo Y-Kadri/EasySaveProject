@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using EasySave_Project.Model;
+using EasySave_Project.Util;
 
 namespace EasySave_Project.Service
 {
@@ -66,5 +67,12 @@ namespace EasySave_Project.Service
         {
             return translations.TryGetValue(key, out var value) ? value : key; // Renvoie la clé si elle n'existe pas
         }
+
+        public static void InitSetting()
+        {
+            SetLanguage(SettingUtil.GetSetting().language);
+            EasySave_Library_Log.manager.LogFormatManager.Instance.SetLogFormat(SettingUtil.GetSetting().logFormat);
+        }
+        
     }
 }

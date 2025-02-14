@@ -1,0 +1,16 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:pages="clr-namespace:EasySave_Project.ViewModels.Pages"
+                xmlns:components="clr-namespace:EasySave_Project.Views.Components"
+             x:Class="EasySave_Project.Views.Pages.HomePage"
+             x:DataType="pages:HomePageViewModel"> <!-- Ajout de x:DataType ici -->
+
+    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <TextBlock 
+            Classes="Secondary"
+            FontSize="32"
+            FontWeight="Bold"
+            Text="{Binding Title}"
+            />
+    </StackPanel>
+</UserControl>

@@ -3,9 +3,12 @@ using EasySave_Library_Log.manager;
 using EasySave_Project.Model;
 using EasySave_Project.Util;
 using System;
+using System.Collections.Generic;
 using CryptoSoft;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
+
 namespace EasySave_Project.Service
 {
     /// <summary>
@@ -15,14 +18,16 @@ namespace EasySave_Project.Service
     /// </summary>
     public class JobDifferencialService : AJobStrategyService
     {
+        public event Action<double> OnProgressChanged;
+        
         /// <summary>
         /// Executes the differential backup job for the given JobModel.
         /// If there is no previous full backup, it performs a complete backup instead.
         /// </summary>
         /// <param name="job">The JobModel object representing the job to execute.</param>
         /// <param name="backupDir">The directory where the backup will be stored.</param>
-        override
-        public void Execute(JobModel job, string backupDir)
+        
+        public override void Execute(JobModel job, string backupDir)
         {
             var translator = TranslationService.GetInstance();
 
@@ -44,6 +49,9 @@ namespace EasySave_Project.Service
                 long processedSize = 0;
 
                 ExecuteDifferentialSave(job, job.FileSource, backupDir, job.LastFullBackupPath, ref processedFiles, ref processedSize); // Perform a differential backup
+                
+                // **Déclenchement du callback pour mettre à jour la progression**
+                OnProgressChanged?.Invoke(processedFiles);
             }
 
             job.LastSaveDifferentialPath = backupDir;

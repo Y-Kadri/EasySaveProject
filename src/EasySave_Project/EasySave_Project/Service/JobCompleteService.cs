@@ -15,13 +15,14 @@ namespace EasySave_Project.Service
     /// </summary>
     public class JobCompleteService : AJobStrategyService
     {
+        public event Action<double> OnProgressChanged;
+        
         /// <summary>
         /// Executes the complete backup job for the given JobModel.
         /// </summary>
         /// <param name="job">The JobModel object representing the job to execute.</param>
         /// <param name="backupDir">The directory where the backup will be stored.</param>
-        override
-        public void Execute(JobModel job, string backupDir)
+        public override void Execute(JobModel job, string backupDir)
         {
             string message = TranslationService.GetInstance().GetText("startingBackUpComplete") + job.Name;
 
@@ -38,7 +39,9 @@ namespace EasySave_Project.Service
 
             // Execute full backup process
             ExecuteCompleteSave(job.FileSource, backupDir, job, totalFiles, totalSize, ref processedFiles, ref processedSize);
-
+            
+            OnProgressChanged?.Invoke(processedFiles);
+            
             // Update the last full backup path
             job.LastFullBackupPath = backupDir;
 
@@ -64,6 +67,7 @@ namespace EasySave_Project.Service
             var files = FileUtil.GetFiles(sourceDir);
             TranslationService translator = TranslationService.GetInstance();
 
+            // Copy all files from the source directory
             foreach (string sourceFile in files)
             {
                 string fileName = FileUtil.GetFileName(sourceFile);
@@ -73,9 +77,11 @@ namespace EasySave_Project.Service
                 // Update processed file count and total processed size
                 processedFiles++;
                 processedSize += fileSize;
+                
 
                 UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFile, targetFile);
             }
+            
 
             // Recursively process subdirectories
             foreach (string subDir in FileUtil.GetDirectories(sourceDir))
