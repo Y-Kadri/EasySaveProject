@@ -8,6 +8,7 @@ using CryptoSoft;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using Tmds.DBus.Protocol;
 
 namespace EasySave_Project.Service
 {
@@ -142,23 +143,32 @@ namespace EasySave_Project.Service
         /// <param name="totalSize">Total size of the files to be backed up.</param>
         private void CopyModifiedFiles(JobModel job, List<string> filesToCopy, string targetDir, ref int processedFiles, ref long processedSize, int totalFiles, long totalSize)
         {
-            foreach (string sourceFile in filesToCopy)
+            if (filesToCopy.Count <= 0)
             {
-                string relativePath = FileUtil.GetRelativePath(job.FileSource, sourceFile);
-                string targetFile = FileUtil.CombinePath(targetDir, relativePath);
+                string message = TranslationService.GetInstance().GetText("notFileDifference") + " " + job.Name;
+                LogManager.Instance.AddMessage(message);
+                LogManager.Instance.UpdateState(job.Name, job.FileSource, job.FileTarget, 0, 0, 0);
+            }
+            else
+            {
+                foreach (string sourceFile in filesToCopy)
+                {
+                    string relativePath = FileUtil.GetRelativePath(job.FileSource, sourceFile);
+                    string targetFile = FileUtil.CombinePath(targetDir, relativePath);
 
-                // Ensure the target directory exists
-                string targetFileDirectory = Path.GetDirectoryName(targetFile);
-                FileUtil.CreateDirectory(targetFileDirectory);
+                    // Ensure the target directory exists
+                    string targetFileDirectory = Path.GetDirectoryName(targetFile);
+                    FileUtil.CreateDirectory(targetFileDirectory);
 
-                // Perform the file copy operation
-                long fileSize = HandleFileOperation(sourceFile, targetFile, job);
+                    // Perform the file copy operation
+                    long fileSize = HandleFileOperation(sourceFile, targetFile, job);
 
-                processedFiles++;
-                processedSize += fileSize;
+                    processedFiles++;
+                    processedSize += fileSize;
 
-                // Update the backup state
-                UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFile, targetFile);
+                    // Update the backup state
+                    UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFile, targetFile);
+                }
             }
         }
     }
