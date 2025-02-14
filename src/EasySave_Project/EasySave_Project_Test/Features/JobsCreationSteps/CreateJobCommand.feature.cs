@@ -396,20 +396,21 @@ namespace EasySave_Project_Test.Features.JobsCreationSteps
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Create up to 5 jobs successfully and fail on the 6th")]
-        [NUnit.Framework.TestCaseAttribute("Backup Project 1", "I should see a success message \"Job created successfully\"", null)]
-        [NUnit.Framework.TestCaseAttribute("Backup Project 2", "I should see a success message \"Job created successfully\"", null)]
-        [NUnit.Framework.TestCaseAttribute("Backup Project 3", "I should see a success message \"Job created successfully\"", null)]
-        [NUnit.Framework.TestCaseAttribute("Backup Project 4", "I should see a success message \"Job created successfully\"", null)]
-        [NUnit.Framework.TestCaseAttribute("Backup Project 5", "I should see a success message \"Job created successfully\"", null)]
-        [NUnit.Framework.TestCaseAttribute("Backup Project 6", "I should see an error message \"Cannot create more than 5 jobs\"", null)]
-        public void CreateUpTo5JobsSuccessfullyAndFailOnThe6Th(string jobName, string expectedResult, string[] exampleTags)
+        [NUnit.Framework.DescriptionAttribute("Create up to 5 jobs successfully and successfully on the 6th")]
+        [NUnit.Framework.TestCaseAttribute("Backup Project 1", "on", "I should see a success message \"Job created successfully\"", null)]
+        [NUnit.Framework.TestCaseAttribute("Backup Project 2", "already on", "I should see a success message \"Job created successfully\"", null)]
+        [NUnit.Framework.TestCaseAttribute("Backup Project 3", "already on", "I should see a success message \"Job created successfully\"", null)]
+        [NUnit.Framework.TestCaseAttribute("Backup Project 4", "already on", "I should see a success message \"Job created successfully\"", null)]
+        [NUnit.Framework.TestCaseAttribute("Backup Project 5", "already on", "I should see a success message \"Job created successfully\"", null)]
+        [NUnit.Framework.TestCaseAttribute("Backup Project 6", "already on", "I should see a success message \"Job created successfully\"", null)]
+        public void CreateUpTo5JobsSuccessfullyAndSuccessfullyOnThe6Th(string jobName, string screenState, string expectedResult, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("JobName", jobName);
+            argumentsOfScenario.Add("ScreenState", screenState);
             argumentsOfScenario.Add("ExpectedResult", expectedResult);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create up to 5 jobs successfully and fail on the 6th", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create up to 5 jobs successfully and successfully on the 6th", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 142
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -424,7 +425,7 @@ namespace EasySave_Project_Test.Features.JobsCreationSteps
     testRunner.Given("the configuration file \"jobsSetting.json\" contains:", "{\r\n  \"jobs\": [],\r\n  \"index\": 0\r\n}", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 150
-    testRunner.And("I am on the job creation screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And(string.Format("I am {0} the job creation screen", screenState), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 152
     testRunner.When(string.Format("I enter \"{0}\" as the job name", jobName), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");

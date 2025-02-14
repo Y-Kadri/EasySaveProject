@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
+using CryptoSoft;
 using EasySave_Library_Log.manager;
 using EasySave_Project.Dto;
 using EasySave_Project.Model;
@@ -102,16 +106,29 @@ namespace EasySave_Project.Util
             string message;
             try
             {
+                // Copy the file to the destination, depending on the 'overwrite' parameter (to overwrite or not)
                 File.Copy(sourceFile, destinationFile, overwrite);
-                message = $"{translator.GetText("fileCopied")}: {sourceFile} -> {destinationFile}";
-                ConsoleUtil.PrintTextconsole(message);
-                LogManager.Instance.AddMessage(message);
             }
             catch (Exception ex)
             {
+                // In case of an error during the copy, display the error message
                 message = $"{translator.GetText("errorCopyingFile")}: '{sourceFile}' - {ex.Message}";
-                ConsoleUtil.PrintTextconsole(message);
-                LogManager.Instance.AddMessage(message);
+                ConsoleUtil.PrintTextconsole(message);  // Display the error message in the console
+                LogManager.Instance.AddMessage(message); // Add the error message to the log
+            }
+        }
+
+        public static void EncryptFile(string filePath, string key)
+        {
+            try
+            {
+                var fileManager = new FileManager(filePath, key);
+                fileManager.TransformFile();
+            }
+            catch (Exception ex)
+            {
+                ConsoleUtil.PrintTextconsole($"Erreur lors du cryptage du fichier: {ex.Message}");
+                LogManager.Instance.AddMessage($"Erreur lors du cryptage du fichier: {ex.Message}");
             }
         }
 
@@ -233,6 +250,56 @@ namespace EasySave_Project.Util
         }
 
         /// <summary>
+        /// Gets the current job index from the JSON file.
+        /// </summary>
+        /// <returns>The current job index, or 0 if not found.</returns>
+        public static int GetCurrentJobIndex()
+        {
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                 "easySave", "easySaveSetting", "jobsSetting.json");
+            string message;
+
+            try
+            {
+                // Check if the JSON file exists
+                if (!File.Exists(filePath))
+                {
+                    message = TranslationService.GetInstance().GetText("jsonFileNotExist");
+                    ConsoleUtil.PrintTextconsole(message);
+                    LogManager.Instance.AddMessage(message);
+                    return 0; // Return 0 if file does not exist
+                }
+
+                // Read the content of the JSON file
+                string jsonString = File.ReadAllText(filePath);
+                JsonDocument doc = JsonDocument.Parse(jsonString);
+                JsonElement root = doc.RootElement;
+
+                // Try to get the "index" property
+                if (root.TryGetProperty("index", out JsonElement indexElement))
+                {
+                    return indexElement.GetInt32(); // Return the current index
+                }
+                else
+                {
+                    message = TranslationService.GetInstance().GetText("indexNotFoundInJson");
+                    ConsoleUtil.PrintTextconsole(message);
+                    LogManager.Instance.AddMessage(message);
+                    return 0; // Default to 0 if index is not found
+                }
+            }
+            catch (Exception ex)
+            {
+                // Print an error message if an exception occurs during reading
+                message = TranslationService.GetInstance().GetText("errorReadingJsonFile") + ex.Message;
+                ConsoleUtil.PrintTextconsole(message);
+                LogManager.Instance.AddMessage(message);
+                return -1; // Return -1 to indicate an error
+            }
+        }
+
+
+        /// <summary>
         /// Retrieves all files in the specified directory.
         /// </summary>
         /// <param name="path">The path of the directory to retrieve files from.</param>
@@ -246,9 +313,6 @@ namespace EasySave_Project.Util
             }
             catch (Exception ex)
             {
-                message = $"{TranslationService.GetInstance().GetText("errorCopyingDirectory")}: '{path}' - {ex.Message}";
-                ConsoleUtil.PrintTextconsole(message);
-                LogManager.Instance.AddMessage(message);
                 return new string[0]; // Returns an empty array in case of error
             }
         }
@@ -449,6 +513,182 @@ namespace EasySave_Project.Util
                 size += GetFileSize(file);
             }
             return size;
+        }
+
+        /// <summary>
+        /// Ensures that the EncryptedFileExtensions key exists in the JobSettingsDto object.
+        /// If the key is missing, it initializes it with an empty list and updates the JSON file.
+        /// </summary>
+        /// <param name="data">The JobSettingsDto object to check and update.</param>
+        /// <param name="settingFilePath">The path to the settings JSON file.</param>
+        private static void EnsureKeyExists(AppSettingDto data, string settingFilePath, string key)
+        {
+            var property = typeof(AppSettingDto).GetProperty(key);
+            if (property != null && property.GetValue(data) == null)
+            {
+                property.SetValue(data, new List<string>());
+                string updatedJsonString = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText(settingFilePath, updatedJsonString); // Write the updated JSON to the file
+            }
+        }
+
+
+        // /// <summary>
+        // /// Adds a value to a specified list in the JobSettingsDto object.
+        // /// If the value is not already present, it is added to the list and the changes are saved to the JSON file.
+        // /// </summary>
+        // /// <param name="key">The property name of the list (e.g., "EncryptedFileExtensions" or "PriorityBusinessProcess").</param>
+        // /// <param name="value">The value to add (e.g., ".txt", ".pdf", "notepad.exe").</param>
+        // public static void AddValueToJobSettingsList(string key, string value)
+        // {
+        //     // Define the file path for the settings JSON file
+        //     string settingFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+        //         "easySave", "easySaveSetting", "appSetting.json");
+        //
+        //     try
+        //     {
+        //         // Check if the JSON file exists
+        //         if (File.Exists(settingFilePath))
+        //         {
+        //             // Read the content of the JSON file
+        //             string jsonString = File.ReadAllText(settingFilePath);
+        //             AppSettingDto data = JsonSerializer.Deserialize<AppSettingDto>(jsonString);
+        //
+        //             // Ensure the specified list key exists
+        //             EnsureKeyExists(data, settingFilePath, key);
+        //
+        //             // Retrieve the list dynamically
+        //             var property = typeof(AppSettingDto).GetProperty(key);
+        //             if (property != null && property.GetValue(data) is List<string> list)
+        //             {
+        //                 // Ensure the value starts with a dot if it's a file extension
+        //                 if (key == "EncryptedFileExtensions" && !string.IsNullOrWhiteSpace(value) && !value.StartsWith('.'))
+        //                 {
+        //                     value = "." + value;
+        //                 }
+        //                 // Add the value if it's not already in the list
+        //                 if (!list.Contains(value))
+        //                 {
+        //                     list.Add(value);
+        //                     // Serialize the updated data back to JSON format
+        //                     string updatedJsonString = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
+        //                     File.WriteAllText(settingFilePath, updatedJsonString); // Write the updated JSON to the file
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         // Print error message if an exception occurs
+        //         ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorAddingFormat") + ex.Message);
+        //     }
+        // }
+
+
+        /// <summary>
+        /// Retrieves a specified list from the JobSettingsDto object.
+        /// If the list is not present or empty, it returns an empty list.
+        /// </summary>
+        /// <param name="key">The property name of the list (e.g., "EncryptedFileExtensions" or "PriorityBusinessProcess").</param>
+        /// <returns>A list of values stored in the specified property.</returns>
+        public static List<string> GetAppSettingsList(string key)
+        {
+            // Define the file path for the settings JSON file
+            string settingFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                "easySave", "easySaveSetting", "appSetting.json");
+
+            List<string> retrievedList = [];
+
+            try
+            {
+                // Check if the JSON file exists
+                if (File.Exists(settingFilePath))
+                {
+                    // Read the content of the JSON file
+                    string jsonString = File.ReadAllText(settingFilePath);
+                    AppSettingDto data = JsonSerializer.Deserialize<AppSettingDto>(jsonString);
+                    // Ensure the specified list key exists
+                    EnsureKeyExists(data, settingFilePath, key);
+
+                    // Retrieve the list dynamically
+                    var property = typeof(AppSettingDto).GetProperty(key);
+                    if (property != null && property.GetValue(data) is List<string> list)
+                    {
+                        retrievedList = list;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Print error message if an exception occurs
+                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorReadingFormat") + ex.Message);
+            }
+            return retrievedList;
+        }
+
+
+        /// <summary>
+        /// Retrieves the file extension from the given file path.
+        /// </summary>
+        /// <param name="filePath">The path of the file.</param>
+        /// <returns>The file extension, or an empty string if the file has no extension.</returns>
+        public static string GetFileExtension(string filePath)
+        {
+            return Path.GetExtension(filePath); // Returns the extension (including the dot)
+        }
+
+        /// <summary>
+        /// Retrieves all files from a directory, including its subdirectories recursively.
+        /// </summary>
+        /// <param name="directoryPath">The path of the source directory.</param>
+        /// <returns>A list of full file paths found in the directory and its subdirectories.</returns>
+        public static List<string> GetFilesRecursively(string directoryPath)
+        {
+            List<string> files = new List<string>();
+
+            try
+            {
+                // Get all files in the current directory
+                files.AddRange(Directory.GetFiles(directoryPath));
+
+                // Recursively get files from subdirectories
+                foreach (string subDir in Directory.GetDirectories(directoryPath))
+                {
+                    files.AddRange(GetFilesRecursively(subDir));
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorReadingFolder") + ex.Message);
+            }
+
+            return files;
+        }
+
+        /// <summary>
+        /// Gets the relative path of a file or directory based on the provided root directory.
+        /// </summary>
+        /// <param name="rootDir">The root directory to base the relative path on.</param>
+        /// <param name="fullPath">The full path of the file or directory.</param>
+        /// <returns>The relative path from the root directory to the specified file or directory.</returns>
+        public static string GetRelativePath(string rootDir, string fullPath)
+        {
+            // Ensure the paths are normalized and absolute
+            var rootDirectoryInfo = new DirectoryInfo(rootDir);
+            var fullPathInfo = new FileInfo(fullPath);
+
+            // Ensure the full path belongs to the root directory
+            if (!fullPathInfo.FullName.StartsWith(rootDirectoryInfo.FullName, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new ArgumentException("The full path must be within the root directory.", nameof(fullPath));
+            }
+
+            // Calculate the relative path
+            Uri rootUri = new Uri(rootDirectoryInfo.FullName + Path.DirectorySeparatorChar);
+            Uri fullPathUri = new Uri(fullPathInfo.FullName);
+            Uri relativeUri = rootUri.MakeRelativeUri(fullPathUri);
+
+            return Uri.UnescapeDataString(relativeUri.ToString().Replace('/', Path.DirectorySeparatorChar));
         }
     }
 }
