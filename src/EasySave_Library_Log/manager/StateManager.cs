@@ -28,7 +28,12 @@ namespace EasySave_Library_Log
         /// </summary>
         private StateManager()
         {
-            // Define the path for the state file
+            initFIles();
+            
+        }
+
+        private void initFIles()
+        {
             string statesDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySave", "Logs");
             string fileExtension = LogFormatManager.Instance.Format == LogFormatManager.LogFormat.JSON ? ".json" : ".xml";
             stateFilePath = FileUtil.CombinePaths(statesDirectory, $"state{fileExtension}");
@@ -45,7 +50,7 @@ namespace EasySave_Library_Log
             {
                 try
                 {
-                    FileUtil.CreateFileIfNotExists(stateFilePath, LogFormatManager.Instance.Format == LogFormatManager.LogFormat.JSON ? "[]" : "<States></States>"); // Create the state file if it doesn't exist
+                    initFIles();
                     if (LogFormatManager.Instance.Format == LogFormatManager.LogFormat.JSON)
                     {
                         string jsonString = FileUtil.ReadFromFile(stateFilePath);

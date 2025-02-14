@@ -91,7 +91,6 @@ namespace EasySave_Library_Log.manager
                 try
                 {
                     initFolders();
-                    FileUtil.CreateFileIfNotExists(logFilePath, LogFormatManager.Instance.Format == LogFormatManager.LogFormat.JSON ? "[]" : "<Logs></Logs>");
                     if (LogFormatManager.Instance.Format == LogFormatManager.LogFormat.JSON)
                     {
                         string jsonString = FileUtil.ReadFromFile(logFilePath);
