@@ -396,21 +396,21 @@ namespace EasySave_Project_Test.Features.JobsCreationSteps
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Create up to 5 jobs successfully and fail on the 6th")]
+        [NUnit.Framework.DescriptionAttribute("Create up to 5 jobs successfully and successfully on the 6th")]
         [NUnit.Framework.TestCaseAttribute("Backup Project 1", "on", "I should see a success message \"Job created successfully\"", null)]
         [NUnit.Framework.TestCaseAttribute("Backup Project 2", "already on", "I should see a success message \"Job created successfully\"", null)]
         [NUnit.Framework.TestCaseAttribute("Backup Project 3", "already on", "I should see a success message \"Job created successfully\"", null)]
         [NUnit.Framework.TestCaseAttribute("Backup Project 4", "already on", "I should see a success message \"Job created successfully\"", null)]
         [NUnit.Framework.TestCaseAttribute("Backup Project 5", "already on", "I should see a success message \"Job created successfully\"", null)]
-        [NUnit.Framework.TestCaseAttribute("Backup Project 6", "already on", "I should see an error message \"Cannot create more than 5 jobs\"", null)]
-        public void CreateUpTo5JobsSuccessfullyAndFailOnThe6Th(string jobName, string screenState, string expectedResult, string[] exampleTags)
+        [NUnit.Framework.TestCaseAttribute("Backup Project 6", "already on", "I should see a success message \"Job created successfully\"", null)]
+        public void CreateUpTo5JobsSuccessfullyAndSuccessfullyOnThe6Th(string jobName, string screenState, string expectedResult, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("JobName", jobName);
             argumentsOfScenario.Add("ScreenState", screenState);
             argumentsOfScenario.Add("ExpectedResult", expectedResult);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create up to 5 jobs successfully and fail on the 6th", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create up to 5 jobs successfully and successfully on the 6th", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 142
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
