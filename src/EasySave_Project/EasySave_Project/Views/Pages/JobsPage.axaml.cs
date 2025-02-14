@@ -25,20 +25,17 @@ public partial class JobsPage : UserControl, IPage
     {
         var selectedJobs = new List<JobModel>();
 
-        // Parcourt les descendants visuels pour trouver les DataGridRow
+        // Récupération des jobs sélectionnés
         foreach (var row in DataGrid.GetVisualDescendants().OfType<DataGridRow>())
         {
             var checkBox = row.GetVisualDescendants().OfType<CheckBox>().FirstOrDefault();
-
-            if (checkBox != null && checkBox.IsChecked == true)
+            if (checkBox?.IsChecked == true && row.DataContext is JobModel job)
             {
-                if (row.DataContext is JobModel job)
-                {
-                    selectedJobs.Add(job);
-                }
+                selectedJobs.Add(job);
             }
         }
 
+        // Vérifier si des jobs sont sélectionnés
         if (selectedJobs.Count == 0)
         {
             Toastr.ShowNotification("Erreur : Veuillez sélectionner au moins un job.", NotificationContainer);
@@ -47,13 +44,12 @@ public partial class JobsPage : UserControl, IPage
 
         if (DataContext is JobsPageViewModel viewModel)
         {
-            await viewModel.ExecuteJobsAsync(selectedJobs, (job, progress) =>
-            {
-                // Mettre à jour la ProgressBar dans le DataGrid pour chaque job
-                UpdateJobProgress(job, progress);
-            });
-
-            Toastr.ShowNotification($"{selectedJobs.Count} job(s) exécuté(s) avec succès.",  NotificationContainer, "Succès");
+            var (success, message) = await viewModel.ExecuteJobsAsync(selectedJobs,
+                (job, progress) => UpdateJobProgress(job, progress),
+                (msg, type) => Dispatcher.UIThread.Post(() =>
+                {
+                    Toastr.ShowNotification(msg, NotificationContainer, type);
+                }));
         }
     }
 

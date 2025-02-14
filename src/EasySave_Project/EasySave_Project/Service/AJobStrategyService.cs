@@ -26,6 +26,8 @@ namespace EasySave_Project.Service
         /// <param name="backupDir">The directory where the backup will be stored.</param>
         public abstract void Execute(JobModel job, string backupDir);
 
+        public event Action<double>? OnProgressChanged;
+
         /// <summary>
         /// Checks if a given file format is in the list of encrypted file extensions.
         /// </summary>
@@ -36,7 +38,7 @@ namespace EasySave_Project.Service
             try
             {
                 // Retrieve the list of encrypted file formats
-                List<string> encryptedFormats = FileUtil.GetJobSettingsList("EncryptedFileExtensions");
+                List<string> encryptedFormats = FileUtil.GetAppSettingsList("EncryptedFileExtensions");
 
                 // Check if the format exists in the list
                 return encryptedFormats != null && encryptedFormats.Contains(format);

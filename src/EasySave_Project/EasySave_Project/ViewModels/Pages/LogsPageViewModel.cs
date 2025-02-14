@@ -4,7 +4,10 @@ using System.Collections.ObjectModel;
 using EasySave_Project.Dto;
 using EasySave_Project.Service;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
+using System.Xml;
+using System.Xml.Serialization;
 using EasySave_Library_Log.manager;
 
 namespace EasySave_Project.ViewModels.Pages
@@ -18,7 +21,9 @@ namespace EasySave_Project.ViewModels.Pages
         public string TargetPath { get; }
         public string FileSize { get; }
         public string TransferTime { get; }
-
+        
+        public string EncryptionTime { get; }
+        
         public LogsPageViewModel()
         {
             AllLogs = TranslationService.GetInstance().GetText("AllLogs");
@@ -27,6 +32,8 @@ namespace EasySave_Project.ViewModels.Pages
             TargetPath = TranslationService.GetInstance().GetText("TargetPath");
             FileSize = TranslationService.GetInstance().GetText("FileSize");
             TransferTime = TranslationService.GetInstance().GetText("TransferTime");
+            EncryptionTime = TranslationService.GetInstance().GetText("EncryptionTime");
+
             Nodes = new ObservableCollection<LogNode>();
 
             LoadLogs();
@@ -39,7 +46,11 @@ namespace EasySave_Project.ViewModels.Pages
             if (!Directory.Exists(logsDirectory))
                 return;
 
-            foreach (var logFile in Directory.GetFiles(logsDirectory, "*.json"))
+            var files = Directory.GetFiles(logsDirectory)
+                .Where(file => file.EndsWith(".json") || file.EndsWith(".xml"))
+                .ToList();
+
+            foreach (var logFile in files)
             {
                 if (Path.GetFileNameWithoutExtension(logFile) == "state")
                     continue;
@@ -60,11 +71,12 @@ namespace EasySave_Project.ViewModels.Pages
             string fileName = Path.GetFileNameWithoutExtension(logFile);
             var dateNode = new LogNode(fileName);
 
-            var jsonContent = File.ReadAllText(logFile);
-            var logs = JsonSerializer.Deserialize<List<LogDataDto>>(jsonContent);
-
-            if (logs == null)
+            var logs = DeserializeLogs(logFile);
+            if (logs == null || !logs.Any())
+            {
+                LogManager.Instance.AddMessage($"Aucun log valide trouvé dans : {logFile}");
                 return;
+            }
 
             foreach (var log in logs)
             {
@@ -73,6 +85,72 @@ namespace EasySave_Project.ViewModels.Pages
             }
 
             Nodes.Add(dateNode);
+        }
+
+        private List<LogDataDto> DeserializeLogs(string filePath)
+        {
+            try
+            {
+                string content = File.ReadAllText(filePath);
+                string extension = Path.GetExtension(filePath).ToLower();
+
+                return extension switch
+                {
+                    ".json" => JsonSerializer.Deserialize<List<LogDataDto>>(content),
+                    ".xml" => DeserializeXmlManually(content),
+                    _ => throw new NotSupportedException($"Extension non supportée : {extension}")
+                };
+            }
+            catch (Exception ex)
+            {
+                LogManager.Instance.AddMessage($"Erreur de désérialisation pour {filePath} : {ex.Message}");
+                return null;
+            }
+        }
+
+        private List<LogDataDto> DeserializeXmlManually(string xmlContent)
+        {
+            var logs = new List<LogDataDto>();
+            try
+            {
+                var doc = new XmlDocument();
+                doc.LoadXml(xmlContent);
+
+                var logEntries = doc.SelectNodes("//LogEntry");
+                if (logEntries == null) return logs;
+
+                foreach (XmlNode entry in logEntries)
+                {
+                    var log = new LogDataDto
+                    {
+                        Timestamp = DateTime.Parse(entry.SelectSingleNode("Timestamp")?.InnerText ?? string.Empty),
+                        JobName = entry.SelectSingleNode("JobName")?.InnerText ?? string.Empty,
+                        SourcePath = entry.SelectSingleNode("SourcePath")?.InnerText ?? string.Empty,
+                        TargetPath = entry.SelectSingleNode("TargetPath")?.InnerText ?? string.Empty,
+                        FileSize = long.TryParse(entry.SelectSingleNode("FileSize")?.InnerText, out var fileSize) ? fileSize : 0,
+                        TransferTime = double.TryParse(entry.SelectSingleNode("TransferTime")?.InnerText, out var transferTime) ? transferTime : 0,
+                        EncryptionTime = double.TryParse(entry.SelectSingleNode("EncryptionTime")?.InnerText, out var encryptionTime) ? encryptionTime : 0,
+                        Messages = new List<MessageDto>()
+                    };
+
+                    var messages = entry.SelectNodes("Messages/Message");
+                    if (messages != null)
+                    {
+                        foreach (XmlNode messageNode in messages)
+                        {
+                            log.Messages.Add(new MessageDto { Text = messageNode.SelectSingleNode("Text")?.InnerText ?? string.Empty });
+                        }
+                    }
+
+                    logs.Add(log);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogManager.Instance.AddMessage($"Erreur lors du parsing manuel du XML : {ex.Message}");
+            }
+
+            return logs;
         }
 
         private LogNode CreateJobNode(LogDataDto log)
@@ -86,6 +164,7 @@ namespace EasySave_Project.ViewModels.Pages
                     new LogNode($"{TargetPath}: {log.TargetPath}"),
                     new LogNode($"{FileSize}: {log.FileSize} bytes"),
                     new LogNode($"{TransferTime}: {log.TransferTime} sec"),
+                    new LogNode($"{EncryptionTime}: {log.EncryptionTime}"),
                     CreateMessageNode(log.Messages)
                 }
             };

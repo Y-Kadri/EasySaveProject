@@ -43,20 +43,29 @@ namespace EasySave_Project.ViewModels.Pages
             Results = TranslationService.GetInstance().GetText("Results");
         }
         
-        public void ExecuteJobs(List<JobModel> jobs)
+        public async Task<(bool, string)> ExecuteJobsAsync(List<JobModel> jobs, Action<JobModel, double> progressCallback, Action<string, string> showPopup)
         {
+            bool allSuccess = true;
+
             foreach (var job in jobs)
             {
-                this.JobService.ExecuteOneJob(job);
+                var (success, message) = await JobService.ExecuteOneJobAsync(job, progressCallback);
+
+                // Affiche un pop-up dès que le job est terminé
+                string notificationMessage = success
+                    ? $"Le job '{job.Name}' s'est terminé avec succès."
+                    : $"Le job '{job.Name}' a échoué : {message}";
+
+                string notificationType = success ? "Success" : "Error";
+
+                // Afficher le pop-up en temps réel
+                showPopup(notificationMessage, notificationType);
+
+                // Mettre à jour le statut global
+                if (!success) allSuccess = false;
             }
-        }
-        
-        public async Task ExecuteJobsAsync(List<JobModel> jobs, Action<JobModel, double> progressCallback)
-        {
-            foreach (var job in jobs)
-            {
-                await JobService.ExecuteOneJobAsync(job, progressCallback);
-            }
+
+            return (allSuccess, allSuccess ? "Tous les jobs ont réussi." : "Au moins un job a échoué.");
         }
 
     }
