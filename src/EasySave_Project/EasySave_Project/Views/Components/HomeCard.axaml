@@ -1,0 +1,52 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:local="clr-namespace:EasySave_Project.Views.Components"
+            x:Class="EasySave_Project.Views.Components.HomeCard"
+             >
+
+    <Border Background="#0f2a4d"
+            CornerRadius="15"
+            Padding="20"
+            Margin="20"
+            BorderBrush="#1a3a5d"
+            BorderThickness="1">
+    
+        <StackPanel Spacing="16"> <!-- Spacing="16" correspond à gap-4 (environ 4 unités) -->
+        
+            <!-- Icône horloge et texte "Today" en haut -->
+            
+            <Grid>
+                <!-- Définition de deux colonnes : une pour les éléments à gauche, l'autre pour les éléments à droite -->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" /> <!-- Occupe tout l'espace disponible -->
+                    <ColumnDefinition Width="Auto" /> <!-- Ajuste automatiquement la taille des 3 points -->
+                </Grid.ColumnDefinitions>
+
+                <!-- Contenu à gauche -->
+                <StackPanel Orientation="Horizontal" Spacing="5" Grid.Column="0">
+                    <TextBlock Text="🕒" FontSize="16" Foreground="White"/>
+                    <TextBlock Text="TODAY" FontSize="14" Foreground="White"/>
+                </StackPanel>
+
+                <!-- Les trois points à droite -->
+                <TextBlock Text="⋮" FontSize="16" Foreground="White" Grid.Column="1" VerticalAlignment="Center"/>
+            </Grid>
+
+            
+
+            <!-- Heure au centre -->
+            <TextBlock Text="19:14" FontSize="48" Foreground="White" HorizontalAlignment="Center"/>
+
+            <!-- Date en bas -->
+            <TextBlock Text="Monday 09 - Dec 2023" 
+                       FontSize="16" 
+                       Foreground="#5e7b9a" 
+                       HorizontalAlignment="Center"/>
+
+            <!-- Lune avec nuages en bas à droite (image à insérer) -->
+            <!-- <Image Source="avares://YourNamespace/Assets/moon_clouds.png" -->
+            <!--        Width="80" -->
+            <!--        HorizontalAlignment="Right"/> -->
+        </StackPanel>
+    </Border>
+</UserControl>

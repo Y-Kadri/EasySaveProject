@@ -16,5 +16,7 @@ namespace EasySave_Project.Service
         /// <param name="job">The JobModel object representing the job to execute.</param>
         /// <param name="backupDir">The directory where the backup will be stored.</param>
         void Execute(JobModel job, string backupDir);
+        
+        event Action<double> OnProgressChanged;
     }
 }

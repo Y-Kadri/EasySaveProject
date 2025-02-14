@@ -15,9 +15,6 @@ namespace EasySave_Project.Manager
         // Static instance of JobManager (Singleton pattern)
         private static JobManager jobManager = null;
         
-        // Static max jobs in the same time
-        public static int MAX_JOB = 5;
- 
         /// <summary>
         /// List containing all backup jobs.
         /// </summary>
@@ -38,16 +35,17 @@ namespace EasySave_Project.Manager
             return jobManager; // Return the singleton instance
         }
 
+        public static void Destroy()
+        {
+            jobManager = null;
+        }
+
         /// <summary>
         /// Adds a new job to the job list.
         /// </summary>
         /// <param name="jobModel">The job to add.</param>
         public void AddJob(JobModel jobModel)
         {
-            if (Jobs.Count > MAX_JOB)
-            {
-                throw new ArgumentException("Cannot create more than 5 jobs");
-            }
             this.Jobs.Add(jobModel); // Add job to the list
         }
 
@@ -63,25 +61,17 @@ namespace EasySave_Project.Manager
         {
             try
             {
-                // Vérifier si le nom du job est vide
+                // Vérifier if the name job is empty
                 if (string.IsNullOrEmpty(name))
                 {
-                    throw new ArgumentException("Job name cannot be empty");
+                    throw new ArgumentException(TranslationService.GetInstance().GetText("jobNameCannotBeEmpty"));
                 }
 
-                if (Jobs.Count > MAX_JOB)
-                {
-                    throw new ArgumentException("Cannot create more than 5 jobs");
-                }
-                
                 // Create the job using the JobFactory
                 JobModel job = JobFactory.CreateJobModel(name, fileSource, fileTarget, jobSaveTypeEnum);
 
                 // Add the job to the list
                 Jobs.Add(job);
-
-                // Display success message
-                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("jobCree"));
                 return job; // Return the created job
             }
             catch (ArgumentException ex)
