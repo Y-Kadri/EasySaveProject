@@ -31,6 +31,9 @@ namespace EasySave_Project.Service
                 message = $"{translator.GetText("directorySourceDoNotExist")} : {job.FileSource}";
                 ConsoleUtil.PrintTextconsole(message);
                 LogManager.Instance.AddMessage(message);
+                LogManager.Instance.UpdateState(job.Name, job.FileSource, job.FileTarget, 0, 0, 0);
+                job.SaveState = JobSaveStateEnum.CANCEL;
+                StateManager.Instance.UpdateState(CreateBackupJobState(job, 0, job.FileSource, string.Empty));
                 return; // Exit if source directory does not exist
             }
 
@@ -38,6 +41,17 @@ namespace EasySave_Project.Service
             if (!FileUtil.ExistsDirectory(job.FileTarget))
             {
                 FileUtil.CreateDirectory(job.FileTarget);
+            }
+
+            var processes = FileUtil.GetJobSettingsList("PriorityBusinessProcess");
+            (bool isRunning, string PName) = ProcessUtil.IsProcessRunning(processes);
+            if (isRunning)
+            {
+                string Pmessage = TranslationService.GetInstance().GetText("interuptJob") + " " + PName;
+                ConsoleUtil.PrintTextconsole(Pmessage);
+                job.SaveState = JobSaveStateEnum.SKIP;
+                StateManager.Instance.UpdateState(CreateBackupJobState(job, 0, job.FileSource, string.Empty));
+                return;
             }
 
             // Create a job-specific backup directory
@@ -216,5 +230,49 @@ namespace EasySave_Project.Service
                 LogManager.Instance.AddMessage(message);
             }
         }
+
+        /// <summary>
+        /// Retrieves a list from the settings file based on the provided key.
+        /// </summary>
+        /// <param name="key">The key to retrieve the list for (e.g., "EncryptedFileExtensions" or "PriorityBusinessProcess").</param>
+        /// <returns>A list of values (e.g., file extensions, business processes).</returns>
+        public List<string> GetJobSettingsList(string key)
+        {
+            try
+            {
+                // Call the utility method to retrieve the list based on the key
+                List<string> settingsList = FileUtil.GetJobSettingsList(key);
+
+                return settingsList; // Return the list
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception and print an error message
+                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("error" + key) + ex.Message);
+                return new List<string>(); // Return an empty list in case of an error
+            }
+        }
+
+        /// <summary>
+        /// Adds a file format to the list of encrypted file extensions.
+        /// </summary>
+        /// <param name="key">The file extension to add (e.g., "txt" or "pdf").</param>
+        public void AddValueToJobSettingsList(string key, string value)
+        {
+            try
+            {
+                // Call the utility method to add the format to settings
+                FileUtil.AddValueToJobSettingsList(key, value);
+
+                // Print success message
+                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("elementAdded") + " " + value);
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception and print an error message
+                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorAddingElement") + ex.Message);
+            }
+        }
+
     }
 }
