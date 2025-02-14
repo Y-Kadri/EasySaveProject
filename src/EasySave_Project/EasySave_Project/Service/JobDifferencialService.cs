@@ -3,9 +3,12 @@ using EasySave_Library_Log.manager;
 using EasySave_Project.Model;
 using EasySave_Project.Util;
 using System;
+using System.Collections.Generic;
 using CryptoSoft;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
+
 namespace EasySave_Project.Service
 {
     /// <summary>

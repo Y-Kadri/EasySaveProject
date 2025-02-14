@@ -146,7 +146,8 @@ namespace EasySave_Project.ViewModels.Pages
                 _message = _translationService.GetText("LogsFormatChangeError");
                 _status = "Error";
             }
-
+            
+            LogFormatManager.Instance.SetLogFormat(logsFormat);
             return (_message, _status);
         }
     }
