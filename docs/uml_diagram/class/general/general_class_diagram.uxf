@@ -81,11 +81,7 @@ r1=addJobsPageViewModel</panel_attributes><additional_attributes>220;20;10;20</a
 &lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>100;10;50;10;50;250;10;250</additional_attributes></element><element><id>Relation</id><coordinates><x>1096</x><y>8</y><w>96</w><h>256</h></coordinates><panel_attributes>lt=&lt;.
 &lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>100;10;50;10;50;300;10;300</additional_attributes></element><element><id>Relation</id><coordinates><x>1096</x><y>8</y><w>88</w><h>312</h></coordinates><panel_attributes>lt=&lt;.
 &lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>90;10;50;10;50;370;10;370</additional_attributes></element><element><id>Relation</id><coordinates><x>848</x><y>104</y><w>736</w><h>272</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;320;10;290;900;300;900;10;720;10</additional_attributes></element><element><id>Relation</id><coordinates><x>848</x><y>152</y><w>736</w><h>224</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;260;10;230;900;240;900;10;730;10</additional_attributes></element><element><id>Relation</id><coordinates><x>848</x><y>200</y><w>736</w><h>176</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;200;10;170;900;180;900;10;730;10</additional_attributes></element><element><id>Relation</id><coordinates><x>848</x><y>248</y><w>736</w><h>128</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;140;10;110;900;120;900;10;730;10</additional_attributes></element><element><id>Relation</id><coordinates><x>848</x><y>296</y><w>736</w><h>80</h></coordinates><panel_attributes>lt=&lt;.
-&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;80;10;50;900;60;900;10;730;10</additional_attributes></element><element><id>Relation</id><coordinates><x>584</x><y>160</y><w>1136</w><h>392</h></coordinates><panel_attributes>lt=&lt;-
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;320;10;290;900;300;900;10;720;10</additional_attributes></element><element><id>Relation</id><coordinates><x>584</x><y>160</y><w>1136</w><h>392</h></coordinates><panel_attributes>lt=&lt;-
 m1=1..1
 r1=jobService</panel_attributes><additional_attributes>10;470;10;320;1400;320;1400;10;1060;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1424</x><y>208</y><w>128</w><h>264</h></coordinates><panel_attributes>lt=&lt;-
 m1=0..*
