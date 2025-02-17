@@ -62,6 +62,13 @@ jobs:
       - name: Run test
         run: dotnet test ${{ env.SOLUTION_PATH }}
 
+      - name: Ensure /tmp directory exists
+        run: mkdir -p /tmp
+
+      - name: Run Test Coverage
+        run: dotnet test ${{ env.SOLUTION_PATH }}  /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./coverage/coverage.cobertura.xml
+
+
   commit_message_validation:
     runs-on: ubuntu-latest
     name: Commit Message Validation
@@ -75,6 +82,7 @@ jobs:
   
   sonar:
     name: Sonar Cloud
+    needs: test
     runs-on: windows-latest
 
     steps:
@@ -118,9 +126,6 @@ jobs:
 
       - name: Restore dependencies
         run: dotnet restore ${{ env.SOLUTION_PATH }}
-
-      - name: Run Test Coverage
-        run: dotnet test ${{ env.SOLUTION_PATH }}  /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./coverage/coverage.cobertura.xml
 
       - name: Build and analyze
         env:
