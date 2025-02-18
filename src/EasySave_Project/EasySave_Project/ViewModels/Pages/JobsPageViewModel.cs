@@ -7,6 +7,7 @@ using ReactiveUI;
 using EasySave_Project.Manager;
 using EasySave_Project.Model;
 using EasySave_Project.Service;
+using System.Threading;
 
 namespace EasySave_Project.ViewModels.Pages
 {
@@ -42,31 +43,51 @@ namespace EasySave_Project.ViewModels.Pages
             Progress = TranslationService.GetInstance().GetText("Progress");
             Results = TranslationService.GetInstance().GetText("Results");
         }
-        
-        public async Task<(bool, string)> ExecuteJobsAsync(List<JobModel> jobs, Action<JobModel, double> progressCallback, Action<string, string> showPopup)
-        {
-            bool allSuccess = true;
 
+        public void ExecuteJobsParallelThreadPool(List<JobModel> jobs, Action<JobModel, double> progressCallback, Action<string, string> showPopup)
+        {
+            int jobCount = jobs.Count; // Total number of jobs to process
+            int completedJobs = 0;     // Counter to keep track of how many jobs are completed
+            object lockObj = new object(); // Lock object to ensure thread safety when updating shared variables
+            bool allSuccess = true;    // Flag to track if all jobs were successful
+
+            // Iterate over each job and add it to the ThreadPool for parallel execution
             foreach (var job in jobs)
             {
-                var (success, message) = await JobService.ExecuteOneJobAsync(job, progressCallback);
+                ThreadPool.QueueUserWorkItem(_ =>
+                {
+                    // Execute the job in a separate thread and get the result
+                    var (success, message) = JobService.ExecuteOneJobThreaded(job, progressCallback);
 
-                // Affiche un pop-up dès que le job est terminé
-                string notificationMessage = success
-                    ? $"{TranslationService.GetInstance().GetText("TheJob")} '{job.Name}' {TranslationService.GetInstance().GetText("successfullyCompleted")} "
-                    : $"{TranslationService.GetInstance().GetText("TheJob")} '{job.Name}' {TranslationService.GetInstance().GetText("failed")} : {message}";
+                    // Prepare the message to display when the job is finished
+                    string notificationMessage = success
+                        ? $"{TranslationService.GetInstance().GetText("TheJob")} '{job.Name}' {TranslationService.GetInstance().GetText("successfullyCompleted")} "
+                        : $"{TranslationService.GetInstance().GetText("TheJob")} '{job.Name}' {TranslationService.GetInstance().GetText("failed")} : {message}";
 
-                string notificationType = success ? "Success" : "Error";
+                    string notificationType = success ? "Success" : "Error";
 
-                // Afficher le pop-up en temps réel
-                showPopup(notificationMessage, notificationType);
+                    // Update the UI using the Dispatcher to show a popup with the result of the job
+                    Avalonia.Threading.Dispatcher.UIThread.Post(() => showPopup(notificationMessage, notificationType));
 
-                // Mettre à jour le statut global
-                if (!success) allSuccess = false;
+                    lock (lockObj) // Ensure thread-safe updates to shared variables
+                    {
+                        if (!success) allSuccess = false; // If any job fails, set allSuccess to false
+                        completedJobs++; // Increment the completed jobs counter
+
+                        // When all jobs are completed, display a final message indicating the overall result
+                        if (completedJobs == jobCount)
+                        {
+                            string finalMessage = allSuccess
+                                ? "All jobs completed successfully."
+                                : "At least one job failed.";
+                            Avalonia.Threading.Dispatcher.UIThread.Post(() => showPopup(finalMessage, allSuccess ? "Success" : "Error"));
+                        }
+                    }
+                });
             }
-
-            return (allSuccess, allSuccess ? "Tous les jobs ont réussi." : "Au moins un job a échoué.");
         }
+
+
 
     }
 }
