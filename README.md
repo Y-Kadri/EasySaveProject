@@ -1,5 +1,8 @@
 # EasySaveProject
-[![GitHub release](https://img.shields.io/github/v/release/Y-Kadri/EasySaveProject?label=Release&style=flat)](https://github.com/Y-Kadri/EasySaveProject/releases)
+[![GitHub release](https://img.shields.io/github/v/release/Y-Kadri/EasySaveProject?label=Release&style=flat)](https://github.com/Y-Kadri/EasySaveProject/releases)  ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/Y-Kadri/EasySaveProject/build.yml)  ![GitHub License](https://img.shields.io/github/license/Y-Kadri/EasySaveProject)
+
+## Description du projet
+Le projet EasySaveProject vise à fournir une solution robuste et efficace pour la gestion et l’exécution de sauvegardes de fichiers. Son architecture repose sur des principes de conception bien établis permettant une extensibilité et une maintenance facilitées. L’un des aspects fondamentaux de ce projet est l’adoption de différents design patterns permettant d’assembler des modules et structures communes et connues de code dans un même projet. Les différentes bonnes pratiques de code ont été détaillées dans le fichier README du projet GitHub.
 
 ## Conventions de Nommage & Lignes Directrices
 
