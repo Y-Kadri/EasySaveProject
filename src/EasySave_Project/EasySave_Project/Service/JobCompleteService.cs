@@ -38,9 +38,7 @@ namespace EasySave_Project.Service
             long processedSize = 0;
 
             // Execute full backup process
-            ExecuteCompleteSave(job.FileSource, backupDir, job, totalFiles, totalSize, ref processedFiles, ref processedSize);
-            
-            OnProgressChanged?.Invoke(processedFiles);
+            ExecuteCompleteSave(job.FileSource, backupDir, job, totalFiles, totalSize, ref processedFiles, ref processedSize);  
             
             // Update the last full backup path
             job.LastFullBackupPath = backupDir;
@@ -72,14 +70,14 @@ namespace EasySave_Project.Service
             {
                 string fileName = FileUtil.GetFileName(sourceFile);
                 string targetFile = FileUtil.CombinePath(targetDir, fileName);
-                long fileSize = HandleFileOperation(sourceFile, targetFile, job);
+                double progressPourcentage = (double)processedFiles / totalFiles * 100;
+                long fileSize = HandleFileOperation(sourceFile, targetFile, job, progressPourcentage);
 
                 // Update processed file count and total processed size
                 processedFiles++;
                 processedSize += fileSize;
-                
 
-                UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFile, targetFile);
+                UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFile, targetFile, progressPourcentage);
             }
             
 
