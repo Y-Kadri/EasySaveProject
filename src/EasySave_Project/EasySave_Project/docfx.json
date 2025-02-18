@@ -16,7 +16,7 @@
             "references": [
                 {
                     "files": [
-                        "bin/Debug/net8.0/*.dll"
+                        "bin/Release/net8.0/*.dll"
                     ]
                 }
             ],
