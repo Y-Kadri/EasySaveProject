@@ -2,12 +2,43 @@ name: Build and Quality Check
 
 on: [push, pull_request]
 
+permissions:
+  actions: read
+  pages: write
+  id-token: write
+
 env:
   SOLUTION_PATH: src/EasySave_Project/EasySave_Project.sln
   FOLDER_TEST_PATH:  src/EasySave_Project/EasySave_Project_Test
   DOTNET_VERSION: '8.0'
 
 jobs:
+  publish-docs:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Dotnet Setup
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.x
+
+    - run: dotnet tool update -g docfx
+    - run: docfx EasySave_Project/EasySave_Project/docfx.json
+    - name: Disable Jekyll
+      run: touch EasySave_Project/EasySave_Project/_site/.nojekyll
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        # Upload entire repository
+        path: 'EasySave_Project/EasySave_Project/_site'
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
   build:
     runs-on: ubuntu-latest
     steps:
@@ -126,6 +157,24 @@ jobs:
 
       - name: Restore dependencies
         run: dotnet restore ${{ env.SOLUTION_PATH }}
+
+      - name: Create /tmp directory
+        run: mkdir -p /tmp
+
+      - name: Install tools
+        run: dotnet tool install -g dotnet-reportgenerator-globaltool
+
+      - name: Run Tests and Generate HTML Report
+        run: dotnet test ${{ env.SOLUTION_PATH }} /p:CollectCoverage=true /p:CoverletOutput=./coverage/ /p:CoverletOutputFormat=opencover
+      
+      - name: Run Convert rapport
+        run: reportgenerator -reports:${{ env.FOLDER_TEST_PATH }}/coverage/coverage.opencover.xml -targetdir:${{ env.FOLDER_TEST_PATH }}/coverage/reports -reporttypes:Html
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: Test-Results
+          path: ${{ env.FOLDER_TEST_PATH }}/coverage/
 
       - name: Build and analyze
         env:
