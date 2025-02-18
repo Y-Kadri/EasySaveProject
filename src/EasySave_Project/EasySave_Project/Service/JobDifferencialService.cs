@@ -50,9 +50,6 @@ namespace EasySave_Project.Service
                 long processedSize = 0;
 
                 ExecuteDifferentialSave(job, job.FileSource, backupDir, job.LastFullBackupPath, ref processedFiles, ref processedSize); // Perform a differential backup
-                
-                // **Déclenchement du callback pour mettre à jour la progression**
-                OnProgressChanged?.Invoke(processedFiles);
             }
 
             job.LastSaveDifferentialPath = backupDir;

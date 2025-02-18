@@ -49,12 +49,12 @@ public partial class JobsPage : UserControl, IPage
 
         if (DataContext is JobsPageViewModel viewModel)
         {
-            var (success, message) = await viewModel.ExecuteJobsAsync(selectedJobs,
-                (job, progress) => UpdateJobProgress(job, progress),
-                (msg, type) => Dispatcher.UIThread.Post(() =>
-                {
-                    Toastr.ShowNotification(msg, NotificationContainer, type);
-                }));
+            viewModel.ExecuteJobsParallelThreadPool(selectedJobs,
+            (job, progress) => UpdateJobProgress(job, progress),
+            (msg, type) => Dispatcher.UIThread.Post(() =>
+            {
+                Toastr.ShowNotification(msg, NotificationContainer, type);
+            }));
         }
     }
 
