@@ -1,0 +1,41 @@
+{
+    "metadata": [
+        {
+            "src": [
+                {
+                    "files": [
+                        "**/*.cs"
+                    ],
+                    "exclude": [
+                        "**/bin/**",
+                        "**/obj/**"
+                    ]
+                }
+            ],
+            "dest": "documentation"
+        }
+    ],
+    "build": {
+        "content": [
+            {
+                "files": [
+                    "**/*.md",
+                    "documentation/**",
+                    "index.md"
+                ]
+            }
+        ],
+        "output": "_site",
+        "markdownEngineName": "markdig",
+        "noLangKeyword": false,
+        "xref": [],
+        "fileMetadata": {},
+        "disableGitFeatures": false,
+        "disableDefaultFilter": false,
+        "disableGitContribute": false,
+        "disableSearch": false,
+        "disablePdf": true,
+        "keepFileLink": false,
+        "noIndexFile": false
+    }
+}
