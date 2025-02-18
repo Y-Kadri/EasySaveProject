@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
 using EasySave_Library_Log;
 using EasySave_Library_Log.manager;
 using EasySave_Project.Dto;
@@ -19,92 +18,101 @@ namespace EasySave_Project.Service
         {
             return JobManager.GetInstance().GetAll();
         }
-        
-        public async Task<(bool, string)> ExecuteOneJobAsync(JobModel job, Action<JobModel, double> progressCallback)
+
+        public (bool, string) ExecuteOneJobThreaded(JobModel job, Action<JobModel, double> progressCallback)
         {
-            return await Task.Run(() =>
+            var translator = TranslationService.GetInstance();
+            string message;
+
+            // Check if the source directory of the job exists
+            if (!FileUtil.ExistsDirectory(job.FileSource))
             {
-                var translator = TranslationService.GetInstance();
-                string message;
-
-                // Check if the source directory exists
-                if (!FileUtil.ExistsDirectory(job.FileSource))
-                {
-                    message = $"{translator.GetText("directorySourceDoNotExist")} : {job.FileSource}";
-                    ConsoleUtil.PrintTextconsole(message);
-                    LogManager.Instance.AddMessage(message);
-                    LogManager.Instance.UpdateState(job.Name, job.FileSource, job.FileTarget, 0, 0, 0);
-                    job.SaveState = JobSaveStateEnum.CANCEL;
-                    StateManager.Instance.UpdateState(CreateBackupJobState(job, 0, job.FileSource, string.Empty));
-                    return (false, "source directory does not exist");
-                }
-
-                // Create target directory if it doesn't exist
-                if (!FileUtil.ExistsDirectory(job.FileTarget))
-                {
-                    FileUtil.CreateDirectory(job.FileTarget);
-                }
-
-                var processes = FileUtil.GetAppSettingsList("PriorityBusinessProcess");
-                (bool isRunning, string PName) = ProcessUtil.IsProcessRunning(processes);
-                if (isRunning)
-                {
-                    string Pmessage = TranslationService.GetInstance().GetText("interuptJob") + " " + PName;
-                    ConsoleUtil.PrintTextconsole(Pmessage);
-                    job.SaveState = JobSaveStateEnum.SKIP;
-                    StateManager.Instance.UpdateState(CreateBackupJobState(job, 0, job.FileSource, string.Empty));
-                    return (false, "A priority program kill the process");
-                }
-
-                // Create a job-specific backup directory
-                string jobBackupDir = FileUtil.CombinePath(job.FileTarget, job.Name + "_" + job.Id);
-                if (!FileUtil.ExistsDirectory(jobBackupDir))
-                {
-                    FileUtil.CreateDirectory(jobBackupDir);
-                }
-
-                // Create a timestamped subdirectory for the backup
-                string timestampedBackupDir = FileUtil.CombinePath(jobBackupDir, DateUtil.GetTodayDate(DateUtil.YYYY_MM_DD_HH_MM_SS));
-                FileUtil.CreateDirectory(timestampedBackupDir);
-
-                // Update job state to ACTIVE
-                job.SaveState = JobSaveStateEnum.ACTIVE;
-                StateManager.Instance.UpdateState(CreateBackupJobState(job, 0, job.FileSource, string.Empty));
-                progressCallback(job, 0);  // Initialiser à 0%
-                
-                // Select the appropriate strategy based on the job type
-                IJobStrategyService strategy = job.SaveType switch
-                {
-                    JobSaveTypeEnum.COMPLETE => new JobCompleteService(),
-                    JobSaveTypeEnum.DIFFERENTIAL => new JobDifferencialService(),
-                    _ => throw new InvalidOperationException("Invalid job type")
-                };
-                
-                // Suivre la progression pendant l'exécution
-                strategy.OnProgressChanged += (progress) =>
-                {
-                    StateManager.Instance.UpdateState(CreateBackupJobState(job, progress, string.Empty, string.Empty));
-                    progressCallback(job, progress);
-                };
-
-                // Execute the job using the selected strategy
-                strategy.Execute(job, timestampedBackupDir);
-
-                // Update job state to END after execution
-                job.SaveState = JobSaveStateEnum.END;
-                progressCallback(job, 100);  // Initialiser à 100%
-                StateManager.Instance.UpdateState(CreateBackupJobState(job, 100, string.Empty, string.Empty));
-               
-                
-                message = $"{translator.GetText("backupCompleted")} : {job.Name}";
+                message = $"{translator.GetText("directorySourceDoNotExist")} : {job.FileSource}";
                 ConsoleUtil.PrintTextconsole(message);
                 LogManager.Instance.AddMessage(message);
 
-                // Update job settings
-                UpdateJobInFile(job);
-                return (true, "carre");
-            });
+                // Update the job status to CANCELLED
+                LogManager.Instance.UpdateState(job.Name, job.FileSource, job.FileTarget, 0, 0, 0);
+                job.SaveState = JobSaveStateEnum.CANCEL;
+                StateManager.Instance.UpdateState(CreateBackupJobState(job, 0, job.FileSource, string.Empty));
+
+                return (false, "source directory does not exist");
+            }
+
+            // Check if the target directory exists, create it if not
+            if (!FileUtil.ExistsDirectory(job.FileTarget))
+            {
+                FileUtil.CreateDirectory(job.FileTarget);
+            }
+
+            // Check if a priority process is currently running
+            var processes = FileUtil.GetAppSettingsList("PriorityBusinessProcess");
+            (bool isRunning, string PName) = ProcessUtil.IsProcessRunning(processes);
+            if (isRunning)
+            {
+                string Pmessage = TranslationService.GetInstance().GetText("interuptJob") + " " + PName;
+                ConsoleUtil.PrintTextconsole(Pmessage);
+
+                // Update the job status to SKIPPED
+                job.SaveState = JobSaveStateEnum.SKIP;
+                StateManager.Instance.UpdateState(CreateBackupJobState(job, 0, job.FileSource, string.Empty));
+
+                return (false, "A priority program killed the process");
+            }
+
+            // Create a backup directory specific to the job
+            string jobBackupDir = FileUtil.CombinePath(job.FileTarget, job.Name + "_" + job.Id);
+            if (!FileUtil.ExistsDirectory(jobBackupDir))
+            {
+                FileUtil.CreateDirectory(jobBackupDir);
+            }
+
+            // Create a timestamped subdirectory to differentiate backup executions
+            string timestampedBackupDir = FileUtil.CombinePath(jobBackupDir, DateUtil.GetTodayDate(DateUtil.YYYY_MM_DD_HH_MM_SS));
+            FileUtil.CreateDirectory(timestampedBackupDir);
+
+            // Mark the job as ACTIVE
+            job.SaveState = JobSaveStateEnum.ACTIVE;
+            StateManager.Instance.UpdateState(CreateBackupJobState(job, 0, job.FileSource, string.Empty));
+
+            // Notify the UI that the progress starts at 0%
+            progressCallback(job, 0);
+
+            // Select the backup strategy based on the job type
+            IJobStrategyService strategy = job.SaveType switch
+            {
+                JobSaveTypeEnum.COMPLETE => new JobCompleteService(),       // Full backup
+                JobSaveTypeEnum.DIFFERENTIAL => new JobDifferencialService(), // Differential backup
+                _ => throw new InvalidOperationException("Invalid job type") // Handle unknown job types
+            };
+
+            // Handle the job progress
+            strategy.OnProgressChanged += (progress) =>
+            {
+                // Update the progress in real-time
+                progressCallback(job, progress);
+                StateManager.Instance.UpdateState(CreateBackupJobState(job, progress, string.Empty, string.Empty));
+            };
+
+            // Execute the backup with the selected strategy
+            strategy.Execute(job, timestampedBackupDir);
+
+            // Update the job status after execution
+            job.SaveState = JobSaveStateEnum.END;
+            progressCallback(job, 100); // Indicate the job is finished at 100%
+            StateManager.Instance.UpdateState(CreateBackupJobState(job, 100, string.Empty, string.Empty));
+
+            // Generate a message indicating the job is complete
+            message = $"{translator.GetText("backupCompleted")} : {job.Name}";
+            ConsoleUtil.PrintTextconsole(message);
+            LogManager.Instance.AddMessage(message);
+
+            // Update the stored parameters for the job
+            UpdateJobInFile(job);
+
+            return (true, "success"); // Return success if everything went as planned
         }
+
 
         private BackupJobState CreateBackupJobState(JobModel job, double progress, string currentSourceFilePath, string currentDestinationFilePath)
         {
