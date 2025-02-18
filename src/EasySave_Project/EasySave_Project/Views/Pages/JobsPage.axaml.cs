@@ -33,9 +33,22 @@ public partial class JobsPage : UserControl, IPage
         foreach (var row in DataGrid.GetVisualDescendants().OfType<DataGridRow>())
         {
             var checkBox = row.GetVisualDescendants().OfType<CheckBox>().FirstOrDefault();
-            if (checkBox?.IsChecked == true && row.DataContext is JobModel job)
+
+            // Vérifiez si le DataContext est un JobModel
+            if (row.DataContext is JobModel job)
             {
-                selectedJobs.Add(job);
+                // Si la CheckBox est cochée, ajoutez le job à la liste des jobs sélectionnés
+                if (checkBox?.IsChecked == true)
+                {
+                    if (!job.SaveState.Equals(JobSaveStateEnum.INACTIVE))
+                    {
+                        Toastr.ShowNotification($"Le job {job.Name} est deja en cours de sauvegarde", NotificationContainer, "warning");
+                    } else
+                    {
+                        checkBox.IsEnabled = false; // Désactiver la CheckBox pour ce job
+                        selectedJobs.Add(job);
+                    }
+                }
             }
         }
 
