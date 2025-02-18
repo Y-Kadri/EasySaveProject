@@ -3,6 +3,7 @@
         {
             "src": [
                 {
+                    "src":".",
                     "files": [
                         "**/*.cs"
                     ],
@@ -12,7 +13,17 @@
                     ]
                 }
             ],
-            "dest": "documentation"
+            "references": [
+                {
+                    "files": [
+                        "bin/Debug/net8.0/*.dll"
+                    ]
+                }
+            ],
+            "dest": "documentation",
+            "disableGitFeatures": false,
+            "disableDefaultFilter": false,
+            "disableCompilation": false
         }
     ],
     "build": {
@@ -27,15 +38,6 @@
         ],
         "output": "_site",
         "markdownEngineName": "markdig",
-        "noLangKeyword": false,
-        "xref": [],
-        "fileMetadata": {},
-        "disableGitFeatures": false,
-        "disableDefaultFilter": false,
-        "disableGitContribute": false,
-        "disableSearch": false,
-        "disablePdf": true,
-        "keepFileLink": false,
-        "noIndexFile": false
+        "disableGitFeatures": true
     }
 }
