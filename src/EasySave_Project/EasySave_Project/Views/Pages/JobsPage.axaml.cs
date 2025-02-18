@@ -25,7 +25,7 @@ public partial class JobsPage : UserControl, IPage
         _translationService = TranslationService.GetInstance();
     }
 
-    private async void Execute(object sender, RoutedEventArgs e)
+    private void Execute(object sender, RoutedEventArgs e)
     {
         var selectedJobs = new List<JobModel>();
 
