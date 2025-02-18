@@ -50,9 +50,6 @@ namespace EasySave_Project.Service
                 long processedSize = 0;
 
                 ExecuteDifferentialSave(job, job.FileSource, backupDir, job.LastFullBackupPath, ref processedFiles, ref processedSize); // Perform a differential backup
-                
-                // **Déclenchement du callback pour mettre à jour la progression**
-                OnProgressChanged?.Invoke(processedFiles);
             }
 
             job.LastSaveDifferentialPath = backupDir;
@@ -160,14 +157,16 @@ namespace EasySave_Project.Service
                     string targetFileDirectory = Path.GetDirectoryName(targetFile);
                     FileUtil.CreateDirectory(targetFileDirectory);
 
+                    double progressPourcentage = (double)processedFiles / totalFiles * 100;
+
                     // Perform the file copy operation
-                    long fileSize = HandleFileOperation(sourceFile, targetFile, job);
+                    long fileSize = HandleFileOperation(sourceFile, targetFile, job, progressPourcentage);
 
                     processedFiles++;
                     processedSize += fileSize;
 
                     // Update the backup state
-                    UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFile, targetFile);
+                    UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFile, targetFile, progressPourcentage);
                 }
             }
         }
