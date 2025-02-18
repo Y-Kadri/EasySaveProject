@@ -3,6 +3,7 @@ using EasySave_Library_Log.manager;
 using EasySave_Project.Model;
 using EasySave_Project.Util;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -30,7 +31,7 @@ namespace EasySave_Project.Service
             LogManager.Instance.AddMessage(message);
 
             // Retrieve total number of files and total size before starting the backup
-            var allFiles = FileUtil.GetFilesRecursively(job.FileSource);
+            var allFiles = FileUtil.GetAllFilesAndDirectories(job.FileSource);
             int totalFiles = allFiles.Count;
             long totalSize = allFiles.Sum(FileUtil.GetFileSize);
 
@@ -38,7 +39,7 @@ namespace EasySave_Project.Service
             long processedSize = 0;
 
             // Execute full backup process
-            ExecuteCompleteSave(job.FileSource, backupDir, job, totalFiles, totalSize, ref processedFiles, ref processedSize);  
+            ExecuteCompleteSave(allFiles, backupDir, job, totalFiles, totalSize, ref processedFiles, ref processedSize);  
             
             // Update the last full backup path
             job.LastFullBackupPath = backupDir;
@@ -60,36 +61,49 @@ namespace EasySave_Project.Service
         /// <param name="totalSize">Total size of all files to be backed up.</param>
         /// <param name="processedFiles">Reference to the counter for processed files.</param>
         /// <param name="processedSize">Reference to the counter for processed size.</param>
-        private void ExecuteCompleteSave(string sourceDir, string targetDir, JobModel job, int totalFiles, long totalSize, ref int processedFiles, ref long processedSize)
+        private void ExecuteCompleteSave(List<string> filesToCopyPath, string targetDir, JobModel job, int totalFiles, long totalSize, ref int processedFiles, ref long processedSize)
         {
-            var files = FileUtil.GetFiles(sourceDir);
             TranslationService translator = TranslationService.GetInstance();
 
             // Copy all files from the source directory
-            foreach (string sourceFile in files)
+            foreach (string sourceFileWithAbsolutePath in filesToCopyPath)
             {
+                string sourceFile = sourceFileWithAbsolutePath.Split(job.FileSource + "\\")[1];
+
                 string fileName = FileUtil.GetFileName(sourceFile);
                 string targetFile = FileUtil.CombinePath(targetDir, fileName);
                 double progressPourcentage = (double)processedFiles / totalFiles * 100;
-                long fileSize = HandleFileOperation(sourceFile, targetFile, job, progressPourcentage);
 
-                // Update processed file count and total processed size
-                processedFiles++;
-                processedSize += fileSize;
+                if (!job.SaveState.Equals(JobSaveStateEnum.PENDING))
+                {
+                    string targetPathComplete = FileUtil.CombinePath(targetDir, sourceFile);
 
-                UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFile, targetFile, progressPourcentage);
+                    long fileSize = HandleFileOperation(sourceFileWithAbsolutePath, targetPathComplete, job, progressPourcentage);
+
+                    // Update processed file count and total processed size
+                    processedFiles++;
+                    processedSize += fileSize;
+                    UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFile, targetFile, progressPourcentage);
+                }
+                else
+                {
+                    SaveFileInPending(job, filesToCopyPath);
+                    break;
+                }
+
+
             }
-            
+
 
             // Recursively process subdirectories
-            foreach (string subDir in FileUtil.GetDirectories(sourceDir))
+            /*foreach (string subDir in FileUtil.GetDirectories(sourceDir))
             {
                 string fileName = FileUtil.GetFileName(subDir);
                 string targetSubDir = FileUtil.CombinePath(targetDir, fileName);
                 FileUtil.CreateDirectory(targetSubDir);
 
                 ExecuteCompleteSave(subDir, targetSubDir, job, totalFiles, totalSize, ref processedFiles, ref processedSize);
-            }
+            }*/
         }
     }
 }

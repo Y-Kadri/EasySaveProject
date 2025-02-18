@@ -92,6 +92,8 @@
   "Name": "Nom",
   "Source": "Source",
   "Destination": "Destination",
+  "Action": "Action",
+  "Pause": "Pause",
   "Type": "Type",
   "Progress": "Progression",
   "Results": "Résultats",
