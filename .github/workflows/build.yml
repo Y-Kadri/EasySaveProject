@@ -27,15 +27,15 @@ jobs:
         dotnet-version: 8.x
 
     - run: dotnet tool update -g docfx
-    - run: docfx EasySave_Project/EasySave_Project/docfx.json
+    - run: docfx src/EasySave_Project/EasySave_Project/docfx.json
     - name: Disable Jekyll
-      run: touch EasySave_Project/EasySave_Project/_site/.nojekyll
+      run: touch src/EasySave_Project/EasySave_Project/_site/.nojekyll
 
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
         # Upload entire repository
-        path: 'EasySave_Project/EasySave_Project/_site'
+        path: 'src/EasySave_Project/EasySave_Project/_site'
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v4
