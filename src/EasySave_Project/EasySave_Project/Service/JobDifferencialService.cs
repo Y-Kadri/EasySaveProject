@@ -160,14 +160,16 @@ namespace EasySave_Project.Service
                     string targetFileDirectory = Path.GetDirectoryName(targetFile);
                     FileUtil.CreateDirectory(targetFileDirectory);
 
+                    double progressPourcentage = (double)processedFiles / totalFiles * 100;
+
                     // Perform the file copy operation
-                    long fileSize = HandleFileOperation(sourceFile, targetFile, job);
+                    long fileSize = HandleFileOperation(sourceFile, targetFile, job, progressPourcentage);
 
                     processedFiles++;
                     processedSize += fileSize;
 
                     // Update the backup state
-                    UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFile, targetFile);
+                    UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFile, targetFile, progressPourcentage);
                 }
             }
         }
