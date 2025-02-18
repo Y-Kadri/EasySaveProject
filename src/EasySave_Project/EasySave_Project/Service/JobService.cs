@@ -170,6 +170,7 @@ namespace EasySave_Project.Service
                 {
                     jobToUpdate.LastFullBackupPath = updatedJob.LastFullBackupPath;
                     jobToUpdate.LastSaveDifferentialPath = updatedJob.LastSaveDifferentialPath;
+                    jobToUpdate.FileInPending = updatedJob.FileInPending;
 
                     // Réécrire le JSON avec les nouvelles valeurs
                     string updatedJsonString = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });

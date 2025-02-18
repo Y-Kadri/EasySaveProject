@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using CryptoSoft;
+using DynamicData;
 using EasySave_Library_Log.manager;
 using EasySave_Project.Dto;
 using EasySave_Project.Model;
@@ -104,19 +106,28 @@ namespace EasySave_Project.Util
         {
             var translator = TranslationService.GetInstance();
             string message;
+
             try
             {
-                // Copy the file to the destination, depending on the 'overwrite' parameter (to overwrite or not)
+                // Ensure the destination directory exists
+                string destinationDirectory = Path.GetDirectoryName(destinationFile);
+                if (!Directory.Exists(destinationDirectory))
+                {
+                    Directory.CreateDirectory(destinationDirectory);
+                }
+
+                // Copy the file to the destination, depending on the 'overwrite' parameter
                 File.Copy(sourceFile, destinationFile, overwrite);
             }
             catch (Exception ex)
             {
-                // In case of an error during the copy, display the error message
+                // Log and display any error that occurs during the copy process
                 message = $"{translator.GetText("errorCopyingFile")}: '{sourceFile}' - {ex.Message}";
-                ConsoleUtil.PrintTextconsole(message);  // Display the error message in the console
-                LogManager.Instance.AddMessage(message); // Add the error message to the log
+                ConsoleUtil.PrintTextconsole(message);
+                LogManager.Instance.AddMessage(message);
             }
         }
+
 
         public static void EncryptFile(string filePath, string key)
         {
@@ -304,16 +315,16 @@ namespace EasySave_Project.Util
         /// </summary>
         /// <param name="path">The path of the directory to retrieve files from.</param>
         /// <returns>An enumerable collection of file paths.</returns>
-        public static IEnumerable<string> GetFiles(string path)
+        public static List<string> GetFiles(string path)
         {
             string message;
             try
             {
-                return Directory.GetFiles(path);
+                return Directory.GetFiles(path).ToList();
             }
             catch (Exception ex)
             {
-                return new string[0]; // Returns an empty array in case of error
+                return new List<string>(); // Returns an empty array in case of error
             }
         }
 
@@ -590,27 +601,27 @@ namespace EasySave_Project.Util
         /// </summary>
         /// <param name="directoryPath">The path of the source directory.</param>
         /// <returns>A list of full file paths found in the directory and its subdirectories.</returns>
-        public static List<string> GetFilesRecursively(string directoryPath)
+        public static List<string> GetAllFilesAndDirectories(string rootPath)
         {
-            List<string> files = new List<string>();
+            List<string> allPaths = new List<string>();
 
             try
             {
-                // Get all files in the current directory
-                files.AddRange(Directory.GetFiles(directoryPath));
 
-                // Recursively get files from subdirectories
-                foreach (string subDir in Directory.GetDirectories(directoryPath))
+                allPaths.AddRange(Directory.GetFiles(rootPath));
+
+
+                foreach (string directory in Directory.GetDirectories(rootPath))
                 {
-                    files.AddRange(GetFilesRecursively(subDir));
+                    allPaths.AddRange(GetAllFilesAndDirectories(directory));
                 }
             }
             catch (Exception ex)
             {
-                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorReadingFolder") + ex.Message);
+                Console.WriteLine($"Erreur lors de la récupération des fichiers/dossiers : {ex.Message}");
             }
 
-            return files;
+            return allPaths;
         }
 
         /// <summary>

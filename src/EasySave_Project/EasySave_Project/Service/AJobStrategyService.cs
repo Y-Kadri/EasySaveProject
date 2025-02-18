@@ -1,5 +1,6 @@
 ﻿using EasySave_Library_Log;
 using EasySave_Library_Log.manager;
+using EasySave_Project.Dto;
 using EasySave_Project.Model;
 using EasySave_Project.Util;
 using System;
@@ -58,14 +59,14 @@ namespace EasySave_Project.Service
         /// <param name="targetDir">The target directory where the file will be copied.</param>
         /// <param name="job">The JobModel object representing the job to execute.</param>
         /// <returns>Elapsed time for encryption or 0 if no encryption occurred.</returns>
-        public long HandleFileOperation(string sourceFile, string targetFile, JobModel job, double progress)
+        public long HandleFileOperation(string sourcePath, string targetFile, JobModel job, double progress)
         {
             TranslationService translator = TranslationService.GetInstance();
 
             // Copy file to target
-            FileUtil.CopyFile(sourceFile, targetFile, true);
+            FileUtil.CopyFile(sourcePath, targetFile, true);
 
-            string formatFile = FileUtil.GetFileExtension(sourceFile);
+            string formatFile = FileUtil.GetFileExtension(sourcePath);
             bool shouldEncrypt = IsEncryptedFileFormat(formatFile);
 
 
@@ -81,7 +82,7 @@ namespace EasySave_Project.Service
                 {
                     stopwatch.Start();
                     FileUtil.EncryptFile(targetFile, "Cesi2004@+");
-                    message = $"{translator.GetText("fileCopiedAndEncrypted")}: {sourceFile} -> {targetFile}";
+                    message = $"{translator.GetText("fileCopiedAndEncrypted")}: {sourcePath} -> {targetFile}";
                     stopwatch.Stop();
                     elapsedTime = stopwatch.ElapsedMilliseconds;
 
@@ -99,17 +100,17 @@ namespace EasySave_Project.Service
             }
             else
             {
-                message = $"{translator.GetText("fileCopied")}: {sourceFile} -> {targetFile}";
+                message = $"{translator.GetText("fileCopied")}: {sourcePath} -> {targetFile}";
                 ConsoleUtil.PrintTextconsole(message);
                 LogManager.Instance.AddMessage(message);
             }
 
             // Calculate file size and transfer time
-            long fileSize = FileUtil.GetFileSize(sourceFile);
-            double transferTime = FileUtil.CalculateTransferTime(sourceFile, targetFile);
+            long fileSize = FileUtil.GetFileSize(sourcePath);
+            double transferTime = FileUtil.CalculateTransferTime(sourcePath, targetFile);
 
             // Update state in LogManager
-            LogManager.Instance.UpdateState(job.Name, sourceFile, targetFile, fileSize, transferTime, elapsedTime);
+            LogManager.Instance.UpdateState(job.Name, sourcePath, targetFile, fileSize, transferTime, elapsedTime);
 
             OnProgressChanged?.Invoke(progress);
 
@@ -141,6 +142,13 @@ namespace EasySave_Project.Service
                 CurrentSourceFilePath = currentSourceFilePath,
                 CurrentDestinationFilePath = currentDestinationFilePath
             });
+        }
+
+        protected void SaveFileInPending(JobModel job, List<string> filesToSave)
+        {
+            FileInPendingJobDTO fileInPendingJobDTO = new FileInPendingJobDTO();
+            fileInPendingJobDTO.FilesInPending = filesToSave;
+            job.FileInPending = fileInPendingJobDTO;
         }
     }
 }

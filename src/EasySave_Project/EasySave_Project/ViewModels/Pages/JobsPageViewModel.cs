@@ -27,6 +27,7 @@ namespace EasySave_Project.ViewModels.Pages
         public string Source { get; private set; }
         public string Destination { get; private set; }
         public string Type { get; private set; }
+        public string Action { get; private set; }
         public string Progress { get; private set; }
         public string Results { get; private set; }
         
@@ -40,6 +41,7 @@ namespace EasySave_Project.ViewModels.Pages
             Source = TranslationService.GetInstance().GetText("Source");
             Destination = TranslationService.GetInstance().GetText("Destination");
             Type = TranslationService.GetInstance().GetText("Type");
+            Action = TranslationService.GetInstance().GetText("Action");
             Progress = TranslationService.GetInstance().GetText("Progress");
             Results = TranslationService.GetInstance().GetText("Results");
         }

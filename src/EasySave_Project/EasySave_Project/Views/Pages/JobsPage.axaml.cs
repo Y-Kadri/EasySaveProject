@@ -43,9 +43,10 @@ public partial class JobsPage : UserControl, IPage
                     if (!job.SaveState.Equals(JobSaveStateEnum.INACTIVE))
                     {
                         Toastr.ShowNotification($"Le job {job.Name} est deja en cours de sauvegarde", NotificationContainer, "warning");
-                    } else
+                    }
+                    else
                     {
-                        checkBox.IsEnabled = false; // Désactiver la CheckBox pour ce job
+                        checkBox.IsChecked = false;
                         selectedJobs.Add(job);
                     }
                 }
@@ -89,7 +90,7 @@ public partial class JobsPage : UserControl, IPage
             }
         });
     }
-    
+
     private void OnAddJobClick(object sender, RoutedEventArgs e)
     {
         var mainWindow = this.GetVisualRoot() as Window;
@@ -101,9 +102,37 @@ public partial class JobsPage : UserControl, IPage
             baseLayout.LoadPage(tempButton, e);
         }
     }
-    
+
     public void Reload()
     {
         DataContext = new JobsPageViewModel();
+    }
+
+    private void OnPandingJob(object sender, RoutedEventArgs e)
+    {
+        // Récupérer le bouton qui a été cliqué
+        var button = sender as Button;
+
+        // Vérifiez si le CommandParameter est un JobModel
+        if (button?.CommandParameter is JobModel job)
+        {
+            job.SaveState = JobSaveStateEnum.PENDING;
+            // Affichez une notification avec le nom du job concerné
+            Toastr.ShowNotification($"Action pour le job : {job.Name}", NotificationContainer, "info");
+        }
+    }
+    
+    private void OnResumeJob(object sender, RoutedEventArgs e)
+    {
+        // Récupérer le bouton qui a été cliqué
+        var button = sender as Button;
+
+        // Vérifiez si le CommandParameter est un JobModel
+        if (button?.CommandParameter is JobModel job)
+        {
+            job.SaveState = JobSaveStateEnum.ACTIVE;
+            // Affichez une notification avec le nom du job concerné
+            Toastr.ShowNotification($"Action pour le job : {job.Name}", NotificationContainer, "info");
+        }
     }
 }
