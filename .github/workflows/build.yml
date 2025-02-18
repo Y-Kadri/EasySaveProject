@@ -177,6 +177,9 @@ jobs:
       - name: Create /tmp directory
         run: mkdir -p /tmp
 
+      - name: Create /raport directory
+        run: mkdir -p ${{ env.FOLDER_TEST_PATH }}/coverage/reports
+
       - name: Install tools
         run: dotnet tool install -g dotnet-reportgenerator-globaltool
 
@@ -184,7 +187,7 @@ jobs:
         run: dotnet test ${{ env.SOLUTION_PATH }} /p:CollectCoverage=true /p:CoverletOutput=./coverage/ /p:CoverletOutputFormat=opencover
       
       - name: Run Convert rapport
-        run: reportgenerator -reports:${{ env.FOLDER_TEST_PATH }}/coverage/coverage.opencover.xml -targetdir:${{ env.FOLDER_TEST_PATH }}/coverage/reports -reporttypes:Html
+        run: reportgenerator -reports:${{ env.FOLDER_TEST_PATH }}/coverage/coverage.cobertura.xml -targetdir:${{ env.FOLDER_TEST_PATH }}/coverage/reports -reporttypes:Html
 
       - name: Upload Test Results
         uses: actions/upload-artifact@v4
