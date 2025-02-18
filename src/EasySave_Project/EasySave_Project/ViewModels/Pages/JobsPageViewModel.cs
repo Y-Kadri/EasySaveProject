@@ -7,6 +7,7 @@ using ReactiveUI;
 using EasySave_Project.Manager;
 using EasySave_Project.Model;
 using EasySave_Project.Service;
+using Avalonia.Controls.Notifications;
 
 namespace EasySave_Project.ViewModels.Pages
 {
@@ -46,6 +47,8 @@ namespace EasySave_Project.ViewModels.Pages
         public async Task<(bool, string)> ExecuteJobsAsync(List<JobModel> jobs, Action<JobModel, double> progressCallback, Action<string, string> showPopup)
         {
             bool allSuccess = true;
+
+
 
             foreach (var job in jobs)
             {

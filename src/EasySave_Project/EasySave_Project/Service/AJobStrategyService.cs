@@ -58,7 +58,7 @@ namespace EasySave_Project.Service
         /// <param name="targetDir">The target directory where the file will be copied.</param>
         /// <param name="job">The JobModel object representing the job to execute.</param>
         /// <returns>Elapsed time for encryption or 0 if no encryption occurred.</returns>
-        public long HandleFileOperation(string sourceFile, string targetFile, JobModel job)
+        public long HandleFileOperation(string sourceFile, string targetFile, JobModel job, double progress)
         {
             TranslationService translator = TranslationService.GetInstance();
 
@@ -111,6 +111,8 @@ namespace EasySave_Project.Service
             // Update state in LogManager
             LogManager.Instance.UpdateState(job.Name, sourceFile, targetFile, fileSize, transferTime, elapsedTime);
 
+            OnProgressChanged?.Invoke(progress);
+
             return fileSize;
         }
 
@@ -124,7 +126,7 @@ namespace EasySave_Project.Service
         /// <param name="totalSize">Total size of the files to be backed up.</param>
         /// <param name="currentSourceFilePath">The path of the current source file being processed.</param>
         /// <param name="currentDestinationFilePath">The path of the destination file being processed.</param>
-        protected void UpdateBackupState(JobModel job, int processedFiles, long processedSize, int totalFiles, long totalSize, string currentSourceFilePath, string currentDestinationFilePath)
+        protected void UpdateBackupState(JobModel job, int processedFiles, long processedSize, int totalFiles, long totalSize, string currentSourceFilePath, string currentDestinationFilePath, double progressPourcentage)
         {
             StateManager.Instance.UpdateState(new BackupJobState
             {
@@ -133,7 +135,7 @@ namespace EasySave_Project.Service
                 JobStatus = job.SaveState.ToString(),
                 TotalEligibleFiles = totalFiles,
                 TotalFileSize = totalSize,
-                Progress = (double)processedFiles / totalFiles * 100,
+                Progress = progressPourcentage,
                 RemainingFiles = totalFiles - processedFiles,
                 RemainingFileSize = totalSize - processedSize,
                 CurrentSourceFilePath = currentSourceFilePath,
