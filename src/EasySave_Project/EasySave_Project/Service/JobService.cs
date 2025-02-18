@@ -83,8 +83,8 @@ namespace EasySave_Project.Service
                 // Suivre la progression pendant l'exécution
                 strategy.OnProgressChanged += (progress) =>
                 {
-                    progressCallback(job, progress);
                     StateManager.Instance.UpdateState(CreateBackupJobState(job, progress, string.Empty, string.Empty));
+                    progressCallback(job, progress);
                 };
 
                 // Execute the job using the selected strategy
