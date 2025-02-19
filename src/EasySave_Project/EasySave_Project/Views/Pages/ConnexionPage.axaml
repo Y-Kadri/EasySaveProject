@@ -1,0 +1,30 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:pages="clr-namespace:EasySave_Project.ViewModels.Pages"
+             x:Class="EasySave_Project.Views.Pages.ConnexionPage"
+             x:DataType="pages:ConnexionViewModel">
+
+    <StackPanel Background="Transparent" Margin="20" Spacing="60" HorizontalAlignment="Center">
+      
+        <!-- Notification --> 
+        <Canvas Panel.ZIndex="9">
+            <StackPanel x:Name="NotificationContainer"
+                        Canvas.Right="0" 
+                        Canvas.Top="0"
+                        Spacing="10" />
+        </Canvas>
+
+        <!-- Formulaire de connexion -->
+        <StackPanel x:Name="LoginForm" Orientation="Vertical">
+            <TextBlock FontSize="32" FontWeight="Bold" Text="Connexion" HorizontalAlignment="Center"/>
+            <TextBox Watermark="Entrer votre nom" Margin="30" Height="40" HorizontalAlignment="Stretch" x:Name="UserName"/>
+            <Button Classes="Large" Content="Connexion" Click="Connexion"/>
+        </StackPanel>
+
+        <!-- Message après connexion -->
+        <StackPanel x:Name="ConnectedMessage" Orientation="Vertical">
+            <TextBlock FontSize="32" FontWeight="Bold" Text="✅ Vous êtes connecté !" HorizontalAlignment="Center"/>
+        </StackPanel>
+
+    </StackPanel>
+</UserControl>
