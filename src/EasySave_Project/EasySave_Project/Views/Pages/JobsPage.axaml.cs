@@ -40,7 +40,7 @@ public partial class JobsPage : UserControl, IPage
                 // Si la CheckBox est cochée, ajoutez le job à la liste des jobs sélectionnés
                 if (checkBox?.IsChecked == true)
                 {
-                    if (!job.SaveState.Equals(JobSaveStateEnum.INACTIVE))
+                    if (job.SaveState.Equals(JobSaveStateEnum.ACTIVE))
                     {
                         Toastr.ShowNotification($"Le job {job.Name} est deja en cours de sauvegarde", NotificationContainer, "warning");
                     }
@@ -61,18 +61,10 @@ public partial class JobsPage : UserControl, IPage
             return;
         }
 
-        if (DataContext is JobsPageViewModel viewModel)
-        {
-            viewModel.ExecuteJobsParallelThreadPool(selectedJobs,
-            (job, progress) => UpdateJobProgress(job, progress),
-            (msg, type) => Dispatcher.UIThread.Post(() =>
-            {
-                Toastr.ShowNotification(msg, NotificationContainer, type);
-            }));
-        }
+        executeJobList(selectedJobs);
     }
 
-    private void UpdateJobProgress(JobModel job, double progress)
+    private void UpdateJobProgress(JobModel job)
     {
         Dispatcher.UIThread.Post(() =>
         {
@@ -85,7 +77,7 @@ public partial class JobsPage : UserControl, IPage
                 var progressBar = row.GetVisualDescendants().OfType<ProgressBar>().FirstOrDefault();
                 if (progressBar != null)
                 {
-                    progressBar.Value = progress;
+                    progressBar.Value = job.FileInPending.Progress;
                 }
             }
         });
@@ -117,8 +109,19 @@ public partial class JobsPage : UserControl, IPage
         if (button?.CommandParameter is JobModel job)
         {
             job.SaveState = JobSaveStateEnum.PENDING;
-            // Affichez une notification avec le nom du job concerné
-            Toastr.ShowNotification($"Action pour le job : {job.Name}", NotificationContainer, "info");
+        }
+    }
+
+    private void executeJobList(List<JobModel> selectedJobs)
+    {
+        if (DataContext is JobsPageViewModel viewModel)
+        {
+            viewModel.ExecuteJobsParallelThreadPool(selectedJobs,
+            (job, progress) => UpdateJobProgress(job),
+            (msg, type) => Dispatcher.UIThread.Post(() =>
+            {
+                Toastr.ShowNotification(msg, NotificationContainer, type);
+            }));
         }
     }
     
@@ -130,9 +133,7 @@ public partial class JobsPage : UserControl, IPage
         // Vérifiez si le CommandParameter est un JobModel
         if (button?.CommandParameter is JobModel job)
         {
-            job.SaveState = JobSaveStateEnum.ACTIVE;
-            // Affichez une notification avec le nom du job concerné
-            Toastr.ShowNotification($"Action pour le job : {job.Name}", NotificationContainer, "info");
+            executeJobList(new List<JobModel>([job]));
         }
     }
 }

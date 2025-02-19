@@ -363,6 +363,9 @@ namespace EasySave_Project.Util
                         return;
                     }
 
+                    FileInPendingJobDTO fileInPendingJobDTO = new FileInPendingJobDTO();
+                    fileInPendingJobDTO.Progress = 0.0;
+
                     // Create a new job model
                     var newJob = new JobModel(name, fileSource, fileTarget, jobSaveTypeEnum, null, null)
                     {
@@ -370,7 +373,8 @@ namespace EasySave_Project.Util
                         SaveState = saveState,
                         FileSize = "0 KB",
                         FileTransferTime = "0 sec",
-                        Time = DateTime.Now
+                        Time = DateTime.Now,
+                        FileInPending = fileInPendingJobDTO
                     };
 
                     data.jobs.Add(newJob); // Add the new job to the list

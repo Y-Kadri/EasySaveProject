@@ -20,6 +20,7 @@
   "directorySourceDoNotExist": "Le répertoire source n'existe pas",
   "startingBackup": "Démarrage de la sauvegarde",
   "backupCompleted": "Sauvegarde terminée",
+  "backupPending": "Travail bien mise en pause ",
   "noPreviousFullBackup": "Aucune sauvegarde complète précédente trouvée",
   "fileUpdated": "Fichier mis à jour",
   "fileNotModified": "Fichier non modifié",

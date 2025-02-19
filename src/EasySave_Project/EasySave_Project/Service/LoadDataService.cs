@@ -50,7 +50,8 @@ namespace EasySave_Project.Service
                                     FileTransferTime = jobData.FileTransferTime,
                                     Time = jobData.Time,
                                     LastFullBackupPath = jobData.LastFullBackupPath,
-                                    LastSaveDifferentialPath = jobData.LastSaveDifferentialPath
+                                    LastSaveDifferentialPath = jobData.LastSaveDifferentialPath,
+                                    FileInPending = jobData.FileInPending
                                 };
 
                                 _jobManager.AddJob(job);

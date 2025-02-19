@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -71,12 +72,17 @@ namespace EasySave_Project.Service
             string timestampedBackupDir = FileUtil.CombinePath(jobBackupDir, DateUtil.GetTodayDate(DateUtil.YYYY_MM_DD_HH_MM_SS));
             FileUtil.CreateDirectory(timestampedBackupDir);
 
-            // Mark the job as ACTIVE
-            job.SaveState = JobSaveStateEnum.ACTIVE;
-            StateManager.Instance.UpdateState(CreateBackupJobState(job, 0, job.FileSource, string.Empty));
+            if (!job.SaveState.Equals(JobSaveStateEnum.PENDING))
+            {
+                // Mark the job as ACTIVE
+                job.SaveState = JobSaveStateEnum.ACTIVE;
+                // Notify the UI that the progress starts at 0%
+                job.FileInPending.Progress = 0;
+            }
 
-            // Notify the UI that the progress starts at 0%
-            progressCallback(job, 0);
+            StateManager.Instance.UpdateState(CreateBackupJobState(job, job.FileInPending.Progress, job.FileSource, string.Empty));
+
+            progressCallback(job, job.FileInPending.Progress);
 
             // Select the backup strategy based on the job type
             IJobStrategyService strategy = job.SaveType switch
@@ -90,29 +96,38 @@ namespace EasySave_Project.Service
             strategy.OnProgressChanged += (progress) =>
             {
                 // Update the progress in real-time
-                progressCallback(job, progress);
-                StateManager.Instance.UpdateState(CreateBackupJobState(job, progress, string.Empty, string.Empty));
+                progressCallback(job, job.FileInPending.Progress);
             };
 
             // Execute the backup with the selected strategy
             strategy.Execute(job, timestampedBackupDir);
 
-            // Update the job status after execution
-            job.SaveState = JobSaveStateEnum.END;
-            progressCallback(job, 100); // Indicate the job is finished at 100%
-            StateManager.Instance.UpdateState(CreateBackupJobState(job, 100, string.Empty, string.Empty));
+            string messageForPopup;
 
-            // Generate a message indicating the job is complete
-            message = $"{translator.GetText("backupCompleted")} : {job.Name}";
-            ConsoleUtil.PrintTextconsole(message);
-            LogManager.Instance.AddMessage(message);
+            if (job.SaveState.Equals(JobSaveStateEnum.PENDING))
+            {
+                // Generate a message indicating the job is pending
+                messageForPopup = $"{translator.GetText("backupPending")} : {job.Name}";
+                ConsoleUtil.PrintTextconsole(messageForPopup);
+                LogManager.Instance.AddMessage(messageForPopup);
+            } else
+            {
+                messageForPopup = TranslationService.GetInstance().GetText("backupComplet") + " " + job.Name;
+                ConsoleUtil.PrintTextconsole(messageForPopup);
+                LogManager.Instance.AddMessage(messageForPopup);
+
+                // Update the job status after execution
+                job.SaveState = JobSaveStateEnum.END;
+                job.FileInPending.Progress = 100;
+                progressCallback(job, 100); // Indicate the job is finished at 100%
+                StateManager.Instance.UpdateState(CreateBackupJobState(job, 100, string.Empty, string.Empty));
+            }
 
             // Update the stored parameters for the job
             UpdateJobInFile(job);
 
-            return (true, "success"); // Return success if everything went as planned
+            return (true, messageForPopup); // Return success if everything went as planned
         }
-
 
         private BackupJobState CreateBackupJobState(JobModel job, double progress, string currentSourceFilePath, string currentDestinationFilePath)
         {
@@ -171,6 +186,7 @@ namespace EasySave_Project.Service
                     jobToUpdate.LastFullBackupPath = updatedJob.LastFullBackupPath;
                     jobToUpdate.LastSaveDifferentialPath = updatedJob.LastSaveDifferentialPath;
                     jobToUpdate.FileInPending = updatedJob.FileInPending;
+                    jobToUpdate.SaveState = updatedJob.SaveState;
 
                     // Réécrire le JSON avec les nouvelles valeurs
                     string updatedJsonString = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
