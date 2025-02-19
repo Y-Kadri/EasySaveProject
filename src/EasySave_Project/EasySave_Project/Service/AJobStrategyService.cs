@@ -59,12 +59,12 @@ namespace EasySave_Project.Service
         /// <param name="targetDir">The target directory where the file will be copied.</param>
         /// <param name="job">The JobModel object representing the job to execute.</param>
         /// <returns>Elapsed time for encryption or 0 if no encryption occurred.</returns>
-        public long HandleFileOperation(string sourcePath, string targetFile, JobModel job, double progress)
+        public long HandleFileOperation(string sourcePath, string targetPath, JobModel job, double progress)
         {
             TranslationService translator = TranslationService.GetInstance();
 
             // Copy file to target
-            FileUtil.CopyFile(sourcePath, targetFile, true);
+            FileUtil.CopyFile(sourcePath, targetPath, true);
 
             string formatFile = FileUtil.GetFileExtension(sourcePath);
             bool shouldEncrypt = IsEncryptedFileFormat(formatFile);
@@ -81,8 +81,8 @@ namespace EasySave_Project.Service
                 try
                 {
                     stopwatch.Start();
-                    FileUtil.EncryptFile(targetFile, ConfigurationService.GetInstance().GetStringSetting("EncryptKey"));
-                    message = $"{translator.GetText("fileCopiedAndEncrypted")}: {sourceFile} -> {targetFile}";
+                    FileUtil.EncryptFile(targetPath, ConfigurationService.GetInstance().GetStringSetting("EncryptKey"));
+                    message = $"{translator.GetText("fileCopiedAndEncrypted")}: {sourcePath} -> {targetPath}";
                     stopwatch.Stop();
                     elapsedTime = stopwatch.ElapsedMilliseconds;
 
@@ -100,17 +100,17 @@ namespace EasySave_Project.Service
             }
             else
             {
-                message = $"{translator.GetText("fileCopied")}: {sourcePath} -> {targetFile}";
+                message = $"{translator.GetText("fileCopied")}: {sourcePath} -> {targetPath}";
                 ConsoleUtil.PrintTextconsole(message);
                 LogManager.Instance.AddMessage(message);
             }
 
             // Calculate file size and transfer time
             long fileSize = FileUtil.GetFileSize(sourcePath);
-            double transferTime = FileUtil.CalculateTransferTime(sourcePath, targetFile);
+            double transferTime = FileUtil.CalculateTransferTime(sourcePath, targetPath);
 
             // Update state in LogManager
-            LogManager.Instance.UpdateState(job.Name, sourcePath, targetFile, fileSize, transferTime, elapsedTime);
+            LogManager.Instance.UpdateState(job.Name, sourcePath, targetPath, fileSize, transferTime, elapsedTime);
 
             job.FileInPending.Progress = progress;
 
