@@ -15,7 +15,6 @@ namespace EasySave_Project.Views.Pages;
 
 public partial class JobsPage : UserControl, IPage
 {
-
     private TranslationService _translationService;
 
     public JobsPage()
@@ -25,24 +24,29 @@ public partial class JobsPage : UserControl, IPage
         _translationService = TranslationService.GetInstance();
     }
 
+    /// <summary>
+    /// Handles the execution of selected backup jobs.
+    /// </summary>
+    /// <param name="sender">The event sender (usually a button).</param>
+    /// <param name="e">Event arguments.</param>
     private void Execute(object sender, RoutedEventArgs e)
     {
         var selectedJobs = new List<JobModel>();
 
-        // Récupération des jobs sélectionnés
+        // Retrieve selected jobs from the DataGrid
         foreach (var row in DataGrid.GetVisualDescendants().OfType<DataGridRow>())
         {
             var checkBox = row.GetVisualDescendants().OfType<CheckBox>().FirstOrDefault();
 
-            // Vérifiez si le DataContext est un JobModel
+            // Ensure DataContext is a JobModel
             if (row.DataContext is JobModel job)
             {
-                // Si la CheckBox est cochée, ajoutez le job à la liste des jobs sélectionnés
+                // If the checkbox is checked, add the job to the selected list
                 if (checkBox?.IsChecked == true)
                 {
                     if (job.SaveState.Equals(JobSaveStateEnum.ACTIVE))
                     {
-                        Toastr.ShowNotification($"Le job {job.Name} est deja en cours de sauvegarde", NotificationContainer, "warning");
+                        Toastr.ShowNotification($"The job {job.Name} is already running", NotificationContainer, "warning");
                     }
                     else
                     {
@@ -53,7 +57,7 @@ public partial class JobsPage : UserControl, IPage
             }
         }
 
-        // Vérifier si des jobs sont sélectionnés
+        // Ensure at least one job is selected
         if (selectedJobs.Count == 0)
         {
             string message = _translationService.GetText("ErrorSelectOneJobMin");
@@ -64,6 +68,10 @@ public partial class JobsPage : UserControl, IPage
         executeJobList(selectedJobs);
     }
 
+    /// <summary>
+    /// Updates the progress bar of a specific job in the UI.
+    /// </summary>
+    /// <param name="job">The JobModel representing the job being updated.</param>
     private void UpdateJobProgress(JobModel job)
     {
         Dispatcher.UIThread.Post(() =>
@@ -83,35 +91,53 @@ public partial class JobsPage : UserControl, IPage
         });
     }
 
+    /// <summary>
+    /// Handles the event when the "Add Job" button is clicked.
+    /// Loads the job creation page.
+    /// </summary>
+    /// <param name="sender">The event sender (usually a button).</param>
+    /// <param name="e">Event arguments.</param>
     private void OnAddJobClick(object sender, RoutedEventArgs e)
     {
         var mainWindow = this.GetVisualRoot() as Window;
 
         if (mainWindow?.FindControl<BaseLayout>("MainLayout") is BaseLayout baseLayout)
         {
-            // Créer un bouton temporaire avec le Tag approprié pour utiliser LoadPage
+            // Create a temporary button with the appropriate Tag to use LoadPage
             var tempButton = new Button { Tag = "4" };
             baseLayout.LoadPage(tempButton, e);
         }
     }
 
+    /// <summary>
+    /// Reloads the page by resetting the DataContext.
+    /// </summary>
     public void Reload()
     {
         DataContext = new JobsPageViewModel();
     }
 
-    private void OnPandingJob(object sender, RoutedEventArgs e)
+    /// <summary>
+    /// Sets the state of a job to "Pending" when the corresponding button is clicked.
+    /// </summary>
+    /// <param name="sender">The event sender (usually a button).</param>
+    /// <param name="e">Event arguments.</param>
+    private void OnPendingJob(object sender, RoutedEventArgs e)
     {
-        // Récupérer le bouton qui a été cliqué
+        // Retrieve the clicked button
         var button = sender as Button;
 
-        // Vérifiez si le CommandParameter est un JobModel
+        // Ensure the CommandParameter is a JobModel
         if (button?.CommandParameter is JobModel job)
         {
             job.SaveState = JobSaveStateEnum.PENDING;
         }
     }
 
+    /// <summary>
+    /// Executes a list of selected jobs using a thread pool for parallel execution.
+    /// </summary>
+    /// <param name="selectedJobs">The list of jobs to execute.</param>
     private void executeJobList(List<JobModel> selectedJobs)
     {
         if (DataContext is JobsPageViewModel viewModel)
@@ -124,16 +150,21 @@ public partial class JobsPage : UserControl, IPage
             }));
         }
     }
-    
+
+    /// <summary>
+    /// Resumes a paused job when the corresponding button is clicked.
+    /// </summary>
+    /// <param name="sender">The event sender (usually a button).</param>
+    /// <param name="e">Event arguments.</param>
     private void OnResumeJob(object sender, RoutedEventArgs e)
     {
-        // Récupérer le bouton qui a été cliqué
+        // Retrieve the clicked button
         var button = sender as Button;
 
-        // Vérifiez si le CommandParameter est un JobModel
+        // Ensure the CommandParameter is a JobModel
         if (button?.CommandParameter is JobModel job)
         {
-            executeJobList(new List<JobModel>([job]));
+            executeJobList(new List<JobModel> { job });
         }
     }
 }

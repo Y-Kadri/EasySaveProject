@@ -63,17 +63,18 @@ namespace EasySave_Project.Service
         }
 
         /// <summary>
-        /// Implements the logic for performing a complete backup.
-        /// This method copies all files and subdirectories from the source directory
-        /// to the target directory.
+        /// Executes a full backup by copying all specified files to the target directory.
+        /// This method iterates through the list of files to copy, processes each file,
+        /// updates the backup state, and tracks progress. It also manages pending files
+        /// in case of an interrupted backup.
         /// </summary>
-        /// <param name="sourceDir">The source directory to back up.</param>
-        /// <param name="targetDir">The target directory where the backup will be stored.</param>
+        /// <param name="filesToCopyPath">List of file paths to be backed up.</param>
+        /// <param name="targetDir">The target directory where files will be copied.</param>
         /// <param name="job">The JobModel representing the backup job.</param>
-        /// <param name="totalFiles">Total number of files to be backed up.</param>
-        /// <param name="totalSize">Total size of all files to be backed up.</param>
-        /// <param name="processedFiles">Reference to the counter for processed files.</param>
-        /// <param name="processedSize">Reference to the counter for processed size.</param>
+        /// <param name="totalFiles">The total number of files to be backed up.</param>
+        /// <param name="totalSize">The total size of all files in the backup.</param>
+        /// <param name="processedFiles">Reference to the counter tracking processed files.</param>
+        /// <param name="processedSize">Reference to the counter tracking processed file size.</param>
         private void ExecuteCompleteSave(List<string> filesToCopyPath, string targetDir, JobModel job, int totalFiles, long totalSize, ref int processedFiles, ref long processedSize)
         {
             TranslationService translator = TranslationService.GetInstance();
@@ -100,8 +101,7 @@ namespace EasySave_Project.Service
                     processedSize += fileSize;
                     UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFile, targetFile, progressPourcentage);
 
-                    pathToDelete.Add(sourceFileWithAbsolutePath);
-                    
+                    pathToDelete.Add(sourceFileWithAbsolutePath);   
                 }
                 else
                 {

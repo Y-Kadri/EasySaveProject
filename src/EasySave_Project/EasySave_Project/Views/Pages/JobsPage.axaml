@@ -73,7 +73,7 @@
 						<DataTemplate>
 							<StackPanel Orientation="Horizontal">
 								<Button Content="Pause"
-										Click="OnPandingJob"
+										Click="OnPendingJob"
 										CommandParameter="{Binding}"
 										IsEnabled="{Binding CanExecute}"
 										IsVisible="{Binding CanExecute}"/>
