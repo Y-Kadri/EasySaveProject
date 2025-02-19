@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using EasySave_Library_Log.manager;
 using EasySave_Project.Model;
@@ -24,5 +24,12 @@ public class AppSettingDto
         EncryptedFileExtensions = new List<string>();
         PriorityBusinessProcess = new List<string>();
     }
-    
+
+    public void SaveSettings()
+    {
+        SettingUtil.SaveList("EncryptedFileExtensions", EncryptedFileExtensions);
+        SettingUtil.SaveList("PriorityBusinessProcess", PriorityBusinessProcess);
+    }
+
+
 }

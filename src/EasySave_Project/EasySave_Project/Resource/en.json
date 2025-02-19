@@ -128,5 +128,6 @@
   "TheJob": "The job",
   "successfullyCompleted": "successfully completed",
   "failed": "failed",
-  "notFileDifference": "No file differences found for job: "
+  "notFileDifference": "No file differences found for job: ",
+  "Priority": "There are pending priority jobs, please wait before starting this backup."
 }

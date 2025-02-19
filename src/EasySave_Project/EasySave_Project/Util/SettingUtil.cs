@@ -24,7 +24,7 @@ public static class SettingUtil
     {
         return UpdateSetting(settings => settings.logFormat = format, "formatUpdated", "errorFormatLanguage");
     }
-    
+
     public static bool AddToList(string key, string value)
     {
         var settings = GetSetting();
@@ -55,7 +55,7 @@ public static class SettingUtil
     /// </summary>
     /// <param name="value">The value to add (e.g., ".txt", ".pdf", "notepad.exe").</param>
     public static string checkFormat(string value, List<string> list)
-    { 
+    {
         if (!string.IsNullOrWhiteSpace(value) && !value.StartsWith('.'))
         {
             value = "." + value;
@@ -175,5 +175,29 @@ public static class SettingUtil
             File.WriteAllText(filePath, "{}");
         }
     }
+
+    public static bool SaveList(string key, List<string> list)
+    {
+        try
+        {
+            var settings = GetSetting();
+            if (settings == null)
+            {
+                return false;
+            }
+
+            if (key == "EncryptedFileExtensions")
+                settings.EncryptedFileExtensions = new List<string>(list);
+            else if (key == "PriorityBusinessProcess")
+                settings.PriorityBusinessProcess = new List<string>(list);
+
+            return SaveSettings(settings, "listSaved", "errorSavingList");
+        }
+        catch
+        {
+            return false;
+        }
+    }
 }
+
 

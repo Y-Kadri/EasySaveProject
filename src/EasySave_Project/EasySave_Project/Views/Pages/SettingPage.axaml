@@ -58,8 +58,22 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </StackPanel>
-        
-        <!-- Notification --> 
+
+		<ListBox ItemsSource="{Binding EncryptedFileExtensions}">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<StackPanel Orientation="Horizontal">
+						<Button Content="⬆" Command="{Binding DataContext.MoveUpEncryptedFileExtensions, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" />
+						<Button Content="⬇" Command="{Binding DataContext.MoveDownEncryptedFileExtensions, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" />
+						<TextBlock Text="{Binding}" Width="150"/>
+						<Button Content="🗑" Command="{Binding DataContext.RemoveEncryptedFileExtensions, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" />
+					</StackPanel>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+
+
+		<!-- Notification --> 
         <Canvas Grid.Column="2" Panel.ZIndex="9">
             <StackPanel x:Name="NotificationContainer"
                         Canvas.Right="0" 

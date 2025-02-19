@@ -1,4 +1,7 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Reactive;
 using EasySave_Library_Log.manager;
 using EasySave_Project.Model;
 using EasySave_Project.Service;
@@ -10,9 +13,18 @@ namespace EasySave_Project.ViewModels.Pages
     public class SettingPageViewModel : ReactiveObject
     {
         private readonly TranslationService _translationService;
-        
-        public ObservableCollection<string> EncryptedFileExtensions { get; }
+
+        private ObservableCollection<string> _encryptedFileExtensions;
+        public ObservableCollection<string> EncryptedFileExtensions
+        {
+            get => _encryptedFileExtensions;
+            set => this.RaiseAndSetIfChanged(ref _encryptedFileExtensions, value);
+        }
         public ObservableCollection<string> PriorityBusinessProcess { get; }
+
+
+
+
 
         private string _message;
         private string _status;
@@ -35,7 +47,7 @@ namespace EasySave_Project.ViewModels.Pages
         public string ChooseLogsFormat { get; private set; }
         public string Json { get; private set; }
         public string Xml { get; private set; }
-        
+
         public string Add { get; private set; }
         public string FileExtensionsToEncrypt { get; private set; }
         public string MonitoredBusinessSoftware { get; private set; }
@@ -44,7 +56,7 @@ namespace EasySave_Project.ViewModels.Pages
         public SettingPageViewModel()
         {
             _translationService = TranslationService.GetInstance();
-            
+
             SelectLanguage = _translationService.GetText("SelectLanguage");
             French = _translationService.GetText("French");
             English = _translationService.GetText("English");
@@ -54,11 +66,14 @@ namespace EasySave_Project.ViewModels.Pages
             Add = _translationService.GetText("Add");
             FileExtensionsToEncrypt = _translationService.GetText("FileExtensionsToEncrypt");
             MonitoredBusinessSoftware = _translationService.GetText("MonitoredBusinessSoftware");
-            
-            EncryptedFileExtensions = new ObservableCollection<string>(SettingUtil.GetList("EncryptedFileExtensions"));
-            PriorityBusinessProcess = new ObservableCollection<string>(SettingUtil.GetList("PriorityBusinessProcess"));
+
+            // Initialisation correcte des collections
+            EncryptedFileExtensions = new ObservableCollection<string>(SettingUtil.GetList("EncryptedFileExtensions") ?? new List<string>());
+            PriorityBusinessProcess = new ObservableCollection<string>(SettingUtil.GetList("PriorityBusinessProcess") ?? new List<string>());
         }
-        
+
+
+
         public void AddEncryptedFileExtensions(string extension)
         {
             if (SettingUtil.AddToList("EncryptedFileExtensions", extension))
@@ -72,7 +87,7 @@ namespace EasySave_Project.ViewModels.Pages
                 Message = "Erreur lors de l'ajout.";
             }
         }
-        
+
         public void AddPriorityBusinessProcess(string software)
         {
             if (SettingUtil.AddToList("PriorityBusinessProcess", software))
@@ -116,7 +131,7 @@ namespace EasySave_Project.ViewModels.Pages
         }
 
         // Méthode pour changer la langue et appeler la notification
-        public  (string message, string status) ChangeLanguage(LanguageEnum lang)
+        public (string message, string status) ChangeLanguage(LanguageEnum lang)
         {
             if (SettingUtil.SettingChangeLanguage(lang))
             {
@@ -146,9 +161,41 @@ namespace EasySave_Project.ViewModels.Pages
                 _message = _translationService.GetText("LogsFormatChangeError");
                 _status = "Error";
             }
-            
+
             LogFormatManager.Instance.SetLogFormat(logsFormat);
             return (_message, _status);
         }
+        public void MoveUpEncryptedFileExtensions(string extension)
+        {
+            int index = EncryptedFileExtensions.IndexOf(extension);
+            if (index > 0)
+            {
+                (EncryptedFileExtensions[index], EncryptedFileExtensions[index - 1]) =
+                (EncryptedFileExtensions[index - 1], EncryptedFileExtensions[index]);
+
+                SaveEncryptedFileExtensions();
+                this.RaisePropertyChanged(nameof(EncryptedFileExtensions));
+            }
+        }
+
+        public void MoveDownEncryptedFileExtensions(string extension)
+        {
+            int index = EncryptedFileExtensions.IndexOf(extension);
+            if (index < EncryptedFileExtensions.Count - 1)
+            {
+                (EncryptedFileExtensions[index], EncryptedFileExtensions[index + 1]) =
+                (EncryptedFileExtensions[index + 1], EncryptedFileExtensions[index]);
+
+                SaveEncryptedFileExtensions();
+                this.RaisePropertyChanged(nameof(EncryptedFileExtensions));
+            }
+        }
+
+        private void SaveEncryptedFileExtensions()
+        {
+            SettingUtil.SaveList("EncryptedFileExtensions", EncryptedFileExtensions.ToList());
+            this.RaisePropertyChanged(nameof(EncryptedFileExtensions)); // Forcer la mise à jour de l'UI
+        }
     }
 }
+
