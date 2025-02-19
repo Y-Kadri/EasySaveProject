@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using DynamicData;
 using EasySave_Project.Model;
 using EasySave_Project.Service;
 using EasySave_Project.ViewModels.Layout;
@@ -13,11 +14,14 @@ public partial class BaseLayout : UserControl
 {
     
     private List<IPage> pages = new List<IPage>();
+
+    private BaseLayoutViewModel _BaseLayoutViewModel;
     
     public BaseLayout()
     {
         InitializeComponent();
-        DataContext = new BaseLayoutViewModel();
+        _BaseLayoutViewModel = new BaseLayoutViewModel();
+        DataContext = _BaseLayoutViewModel;
         
         // Ajout des pages à la liste
         pages.Add(new HomePage());
@@ -25,13 +29,16 @@ public partial class BaseLayout : UserControl
         pages.Add(new LogsPage());
         pages.Add(new SettingPage(this));
         pages.Add(new AddJobsPage());
+        pages.Add(new ConnexionPage(this));
+        
         
         ContentArea.Content = pages[0];
     }
     
     public void reload()
     {
-        DataContext = new BaseLayoutViewModel();
+        _BaseLayoutViewModel = new BaseLayoutViewModel();
+        DataContext = _BaseLayoutViewModel;
     }
     
     public void LoadPage(object sender, RoutedEventArgs e)

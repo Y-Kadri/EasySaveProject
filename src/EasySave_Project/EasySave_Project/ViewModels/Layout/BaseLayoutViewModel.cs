@@ -15,6 +15,8 @@ namespace EasySave_Project.ViewModels.Layout
         public string Jobs { get; private set; }
         public string Logs { get; private set; }
         public string Settings { get; private set; }
+        
+        public string Conecte { get; set; }
 
         public string CurrentDate
         {
@@ -33,14 +35,21 @@ namespace EasySave_Project.ViewModels.Layout
             {
                 CurrentDate = DateTime.Now.ToString("MMMM dd yyyy", new CultureInfo("en-US"));
             }
-
-            
             
             Home = TranslationService.GetInstance().GetText("Home");
             Jobs = TranslationService.GetInstance().GetText("Jobs");
             Logs = TranslationService.GetInstance().GetText("Logs");
             Settings = TranslationService.GetInstance().GetText("Settings");
 
+            if (GlobalDataService.GetInstance().isConnecte)
+            {
+                Conecte = "Connecte";
+            }
+            else
+            {
+                Conecte = "Non connecte";
+            }
+            
         }
     }
 }
