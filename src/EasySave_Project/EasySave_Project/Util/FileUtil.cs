@@ -18,7 +18,6 @@ namespace EasySave_Project.Util
 {
     public class FileUtil
     {
-
         public static void CreateDirectory(string path)
         {
             var translator = TranslationService.GetInstance();
@@ -214,8 +213,12 @@ namespace EasySave_Project.Util
         /// <returns>The incremented job index.</returns>
         public static int GetJobIndex()
         {
+            ConfigurationService _configurationService = ConfigurationService.GetInstance();
+            
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                 "easySave", "easySaveSetting", "jobsSetting.json");
+                _configurationService.GetStringSetting("Path:ProjectFile"),
+                _configurationService.GetStringSetting("Path:SettingFolder"),
+                _configurationService.GetStringSetting("Path:JobSettingFile"));
             string message;
 
             try
@@ -265,9 +268,12 @@ namespace EasySave_Project.Util
         /// </summary>
         /// <returns>The current job index, or 0 if not found.</returns>
         public static int GetCurrentJobIndex()
-        {
+        { 
+            ConfigurationService _configurationService = ConfigurationService.GetInstance();
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                 "easySave", "easySaveSetting", "jobsSetting.json");
+                _configurationService.GetStringSetting("Path:ProjectFile"),
+                _configurationService.GetStringSetting("Path:SettingFolder"),
+                _configurationService.GetStringSetting("Path:JobSettingFile"));
             string message;
 
             try
@@ -337,8 +343,12 @@ namespace EasySave_Project.Util
         /// <param name="jobSaveTypeEnum">The type of the save job.</param>
         public static void AddJobInFile(string name, string fileSource, string fileTarget, JobSaveTypeEnum jobSaveTypeEnum)
         {
+            ConfigurationService _configurationService = ConfigurationService.GetInstance();
+            
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                 "easySave", "easySaveSetting", "jobsSetting.json");
+                _configurationService.GetStringSetting("Path:ProjectFile"),
+                _configurationService.GetStringSetting("Path:SettingFolder"),
+                _configurationService.GetStringSetting("Path:JobSettingFile"));
             string message;
 
             try
@@ -428,8 +438,12 @@ namespace EasySave_Project.Util
         /// </summary>
         public static void IncrementJobIndex(JobSettingsDto data)
         {
+            ConfigurationService _configurationService = ConfigurationService.GetInstance();
+            
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                 "easySave", "easySaveSetting", "jobsSetting.json");
+                _configurationService.GetStringSetting("Path:ProjectFile"),
+                _configurationService.GetStringSetting("Path:SettingFolder"),
+                _configurationService.GetStringSetting("Path:JobSettingFile"));
 
             try
             {

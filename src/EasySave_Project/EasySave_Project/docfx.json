@@ -1,0 +1,43 @@
+{
+    "metadata": [
+        {
+            "src": [
+                {
+                    "src":".",
+                    "files": [
+                        "**/*.cs"
+                    ],
+                    "exclude": [
+                        "**/bin/**",
+                        "**/obj/**"
+                    ]
+                }
+            ],
+            "references": [
+                {
+                    "files": [
+                        "bin/Release/net8.0/*.dll"
+                    ]
+                }
+            ],
+            "dest": "documentation",
+            "disableGitFeatures": false,
+            "disableDefaultFilter": false,
+            "disableCompilation": false
+        }
+    ],
+    "build": {
+        "content": [
+            {
+                "files": [
+                    "**/*.md",
+                    "documentation/**",
+                    "index.md"
+                ]
+            }
+        ],
+        "output": "_site",
+        "markdownEngineName": "markdig",
+        "disableGitFeatures": true
+    }
+}
