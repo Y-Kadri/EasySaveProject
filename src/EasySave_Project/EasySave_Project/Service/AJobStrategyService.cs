@@ -81,8 +81,8 @@ namespace EasySave_Project.Service
                 try
                 {
                     stopwatch.Start();
-                    FileUtil.EncryptFile(targetFile, "Cesi2004@+");
-                    message = $"{translator.GetText("fileCopiedAndEncrypted")}: {sourcePath} -> {targetFile}";
+                    FileUtil.EncryptFile(targetFile, ConfigurationService.GetInstance().GetStringSetting("EncryptKey"));
+                    message = $"{translator.GetText("fileCopiedAndEncrypted")}: {sourceFile} -> {targetFile}";
                     stopwatch.Stop();
                     elapsedTime = stopwatch.ElapsedMilliseconds;
 
