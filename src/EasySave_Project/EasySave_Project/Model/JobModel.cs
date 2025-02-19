@@ -82,6 +82,14 @@ namespace EasySave_Project.Model
             this.LastSaveDifferentialPath = lastSaveDifferentialPath;
             this.Id = FileUtil.GetCurrentJobIndex();
             this.SaveState = JobSaveStateEnum.INACTIVE; // Initialise par défaut à INACTIVE
+            FileInPendingJobDTO fileInPendingJobDTO = new FileInPendingJobDTO();
+            fileInPendingJobDTO.FilesInPending = new List<string>();
+            fileInPendingJobDTO.Progress = 0;
+            fileInPendingJobDTO.ProcessedFiles = 0;
+            fileInPendingJobDTO.TotalFiles = 0;
+            fileInPendingJobDTO.TotalSize = 0;
+            this.FileInPending = fileInPendingJobDTO;
+
         }
 
         /// <summary>

@@ -9,5 +9,11 @@ namespace EasySave_Project.Dto
     public class FileInPendingJobDTO
     {
         public List<string> FilesInPending {  get; set; }
+        public double Progress { get; set; }
+
+        public int ProcessedFiles { get; set; }
+        public long ProcessedSize { get; set; }
+        public int TotalFiles { get; set; }
+        public long TotalSize { get; set; }
     }
 }

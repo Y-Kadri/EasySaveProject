@@ -63,7 +63,7 @@ namespace EasySave_Project.ViewModels.Pages
 
                     // Prepare the message to display when the job is finished
                     string notificationMessage = success
-                        ? $"{TranslationService.GetInstance().GetText("TheJob")} '{job.Name}' {TranslationService.GetInstance().GetText("successfullyCompleted")} "
+                        ? $"{message} "
                         : $"{TranslationService.GetInstance().GetText("TheJob")} '{job.Name}' {TranslationService.GetInstance().GetText("failed")} : {message}";
 
                     string notificationType = success ? "Success" : "Error";
@@ -75,15 +75,6 @@ namespace EasySave_Project.ViewModels.Pages
                     {
                         if (!success) allSuccess = false; // If any job fails, set allSuccess to false
                         completedJobs++; // Increment the completed jobs counter
-
-                        // When all jobs are completed, display a final message indicating the overall result
-                        if (completedJobs == jobCount)
-                        {
-                            string finalMessage = allSuccess
-                                ? "All jobs completed successfully."
-                                : "At least one job failed.";
-                            Avalonia.Threading.Dispatcher.UIThread.Post(() => showPopup(finalMessage, allSuccess ? "Success" : "Error"));
-                        }
                     }
                 });
             }

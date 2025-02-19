@@ -1,4 +1,5 @@
-﻿using EasySave_Library_Log;
+﻿using DynamicData;
+using EasySave_Library_Log;
 using EasySave_Library_Log.manager;
 using EasySave_Project.Model;
 using EasySave_Project.Util;
@@ -30,23 +31,35 @@ namespace EasySave_Project.Service
             ConsoleUtil.PrintTextconsole(message);
             LogManager.Instance.AddMessage(message);
 
-            // Retrieve total number of files and total size before starting the backup
-            var allFiles = FileUtil.GetAllFilesAndDirectories(job.FileSource);
-            int totalFiles = allFiles.Count;
-            long totalSize = allFiles.Sum(FileUtil.GetFileSize);
+            List<string> allFiles;
 
             int processedFiles = 0;
             long processedSize = 0;
+            int totalFiles = 0;
+            long totalSize = 0;
+
+            if (job.SaveState.Equals(JobSaveStateEnum.PENDING))
+            {
+                allFiles = job.FileInPending.FilesInPending;
+                job.SaveState = JobSaveStateEnum.ACTIVE;
+                processedFiles = job.FileInPending.ProcessedFiles;
+                processedSize = job.FileInPending.ProcessedSize;
+                totalFiles = job.FileInPending.TotalFiles;
+                totalSize = job.FileInPending.TotalSize;
+            }
+            else
+            {
+                // Retrieve total number of files and total size before starting the backup
+                allFiles = FileUtil.GetAllFilesAndDirectories(job.FileSource);
+                totalFiles = allFiles.Count;
+                totalSize = allFiles.Sum(FileUtil.GetFileSize);
+            }
 
             // Execute full backup process
             ExecuteCompleteSave(allFiles, backupDir, job, totalFiles, totalSize, ref processedFiles, ref processedSize);  
             
             // Update the last full backup path
             job.LastFullBackupPath = backupDir;
-
-            message = TranslationService.GetInstance().GetText("backupComplet") + " " + job.Name;
-            ConsoleUtil.PrintTextconsole(message);
-            LogManager.Instance.AddMessage(message);
         }
 
         /// <summary>
@@ -64,6 +77,8 @@ namespace EasySave_Project.Service
         private void ExecuteCompleteSave(List<string> filesToCopyPath, string targetDir, JobModel job, int totalFiles, long totalSize, ref int processedFiles, ref long processedSize)
         {
             TranslationService translator = TranslationService.GetInstance();
+
+            List<string> pathToDelete = new List<string>();
 
             // Copy all files from the source directory
             foreach (string sourceFileWithAbsolutePath in filesToCopyPath)
@@ -84,26 +99,18 @@ namespace EasySave_Project.Service
                     processedFiles++;
                     processedSize += fileSize;
                     UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFile, targetFile, progressPourcentage);
+
+                    pathToDelete.Add(sourceFileWithAbsolutePath);
+                    
                 }
                 else
                 {
-                    SaveFileInPending(job, filesToCopyPath);
                     break;
                 }
-
-
             }
 
-
-            // Recursively process subdirectories
-            /*foreach (string subDir in FileUtil.GetDirectories(sourceDir))
-            {
-                string fileName = FileUtil.GetFileName(subDir);
-                string targetSubDir = FileUtil.CombinePath(targetDir, fileName);
-                FileUtil.CreateDirectory(targetSubDir);
-
-                ExecuteCompleteSave(subDir, targetSubDir, job, totalFiles, totalSize, ref processedFiles, ref processedSize);
-            }*/
+            filesToCopyPath.RemoveAll(path => pathToDelete.Contains(path));
+            SaveFileInPending(job, filesToCopyPath, processedFiles, processedSize, totalFiles, totalSize);
         }
     }
 }

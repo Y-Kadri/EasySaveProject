@@ -112,6 +112,8 @@ namespace EasySave_Project.Service
             // Update state in LogManager
             LogManager.Instance.UpdateState(job.Name, sourcePath, targetFile, fileSize, transferTime, elapsedTime);
 
+            job.FileInPending.Progress = progress;
+
             OnProgressChanged?.Invoke(progress);
 
             return fileSize;
@@ -142,12 +144,22 @@ namespace EasySave_Project.Service
                 CurrentSourceFilePath = currentSourceFilePath,
                 CurrentDestinationFilePath = currentDestinationFilePath
             });
+            job.FileInPending.Progress = progressPourcentage;
+            job.FileInPending.ProcessedFiles = processedFiles;
+            job.FileInPending.ProcessedSize = processedSize;
+            job.FileInPending.TotalFiles = totalFiles;
+            job.FileInPending.TotalSize = totalSize;
         }
 
-        protected void SaveFileInPending(JobModel job, List<string> filesToSave)
+        protected void SaveFileInPending(JobModel job, List<string> filesToSave, int processedFiles, long processedSize, int totalFiles, long totalSize)
         {
             FileInPendingJobDTO fileInPendingJobDTO = new FileInPendingJobDTO();
             fileInPendingJobDTO.FilesInPending = filesToSave;
+            fileInPendingJobDTO.Progress = job.FileInPending.Progress;
+            fileInPendingJobDTO.ProcessedFiles = processedFiles;
+            fileInPendingJobDTO.ProcessedSize = processedSize; 
+            fileInPendingJobDTO.TotalFiles = totalFiles;
+            fileInPendingJobDTO.TotalSize = totalSize;
             job.FileInPending = fileInPendingJobDTO;
         }
     }
