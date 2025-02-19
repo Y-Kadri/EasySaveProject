@@ -151,6 +151,18 @@ namespace EasySave_Project.Service
             job.FileInPending.TotalSize = totalSize;
         }
 
+        /// <summary>
+        /// Saves the current state of pending files in a backup job.
+        /// This method updates the JobModel with details about the files yet to be processed,
+        /// along with progress metrics such as the number of processed files, processed size,
+        /// total files, and total size.
+        /// </summary>
+        /// <param name="job">The JobModel representing the backup job.</param>
+        /// <param name="filesToSave">The list of file paths that are still pending processing.</param>
+        /// <param name="processedFiles">The number of files that have been processed so far.</param>
+        /// <param name="processedSize">The total size of the files that have been processed.</param>
+        /// <param name="totalFiles">The total number of files in the backup job.</param>
+        /// <param name="totalSize">The total size of all files in the backup job.</param>
         protected void SaveFileInPending(JobModel job, List<string> filesToSave, int processedFiles, long processedSize, int totalFiles, long totalSize)
         {
             FileInPendingJobDTO fileInPendingJobDTO = new FileInPendingJobDTO();
