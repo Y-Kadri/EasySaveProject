@@ -38,6 +38,8 @@
             <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
         </PackageReference>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.2" />
         <PackageReference Include="ReactiveUI" Version="20.1.63" />
         <PackageReference Include="Semi.Avalonia" Version="11.2.1.4" />
         <PackageReference Include="Semi.Avalonia.DataGrid" Version="11.2.1.4" />
