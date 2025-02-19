@@ -11,16 +11,21 @@ namespace EasySave_Project.Service
     public class LoadDataService
     {
         private JobManager _jobManager;
+        private ConfigurationService _configurationService;
 
         public LoadDataService()
         {
+            this._configurationService = ConfigurationService.GetInstance();
             this._jobManager = JobManager.GetInstance();
         }
 
         public void LoadJobs()
         {
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                 "easySave", "easySaveSetting", "jobsSetting.json");
+                _configurationService.GetStringSetting("Path:ProjectFile"),
+                _configurationService.GetStringSetting("Path:SettingFolder"),
+                _configurationService.GetStringSetting("Path:JobSettingFile"));
+
 
             try
             {

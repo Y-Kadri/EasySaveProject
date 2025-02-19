@@ -14,6 +14,9 @@ namespace EasySave_Project.Service
 {
     public class JobService
     {
+        
+        private ConfigurationService _configurationService = ConfigurationService.GetInstance();
+        
         public List<JobModel> GetAllJobs()
         {
             return JobManager.GetInstance().GetAll();
@@ -138,7 +141,10 @@ namespace EasySave_Project.Service
         /// <param name="updatedJob">Le job mis à jour.</param>
         private void UpdateJobInFile(JobModel updatedJob)
         {
-            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easysave", "easySaveSetting", "jobsSetting.json");
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                _configurationService.GetStringSetting("Path:ProjectFile"),
+                _configurationService.GetStringSetting("Path:SettingFolder"),
+                _configurationService.GetStringSetting("Path:JobSettingFile"));
             var translator = TranslationService.GetInstance();
             string message;
 
