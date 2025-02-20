@@ -2,9 +2,9 @@
 using System;
 using System.Text.Json.Serialization;
 using EasySave_Project.Util;
-using System;
 using System.Collections.Generic;
 using EasySave_Project.Service;
+using System.Collections.ObjectModel;
 
 namespace EasySave_Project.Model
 {
@@ -15,33 +15,31 @@ namespace EasySave_Project.Model
     {
         // Propriétés publiques
         public int Id { get; set; }
-        
+
         [JsonConverter(typeof(EnumConverterUtil.JsonEnumConverter<JobSaveStateEnum>))]
         public JobSaveStateEnum SaveState { get; set; } = JobSaveStateEnum.INACTIVE;
-        
+
         [JsonConverter(typeof(EnumConverterUtil.JsonEnumConverter<JobSaveTypeEnum>))]
         public JobSaveTypeEnum SaveType { get; set; }
 
         public string Name { get; set; }
 
-
         public string FileSource { get; set; }
 
         public string FileTarget { get; set; }
 
-
         public string FileSize { get; set; } = "0 KB";
-
 
         public string FileTransferTime { get; set; } = "0 sec";
 
         public string LastFullBackupPath { get; set; } = null;
 
-
         public string LastSaveDifferentialPath { get; set; } = null;
 
-
         public DateTime Time { get; set; } = DateTime.Now;
+
+        // Liste des extensions de fichiers prioritaires
+        public ObservableCollection<string> PriorityFileExtensions { get; set; } = new ObservableCollection<string>();
 
         /// <summary>
         /// Mandatory constructor for .NET JSON Deserialization use
@@ -55,14 +53,14 @@ namespace EasySave_Project.Model
         /// <param name="fileSource">The source file path.</param>
         /// <param name="fileTarget">The target file path.</param>
         /// <param name="jobSaveTypeEnum">The type of save operation.</param>
-        public JobModel(string name, string fileSource, string fileTarget, JobSaveTypeEnum jobSaveTypeEnum, string LastFullBackupPath, string LastSaveDifferentialPath)
+        public JobModel(string name, string fileSource, string fileTarget, JobSaveTypeEnum jobSaveTypeEnum, string lastFullBackupPath, string lastSaveDifferentialPath)
         {
             this.Name = name;
             this.FileSource = fileSource;
             this.FileTarget = fileTarget;
             this.SaveType = jobSaveTypeEnum;
-            this.LastFullBackupPath = LastFullBackupPath;
-            this.LastSaveDifferentialPath = LastSaveDifferentialPath;
+            this.LastFullBackupPath = lastFullBackupPath;
+            this.LastSaveDifferentialPath = lastSaveDifferentialPath;
             this.Id = FileUtil.GetCurrentJobIndex();
         }
 
@@ -88,5 +86,36 @@ namespace EasySave_Project.Model
             );
         }
 
+        // Ajout d'une extension prioritaire
+        public void AddPriorityFileExtension(string extension)
+        {
+            if (!PriorityFileExtensions.Contains(extension))
+            {
+                PriorityFileExtensions.Add(extension);
+            }
+        }
+
+        // Suppression d'une extension prioritaire
+        public void RemovePriorityFileExtension(string extension)
+        {
+            if (PriorityFileExtensions.Contains(extension))
+            {
+                PriorityFileExtensions.Remove(extension);
+            }
+        }
+
+        // Vérifie si le job contient des extensions prioritaires non traitées
+        public bool HasPendingPriorityFiles()
+        {
+            // Vérifier si le job contient des extensions prioritaires qui n'ont pas été traitées
+            foreach (var extension in PriorityFileExtensions)
+            {
+                if (SettingUtil.IsExtensionPriority(extension)) // Vous aurez une méthode pour vérifier si l'extension est prioritaire
+                {
+                    return true; // Il y a des fichiers prioritaires en attente
+                }
+            }
+            return false; // Aucune extension prioritaire en attente
+        }
     }
 }

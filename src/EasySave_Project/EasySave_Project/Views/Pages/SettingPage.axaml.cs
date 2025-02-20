@@ -87,23 +87,35 @@ namespace EasySave_Project.Views.Pages
             Reload();
             _baseLayout.reload();
         }
-        
+
         private void AddEncryptedFileExtensions_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(ExtensionInput.Text))
             {
-                _settingPageViewModel.AddEncryptedFileExtensions(ExtensionInput.Text);
-                ExtensionInput.Text = "";
-                Reload();
+                _settingPageViewModel.AddEncryptedFileExtension(ExtensionInput.Text);
+                ExtensionInput.Clear(); // Efface le texte après l'ajout
             }
         }
 
         private void RemoveEncryptedFileExtensions_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
+            var extension = (string)button.DataContext; // Récupère l'extension à supprimer
+            _settingPageViewModel.RemoveEncryptedFileExtension(extension);
+        }
+
+        private void MoveExtensionUp_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
             var extension = (string)button.DataContext;
-            _settingPageViewModel.RemoveEncryptedFileExtensions(extension);
-            Reload();
+            _settingPageViewModel.MoveExtensionUp(extension);
+        }
+
+        private void MoveExtensionDown_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            var extension = (string)button.DataContext;
+            _settingPageViewModel.MoveExtensionDown(extension);
         }
 
         private void AddPriorityBusinessProcess_Click(object sender, RoutedEventArgs e)
@@ -111,17 +123,31 @@ namespace EasySave_Project.Views.Pages
             if (!string.IsNullOrEmpty(SoftwareInput.Text))
             {
                 _settingPageViewModel.AddPriorityBusinessProcess(SoftwareInput.Text);
-                SoftwareInput.Text = "";
-                Reload();
+                SoftwareInput.Clear(); // Efface le texte après l'ajout
             }
         }
 
         private void RemovePriorityBusinessProcess_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
-            var software = (string)button.DataContext;
-            _settingPageViewModel.RemovPriorityBusinessProcess(software);
-            Reload();
+            var software = (string)button.DataContext; // Récupère le logiciel à supprimer
+            _settingPageViewModel.RemovePriorityBusinessProcess(software);
         }
+
+        private void MoveSoftwareUp_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            var software = (string)button.DataContext;
+            _settingPageViewModel.MoveSoftwareUp(software);
+        }
+
+        private void MoveSoftwareDown_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            var software = (string)button.DataContext;
+            _settingPageViewModel.MoveSoftwareDown(software);
+        }
+
+
     }
 }

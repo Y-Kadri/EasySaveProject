@@ -4,15 +4,17 @@ using EasySave_Project.Model;
 using EasySave_Project.Service;
 using EasySave_Project.Util;
 using ReactiveUI;
+using System.Windows.Input;
 
 namespace EasySave_Project.ViewModels.Pages
 {
     public class SettingPageViewModel : ReactiveObject
     {
         private readonly TranslationService _translationService;
-        
+
         public ObservableCollection<string> EncryptedFileExtensions { get; }
         public ObservableCollection<string> PriorityBusinessProcess { get; }
+        public ObservableCollection<string> PriorityFileExtensions { get; }
 
         private string _message;
         private string _status;
@@ -29,22 +31,31 @@ namespace EasySave_Project.ViewModels.Pages
             set => this.RaiseAndSetIfChanged(ref _status, value);
         }
 
+        public ICommand AddEncryptedFileExtensionCommand { get; }
+        public ICommand RemoveEncryptedFileExtensionCommand { get; }
+        public ICommand MoveExtensionUpCommand { get; }
+        public ICommand MoveExtensionDownCommand { get; }
+
+        public ICommand AddPriorityBusinessProcessCommand { get; }
+        public ICommand RemovePriorityBusinessProcessCommand { get; }
+        public ICommand MoveSoftwareUpCommand { get; }
+        public ICommand MoveSoftwareDownCommand { get; }
+
         public string SelectLanguage { get; private set; }
         public string French { get; private set; }
         public string English { get; private set; }
         public string ChooseLogsFormat { get; private set; }
         public string Json { get; private set; }
         public string Xml { get; private set; }
-        
+
         public string Add { get; private set; }
         public string FileExtensionsToEncrypt { get; private set; }
         public string MonitoredBusinessSoftware { get; private set; }
 
-        // Constructeur qui prend un callback pour notifier la vue
         public SettingPageViewModel()
         {
             _translationService = TranslationService.GetInstance();
-            
+
             SelectLanguage = _translationService.GetText("SelectLanguage");
             French = _translationService.GetText("French");
             English = _translationService.GetText("English");
@@ -54,69 +65,78 @@ namespace EasySave_Project.ViewModels.Pages
             Add = _translationService.GetText("Add");
             FileExtensionsToEncrypt = _translationService.GetText("FileExtensionsToEncrypt");
             MonitoredBusinessSoftware = _translationService.GetText("MonitoredBusinessSoftware");
-            
-            EncryptedFileExtensions = new ObservableCollection<string>(SettingUtil.GetList("EncryptedFileExtensions"));
-            PriorityBusinessProcess = new ObservableCollection<string>(SettingUtil.GetList("PriorityBusinessProcess"));
+
+            EncryptedFileExtensions = new ObservableCollection<string>();
+            PriorityBusinessProcess = new ObservableCollection<string>();
+            PriorityFileExtensions = new ObservableCollection<string>();
+
+            AddEncryptedFileExtensionCommand = ReactiveCommand.Create<string>(AddEncryptedFileExtension);
+            RemoveEncryptedFileExtensionCommand = ReactiveCommand.Create<string>(RemoveEncryptedFileExtension);
+            MoveExtensionUpCommand = ReactiveCommand.Create<string>(MoveExtensionUp);
+            MoveExtensionDownCommand = ReactiveCommand.Create<string>(MoveExtensionDown);
+
+            AddPriorityBusinessProcessCommand = ReactiveCommand.Create<string>(AddPriorityBusinessProcess);
+            RemovePriorityBusinessProcessCommand = ReactiveCommand.Create<string>(RemovePriorityBusinessProcess);
+            MoveSoftwareUpCommand = ReactiveCommand.Create<string>(MoveSoftwareUp);
+            MoveSoftwareDownCommand = ReactiveCommand.Create<string>(MoveSoftwareDown);
         }
-        
-        public void AddEncryptedFileExtensions(string extension)
+
+        public void AddEncryptedFileExtension(string extension)
         {
-            if (SettingUtil.AddToList("EncryptedFileExtensions", extension))
+            EncryptedFileExtensions.Add(extension);
+        }
+
+        public void RemoveEncryptedFileExtension(string extension)
+        {
+            EncryptedFileExtensions.Remove(extension);
+        }
+
+        public void MoveExtensionUp(string extension)
+        {
+            var index = EncryptedFileExtensions.IndexOf(extension);
+            if (index > 0)
             {
-                EncryptedFileExtensions.Add(extension);
-                this.RaisePropertyChanged(nameof(EncryptedFileExtensions));
-                Message = "Extension ajoutée avec succès.";
-            }
-            else
-            {
-                Message = "Erreur lors de l'ajout.";
+                EncryptedFileExtensions.Move(index, index - 1);
             }
         }
-        
+
+        public void MoveExtensionDown(string extension)
+        {
+            var index = EncryptedFileExtensions.IndexOf(extension);
+            if (index < EncryptedFileExtensions.Count - 1)
+            {
+                EncryptedFileExtensions.Move(index, index + 1);
+            }
+        }
+
         public void AddPriorityBusinessProcess(string software)
         {
-            if (SettingUtil.AddToList("PriorityBusinessProcess", software))
-            {
-                PriorityBusinessProcess.Add(software);
-                this.RaisePropertyChanged(nameof(PriorityBusinessProcess));
-                Message = "Logiciel ajouté avec succès.";
-            }
-            else
-            {
-                Message = "Erreur lors de l'ajout.";
-            }
+            PriorityBusinessProcess.Add(software);
         }
 
-        public void RemovPriorityBusinessProcess(string software)
+        public void RemovePriorityBusinessProcess(string software)
         {
-            if (SettingUtil.RemoveFromList("PriorityBusinessProcess", software))
-            {
-                PriorityBusinessProcess.Remove(software);
-                this.RaisePropertyChanged(nameof(PriorityBusinessProcess));
-                Message = "Logiciel supprimé avec succès.";
-            }
-            else
-            {
-                Message = "Erreur lors de la suppression.";
-            }
+            PriorityBusinessProcess.Remove(software);
         }
 
-        public void RemoveEncryptedFileExtensions(string extension)
+        public void MoveSoftwareUp(string software)
         {
-            if (SettingUtil.RemoveFromList("EncryptedFileExtensions", extension))
+            var index = PriorityBusinessProcess.IndexOf(software);
+            if (index > 0)
             {
-                EncryptedFileExtensions.Remove(extension);
-                this.RaisePropertyChanged(nameof(EncryptedFileExtensions));
-                Message = "Extension supprimée avec succès.";
-            }
-            else
-            {
-                Message = "Erreur lors de la suppression.";
+                PriorityBusinessProcess.Move(index, index - 1);
             }
         }
 
-        // Méthode pour changer la langue et appeler la notification
-        public  (string message, string status) ChangeLanguage(LanguageEnum lang)
+        public void MoveSoftwareDown(string software)
+        {
+            var index = PriorityBusinessProcess.IndexOf(software);
+            if (index < PriorityBusinessProcess.Count - 1)
+            {
+                PriorityBusinessProcess.Move(index, index + 1);
+            }
+        }
+        public (string message, string status) ChangeLanguage(LanguageEnum lang)
         {
             if (SettingUtil.SettingChangeLanguage(lang))
             {
@@ -130,7 +150,6 @@ namespace EasySave_Project.ViewModels.Pages
                 _status = "Error";
             }
 
-            // Appeler le callback pour afficher la notification dans la vue
             return (_message, _status);
         }
 
@@ -146,7 +165,7 @@ namespace EasySave_Project.ViewModels.Pages
                 _message = _translationService.GetText("LogsFormatChangeError");
                 _status = "Error";
             }
-            
+
             LogFormatManager.Instance.SetLogFormat(logsFormat);
             return (_message, _status);
         }
