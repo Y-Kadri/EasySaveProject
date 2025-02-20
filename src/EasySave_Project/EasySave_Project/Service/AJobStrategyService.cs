@@ -85,7 +85,6 @@ namespace EasySave_Project.Service
                     message = $"{translator.GetText("fileCopiedAndEncrypted")}: {sourcePath} -> {targetPath}";
                     stopwatch.Stop();
                     elapsedTime = stopwatch.ElapsedMilliseconds;
-
                     // Log message after encryption
                     ConsoleUtil.PrintTextconsole(message);
                     LogManager.Instance.AddMessage(message);
@@ -174,7 +173,6 @@ namespace EasySave_Project.Service
             fileInPendingJobDTO.TotalSize = totalSize;
             job.FileInPending = fileInPendingJobDTO;
         }
-
 
         protected void changeJobStateIfBusinessProcessLaunching(JobModel job)
         {
