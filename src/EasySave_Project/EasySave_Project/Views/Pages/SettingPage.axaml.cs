@@ -44,7 +44,7 @@ namespace EasySave_Project.Views.Pages
                 {
                     return;
                 }
-                
+
                 // Appel de ChangeLanguage et décomposition du tuple
                 var (message, status) = _settingPageViewModel.ChangeLanguage(lang);
 
@@ -53,7 +53,7 @@ namespace EasySave_Project.Views.Pages
                 Update();
             }
         }
-        
+
         private void OnLogsFormatChanged(object? sender, RoutedEventArgs e)
         {
             if (sender is RadioButton selectedRadioButton)
@@ -72,7 +72,7 @@ namespace EasySave_Project.Views.Pages
                 {
                     return;
                 }
-                
+
                 // Appel de ChangeLogsFormat et décomposition du tuple
                 var (message, status) = _settingPageViewModel.ChangeLogsFormat(logsFormat);
 
@@ -87,7 +87,7 @@ namespace EasySave_Project.Views.Pages
             Reload();
             _baseLayout.reload();
         }
-        
+
         private void AddEncryptedFileExtensions_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(ExtensionInput.Text))
@@ -122,6 +122,53 @@ namespace EasySave_Project.Views.Pages
             var software = (string)button.DataContext;
             _settingPageViewModel.RemovPriorityBusinessProcess(software);
             Reload();
+        }
+
+        /// <summary>
+        /// Handles the click event for the "Move Up" button for file extensions.
+        /// </summary>
+        /// <param name="sender">The sender of the event (Button).</param>
+        /// <param name="e">The event arguments.</param>
+        private void MoveExtensionUp_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender; // Get the button that was clicked
+            var extension = (string)button.CommandParameter; // Get the current file extension from the button’s CommandParameter
+            var index = _settingPageViewModel.EncryptedFileExtensions.IndexOf(extension); // Find the index of the extension in the list
+
+            if (index > 0)
+            {
+                _settingPageViewModel.MoveExtensionUp(index); // Call the MoveExtensionUp method in the ViewModel with the found index
+                Toastr.ShowNotification("Extension moved up.", NotificationContainer, "Success"); // Show success notification
+            }
+        }
+
+        /// <summary>
+        /// Handles the click event for the "Move Down" button for file extensions.
+        /// </summary>
+        /// <param name="sender">The sender of the event (Button).</param>
+        /// <param name="e">The event arguments.</param>
+        private void MoveExtensionDown_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender; // Get the button that was clicked
+            var extension = (string)button.CommandParameter; // Get the current file extension from the button’s CommandParameter
+            var index = _settingPageViewModel.EncryptedFileExtensions.IndexOf(extension); // Find the index of the extension in the list
+
+            if (index > 0)
+            {
+                _settingPageViewModel.MoveExtensionDown(index); // Call the MoveExtensionDown method in the ViewModel with the found index
+                Toastr.ShowNotification("Extension moved down.", NotificationContainer, "Success"); // Show success notification
+            }
+        }
+
+        /// <summary>
+        /// Handles the click event for the "Move Software Down" button.
+        /// (This method is for future implementation related to software management.) 
+        /// </summary>
+        /// <param name="sender">The sender of the event (Button).</param>
+        /// <param name="e">The event arguments.</param>
+        private void MoveSoftwareDown_Click(object sender, RoutedEventArgs e)
+        {
+            Toastr.ShowNotification("Functionality to be implemented for software.", NotificationContainer, "Success"); // Show placeholder notification for software management
         }
     }
 }

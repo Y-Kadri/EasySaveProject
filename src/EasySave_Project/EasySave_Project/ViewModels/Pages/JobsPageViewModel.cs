@@ -29,6 +29,7 @@ namespace EasySave_Project.ViewModels.Pages
         public string Type { get; private set; }
         public string Progress { get; private set; }
         public string Results { get; private set; }
+        public string PriorityExtension { get; private set; }
         
         public JobsPageViewModel()
         {
@@ -42,6 +43,7 @@ namespace EasySave_Project.ViewModels.Pages
             Type = TranslationService.GetInstance().GetText("Type");
             Progress = TranslationService.GetInstance().GetText("Progress");
             Results = TranslationService.GetInstance().GetText("Results");
+            PriorityExtension = TranslationService.GetInstance().GetText("PriorityExtension");
         }
 
         public void ExecuteJobsParallelThreadPool(List<JobModel> jobs, Action<JobModel, double> progressCallback, Action<string, string> showPopup)

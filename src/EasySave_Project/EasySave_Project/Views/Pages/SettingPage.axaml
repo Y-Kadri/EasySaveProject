@@ -3,72 +3,92 @@
              xmlns:pages="clr-namespace:EasySave_Project.ViewModels.Pages"
              xmlns:components="clr-namespace:EasySave_Project.Views.Components"
              x:Class="EasySave_Project.Views.Pages.SettingPage"
-             x:DataType="pages:SettingPageViewModel"> <!-- Ajout de x:DataType ici -->
+             x:DataType="pages:SettingPageViewModel">
+	<!-- Ajout de x:DataType ici -->
 
-    <Grid Background="#0D2B4D" ColumnDefinitions="*,*,*" RowDefinitions="*,*" Margin="10">
-        <!-- Langue -->
-        <StackPanel Margin="30" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
-            <TextBlock Text="{Binding SelectLanguage}" VerticalAlignment="Center"/>
-            <!-- RadioButton pour le français -->
-            <RadioButton GroupName="SettingLangue" Content="{Binding French}" x:Name="FirstLangue" 
+	<Grid Background="#0D2B4D" ColumnDefinitions="*,*,*" RowDefinitions="*,*" Margin="10">
+		<!-- Langue -->
+		<StackPanel Margin="30" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
+			<TextBlock Text="{Binding SelectLanguage}" VerticalAlignment="Center"/>
+			<!-- RadioButton pour le français -->
+			<RadioButton GroupName="SettingLangue" Content="{Binding French}" x:Name="FirstLangue"
                          Checked="OnLanguageChanged"/>
-    
-            <!-- RadioButton pour l'anglais -->
-            <RadioButton GroupName="SettingLangue" Content="{Binding English}" x:Name="SecondLangue" 
+
+			<!-- RadioButton pour l'anglais -->
+			<RadioButton GroupName="SettingLangue" Content="{Binding English}" x:Name="SecondLangue"
                          Checked="OnLanguageChanged"/>
-        </StackPanel>
-        
-        <!-- Format -->
-        <StackPanel Margin="30" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
-            <TextBlock Text="{Binding ChooseLogsFormat}" VerticalAlignment="Center"/>
-            <RadioButton GroupName="SettingFormat" Content="{Binding Json}" x:Name="FirstFormat" Checked="OnLogsFormatChanged"/>
-            <RadioButton GroupName="SettingFormat" Content="{Binding Xml}" x:Name="SecondFormat" Checked="OnLogsFormatChanged"/>
-        </StackPanel>
-        
-        <StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="{Binding FileExtensionsToEncrypt}" FontWeight="Bold" />
-            <TextBox x:Name="ExtensionInput" Width="200" Watermark="Ex: .txt" />
-            <Button Content="{Binding Add}" Click="AddEncryptedFileExtensions_Click"/>
-            <ListBox ItemsSource="{Binding EncryptedFileExtensions}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding}" Width="150"/>
-                            <Button Content="🗑"
+		</StackPanel>
+
+		<!-- Format -->
+		<StackPanel Margin="30" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
+			<TextBlock Text="{Binding ChooseLogsFormat}" VerticalAlignment="Center"/>
+			<RadioButton GroupName="SettingFormat" Content="{Binding Json}" x:Name="FirstFormat" Checked="OnLogsFormatChanged"/>
+			<RadioButton GroupName="SettingFormat" Content="{Binding Xml}" x:Name="SecondFormat" Checked="OnLogsFormatChanged"/>
+		</StackPanel>
+
+		<StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+			<TextBlock Text="{Binding FileExtensionsToEncrypt}" FontWeight="Bold" />
+			<TextBox x:Name="ExtensionInput" Width="200" Watermark="Ex: .txt" />
+			<Button Content="{Binding Add}" Click="AddEncryptedFileExtensions_Click"/>
+			<ListBox ItemsSource="{Binding EncryptedFileExtensions}">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="{Binding}" Width="150"/>
+							<Button Content="🗑"
                                     Tag="{Binding}" Click="RemoveEncryptedFileExtensions_Click"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </StackPanel>
-        
-        <StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="{Binding MonitoredBusinessSoftware}" FontWeight="Bold" Margin="10,20,0,0"/>
-            <TextBox x:Name="SoftwareInput" Width="200" Watermark="Ex: Calculator"/>
-            <Button Content="{Binding Add}" Click="AddPriorityBusinessProcess_Click"/>
-            <ListBox ItemsSource="{Binding PriorityBusinessProcess}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding}" Width="150"/>
-                            <Button Content="🗑"
+						</StackPanel>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+		</StackPanel>
+
+		<StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+			<TextBlock Text="{Binding MonitoredBusinessSoftware}" FontWeight="Bold" Margin="10,20,0,0"/>
+			<TextBox x:Name="SoftwareInput" Width="200" Watermark="Ex: Calculator"/>
+			<Button Content="{Binding Add}" Click="AddPriorityBusinessProcess_Click"/>
+			<ListBox ItemsSource="{Binding PriorityBusinessProcess}">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="{Binding}" Width="150"/>
+							<Button Content="🗑"
                                     Tag="{Binding}" Click="RemovePriorityBusinessProcess_Click"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </StackPanel>
-        
-        <!-- Notification --> 
-        <Canvas Grid.Column="2" Panel.ZIndex="9">
-            <StackPanel x:Name="NotificationContainer"
-                        Canvas.Right="0" 
+						</StackPanel>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+		</StackPanel>
+
+		<!-- Gestion avancée des logiciels prioritaires -->
+		<StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="3" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+			<TextBlock Text="Gestion des logiciels prioritaires" FontWeight="Bold" Margin="10,20,0,0"/>
+			<TextBlock x:Name="ExtensionInput2" Text="Logiciels prioritaires :" FontWeight="Bold" Margin="10,10,0,0"/>
+			<ListBox ItemsSource="{Binding EncryptedFileExtensions}">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="{Binding}" Width="120"/>
+
+							<Button Content="⬆" Click="MoveExtensionUp_Click" CommandParameter="{Binding}"/>
+							<Button Content="⬇" Click="MoveExtensionDown_Click" CommandParameter="{Binding}"/>
+							<Button Content="🗑" Click="MoveSoftwareDown_Click" CommandParameter="{Binding}"/>
+						</StackPanel>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+		</StackPanel>
+
+		<!-- Notification -->
+		<Canvas Grid.Column="2" Panel.ZIndex="9">
+			<StackPanel x:Name="NotificationContainer"
+                        Canvas.Right="0"
                         Canvas.Top="0"
-                        Spacing="10" 
+                        Spacing="10"
                         />
-        </Canvas>
-    
-    </Grid>
-        
+		</Canvas>
+
+	</Grid>
+
 
 </UserControl>
