@@ -136,6 +136,7 @@ namespace EasySave_Project.Service
             job.FileInPending.TotalSize = totalSize;
         }
 
+
         /// <summary>
         /// Saves the current state of pending files in a backup job.
         /// This method updates the JobModel with details about the files yet to be processed,
