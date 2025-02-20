@@ -35,9 +35,38 @@ namespace Server
 
                 Console.WriteLine($"🔵 Nouveau client connecté: {newUser.Name} ({newUser.IPAddress}:{newUser.Port})");
 
+                
+                //Envoyer a tout les clients qu'un nouveau user est la
+                BroadCastNewConnection(newUser);
+                
                 Thread clientThread = new Thread(() => HandleClient(newUser));
                 clientThread.Start();
             }
+        }
+
+        static void BroadCastNewConnection(User sender)
+        {
+            string message = "NEW_USER";
+
+            foreach (User user in clients)
+            {
+                if (user != sender)
+                {
+                    byte[] data = Encoding.UTF8.GetBytes(message);
+                    user.TcpClient.GetStream().Write(data, 0, data.Length);
+                }
+            }
+        }
+
+        static User? GetUserById(string id)
+        {
+            foreach (User user in clients)
+            {
+                if (user.Id == id)
+                    return user;
+            }
+
+            return null;
         }
 
         static void HandleClient(User user)
@@ -53,9 +82,39 @@ namespace Server
 
                     Console.WriteLine($"📩 Reçu du client {user.Id}: {message}");
 
+                    // Vérifier si c'est une requête pour obtenir la liste des utilisateurs
                     if (message == "GET_USERS")
                     {
                         SendClientsList(stream);
+                        continue; // Passe à l'itération suivante
+                    }
+
+                    try
+                    {
+                        // Désérialisation JSON en un objet dynamique
+                        var requestData = JsonSerializer.Deserialize<Dictionary<string, string>>(message);
+
+                        // Vérification de la présence de la clé "command"
+                        if (requestData != null && requestData.TryGetValue("command", out string command) && requestData.TryGetValue("id", out string id))
+                        {
+                            if (command == "CONNECTE_USERS" && id != null)
+                            {
+                                ConnecteUser(user,id);
+                            }
+                            
+                            if (command == "DISCONNECTE_USERS" && id != null)
+                            {
+                                DisconnecteUser(user, id);
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("❌ Erreur: Commande invalide.");
+                        }
+                    }
+                    catch (JsonException ex)
+                    {
+                        Console.WriteLine($"❌ Erreur de parsing JSON: {ex.Message}");
                     }
                 }
             }
@@ -70,7 +129,44 @@ namespace Server
             }
         }
 
-        
+        private static void DisconnecteUser(User user, string id)
+        {
+            User? disConnectTo = GetUserById(id);
+
+            if (disConnectTo != null)
+            {
+                user.ConnectTo = null;
+                byte[] data2 = Encoding.UTF8.GetBytes($"L'utilisateur {user.Name} s'est déconnecté à vous !");
+                disConnectTo.TcpClient.GetStream().Write(data2, 0, data2.Length);
+                
+                byte[] data3 = Encoding.UTF8.GetBytes($"Déconnection à {disConnectTo.Name} réussi !");
+                user.TcpClient.GetStream().Write(data3, 0, data3.Length);
+
+                return;
+            }
+            byte[] data = Encoding.UTF8.GetBytes("Déconnection échoué");
+            user.TcpClient.GetStream().Write(data, 0, data.Length);
+        }
+
+        private static void ConnecteUser(User user, string id)
+        {
+            User? connectTo = GetUserById(id);
+
+            if (connectTo != null)
+            {
+                user.ConnectTo = connectTo;
+                byte[] data2 = Encoding.UTF8.GetBytes($"L'utilisateur {user.Name} s'est connecté à vous !");
+                connectTo.TcpClient.GetStream().Write(data2, 0, data2.Length);
+                
+                byte[] data3 = Encoding.UTF8.GetBytes($"Connection à {connectTo.Name} réussi !");
+                user.TcpClient.GetStream().Write(data3, 0, data3.Length);
+
+                return;
+            }
+            byte[] data = Encoding.UTF8.GetBytes("Connection échoué");
+            user.TcpClient.GetStream().Write(data, 0, data.Length);
+        }
+
 
         static void SendClientsList(NetworkStream stream)
         {
@@ -96,61 +192,6 @@ namespace Server
             {
                 Console.WriteLine($"⚠️ Erreur lors de l'envoi de la liste des clients : {ex.Message}");
             }
-        }
-        
-        static void SendJobToClient(NetworkStream stream, User sender)
-        {
-            // 🔹 Afficher la liste des clients connectés
-            string clientList = "\n👥 Clients connectés:\n";
-            for (int i = 0; i < clients.Count; i++)
-            {
-                if (clients[i] != sender) // Empêcher d'envoyer un job à soi-même
-                    clientList += $"{i + 1} - {clients[i]}\n";
-            }
-
-            clientList += "\n🛠️ Choisis un client cible (Numéro) : ";
-            byte[] data = Encoding.UTF8.GetBytes(clientList);
-            stream.Write(data, 0, data.Length);
-
-            // 🔹 Demander au client d'entrer un numéro
-            byte[] inputRequest = Encoding.UTF8.GetBytes("INPUT_REQUEST");
-            stream.Write(inputRequest, 0, inputRequest.Length);
-            string clientChoice = ServerUtils.ReadMessage(stream);
-
-            if (!int.TryParse(clientChoice, out int clientIndex) || clientIndex < 1 || clientIndex > clients.Count || clients[clientIndex - 1] == sender)
-            {
-                string errorMsg = "⚠️ Numéro invalide. Opération annulée.";
-                data = Encoding.UTF8.GetBytes(errorMsg);
-                stream.Write(data, 0, data.Length);
-                return;
-            }
-
-            User targetUser = clients[clientIndex - 1];
-            Console.WriteLine($"🎯 Client cible sélectionné : {targetUser}");
-
-            // 🔹 Demander le nom du job
-            string jobRequest = "\n💼 Entrez le nom du job à envoyer : ";
-            data = Encoding.UTF8.GetBytes(jobRequest);
-            stream.Write(data, 0, data.Length);
-
-            stream.Write(inputRequest, 0, inputRequest.Length);
-            string jobName = ServerUtils.ReadMessage(stream);
-
-            if (string.IsNullOrWhiteSpace(jobName))
-            {
-                string errorMsg = "⚠️ Nom de job invalide. Opération annulée.";
-                data = Encoding.UTF8.GetBytes(errorMsg);
-                stream.Write(data, 0, data.Length);
-                return;
-            }
-
-            Console.WriteLine($"📤 Envoi du job '{jobName}' à {targetUser}");
-
-            // 🔹 Envoyer le job au client cible
-            NetworkStream targetStream = targetUser.TcpClient.GetStream();
-            string jobMessage = $"📩 Nouveau job reçu de {sender}: {jobName}";
-            data = Encoding.UTF8.GetBytes(jobMessage);
-            targetStream.Write(data, 0, data.Length);
         }
 
 
