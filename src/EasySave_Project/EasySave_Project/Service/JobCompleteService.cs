@@ -90,6 +90,8 @@ namespace EasySave_Project.Service
                 string targetFile = FileUtil.CombinePath(targetDir, fileName);
                 double progressPourcentage = (double)processedFiles / totalFiles * 100;
 
+                changeJobStateIfBusinessProcessLaunching(job);
+
                 if (!job.SaveState.Equals(JobSaveStateEnum.PENDING))
                 {
                     string targetPathComplete = FileUtil.CombinePath(targetDir, sourceFile);

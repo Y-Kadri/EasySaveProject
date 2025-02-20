@@ -49,20 +49,6 @@ namespace EasySave_Project.Service
                 FileUtil.CreateDirectory(job.FileTarget);
             }
 
-            // Check if a priority process is currently running
-            var processes = FileUtil.GetAppSettingsList("PriorityBusinessProcess");
-            (bool isRunning, string PName) = ProcessUtil.IsProcessRunning(processes);
-            if (isRunning)
-            {
-                string Pmessage = TranslationService.GetInstance().GetText("interuptJob") + " " + PName;
-                ConsoleUtil.PrintTextconsole(Pmessage);
-
-                // Update the job status to SKIPPED
-                job.SaveState = JobSaveStateEnum.SKIP;
-                StateManager.Instance.UpdateState(CreateBackupJobState(job, 0, job.FileSource, string.Empty));
-
-                return (false, "A priority program killed the process");
-            }
 
             // Create a backup directory specific to the job
             string jobBackupDir = FileUtil.CombinePath(job.FileTarget, job.Name + "_" + job.Id);
