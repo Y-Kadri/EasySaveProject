@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 
 namespace EasySave_Project.Service
 {
@@ -18,7 +19,7 @@ namespace EasySave_Project.Service
     public class JobCompleteService : AJobStrategyService
     {
         public event Action<double> OnProgressChanged;
-        
+
         /// <summary>
         /// Executes the complete backup job for the given JobModel.
         /// </summary>
@@ -77,8 +78,39 @@ namespace EasySave_Project.Service
         /// <param name="processedSize">Reference to the counter tracking processed file size.</param>
         private void ExecuteCompleteSave(List<string> filesToCopyPath, string targetDir, JobModel job, int totalFiles, long totalSize, ref int processedFiles, ref long processedSize)
         {
-            TranslationService translator = TranslationService.GetInstance();
+            // Queue to store normal-sized files to be copied first
+            var files = new Queue<string>(filesToCopyPath);
+            // Queue for large files that will be processed later
+            var fallbackQueue = new Queue<string>();
 
+            // Process the queued files
+            ProcessFilesInQueue(files, fallbackQueue, targetDir, job, ref processedFiles, ref processedSize);
+            // Process large files after regular ones
+            ProcessFallbackQueue(fallbackQueue, targetDir, job, ref processedFiles, ref processedSize);
+            // Recursively process subdirectories
+            ProcessSubdirectories(sourceDir, targetDir, job, totalFiles, totalSize, ref processedFiles, ref processedSize);
+        }
+
+        /// <summary>
+        /// Recursively processes subdirectories and performs a full backup for each.
+        /// </summary>
+        /// <param name="sourceDir">The source directory.</param>
+        /// <param name="targetDir">The target backup directory.</param>
+        /// <param name="job">The job configuration.</param>
+        /// <param name="totalFiles">Total number of files in the backup.</param>
+        /// <param name="totalSize">Total size of all files in the backup.</param>
+        /// <param name="processedFiles">Counter for processed files (used for progress tracking).</param>
+        /// <param name="processedSize">Counter for processed data size (used for progress tracking).</param>
+        private void ProcessSubdirectories(string sourceDir, string targetDir, JobModel job, int totalFiles, long totalSize, ref int processedFiles, ref long processedSize)
+        {
+            foreach (string subDir in FileUtil.GetDirectories(sourceDir))
+            {
+                // Get the subdirectory name and construct the target path
+                string subDirName = FileUtil.GetFileName(subDir);
+                string targetSubDir = FileUtil.CombinePath(targetDir, subDirName);
+
+                // Create the subdirectory in the target location
+                FileUtil.CreateDirectory(targetSubDir);
             List<string> pathToDelete = new List<string>();
 
             // Copy all files from the source directory
