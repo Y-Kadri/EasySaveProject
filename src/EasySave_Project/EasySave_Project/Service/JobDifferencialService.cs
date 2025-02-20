@@ -175,6 +175,8 @@ namespace EasySave_Project.Service
 
                     double progressPourcentage = (double)processedFiles / totalFiles * 100;
 
+                    changeJobStateIfBusinessProcessLaunching(job);
+
                     if (!job.SaveState.Equals(JobSaveStateEnum.PENDING))
                     {
                         // Perform the file copy operation

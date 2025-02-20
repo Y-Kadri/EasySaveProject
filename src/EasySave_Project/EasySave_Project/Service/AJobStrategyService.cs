@@ -174,5 +174,21 @@ namespace EasySave_Project.Service
             fileInPendingJobDTO.TotalSize = totalSize;
             job.FileInPending = fileInPendingJobDTO;
         }
+
+
+        protected void changeJobStateIfBusinessProcessLaunching(JobModel job)
+        {
+            // Check if a priority process is currently running
+            var processes = FileUtil.GetAppSettingsList("PriorityBusinessProcess");
+            (bool isRunning, string PName) = ProcessUtil.IsProcessRunning(processes);
+            if (isRunning)
+            {
+                string Pmessage = TranslationService.GetInstance().GetText("interuptJob") + " " + PName;
+                ConsoleUtil.PrintTextconsole(Pmessage);
+
+                // Update the job status to SKIPPED
+                job.SaveState = JobSaveStateEnum.PENDING;
+            }
+        }
     }
 }
