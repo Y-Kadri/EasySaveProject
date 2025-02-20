@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-using DynamicData;
 using EasySave_Library_Log.manager;
 using EasySave_Project.Dto;
 using EasySave_Project.Model;
@@ -24,7 +23,7 @@ public static class SettingUtil
     {
         return UpdateSetting(settings => settings.logFormat = format, "formatUpdated", "errorFormatLanguage");
     }
-    
+
     public static bool AddToList(string key, string value)
     {
         var settings = GetSetting();
@@ -49,20 +48,14 @@ public static class SettingUtil
         return SaveSettings(settings, "itemAdded", "errorAddingItem");
     }
 
-    /// <summary>
-    /// Adds a value to a specified list in the JobSettingsDto object.
-    /// If the value is not already present, it is added to the list and the changes are saved to the JSON file.
-    /// </summary>
-    /// <param name="value">The value to add (e.g., ".txt", ".pdf", "notepad.exe").</param>
     public static string checkFormat(string value, List<string> list)
-    { 
+    {
         if (!string.IsNullOrWhiteSpace(value) && !value.StartsWith('.'))
         {
             value = "." + value;
         }
         return value;
     }
-
 
     public static bool RemoveFromList(string key, string value)
     {
@@ -129,6 +122,12 @@ public static class SettingUtil
         }
     }
 
+    public static bool IsExtensionPriority(string extension)
+    {
+        var priorityExtensions = GetSetting()?.EncryptedFileExtensions ?? new List<string>();
+        return priorityExtensions.Contains(extension);
+    }
+
     private static AppSettingDto? LoadSettings()
     {
         return GetSetting();
@@ -176,4 +175,3 @@ public static class SettingUtil
         }
     }
 }
-
