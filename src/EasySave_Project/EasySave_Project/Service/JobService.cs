@@ -110,6 +110,12 @@ namespace EasySave_Project.Service
                 job.FileInPending.Progress = 100;
                 progressCallback(job, 100); // Indicate the job is finished at 100%
                 StateManager.Instance.UpdateState(CreateBackupJobState(job, 100, string.Empty, string.Empty));
+                job.FileInPending.Progress = 0;
+                job.FileInPending.ProcessedFiles = 0;
+                job.FileInPending.ProcessedSize = 0;
+                job.FileInPending.TotalFiles = 0;
+                job.FileInPending.TotalSize = 0;
+                progressCallback(job, 0);
             }
 
             // Update the stored parameters for the job
