@@ -20,7 +20,8 @@ public partial class BaseLayout : UserControl
     public BaseLayout()
     {
         InitializeComponent();
-        _BaseLayoutViewModel = new BaseLayoutViewModel();
+        BaseLayoutViewModel.GetInstance().NotificationContainer = NotificationContainer;
+        _BaseLayoutViewModel = BaseLayoutViewModel.GetInstance();
         DataContext = _BaseLayoutViewModel;
         
         // Ajout des pages à la liste
@@ -37,7 +38,9 @@ public partial class BaseLayout : UserControl
     
     public void reload()
     {
-        _BaseLayoutViewModel = new BaseLayoutViewModel();
+        BaseLayoutViewModel.NewInstance();
+        BaseLayoutViewModel.GetInstance().NotificationContainer = NotificationContainer;
+        _BaseLayoutViewModel = BaseLayoutViewModel.GetInstance();
         DataContext = _BaseLayoutViewModel;
     }
     

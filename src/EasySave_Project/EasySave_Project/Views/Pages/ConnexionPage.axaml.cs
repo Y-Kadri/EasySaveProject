@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using EasySave_Project.Model;
@@ -25,22 +24,30 @@ public partial class ConnexionPage : UserControl, IPage
     
     public void Reload()
     {
-        _ConnexionViewModel = new ConnexionViewModel();
-        DataContext = _ConnexionViewModel;
 
-        if (GlobalDataService.GetInstance().isConnecte)
+        _ConnexionViewModel = new ConnexionViewModel();
+        if (GlobalDataService.GetInstance().isConnecte && GlobalDataService.GetInstance().connecteTo.Item2 == null)
         {
             ConnectedMessage.IsVisible = true;
             LoginForm.IsVisible = false;
+            ConnectedToMessage.IsVisible = false;
+            _ConnexionViewModel.GetAllUserConnect();
+        }
+        else if (GlobalDataService.GetInstance().isConnecte && GlobalDataService.GetInstance().connecteTo.Item2 != null)
+        {
+            ConnectedMessage.IsVisible = false;
+            LoginForm.IsVisible = false;
+            ConnectedToMessage.IsVisible = true;
 
-            List<User> users = _ConnexionViewModel.GetAllUserConnect();
-            Console.WriteLine("");
+            ConnectedToTitre.Text = $"\u2705 Vous êtes connecté à {GlobalDataService.GetInstance().connecteTo.Item2} !";
         }
         else
         {
             LoginForm.IsVisible = true;
             ConnectedMessage.IsVisible = false;
+            ConnectedToMessage.IsVisible = false;
         }
+        DataContext = _ConnexionViewModel;
     }
 
     private void Connexion(object? sender, RoutedEventArgs e)
@@ -57,5 +64,25 @@ public partial class ConnexionPage : UserControl, IPage
         {
             Console.WriteLine(ex.Message);
         }
+    }
+
+    private void ConnectTo(object? sender, RoutedEventArgs e)
+    {
+        if (sender is Button button && button.DataContext is User user)
+        {
+            string id = user.Id;
+            string name = user.Name;
+
+            _ConnexionViewModel.ConnexionTo(id, name);
+            _baseLayout.reload();
+            Reload();
+        }
+    }
+
+    private void DisconnectTo(object? sender, RoutedEventArgs e)
+    {
+        _ConnexionViewModel.DisconnexionTo();
+        _baseLayout.reload();
+        Reload();
     }
 }

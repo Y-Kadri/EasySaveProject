@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Threading;
 
 namespace EasySave_Project.Views.Components
 {
@@ -75,6 +76,54 @@ namespace EasySave_Project.Views.Components
 
             // Retire la notification après le délai
             notificationContainer.Children.Remove(notificationCard);
+        }
+        
+        public static async void ShowServeurNotification(string message, StackPanel notificationContainer = null)
+        {
+            if (notificationContainer == null)
+                throw new ArgumentNullException(nameof(notificationContainer), "Notification container is required.");
+
+            // Déclaration des couleurs par défaut
+            Color backgroundColor, foregroundColor, borderColor;
+            backgroundColor = Color.Parse("#d1ecf1");
+            foregroundColor = Color.Parse("#0c5460");
+            borderColor = Color.Parse("#bee5eb");
+            
+            // 🔹 Création de la notification dans le thread UI
+            Border notificationCard = null;
+            await Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                notificationCard = new Border
+                {
+                    Child = new TextBlock
+                    {
+                        Text = message,
+                        Foreground = new SolidColorBrush(foregroundColor),
+                        FontSize = 14,
+                        VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+                        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center
+                    },
+                    Background = new SolidColorBrush(backgroundColor),
+                    BorderBrush = new SolidColorBrush(borderColor),
+                    BorderThickness = new Thickness(1),
+                    CornerRadius = new CornerRadius(8),
+                    Padding = new Thickness(15),
+                    Margin = new Thickness(10),
+                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Right
+                };
+
+                // Ajoute la notification au conteneur
+                notificationContainer.Children.Add(notificationCard);
+            });
+
+            // 🔹 Attend 5 secondes
+            await Task.Delay(5000);
+
+            // 🔹 Supprime la notification dans le thread UI
+            await Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                notificationContainer.Children.Remove(notificationCard);
+            });
         }
     }
 }

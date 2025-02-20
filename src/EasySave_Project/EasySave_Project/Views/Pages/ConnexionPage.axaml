@@ -24,6 +24,47 @@
         <!-- Message après connexion -->
         <StackPanel x:Name="ConnectedMessage" Orientation="Vertical">
             <TextBlock FontSize="32" FontWeight="Bold" Text="✅ Vous êtes connecté !" HorizontalAlignment="Center"/>
+            <DataGrid ItemsSource="{Binding users}" 
+                  IsReadOnly="True" 
+                  Background="Transparent"
+                  AutoGenerateColumns="False"
+                  GridLinesVisibility="All"
+                  HeadersVisibility="Column"
+                  BorderThickness="1"
+                  Margin="0,0,0,10"
+                  x:Name="DataGrid">
+
+                <!-- Colonnes du DataGrid -->
+                <DataGrid.Columns>
+                
+                    <!-- ID -->
+                    <DataGridTextColumn Foreground="white" Header="Id" Binding="{Binding Id}" Width="*" />
+                
+                    <!-- Nom -->
+                    <DataGridTextColumn Foreground="white" Header="Name" Binding="{Binding Name}" Width="2*" />
+                    
+                    <!-- Ip -->
+                    <DataGridTextColumn Foreground="white" Header="Ip" Binding="{Binding IPAddress}" Width="2*" />
+                    
+                    <!-- Port -->
+                    <DataGridTextColumn Foreground="white" Header="Port" Binding="{Binding Port}" Width="2*" />
+                    
+                    <!-- Button -->
+                    <DataGridTemplateColumn Width="2*" Header="Button">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate >
+                               <Button Content="Se connecter" Click="ConnectTo"></Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+        
+        <StackPanel x:Name="ConnectedToMessage" Orientation="Vertical">
+            <TextBlock FontSize="32" FontWeight="Bold" HorizontalAlignment="Center" x:Name="ConnectedToTitre"/>
+            <Button Content="Se déconnecter" Click="DisconnectTo"></Button>
         </StackPanel>
 
     </StackPanel>

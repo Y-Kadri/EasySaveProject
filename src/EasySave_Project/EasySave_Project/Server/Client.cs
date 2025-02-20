@@ -23,8 +23,8 @@ namespace EasySave_Project.Server
             SendName();
 
             // // Démarre un thread pour recevoir les messages du serveur
-            // Thread receiveThread = new Thread(() => Utils.ReceiveMessages(stream));
-            // receiveThread.Start();
+            Thread receiveThread = new Thread(() => Utils.ReceiveMessages(stream));
+            receiveThread.Start();
         }
         
         private void SendName()
@@ -59,7 +59,7 @@ namespace EasySave_Project.Server
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"⚠️ Erreur lors de la récupération des utilisateurs : {ex.Message}");
+                Console.WriteLine($"⚠️ Erreur lors de la récupération des utilisateurs <client> : {ex.Message}");
             }
 
             return users;

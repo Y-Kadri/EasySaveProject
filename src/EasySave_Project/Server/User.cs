@@ -11,6 +11,8 @@ namespace Server
         public int Port { get; private set; }
         public TcpClient TcpClient { get; private set; }
 
+        public User? ConnectTo { get; set; } = null;
+
         public User(TcpClient client)
         {
             this.TcpClient = client;

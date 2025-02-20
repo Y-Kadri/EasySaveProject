@@ -12,6 +12,8 @@ public class GlobalDataService
 
     public Client client { get; set; }
     
+    public (string?,string?) connecteTo { get; set; } = (null,null);
+    
 
     // Constructeur privé
     private GlobalDataService()
