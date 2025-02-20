@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 
 namespace EasySave_Project.Service
 {
@@ -18,7 +19,7 @@ namespace EasySave_Project.Service
     public class JobCompleteService : AJobStrategyService
     {
         public event Action<double> OnProgressChanged;
-        
+
         /// <summary>
         /// Executes the complete backup job for the given JobModel.
         /// </summary>
@@ -77,42 +78,15 @@ namespace EasySave_Project.Service
         /// <param name="processedSize">Reference to the counter tracking processed file size.</param>
         private void ExecuteCompleteSave(List<string> filesToCopyPath, string targetDir, JobModel job, int totalFiles, long totalSize, ref int processedFiles, ref long processedSize)
         {
-            TranslationService translator = TranslationService.GetInstance();
+            // Queue to store normal-sized files to be copied first
+            var files = new Queue<string>(filesToCopyPath);
+            // Queue for large files that will be processed later
+            var fallbackQueue = new Queue<string>();
 
-            List<string> pathToDelete = new List<string>();
-
-            // Copy all files from the source directory
-            foreach (string sourceFileWithAbsolutePath in filesToCopyPath)
-            {
-                string sourceFile = sourceFileWithAbsolutePath.Split(job.FileSource + "\\")[1];
-
-                string fileName = FileUtil.GetFileName(sourceFile);
-                string targetFile = FileUtil.CombinePath(targetDir, fileName);
-                double progressPourcentage = (double)processedFiles / totalFiles * 100;
-
-                changeJobStateIfBusinessProcessLaunching(job);
-
-                if (!job.SaveState.Equals(JobSaveStateEnum.PENDING))
-                {
-                    string targetPathComplete = FileUtil.CombinePath(targetDir, sourceFile);
-
-                    long fileSize = HandleFileOperation(sourceFileWithAbsolutePath, targetPathComplete, job, progressPourcentage);
-
-                    // Update processed file count and total processed size
-                    processedFiles++;
-                    processedSize += fileSize;
-                    UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFile, targetFile, progressPourcentage);
-
-                    pathToDelete.Add(sourceFileWithAbsolutePath);   
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            filesToCopyPath.RemoveAll(path => pathToDelete.Contains(path));
-            SaveFileInPending(job, filesToCopyPath, processedFiles, processedSize, totalFiles, totalSize);
+            // Process the queued files
+            ProcessFilesInQueue(files, fallbackQueue, targetDir, job, ref processedFiles, ref processedSize, filesToCopyPath, totalFiles, totalSize);
+            // Process large files after regular ones
+            ProcessFallbackQueue(fallbackQueue, targetDir, job, ref processedFiles, ref processedSize, filesToCopyPath, totalFiles, totalSize);
         }
     }
 }
