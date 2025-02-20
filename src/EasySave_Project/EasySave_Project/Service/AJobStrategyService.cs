@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace EasySave_Project.Service
@@ -28,6 +29,8 @@ namespace EasySave_Project.Service
         public abstract void Execute(JobModel job, string backupDir);
 
         public event Action<double>? OnProgressChanged;
+        private static readonly SemaphoreSlim _largeFileSemaphore = new SemaphoreSlim(1, 1);
+        private static int LargeFileThreshold = 100 * 1024 * 1024;
 
         /// <summary>
         /// Checks if a given file format is in the list of encrypted file extensions.
@@ -38,7 +41,7 @@ namespace EasySave_Project.Service
         {
             try
             {
-                // Retrieve the list of encrypted file formats
+                // Retrieve the list of encrypted file formats from application settings
                 List<string> encryptedFormats = FileUtil.GetAppSettingsList("EncryptedFileExtensions");
 
                 // Check if the format exists in the list
@@ -46,15 +49,12 @@ namespace EasySave_Project.Service
             }
             catch (Exception ex)
             {
-                // Print an error message if an exception occurs
+                // Log an error message if an exception occurs
                 ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorReadingFormat") + ex.Message);
                 return false;
             }
         }
 
-        /// <summary>
-        /// Common method to handle file copying, encryption, and logging.
-        /// </summary>
         /// <param name="sourceFile">The source file to copy.</param>
         /// <param name="targetDir">The target directory where the file will be copied.</param>
         /// <param name="job">The JobModel object representing the job to execute.</param>
@@ -68,14 +68,10 @@ namespace EasySave_Project.Service
 
             string formatFile = FileUtil.GetFileExtension(sourcePath);
             bool shouldEncrypt = IsEncryptedFileFormat(formatFile);
-
-
             Stopwatch stopwatch = new Stopwatch();
             double elapsedTime = 0;
-
             string message;
 
-            // If encryption option is enabled, encrypt the file after copying
             if (shouldEncrypt)
             {
                 try
@@ -92,8 +88,6 @@ namespace EasySave_Project.Service
                 catch (Exception ex)
                 {
                     message = $"{translator.GetText("errorEncrypting")}: {ex.Message}";
-                    ConsoleUtil.PrintTextconsole(message);
-                    LogManager.Instance.AddMessage(message);
                     elapsedTime = -1;
                 }
             }
@@ -114,20 +108,12 @@ namespace EasySave_Project.Service
             job.FileInPending.Progress = progress;
 
             OnProgressChanged?.Invoke(progress);
-
             return fileSize;
         }
 
         /// <summary>
         /// Updates the backup state in the StateManager during the backup process.
         /// </summary>
-        /// <param name="job">The JobModel representing the backup job.</param>
-        /// <param name="processedFiles">The current number of processed files.</param>
-        /// <param name="processedSize">The current total size of processed files.</param>
-        /// <param name="totalFiles">Total number of files to be processed.</param>
-        /// <param name="totalSize">Total size of the files to be backed up.</param>
-        /// <param name="currentSourceFilePath">The path of the current source file being processed.</param>
-        /// <param name="currentDestinationFilePath">The path of the destination file being processed.</param>
         protected void UpdateBackupState(JobModel job, int processedFiles, long processedSize, int totalFiles, long totalSize, string currentSourceFilePath, string currentDestinationFilePath, double progressPourcentage)
         {
             StateManager.Instance.UpdateState(new BackupJobState
@@ -187,6 +173,114 @@ namespace EasySave_Project.Service
                 // Update the job status to SKIPPED
                 job.SaveState = JobSaveStateEnum.PENDING;
             }
+        }
+
+        protected void ProcessFilesInQueue(Queue<string> files, Queue<string> fallbackQueue, string targetDir, JobModel job, ref int processedFiles, ref long processedSize, List<string> filesToCopyPath, int totalFiles, long totalSize)
+        {
+            bool jobInPending = false;
+
+            while (files.Count > 0)
+            {
+                string file = files.Dequeue();
+                long fileSize = FileUtil.GetFileSize(file);
+                bool isLargeFile = fileSize > LargeFileThreshold;
+
+                if (isLargeFile && !_largeFileSemaphore.Wait(0))
+                {
+                    fallbackQueue.Enqueue(file); // Fichier volumineux en attente
+                    System.Diagnostics.Debug.WriteLine($"[WAIT] {FileUtil.GetFileName(file)} attend son tour...");
+                }
+                else
+                {
+                    jobInPending = CopyFileWithSemaphore(
+                        file, 
+                        targetDir, 
+                        job, 
+                        isLargeFile, 
+                        ref processedFiles, 
+                        ref processedSize, 
+                        filesToCopyPath, 
+                        totalFiles, 
+                        totalSize);
+                }
+            }
+        }
+
+        protected void ProcessFallbackQueue(Queue<string> fallbackQueue, string targetDir, JobModel job, ref int processedFiles, ref long processedSize, List<string> filesToCopyPath, int totalFiles, long totalSize)
+        {
+            bool jobInPending = false;
+
+            while (fallbackQueue.Count > 0 && !jobInPending)
+            {
+                string waitingFile = fallbackQueue.Dequeue();
+                if (_largeFileSemaphore.Wait(0))
+                {
+                    jobInPending = CopyFileWithSemaphore(
+                        waitingFile, 
+                        targetDir, 
+                        job,
+                        true,
+                        ref processedFiles, 
+                        ref processedSize, 
+                        filesToCopyPath, 
+                        totalFiles,
+                        totalSize);
+                }
+                else
+                {
+                    fallbackQueue.Enqueue(waitingFile);
+                    System.Diagnostics.Debug.WriteLine($"[WAIT] {FileUtil.GetFileName(waitingFile)} attend encore...");
+                    Thread.Sleep(500);
+                }
+            }
+        }
+
+        protected bool CopyFileWithSemaphore(string sourceFileWithAbsolutePath, string targetDir, JobModel job, bool isLargeFile, ref int processedFiles, ref long processedSize, List<string> filesToCopyPath, int totalFiles, long totalSize)
+        {
+            string sourceFile = sourceFileWithAbsolutePath.Split(job.FileSource + "\\")[1];
+            string fileName = FileUtil.GetFileName(sourceFile);
+            string targetFile = FileUtil.CombinePath(targetDir, fileName);
+            double progressPourcentage = (double)processedFiles / totalFiles * 100;
+            bool jobInPending = false;
+
+            List<string> pathToDelete = new List<string>();
+
+            if (isLargeFile)
+            {
+                System.Diagnostics.Debug.WriteLine($"[S_COPY] Début du transfert de {sourceFile}...");
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"[I_COPY] {sourceFile} est copié immédiatement.");
+            }
+
+            changeJobStateIfBusinessProcessLaunching(job);
+
+            if (!job.SaveState.Equals(JobSaveStateEnum.PENDING))
+            {
+                string targetPathComplete = FileUtil.CombinePath(targetDir, sourceFile);
+
+                long fileSize = HandleFileOperation(sourceFileWithAbsolutePath, targetPathComplete, job, progressPourcentage);
+
+                processedFiles++;
+                processedSize += fileSize;
+                UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFile, targetFile, progressPourcentage);
+
+            } else
+            {
+                jobInPending = true;
+            }
+
+            if (isLargeFile)
+            {
+                System.Diagnostics.Debug.WriteLine($"[DONE] {sourceFile} copié !");
+                _largeFileSemaphore.Release();
+            }
+
+            filesToCopyPath.RemoveAll(path => pathToDelete.Contains(path));
+            SaveFileInPending(job, filesToCopyPath, processedFiles, processedSize, totalFiles, totalSize);
+
+            return jobInPending;
         }
     }
 }
