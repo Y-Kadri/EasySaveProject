@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using ReactiveUI;
@@ -8,6 +10,7 @@ using EasySave_Project.Manager;
 using EasySave_Project.Model;
 using EasySave_Project.Service;
 using System.Threading;
+using EasySave_Project.Server;
 
 namespace EasySave_Project.ViewModels.Pages
 {
@@ -32,7 +35,42 @@ namespace EasySave_Project.ViewModels.Pages
         
         public JobsPageViewModel()
         {
-            Jobs = new ObservableCollection<JobModel>(this.JobService.GetAllJobs());
+            if (GlobalDataService.GetInstance().isConnecte && GlobalDataService.GetInstance().connecteTo.Item1 != null)
+            {
+               // Création de l'objet JSON
+               var requestData = new
+               {
+                   command = "GET_JOB_USERS",
+                   id = GlobalDataService.GetInstance().connecteTo.Item1
+               };
+
+               // Sérialisation en JSON
+               string jsonString = JsonSerializer.Serialize(requestData);
+               Utils.SendToServer(jsonString);
+               
+               Console.WriteLine("");
+
+               // // 🔥 Lire la réponse du serveur
+               // byte[] buffer = new byte[4096]; // Augmenter la taille si nécessaire
+               // int bytesRead = GlobalDataService.GetInstance().client.stream.Read(buffer, 0, buffer.Length);
+               // string jsonResponse = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+               //
+               // jsonResponse = jsonResponse.Trim();
+               //
+               // var options = new JsonSerializerOptions
+               // {
+               //     PropertyNameCaseInsensitive = true,
+               //     ReadCommentHandling = JsonCommentHandling.Skip,
+               //     AllowTrailingCommas = true
+               // };
+               //
+               // Jobs = new ObservableCollection<JobModel>();
+               // Jobs = JsonSerializer.Deserialize<ObservableCollection<JobModel>>(jsonResponse, options);
+            }
+            else
+            {
+                Jobs = new ObservableCollection<JobModel>(this.JobService.GetAllJobs());
+            }
             AllJobs = TranslationService.GetInstance().GetText("AllJobs");
             AddAJob = TranslationService.GetInstance().GetText("AddAJob");
             Run = TranslationService.GetInstance().GetText("Run");

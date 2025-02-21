@@ -15,7 +15,7 @@ namespace Server
 
         static void Main()
         {
-            int port = 8080;
+            int port = 8912;
             listener = new TcpListener(IPAddress.Any, port);
             listener.Start();
             Console.WriteLine($"✅ Serveur démarré sur le port {port}");
@@ -71,13 +71,11 @@ namespace Server
 
         static void HandleClient(User user)
         {
-            NetworkStream stream = user.TcpClient.GetStream();
-
             try
             {
                 while (true)
                 {
-                    string message = ServerUtils.ReadMessage(stream);
+                    string message = ServerUtils.ReadMessage(user);
                     if (string.IsNullOrEmpty(message)) break;
 
                     Console.WriteLine($"📩 Reçu du client {user.Id}: {message}");
@@ -85,7 +83,7 @@ namespace Server
                     // Vérifier si c'est une requête pour obtenir la liste des utilisateurs
                     if (message == "GET_USERS")
                     {
-                        SendClientsList(stream);
+                        SendClientsList(user);
                         continue; // Passe à l'itération suivante
                     }
 
@@ -105,6 +103,11 @@ namespace Server
                             if (command == "DISCONNECTE_USERS" && id != null)
                             {
                                 DisconnecteUser(user, id);
+                            }
+                            
+                            if (command == "GET_JOB_USERS" && id != null)
+                            {
+                                GetJobsUser(user,id);
                             }
                         }
                         else
@@ -129,6 +132,21 @@ namespace Server
             }
         }
 
+        private static void GetJobsUser(User user, string id)
+        {
+            User? userConnect = GetUserById(id);
+
+            if (userConnect != null)
+            {
+                sendMessage(userConnect, "GET_JOBS");
+                string response = ServerUtils.ReadMessage(userConnect);
+                sendMessage(user, response);
+                return;
+            }
+            
+            sendMessage(user, "get job échoué");
+        }
+
         private static void DisconnecteUser(User user, string id)
         {
             User? disConnectTo = GetUserById(id);
@@ -136,16 +154,14 @@ namespace Server
             if (disConnectTo != null)
             {
                 user.ConnectTo = null;
-                byte[] data2 = Encoding.UTF8.GetBytes($"L'utilisateur {user.Name} s'est déconnecté à vous !");
-                disConnectTo.TcpClient.GetStream().Write(data2, 0, data2.Length);
                 
-                byte[] data3 = Encoding.UTF8.GetBytes($"Déconnection à {disConnectTo.Name} réussi !");
-                user.TcpClient.GetStream().Write(data3, 0, data3.Length);
+                sendMessage(disConnectTo,$"L'utilisateur {user.Name} s'est déconnecté à vous !" );
+                sendMessage(user, $"Déconnection à {disConnectTo.Name} réussi !");
 
                 return;
             }
-            byte[] data = Encoding.UTF8.GetBytes("Déconnection échoué");
-            user.TcpClient.GetStream().Write(data, 0, data.Length);
+            
+            sendMessage(user, "Déconnection échoué");
         }
 
         private static void ConnecteUser(User user, string id)
@@ -155,20 +171,28 @@ namespace Server
             if (connectTo != null)
             {
                 user.ConnectTo = connectTo;
-                byte[] data2 = Encoding.UTF8.GetBytes($"L'utilisateur {user.Name} s'est connecté à vous !");
-                connectTo.TcpClient.GetStream().Write(data2, 0, data2.Length);
-                
-                byte[] data3 = Encoding.UTF8.GetBytes($"Connection à {connectTo.Name} réussi !");
-                user.TcpClient.GetStream().Write(data3, 0, data3.Length);
-
+                sendMessage(connectTo, $"L'utilisateur {user.Name} s'est connecté à vous !");
+           
+                sendMessage(user, $"Connection à {connectTo.Name} réussi !");
                 return;
             }
-            byte[] data = Encoding.UTF8.GetBytes("Connection échoué");
-            user.TcpClient.GetStream().Write(data, 0, data.Length);
+            
+            sendMessage(user, "Connection échoué");
+        }
+
+        private static void sendMessage(User user, string message)
+        {
+            byte[] data = Encoding.UTF8.GetBytes(message);
+            NetworkStream stream = user.TcpClient.GetStream();
+    
+            stream.Write(data, 0, data.Length);
+            stream.Flush(); // 🔥 Assurer l'envoi immédiat
+
+            ServerUtils.WriteLog(user, message);
         }
 
 
-        static void SendClientsList(NetworkStream stream)
+        static void SendClientsList(User user)
         {
             try
             {
@@ -185,8 +209,7 @@ namespace Server
                 string jsonData = JsonSerializer.Serialize(clientDTOs);
 
                 // 🔥 Envoyer les données au client
-                byte[] data = Encoding.UTF8.GetBytes(jsonData);
-                stream.Write(data, 0, data.Length);
+                sendMessage(user, jsonData);
             }
             catch (Exception ex)
             {

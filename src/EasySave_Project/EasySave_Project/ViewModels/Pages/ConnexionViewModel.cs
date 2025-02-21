@@ -31,21 +31,12 @@ public class ConnexionViewModel : ReactiveObject
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsConnected)));
     }
 
-    public void GetAllUserConnect()
+    public async void GetAllUserConnect()
     {
         try
         {
-            // 🔥 Envoyer la requête pour obtenir la liste des utilisateurs
-            byte[] requestData = Encoding.UTF8.GetBytes("GET_USERS");
-            GlobalDataService.GetInstance().client.stream.Write(requestData, 0, requestData.Length);
-
-            // 🔥 Lire la réponse du serveur
-            byte[] buffer = new byte[4096]; // Augmenter la taille si nécessaire
-            int bytesRead = GlobalDataService.GetInstance().client.stream.Read(buffer, 0, buffer.Length);
-            string jsonResponse = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-
-            // 🔥 Désérialiser le JSON en liste d'objets `User`
-            users = JsonSerializer.Deserialize<ObservableCollection<User>>(jsonResponse);
+            Utils.SendToServer("GET_USERS");
+            users = Utils.ReceiveFromServer<ObservableCollection<User>>();
         }
         catch (Exception ex)
         {
@@ -68,10 +59,7 @@ public class ConnexionViewModel : ReactiveObject
 
         // Sérialisation en JSON
         string jsonString = JsonSerializer.Serialize(requestData);
-        byte[] buffer = Encoding.UTF8.GetBytes(jsonString);
-
-        // Envoi des données au serveur
-        GlobalDataService.GetInstance().client.stream.Write(buffer, 0, buffer.Length);
+        Utils.SendToServer(jsonString);
     }
 
     public void DisconnexionTo()
@@ -83,10 +71,7 @@ public class ConnexionViewModel : ReactiveObject
             id = GlobalDataService.GetInstance().connecteTo.Item1
         };
         string jsonString = JsonSerializer.Serialize(requestData);
-        byte[] buffer = Encoding.UTF8.GetBytes(jsonString);
-
-        // Envoi des données au serveur
-        GlobalDataService.GetInstance().client.stream.Write(buffer, 0, buffer.Length);
+        Utils.SendToServer(jsonString);
         GlobalDataService.GetInstance().connecteTo = (null, null);
     }
 }
