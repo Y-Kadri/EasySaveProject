@@ -74,14 +74,13 @@ namespace EasySave_Project.Service
             // Retrieve the list of files to copy along with their count and size
             (int filesToCopyCount, long filesToCopySize, List<string> filesToCopy) = CalculateFilesToCopy(fileSource, lastFullBackupDir);
 
-            []            // Queue to store normal-sized files to be copied first
             var files = new Queue<string>(filesToCopy);
             // Queue for large files that will be processed later
             var fallbackQueue = new Queue<string>();
             // Process the queued files
-            ProcessFilesInQueue(files, fallbackQueue, targetDir, job, ref processedFiles, ref processedSize, filesToCopy, totalFiles, totalSize);
+            ProcessFilesInQueue(files, fallbackQueue, targetDir, job, ref processedFiles, ref processedSize, filesToCopy, filesToCopyCount, filesToCopySize);
             // Process large files after regular ones
-            ProcessFallbackQueue(fallbackQueue, targetDir, job, ref processedFiles, ref processedSize, filesToCopy, totalFiles, totalSize);
+            ProcessFallbackQueue(fallbackQueue, targetDir, job, ref processedFiles, ref processedSize, filesToCopy, filesToCopyCount, filesToCopySize);
 
             // Log the completion of the backup
             message = TranslationService.GetInstance().GetText("backupCompleted") + job.Name;

@@ -123,5 +123,29 @@ namespace EasySave_Project.Views.Pages
             _settingPageViewModel.RemovPriorityBusinessProcess(software);
             Reload();
         }
+
+        /// <summary>
+        /// Handles the click event for updating the maximum large file size setting.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void MaxLargeFileSize_Click(object sender, RoutedEventArgs e)
+        {
+            // Check if a value is set in the input field
+            if (MaxLargeFileSizeInput.Value.HasValue)
+            {
+                // Convert the decimal value to an integer
+                int value = (int)MaxLargeFileSizeInput.Value.Value;
+
+                // Call ChangeMaxLargeFileSize and deconstruct the returned tuple
+                var (message, status) = _settingPageViewModel.ChangeMaxLargeFileSize(value);
+
+                // Display the notification with the retrieved values
+                Toastr.ShowNotification(message, NotificationContainer, status);
+
+                // Update the UI or settings after the change
+                Update();
+            }
+        }
     }
 }
