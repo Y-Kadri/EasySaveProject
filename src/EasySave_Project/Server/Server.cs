@@ -12,10 +12,12 @@ namespace Server
     {
         private static List<User> clients = new List<User>();
         private static TcpListener listener;
+        public static Dictionary<string, string> pendingResponses = new Dictionary<string, string>();
 
         static void Main()
         {
             int port = 8912;
+            // int port = 8080;
             listener = new TcpListener(IPAddress.Any, port);
             listener.Start();
             Console.WriteLine($"✅ Serveur démarré sur le port {port}");
@@ -117,7 +119,12 @@ namespace Server
                     }
                     catch (JsonException ex)
                     {
+                        lock (pendingResponses)
+                        {
+                            pendingResponses[user.Id] = message;
+                        }
                         Console.WriteLine($"❌ Erreur de parsing JSON: {ex.Message}");
+                        continue;
                     }
                 }
             }
@@ -132,18 +139,41 @@ namespace Server
             }
         }
 
-        private static void GetJobsUser(User user, string id)
+        private static async Task GetJobsUser(User user, string id)
         {
             User? userConnect = GetUserById(id);
 
             if (userConnect != null)
             {
+                // 📤 Demande les jobs au Client 2
                 sendMessage(userConnect, "GET_JOBS");
-                string response = ServerUtils.ReadMessage(userConnect);
-                sendMessage(user, response);
+                Console.WriteLine($"📤 Demande envoyée à {userConnect.Name} pour ses jobs.");
+
+                try
+                {
+                    // ⏳ Attente de la réponse avec limite de temps
+                    string? response = await ServerUtils.WaitForResponse(userConnect, 5000); // Max 5s d'attente
+
+                    if (!string.IsNullOrEmpty(response))
+                    {
+                        Console.WriteLine($"📩 Réponse reçue de {userConnect.Name} : {response}");
+                        sendMessage(user, response); // 📤 Envoi des jobs au Client 1
+                    }
+                    else
+                    {
+                        Console.WriteLine("❌ Aucun job reçu après plusieurs tentatives.");
+                        sendMessage(user, "get job échoué");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"❌ Erreur lors de la réception des jobs : {ex.Message}");
+                    sendMessage(user, "get job échoué");
+                }
                 return;
             }
-            
+
+            // 📢 Si l'utilisateur demandé n'est pas trouvé
             sendMessage(user, "get job échoué");
         }
 
@@ -172,7 +202,6 @@ namespace Server
             {
                 user.ConnectTo = connectTo;
                 sendMessage(connectTo, $"L'utilisateur {user.Name} s'est connecté à vous !");
-           
                 sendMessage(user, $"Connection à {connectTo.Name} réussi !");
                 return;
             }

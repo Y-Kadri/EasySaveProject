@@ -39,8 +39,8 @@
                             Grid.Column="1">
                     <Button Content="{Binding Home}" Foreground="White" Background="Transparent" Tag="0" Click="LoadPage" Padding="10" Cursor="Hand"/>
                     <Button Content="{Binding Jobs}" Foreground="White" Background="Transparent" Tag="1" Click="LoadPage" Padding="10" Cursor="Hand"/>
-                    <Button Content="{Binding Logs}" Foreground="White" Background="Transparent" Tag="2" Click="LoadPage" Padding="10" Cursor="Hand"/>
-                    <Button Content="{Binding Settings}" Foreground="White" Background="Transparent" Tag="3" Click="LoadPage" Padding="10" Cursor="Hand"/>
+                    <Button x:Name="labelLogs" Content="{Binding Logs}" Foreground="White" Background="Transparent" Tag="2" Click="LoadPage" Padding="10" Cursor="Hand"/>
+                    <Button x:Name="labelSetting" Content="{Binding Settings}" Foreground="White" Background="Transparent" Tag="3" Click="LoadPage" Padding="10" Cursor="Hand"/>
                 </StackPanel>
 
                 <TextBlock Text="{Binding CurrentDate}"

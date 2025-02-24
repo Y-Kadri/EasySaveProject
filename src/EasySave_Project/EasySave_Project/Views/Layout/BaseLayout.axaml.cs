@@ -31,7 +31,10 @@ namespace EasySave_Project.Views.Layout
 
         public void Reload()
         {
-            BaseLayoutViewModel.RefreshInstance();
+            Button logsButton = labelLogs;
+            Button SettingButton = labelSetting;
+            
+            BaseLayoutViewModel.RefreshInstance(logsButton, SettingButton);
         }
 
         public void LoadPage(object sender, RoutedEventArgs e)

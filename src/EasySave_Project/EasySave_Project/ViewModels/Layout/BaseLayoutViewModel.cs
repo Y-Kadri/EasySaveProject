@@ -20,6 +20,14 @@ namespace EasySave_Project.ViewModels.Layout
             get => _notificationContainer;
             set => this.RaiseAndSetIfChanged(ref _notificationContainer, value);
         }
+        
+        private bool _isLogsVisible = true; // Visible par défaut
+        public bool IsLogsVisible
+        {
+            get => _isLogsVisible;
+            set => this.RaiseAndSetIfChanged(ref _isLogsVisible, value);
+        }
+
 
         private string _currentDate;
         public string CurrentDate
@@ -65,10 +73,10 @@ namespace EasySave_Project.ViewModels.Layout
 
         public BaseLayoutViewModel()
         {
-            UpdateValues();
+            UpdateValues(null, null);
         }
 
-        public void UpdateValues()
+        public void UpdateValues(Button? logsButton, Button? SettingButton)
         {
             CurrentDate = TranslationService.Language == LanguageEnum.FR 
                 ? DateTime.Now.ToString("dd MMMM yyyy", new CultureInfo("fr-FR")) 
@@ -84,11 +92,26 @@ namespace EasySave_Project.ViewModels.Layout
             Conecte = globalData.isConnecte 
                 ? $"Connecté{(globalData.connecteTo.Item2 != null ? " à " + globalData.connecteTo.Item2 : "")}" 
                 : "Non connecté";
+
+            if (logsButton != null && SettingButton != null)
+            {
+                if (globalData.isConnecte && globalData.connecteTo.Item2 != null)
+                {
+                    SettingButton.IsVisible = false;
+                    logsButton.IsVisible = false;
+                }
+                else
+                {
+                    SettingButton.IsVisible = true;
+                    logsButton.IsVisible = true;
+                }
+            }
+            
         }
 
-        public static void RefreshInstance()
+        public static void RefreshInstance( Button? logsButton, Button? SettingButton)
         {
-            _instance.UpdateValues(); // 🔥 Met à jour sans recréer une instance
+            _instance.UpdateValues(logsButton, SettingButton); // 🔥 Met à jour sans recréer une instance
         }
         
         public void AddNotification(string message)

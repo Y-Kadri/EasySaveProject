@@ -1,10 +1,13 @@
 using System;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using EasySave_Project.Model;
 using EasySave_Project.Server;
 using EasySave_Project.Service;
+using EasySave_Project.ViewModels.Layout;
 using EasySave_Project.ViewModels.Pages;
+using EasySave_Project.Views.Components;
 using EasySave_Project.Views.Layout;
 
 namespace EasySave_Project.Views.Pages
@@ -72,15 +75,42 @@ namespace EasySave_Project.Views.Pages
             try
             {
                 string name = UserName.Text;
-                _connexionViewModel.Connexion(name);
-                _baseLayout.Reload();
-                Reload();
+                Connexion(name);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
         }
+        
+        public async Task Connexion(string name)
+        {
+            // 🔹 Affiche le message sur l'UI Thread
+            await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                Toastr.ShowServeurNotification("Connexion en cours ...", BaseLayoutViewModel.Instance.NotificationContainer);
+            });
+
+            await Task.Run(() =>
+            {
+                try
+                {
+                    _connexionViewModel.Connexion(name);
+
+                    // 🔹 Mise à jour de l'UI doit être faite sur le thread UI
+                    Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+                    {
+                        _baseLayout.Reload();
+                        Reload();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"⚠️ Erreur de connexion Page : {ex.Message}");
+                }
+            });
+        }
+
 
         private void ConnectTo(object? sender, RoutedEventArgs e)
         {
