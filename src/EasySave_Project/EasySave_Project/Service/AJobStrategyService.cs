@@ -30,7 +30,7 @@ namespace EasySave_Project.Service
 
         public event Action<double>? OnProgressChanged;
         private static readonly SemaphoreSlim _largeFileSemaphore = new SemaphoreSlim(1, 1);
-        private static int LargeFileThreshold = 100 * 1024 * 1024;
+        private static int LargeFileThreshold = 100 * 1024 * 1024; // TODO : selectable value from settings
 
         /// <summary>
         /// Checks if a given file format is in the list of encrypted file extensions.
