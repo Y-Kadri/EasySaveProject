@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
+using System.Linq;
 using EasySave_Library_Log.manager;
+using EasySave_Project.Dto;
 using EasySave_Project.Model;
 using EasySave_Project.Service;
 using EasySave_Project.Util;
@@ -13,7 +15,7 @@ namespace EasySave_Project.ViewModels.Pages
 
         public ObservableCollection<string> EncryptedFileExtensions { get; }
         public ObservableCollection<string> PriorityBusinessProcess { get; }
-        public ObservableCollection<string> PriorityExtension { get; }
+        public ObservableCollection<PriorityExtensionDTO> PriorityExtensionFiles { get; }
 
         private string _message;
         private string _status;
@@ -58,8 +60,8 @@ namespace EasySave_Project.ViewModels.Pages
 
             EncryptedFileExtensions = new ObservableCollection<string>(SettingUtil.GetList("EncryptedFileExtensions"));
             PriorityBusinessProcess = new ObservableCollection<string>(SettingUtil.GetList("PriorityBusinessProcess"));
-            PriorityExtension = new ObservableCollection<string>(SettingUtil.GetList("PriorityBusinessProcess"));
-
+            PriorityExtensionFiles = new ObservableCollection<PriorityExtensionDTO>(SettingUtil.GetPriorityExtensionFilesList("PriorityExtensionFiles"));
+            SortPriorityExtensions();
         }
 
         public void AddEncryptedFileExtensions(string extension)
@@ -162,13 +164,12 @@ namespace EasySave_Project.ViewModels.Pages
         {
             if (index > 0) // Check if the item is not the first one in the list
             {
-                var item = EncryptedFileExtensions[index]; // Get the item at the current index
-                EncryptedFileExtensions.RemoveAt(index); // Remove it from the current position
-                EncryptedFileExtensions.Insert(index - 1, item); // Insert it one position above
-                this.RaisePropertyChanged(nameof(EncryptedFileExtensions)); // Notify the UI to update
-                Message = "Extension moved up.";
+                SettingUtil.MovePriorityExtensionFileUp(index);
 
-                SettingUtil.
+                // Sort the list after moving the item
+                SortPriorityExtensions();  // Call the method to sort the list
+
+                Message = "Extension moved up.";
             }
             else
             {
@@ -176,18 +177,20 @@ namespace EasySave_Project.ViewModels.Pages
             }
         }
 
+
         /// <summary>
         /// Moves the file extension down in the list if it is not already at the bottom.
         /// </summary>
         /// <param name="index">The index of the item to move.</param>
         public void MoveExtensionDown(int index)
         {
-            if (index < EncryptedFileExtensions.Count - 1) // Check if the item is not the last one in the list
+            if (index <= PriorityExtensionFiles.Count) // Check if the item is not the last one in the list
             {
-                var item = EncryptedFileExtensions[index]; // Get the item at the current index
-                EncryptedFileExtensions.RemoveAt(index); // Remove it from the current position
-                EncryptedFileExtensions.Insert(index + 1, item); // Insert it one position below
-                this.RaisePropertyChanged(nameof(EncryptedFileExtensions)); // Notify the UI to update
+                SettingUtil.MovePriorityExtensionFileDown(index);
+
+                // Sort the list after moving the item
+                SortPriorityExtensions();  // Call the method to sort the list
+
                 Message = "Extension moved down.";
             }
             else
@@ -196,5 +199,29 @@ namespace EasySave_Project.ViewModels.Pages
             }
         }
 
+        /// <summary>
+        /// Sorts the list of priority extensions by their index.
+        /// This method orders the extensions in the PriorityExtensionFiles collection 
+        /// based on the 'Index' property, and updates the collection to reflect the sorted order.
+        /// </summary>
+        private void SortPriorityExtensions()
+        {
+            // Sort the list of extensions by the 'Index' property
+            // This assumes that PriorityExtensionDTO has an 'Index' property that is used to determine priority
+            var sortedList = PriorityExtensionFiles.OrderBy(p => p.Index).ToList();
+
+            // Clear the existing list in the ObservableCollection
+            PriorityExtensionFiles.Clear();
+
+            // Add the sorted extensions back to the ObservableCollection
+            foreach (var extension in sortedList)
+            {
+                PriorityExtensionFiles.Add(extension);
+            }
+
+            // Notify the view that the ObservableCollection has been updated and the list has changed
+            // This triggers a re-render of the UI elements bound to PriorityExtensionFiles
+            this.RaisePropertyChanged(nameof(PriorityExtensionFiles));
+        }
     }
 }

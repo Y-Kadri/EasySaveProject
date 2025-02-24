@@ -64,11 +64,11 @@
 		<StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="3" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
 			<TextBlock Text="Gestion des logiciels prioritaires" FontWeight="Bold" Margin="10,20,0,0"/>
 			<TextBlock x:Name="ExtensionInput2" Text="Logiciels prioritaires :" FontWeight="Bold" Margin="10,10,0,0"/>
-			<ListBox ItemsSource="{Binding EncryptedFileExtensions}">
+			<ListBox ItemsSource="{Binding PriorityExtensionFiles}">
 				<ListBox.ItemTemplate>
 					<DataTemplate>
 						<StackPanel Orientation="Horizontal">
-							<TextBlock Text="{Binding}" Width="120"/>
+							<TextBlock Text="{Binding ExtensionFile}" Width="120"/>
 
 							<Button Content="⬆" Click="MoveExtensionUp_Click" CommandParameter="{Binding}"/>
 							<Button Content="⬇" Click="MoveExtensionDown_Click" CommandParameter="{Binding}"/>
