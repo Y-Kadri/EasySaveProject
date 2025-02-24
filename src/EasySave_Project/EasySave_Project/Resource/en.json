@@ -51,6 +51,7 @@
   "type": "type",
   "startingBackUpComplete": "Starting complete backup for",
   "backupComplet": "Complete backup for",
+  "backupPending": "Job well paused ",
   "jobNameCannotBeEmpty": "The job name cannot be empty",
   "maxJobLimitReached": "Cannot create more than 5 jobs",
   "enterLogFormatChoose": "Please choose the log format:",
@@ -84,6 +85,8 @@
   "Name": "Name",
   "Source": "Source",
   "Destination": "Destination",
+  "Action": "Action",
+  "Pause": "Pause",
   "Type": "Type",
   "Progress": "Progress",
   "Results": "Results",
@@ -128,5 +131,13 @@
   "TheJob": "The job",
   "successfullyCompleted": "successfully completed",
   "failed": "failed",
-  "notFileDifference": "No file differences found for job: "
+  "notFileDifference": "No file differences found for job: ",
+  "resumejob": "Resume Job : ",
+  "EncryptionTime": "Encryption time",
+  "ErrorReadingLogFile": "Error reading file {file}: {error}",
+  "NoValidLogFound": "No valid log found in: {file}",
+  "UnsupportedExtension": "Unsupported extension: {extension}",
+  "ErrorDeserializingFile": "Error deserializing {file}: {error}",
+  "ErrorParsingXml": "Error parsing XML: {error}",
+  "Messages": "Messages"
 }
