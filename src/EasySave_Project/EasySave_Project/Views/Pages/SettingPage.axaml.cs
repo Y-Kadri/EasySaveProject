@@ -180,6 +180,5 @@ namespace EasySave_Project.Views.Pages
                 Toastr.ShowNotification("Extension removed.", NotificationContainer, "Success"); // Show success notification
             }
         }
-
     }
 }
