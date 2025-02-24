@@ -101,5 +101,10 @@ namespace EasySave_Project.ViewModels.Pages
                 });
             }
         }
+
+        public void CancelJobInActif(JobModel jib, Action<JobModel, double> progressCallback)
+        {
+            JobService.CanceljobInActif(jib, progressCallback);
+        }
     }
 }

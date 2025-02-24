@@ -104,29 +104,46 @@ namespace EasySave_Project.Service
                 messageForPopup = $"{translator.GetText("backupPending")} : {job.Name}";
                 ConsoleUtil.PrintTextconsole(messageForPopup);
                 LogManager.Instance.AddMessage(messageForPopup);
-            } else
+            } else if (job.SaveState.Equals(JobSaveStateEnum.CANCEL))
             {
+                messageForPopup = $"{translator.GetText("backupCancel")} : {job.Name}";
+                ConsoleUtil.PrintTextconsole(messageForPopup);
+                LogManager.Instance.AddMessage(messageForPopup);
+                StateManager.Instance.UpdateState(CreateBackupJobState(job, 0, string.Empty, string.Empty));
+                InitJobDefaultValues(job, progressCallback);
+            }
+            else {
                 messageForPopup = TranslationService.GetInstance().GetText("backupComplet") + " " + job.Name;
                 ConsoleUtil.PrintTextconsole(messageForPopup);
                 LogManager.Instance.AddMessage(messageForPopup);
-
-                // Update the job status after execution
-                job.SaveState = JobSaveStateEnum.END;
-                job.FileInPending.Progress = 100;
-                progressCallback(job, 100); // Indicate the job is finished at 100%
                 StateManager.Instance.UpdateState(CreateBackupJobState(job, 100, string.Empty, string.Empty));
-                job.FileInPending.Progress = 0;
-                job.FileInPending.ProcessedFiles = 0;
-                job.FileInPending.ProcessedSize = 0;
-                job.FileInPending.TotalFiles = 0;
-                job.FileInPending.TotalSize = 0;
-                progressCallback(job, 0);
+                InitJobDefaultValues(job, progressCallback);
             }
 
             // Update the stored parameters for the job
             UpdateJobInFile(job);
 
             return (true, messageForPopup); // Return success if everything went as planned
+        }
+
+        private void InitJobDefaultValues(JobModel job, Action<JobModel, double> progressCallback)
+        {
+            job.FileInPending.Progress = 0;
+            job.FileInPending.ProcessedFiles = 0;
+            job.FileInPending.ProcessedSize = 0;
+            job.FileInPending.TotalFiles = 0;
+            job.FileInPending.TotalSize = 0;
+            progressCallback(job, 0);
+        }
+
+        public void CanceljobInActif(JobModel job, Action<JobModel, double> progressCallback)
+        {
+            string messageForPopup = $"{TranslationService.GetInstance().GetText("backupCancel")} : {job.Name}";
+            ConsoleUtil.PrintTextconsole(messageForPopup);
+            StateManager.Instance.UpdateState(CreateBackupJobState(job, 0, string.Empty, string.Empty));
+            InitJobDefaultValues(job, progressCallback);
+            job.FileInPending.LastDateTimePath = null;
+            UpdateJobInFile(job);
         }
 
         private BackupJobState CreateBackupJobState(JobModel job, double progress, string currentSourceFilePath, string currentDestinationFilePath)
