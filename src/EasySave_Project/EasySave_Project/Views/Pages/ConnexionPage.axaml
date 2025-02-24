@@ -24,7 +24,7 @@
         <!-- Message après connexion -->
         <StackPanel x:Name="ConnectedMessage" Orientation="Vertical">
             <TextBlock FontSize="32" FontWeight="Bold" Text="✅ Vous êtes connecté !" HorizontalAlignment="Center"/>
-            <DataGrid ItemsSource="{Binding users}" 
+            <DataGrid ItemsSource="{Binding Users}" 
                   IsReadOnly="True" 
                   Background="Transparent"
                   AutoGenerateColumns="False"

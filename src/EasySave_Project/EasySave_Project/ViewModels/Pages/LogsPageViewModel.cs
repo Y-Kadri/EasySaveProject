@@ -1,54 +1,120 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using EasySave_Project.Dto;
-using EasySave_Project.Service;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Xml;
-using System.Xml.Serialization;
+using Avalonia.Threading;
+using ReactiveUI;
+using EasySave_Project.Dto;
+using EasySave_Project.Service;
 using EasySave_Library_Log.manager;
 
 namespace EasySave_Project.ViewModels.Pages
 {
-    public class LogsPageViewModel
+    public class LogsPageViewModel : ReactiveObject
     {
-        public ObservableCollection<LogNode> Nodes { get; }
-        public string AllLogs { get; }
-        public string Timestamp { get; }
-        public string SourcePath { get; }
-        public string TargetPath { get; }
-        public string FileSize { get; }
-        public string TransferTime { get; }
-        
-        public string EncryptionTime { get; }
-        
+        private ObservableCollection<LogNode> _nodes;
+        public ObservableCollection<LogNode> Nodes
+        {
+            get => _nodes;
+            private set => this.RaiseAndSetIfChanged(ref _nodes, value);
+        }
+
+        private string _allLogs;
+        public string AllLogs
+        {
+            get => _allLogs;
+            private set => this.RaiseAndSetIfChanged(ref _allLogs, value);
+        }
+
+        private string _timestamp;
+        public string Timestamp
+        {
+            get => _timestamp;
+            private set => this.RaiseAndSetIfChanged(ref _timestamp, value);
+        }
+
+        private string _sourcePath;
+        public string SourcePath
+        {
+            get => _sourcePath;
+            private set => this.RaiseAndSetIfChanged(ref _sourcePath, value);
+        }
+
+        private string _targetPath;
+        public string TargetPath
+        {
+            get => _targetPath;
+            private set => this.RaiseAndSetIfChanged(ref _targetPath, value);
+        }
+
+        private string _fileSize;
+        public string FileSize
+        {
+            get => _fileSize;
+            private set => this.RaiseAndSetIfChanged(ref _fileSize, value);
+        }
+
+        private string _transferTime;
+        public string TransferTime
+        {
+            get => _transferTime;
+            private set => this.RaiseAndSetIfChanged(ref _transferTime, value);
+        }
+
+        private string _encryptionTime;
+        public string EncryptionTime
+        {
+            get => _encryptionTime;
+            private set => this.RaiseAndSetIfChanged(ref _encryptionTime, value);
+        }
+
+        private readonly TranslationService _translationService = TranslationService.GetInstance();
+
         public LogsPageViewModel()
         {
-            AllLogs = TranslationService.GetInstance().GetText("AllLogs");
-            Timestamp = TranslationService.GetInstance().GetText("Timestamp");
-            SourcePath = TranslationService.GetInstance().GetText("SourcePath");
-            TargetPath = TranslationService.GetInstance().GetText("TargetPath");
-            FileSize = TranslationService.GetInstance().GetText("FileSize");
-            TransferTime = TranslationService.GetInstance().GetText("TransferTime");
-            EncryptionTime = TranslationService.GetInstance().GetText("EncryptionTime");
-
             Nodes = new ObservableCollection<LogNode>();
+            Refresh();
+        }
 
+        public void Refresh()
+        {
+            LoadTranslations();
             LoadLogs();
         }
+
+        private void LoadTranslations()
+        {
+            Dispatcher.UIThread.Post(() =>
+            {
+                AllLogs = _translationService.GetText("AllLogs");
+                Timestamp = _translationService.GetText("Timestamp");
+                SourcePath = _translationService.GetText("SourcePath");
+                TargetPath = _translationService.GetText("TargetPath");
+                FileSize = _translationService.GetText("FileSize");
+                TransferTime = _translationService.GetText("TransferTime");
+                EncryptionTime = _translationService.GetText("EncryptionTime");
+            });
+        }
+        
 
         private void LoadLogs()
         {
             string logsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySave", "Logs");
 
             if (!Directory.Exists(logsDirectory))
+            {
+                Nodes.Clear();
                 return;
+            }
 
             var files = Directory.GetFiles(logsDirectory)
                 .Where(file => file.EndsWith(".json") || file.EndsWith(".xml"))
                 .ToList();
+
+            var newNodes = new ObservableCollection<LogNode>();
 
             foreach (var logFile in files)
             {
@@ -57,16 +123,22 @@ namespace EasySave_Project.ViewModels.Pages
 
                 try
                 {
-                    AddLogFileToTree(logFile);
+                    var node = CreateLogNode(logFile);
+                    if (node != null)
+                    {
+                        newNodes.Add(node);
+                    }
                 }
                 catch (Exception ex)
                 {
                     LogManager.Instance.AddMessage($"Erreur de lecture du fichier {logFile}: {ex.Message}");
                 }
             }
+
+            Dispatcher.UIThread.Post(() => Nodes = newNodes);
         }
 
-        private void AddLogFileToTree(string logFile)
+        private LogNode CreateLogNode(string logFile)
         {
             string fileName = Path.GetFileNameWithoutExtension(logFile);
             var dateNode = new LogNode(fileName);
@@ -75,7 +147,7 @@ namespace EasySave_Project.ViewModels.Pages
             if (logs == null || !logs.Any())
             {
                 LogManager.Instance.AddMessage($"Aucun log valide trouvé dans : {logFile}");
-                return;
+                return null;
             }
 
             foreach (var log in logs)
@@ -84,7 +156,7 @@ namespace EasySave_Project.ViewModels.Pages
                 dateNode.SubNodes.Add(jobNode);
             }
 
-            Nodes.Add(dateNode);
+            return dateNode;
         }
 
         private List<LogDataDto> DeserializeLogs(string filePath)

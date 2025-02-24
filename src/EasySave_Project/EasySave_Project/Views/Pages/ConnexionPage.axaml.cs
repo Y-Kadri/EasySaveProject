@@ -7,33 +7,58 @@ using EasySave_Project.Service;
 using EasySave_Project.ViewModels.Pages;
 using EasySave_Project.Views.Layout;
 
-namespace EasySave_Project.Views.Pages;
-
-public partial class ConnexionPage : UserControl, IPage
+namespace EasySave_Project.Views.Pages
 {
-    private ConnexionViewModel _ConnexionViewModel;
-    private BaseLayout _baseLayout;
-    
-    public ConnexionPage(BaseLayout baseLayout)
+    public partial class ConnexionPage : UserControl, IPage
     {
-        InitializeComponent();
-        _baseLayout = baseLayout;
-        _ConnexionViewModel = new ConnexionViewModel();
-        DataContext = _ConnexionViewModel;
-    }
-    
-    public void Reload()
-    {
+        private readonly ConnexionViewModel _connexionViewModel;
+        private readonly BaseLayout _baseLayout;
 
-        _ConnexionViewModel = new ConnexionViewModel();
-        if (GlobalDataService.GetInstance().isConnecte && GlobalDataService.GetInstance().connecteTo.Item2 == null)
+        public ConnexionPage(BaseLayout baseLayout)
+        {
+            InitializeComponent();
+            _baseLayout = baseLayout;
+            _connexionViewModel = new ConnexionViewModel();
+            DataContext = _connexionViewModel;
+
+            Reload();
+        }
+
+        public void Reload()
+        {
+            if (GlobalDataService.GetInstance().isConnecte)
+            {
+                if (GlobalDataService.GetInstance().connecteTo.Item2 == null)
+                {
+                    ShowConnectedState();
+                    _connexionViewModel.GetAllUserConnect();
+                }
+                else
+                {
+                    ShowConnectedToState();
+                }
+            }
+            else
+            {
+                ShowLoginForm();
+            }
+        }
+
+        private void ShowLoginForm()
+        {
+            LoginForm.IsVisible = true;
+            ConnectedMessage.IsVisible = false;
+            ConnectedToMessage.IsVisible = false;
+        }
+
+        private void ShowConnectedState()
         {
             ConnectedMessage.IsVisible = true;
             LoginForm.IsVisible = false;
             ConnectedToMessage.IsVisible = false;
-            _ConnexionViewModel.GetAllUserConnect();
         }
-        else if (GlobalDataService.GetInstance().isConnecte && GlobalDataService.GetInstance().connecteTo.Item2 != null)
+
+        private void ShowConnectedToState()
         {
             ConnectedMessage.IsVisible = false;
             LoginForm.IsVisible = false;
@@ -41,48 +66,37 @@ public partial class ConnexionPage : UserControl, IPage
 
             ConnectedToTitre.Text = $"\u2705 Vous êtes connecté à {GlobalDataService.GetInstance().connecteTo.Item2} !";
         }
-        else
+
+        private void Connexion(object? sender, RoutedEventArgs e)
         {
-            LoginForm.IsVisible = true;
-            ConnectedMessage.IsVisible = false;
-            ConnectedToMessage.IsVisible = false;
+            try
+            {
+                string name = UserName.Text;
+                _connexionViewModel.Connexion(name);
+                _baseLayout.Reload();
+                Reload();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
-        DataContext = _ConnexionViewModel;
-    }
 
-    private void Connexion(object? sender, RoutedEventArgs e)
-    {
-        string name = UserName.Text;
-
-        try
+        private void ConnectTo(object? sender, RoutedEventArgs e)
         {
-            _ConnexionViewModel.Connexion(name);
-            _baseLayout.reload();
+            if (sender is Button button && button.DataContext is User user)
+            {
+                _connexionViewModel.ConnexionTo(user.Id, user.Name);
+                _baseLayout.Reload();
+                Reload();
+            }
+        }
+
+        private void DisconnectTo(object? sender, RoutedEventArgs e)
+        {
+            _connexionViewModel.DisconnexionTo();
+            _baseLayout.Reload();
             Reload();
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
-    }
-
-    private void ConnectTo(object? sender, RoutedEventArgs e)
-    {
-        if (sender is Button button && button.DataContext is User user)
-        {
-            string id = user.Id;
-            string name = user.Name;
-
-            _ConnexionViewModel.ConnexionTo(id, name);
-            _baseLayout.reload();
-            Reload();
-        }
-    }
-
-    private void DisconnectTo(object? sender, RoutedEventArgs e)
-    {
-        _ConnexionViewModel.DisconnexionTo();
-        _baseLayout.reload();
-        Reload();
     }
 }
