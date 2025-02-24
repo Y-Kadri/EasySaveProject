@@ -37,8 +37,27 @@ namespace Server
             {
                 Console.WriteLine($"Erreur lors de l'écriture dans le log : {e.Message}");
             }
+        }
+        
+        public static async Task<string?> WaitForResponse(User user, int timeoutMs)
+        {
+            int elapsedTime = 0;
+            while (elapsedTime < timeoutMs)
+            {
+                lock (Server.pendingResponses)
+                {
+                    if (Server.pendingResponses.TryGetValue(user.Id, out string response))
+                    {
+                        Server.pendingResponses.Remove(user.Id);
+                        return response;
+                    }
+                }
+        
+                await Task.Delay(100); // Attendre 100ms avant de réessayer
+                elapsedTime += 100;
+            }
 
-            Console.WriteLine(message);
+            return null; // Timeout expiré
         }
     }
 }

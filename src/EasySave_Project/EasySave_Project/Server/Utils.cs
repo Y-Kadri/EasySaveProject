@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Concurrent;
+using System.Collections.ObjectModel;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
@@ -7,127 +9,129 @@ using EasySave_Project.Manager;
 using EasySave_Project.Service;
 using EasySave_Project.ViewModels.Layout;
 
-namespace EasySave_Project.Server;
-
-public class Utils
+namespace EasySave_Project.Server
 {
-    public static void ReceiveMessages(NetworkStream stream)
+    public class Utils
     {
-        byte[] buffer = new byte[1024];
+        public static event Action<ObservableCollection<User>>? OnUsersReceived;
 
-        try
+        // 📌 Queue pour stocker tous les messages reçus
+        private static readonly ConcurrentQueue<string> messageQueue = new();
+
+        // 🚀 Démarre la réception des messages en continu
+        public static async Task StartListening(NetworkStream stream)
         {
-            while (true)
+            byte[] buffer = new byte[4096];
+
+            try
             {
-                int bytesRead = stream.Read(buffer, 0, buffer.Length);
-
-                // 🔴 Si la connexion est fermée, on arrête la boucle
-                if (bytesRead == 0)
+                while (true)
                 {
-                    Console.WriteLine("🔴 Connexion fermée par le serveur.");
-                    break;
-                }
+                    int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
 
-                // ✅ Convertit les données lues en string
-                string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                Console.WriteLine($"\n[Server]: {message}");
-
-                switch (message)
-                {
-                    case "NEW_USER":
-                        message = "Un nouveau utilisateur est connecté";
+                    if (bytesRead == 0)
+                    {
+                        Console.WriteLine("🔴 Connexion fermée par le serveur.");
                         break;
-                    case "GET_JOBS":
-                        message = null;
-                        //envoi mes jobs au serveur
-                        var jobs = JobManager.GetInstance().Jobs;
+                    }
 
-                        // Options pour une sérialisation plus lisible (indente le JSON)
-                        var options = new JsonSerializerOptions
-                        {
-                            WriteIndented = true, // Pour un JSON bien formaté
-                            PropertyNameCaseInsensitive = true
-                        };
+                    string message = Encoding.UTF8.GetString(buffer, 0, bytesRead).Trim();
+                    Console.WriteLine($"\n[Server]: {message}");
 
-                        string jsonJobs = JsonSerializer.Serialize(jobs, options);
-                        SendToServer(jsonJobs);
-                        break;
+                    // 🎯 Filtrage des messages spéciaux
+                    switch (message)
+                    {
+                        case "NEW_USER":
+                            BaseLayoutViewModel.Instance.AddNotification("Un nouvel utilisateur est connecté.");
+                            continue;
+                        case "GET_JOBS":
+                            SendToServer(JsonSerializer.Serialize(JobManager.GetInstance().Jobs));
+                            continue;
+                    }
+                    
+                    if(!message.StartsWith("{") && !message.StartsWith("[")) {
+                        BaseLayoutViewModel.Instance.AddNotification(message);
+                        continue;
+                    }
+
+                    // ✅ Stocker dans la file d'attente
+                    messageQueue.Enqueue(message);
                 }
-                
-                // 🔥 Ajout du message dans les notifications du BaseLayoutViewModel
-                if (message != null)
-                    BaseLayoutViewModel.Instance.AddNotification(message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"⚠️ Erreur de connexion : {e.Message}");
             }
         }
-        catch (Exception e)
+
+        // 📤 Envoi de messages au serveur
+        public static void SendToServer(string message, NetworkStream stream = null)
         {
-            Console.WriteLine($"⚠️ Erreur de connexion : {e.Message}");
-        }
-    }
-
-
-    public static void SendToServer(string message, NetworkStream stream = null)
-    {
-        try
-        {
-            stream ??= GlobalDataService.GetInstance().client.stream;
-
-            if (stream == null || !stream.CanWrite)
+            Task.Run(() =>
             {
-                Console.WriteLine("❌ Erreur : Le stream est invalide ou non accessible en écriture.");
-                return;
+                try
+                {
+                    stream ??= GlobalDataService.GetInstance().client?.stream;
+
+                    if (stream == null || !stream.CanWrite)
+                    {
+                        Console.WriteLine("❌ Erreur : Le stream est invalide ou non accessible.");
+                        return;
+                    }
+
+                    byte[] data = Encoding.UTF8.GetBytes(message);
+                    stream.Write(data, 0, data.Length);
+                    stream.Flush();
+
+                    Console.WriteLine($"📤 Message envoyé : {message}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"⚠️ Erreur lors de l'envoi : {ex.Message}");
+                }
+            });
+        }
+
+        // 📩 Récupérer un message (bloquant tant qu'il n'y en a pas)
+        public static async Task<string?> GetNextMessage()
+        {
+            while (messageQueue.IsEmpty)
+            {
+                await Task.Delay(100); // Attente active
             }
 
-            // Convertir le message en bytes
-            byte[] data = Encoding.UTF8.GetBytes(message);
-
-            // Envoyer les données au serveur
-            stream.Write(data, 0, data.Length);
-            stream.Flush(); // Assurer l'envoi immédiat
-
-            Console.WriteLine($"📤 Message envoyé : {message}");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"⚠️ Erreur lors de l'envoi au serveur : {ex.Message}");
-        }
-    }
-    
-    public static T? ReceiveFromServer<T>()
-    {
-        try
-        {
-            NetworkStream stream = GlobalDataService.GetInstance().client.stream;
-
-            if (stream == null || !stream.CanRead)
+            if (messageQueue.TryDequeue(out string message))
             {
-                Console.WriteLine("❌ Erreur : Le stream est invalide ou non accessible en lecture.");
+                return message;
+            }
+
+            return null;
+        }
+
+        // 🎯 Attend une réponse spécifique et la retourne sous forme d'objet
+        public static async Task<T?> WaitForResponse<T>()
+        {
+            string? jsonResponse = await GetNextMessage();
+            if (jsonResponse == null) return default;
+
+            try
+            {
+                Console.WriteLine($"📩 Réponse reçue : {jsonResponse}");
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    ReadCommentHandling = JsonCommentHandling.Skip,
+                    AllowTrailingCommas = true
+                };
+
+                return JsonSerializer.Deserialize<T>(jsonResponse, options);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"⚠️ Erreur de parsing JSON : {ex.Message}");
                 return default;
             }
-
-            // 🔥 Lire la réponse du serveur
-            byte[] buffer = new byte[4096]; // Augmenter la taille si nécessaire
-            
-            
-            int bytesRead  = stream.Read(buffer, 0, buffer.Length);
-            string jsonResponse = Encoding.UTF8.GetString(buffer, 0, bytesRead).Trim();
-
-            Console.WriteLine($"📩 Réponse reçue : {jsonResponse}");
-
-            // 🔥 Désérialisation générique
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-                ReadCommentHandling = JsonCommentHandling.Skip,
-                AllowTrailingCommas = true
-            };
-
-            return JsonSerializer.Deserialize<T>(jsonResponse, options);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"⚠️ Erreur lors de la réception : {ex.Message}");
-            return default;
         }
     }
 }

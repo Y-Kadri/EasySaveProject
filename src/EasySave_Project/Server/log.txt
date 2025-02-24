@@ -123,3 +123,732 @@
     "Time": "2025-02-19T09:35:35.122046+01:00"
   }
 ]
+2025-02-24 13:05:48 - 3e7b17b9-04ec-443d-88f6-cd4b1647d6ef - 127.0.0.1:62950 - GET_USERS
+2025-02-24 13:05:48 - 3e7b17b9-04ec-443d-88f6-cd4b1647d6ef - 127.0.0.1:62950 - [{"Id":"3e7b17b9-04ec-443d-88f6-cd4b1647d6ef","Name":"a","IPAddress":"127.0.0.1","Port":62950}]
+2025-02-24 13:05:59 - 3e7b17b9-04ec-443d-88f6-cd4b1647d6ef - 127.0.0.1:62950 - {"command":"CONNECTE_USERS","id":"3e7b17b9-04ec-443d-88f6-cd4b1647d6ef"}
+2025-02-24 13:05:59 - 3e7b17b9-04ec-443d-88f6-cd4b1647d6ef - 127.0.0.1:62950 - L'utilisateur a s'est connecté à vous !
+2025-02-24 13:05:59 - 3e7b17b9-04ec-443d-88f6-cd4b1647d6ef - 127.0.0.1:62950 - Connection à a réussi !
+2025-02-24 13:06:06 - 3e7b17b9-04ec-443d-88f6-cd4b1647d6ef - 127.0.0.1:62950 - {"command":"GET_JOB_USERS","id":"3e7b17b9-04ec-443d-88f6-cd4b1647d6ef"}
+2025-02-24 13:06:06 - 3e7b17b9-04ec-443d-88f6-cd4b1647d6ef - 127.0.0.1:62950 - GET_JOBS
+2025-02-24 13:06:29 - 3e7b17b9-04ec-443d-88f6-cd4b1647d6ef - 127.0.0.1:62950 - 
+2025-02-24 13:12:04 - d47ff585-8428-4851-be9d-46a56edc8426 - 127.0.0.1:63059 - GET_USERS
+2025-02-24 13:12:04 - d47ff585-8428-4851-be9d-46a56edc8426 - 127.0.0.1:63059 - [{"Id":"d47ff585-8428-4851-be9d-46a56edc8426","Name":"a","IPAddress":"127.0.0.1","Port":63059}]
+2025-02-24 13:12:25 - b9a30208-f195-45b9-aade-a1cbd40554b9 - 127.0.0.1:63071 - GET_USERS
+2025-02-24 13:12:25 - b9a30208-f195-45b9-aade-a1cbd40554b9 - 127.0.0.1:63071 - [{"Id":"b9a30208-f195-45b9-aade-a1cbd40554b9","Name":"a","IPAddress":"127.0.0.1","Port":63071}]
+2025-02-24 13:12:31 - b9a30208-f195-45b9-aade-a1cbd40554b9 - 127.0.0.1:63071 - {"command":"CONNECTE_USERS","id":"b9a30208-f195-45b9-aade-a1cbd40554b9"}
+2025-02-24 13:12:31 - b9a30208-f195-45b9-aade-a1cbd40554b9 - 127.0.0.1:63071 - L'utilisateur a s'est connecté à vous !
+2025-02-24 13:12:31 - b9a30208-f195-45b9-aade-a1cbd40554b9 - 127.0.0.1:63071 - Connection à a réussi !
+2025-02-24 13:12:37 - b9a30208-f195-45b9-aade-a1cbd40554b9 - 127.0.0.1:63071 - {"command":"GET_JOB_USERS","id":"b9a30208-f195-45b9-aade-a1cbd40554b9"}
+2025-02-24 13:12:37 - b9a30208-f195-45b9-aade-a1cbd40554b9 - 127.0.0.1:63071 - GET_JOBS
+2025-02-24 13:12:43 - b9a30208-f195-45b9-aade-a1cbd40554b9 - 127.0.0.1:63071 - {"command":"GET_JOB_USERS","id":"b9a30208-f195-45b9-aade-a1cbd40554b9"}
+2025-02-24 13:12:43 - b9a30208-f195-45b9-aade-a1cbd40554b9 - 127.0.0.1:63071 - {"command":"GET_JOB_USERS","id":"b9a30208-f195-45b9-aade-a1cbd40554b9"}
+2025-02-24 13:14:09 - b05383eb-4bca-4093-b8c3-181a03faf0f1 - 127.0.0.1:63105 - GET_USERS
+2025-02-24 13:14:09 - b05383eb-4bca-4093-b8c3-181a03faf0f1 - 127.0.0.1:63105 - [{"Id":"b05383eb-4bca-4093-b8c3-181a03faf0f1","Name":"a","IPAddress":"127.0.0.1","Port":63105}]
+2025-02-24 13:14:13 - b05383eb-4bca-4093-b8c3-181a03faf0f1 - 127.0.0.1:63105 - {"command":"CONNECTE_USERS","id":"b05383eb-4bca-4093-b8c3-181a03faf0f1"}
+2025-02-24 13:14:13 - b05383eb-4bca-4093-b8c3-181a03faf0f1 - 127.0.0.1:63105 - L'utilisateur a s'est connecté à vous !
+2025-02-24 13:14:13 - b05383eb-4bca-4093-b8c3-181a03faf0f1 - 127.0.0.1:63105 - Connection à a réussi !
+2025-02-24 13:14:16 - b05383eb-4bca-4093-b8c3-181a03faf0f1 - 127.0.0.1:63105 - {"command":"GET_JOB_USERS","id":"b05383eb-4bca-4093-b8c3-181a03faf0f1"}
+2025-02-24 13:14:16 - b05383eb-4bca-4093-b8c3-181a03faf0f1 - 127.0.0.1:63105 - GET_JOBS
+2025-02-24 13:14:18 - b05383eb-4bca-4093-b8c3-181a03faf0f1 - 127.0.0.1:63105 - {"command":"GET_JOB_USERS","id":"b05383eb-4bca-4093-b8c3-181a03faf0f1"}
+2025-02-24 13:14:18 - b05383eb-4bca-4093-b8c3-181a03faf0f1 - 127.0.0.1:63105 - {"command":"GET_JOB_USERS","id":"b05383eb-4bca-4093-b8c3-181a03faf0f1"}
+2025-02-24 13:16:11 - b4f787d5-1902-4cde-a45a-ae2c89e69fe7 - 127.0.0.1:63145 - GET_USERS
+2025-02-24 13:16:11 - b4f787d5-1902-4cde-a45a-ae2c89e69fe7 - 127.0.0.1:63145 - [{"Id":"b4f787d5-1902-4cde-a45a-ae2c89e69fe7","Name":"a","IPAddress":"127.0.0.1","Port":63145}]
+2025-02-24 13:16:13 - b4f787d5-1902-4cde-a45a-ae2c89e69fe7 - 127.0.0.1:63145 - {"command":"CONNECTE_USERS","id":"b4f787d5-1902-4cde-a45a-ae2c89e69fe7"}
+2025-02-24 13:16:13 - b4f787d5-1902-4cde-a45a-ae2c89e69fe7 - 127.0.0.1:63145 - L'utilisateur a s'est connecté à vous !
+2025-02-24 13:16:13 - b4f787d5-1902-4cde-a45a-ae2c89e69fe7 - 127.0.0.1:63145 - Connection à a réussi !
+2025-02-24 13:16:14 - b4f787d5-1902-4cde-a45a-ae2c89e69fe7 - 127.0.0.1:63145 - {"command":"GET_JOB_USERS","id":"b4f787d5-1902-4cde-a45a-ae2c89e69fe7"}
+2025-02-24 13:16:14 - b4f787d5-1902-4cde-a45a-ae2c89e69fe7 - 127.0.0.1:63145 - GET_JOBS
+2025-02-24 13:16:14 - b4f787d5-1902-4cde-a45a-ae2c89e69fe7 - 127.0.0.1:63145 - [
+  {
+    "Id": 1,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "Backup Documents",
+    "FileSource": "C:\\Documents\\myfile.txt",
+    "FileTarget": "D:\\Backup\\myfile.txt",
+    "FileSize": "1024",
+    "FileTransferTime": "30",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-03T12:00:00"
+  },
+  {
+    "Id": 2,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "dez",
+    "FileSource": "/Users/matisbouquin/Desktop/CESI/",
+    "FileTarget": "/Users/matisbouquin/Desktop/PERSO/",
+    "FileSize": "0 KB",
+    "FileTransferTime": "0 sec",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-19T09:35:35.122046+01:00"
+  }
+]
+2025-02-24 13:16:14 - b4f787d5-1902-4cde-a45a-ae2c89e69fe7 - 127.0.0.1:63145 - [
+  {
+    "Id": 1,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "Backup Documents",
+    "FileSource": "C:\\Documents\\myfile.txt",
+    "FileTarget": "D:\\Backup\\myfile.txt",
+    "FileSize": "1024",
+    "FileTransferTime": "30",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-03T12:00:00"
+  },
+  {
+    "Id": 2,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "dez",
+    "FileSource": "/Users/matisbouquin/Desktop/CESI/",
+    "FileTarget": "/Users/matisbouquin/Desktop/PERSO/",
+    "FileSize": "0 KB",
+    "FileTransferTime": "0 sec",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-19T09:35:35.122046+01:00"
+  }
+]
+2025-02-24 13:16:16 - b4f787d5-1902-4cde-a45a-ae2c89e69fe7 - 127.0.0.1:63145 - {"command":"GET_JOB_USERS","id":"b4f787d5-1902-4cde-a45a-ae2c89e69fe7"}
+2025-02-24 13:16:16 - b4f787d5-1902-4cde-a45a-ae2c89e69fe7 - 127.0.0.1:63145 - GET_JOBS
+2025-02-24 13:16:18 - b4f787d5-1902-4cde-a45a-ae2c89e69fe7 - 127.0.0.1:63145 - {"command":"GET_JOB_USERS","id":"b4f787d5-1902-4cde-a45a-ae2c89e69fe7"}
+2025-02-24 13:16:18 - b4f787d5-1902-4cde-a45a-ae2c89e69fe7 - 127.0.0.1:63145 - {"command":"GET_JOB_USERS","id":"b4f787d5-1902-4cde-a45a-ae2c89e69fe7"}
+2025-02-24 13:17:43 - 7a7a7534-7115-455d-ab65-4324e8be53c2 - 127.0.0.1:63170 - GET_USERS
+2025-02-24 13:17:43 - 7a7a7534-7115-455d-ab65-4324e8be53c2 - 127.0.0.1:63170 - [{"Id":"7a7a7534-7115-455d-ab65-4324e8be53c2","Name":"a","IPAddress":"127.0.0.1","Port":63170}]
+2025-02-24 13:17:44 - 7a7a7534-7115-455d-ab65-4324e8be53c2 - 127.0.0.1:63170 - {"command":"CONNECTE_USERS","id":"7a7a7534-7115-455d-ab65-4324e8be53c2"}
+2025-02-24 13:17:44 - 7a7a7534-7115-455d-ab65-4324e8be53c2 - 127.0.0.1:63170 - L'utilisateur a s'est connecté à vous !
+2025-02-24 13:17:44 - 7a7a7534-7115-455d-ab65-4324e8be53c2 - 127.0.0.1:63170 - Connection à a réussi !
+2025-02-24 13:17:47 - 7a7a7534-7115-455d-ab65-4324e8be53c2 - 127.0.0.1:63170 - {"command":"GET_JOB_USERS","id":"7a7a7534-7115-455d-ab65-4324e8be53c2"}
+2025-02-24 13:17:47 - 7a7a7534-7115-455d-ab65-4324e8be53c2 - 127.0.0.1:63170 - GET_JOBS
+2025-02-24 13:17:54 - 7a7a7534-7115-455d-ab65-4324e8be53c2 - 127.0.0.1:63170 - 
+2025-02-24 13:18:51 - 46dcbf8f-6870-4b87-88da-dcf7cfbe97a7 - 127.0.0.1:63193 - GET_USERS
+2025-02-24 13:18:51 - 46dcbf8f-6870-4b87-88da-dcf7cfbe97a7 - 127.0.0.1:63193 - [{"Id":"46dcbf8f-6870-4b87-88da-dcf7cfbe97a7","Name":"k","IPAddress":"127.0.0.1","Port":63193}]
+2025-02-24 13:18:54 - 46dcbf8f-6870-4b87-88da-dcf7cfbe97a7 - 127.0.0.1:63193 - {"command":"CONNECTE_USERS","id":"46dcbf8f-6870-4b87-88da-dcf7cfbe97a7"}
+2025-02-24 13:18:54 - 46dcbf8f-6870-4b87-88da-dcf7cfbe97a7 - 127.0.0.1:63193 - L'utilisateur k s'est connecté à vous !
+2025-02-24 13:18:54 - 46dcbf8f-6870-4b87-88da-dcf7cfbe97a7 - 127.0.0.1:63193 - Connection à k réussi !
+2025-02-24 13:25:15 - 427f7af1-19b3-49df-890d-1cecac0aadbe - 127.0.0.1:63307 - GET_USERS
+2025-02-24 13:25:15 - 427f7af1-19b3-49df-890d-1cecac0aadbe - 127.0.0.1:63307 - [{"Id":"427f7af1-19b3-49df-890d-1cecac0aadbe","Name":"a","IPAddress":"127.0.0.1","Port":63307}]
+2025-02-24 13:25:16 - 427f7af1-19b3-49df-890d-1cecac0aadbe - 127.0.0.1:63307 - {"command":"CONNECTE_USERS","id":"427f7af1-19b3-49df-890d-1cecac0aadbe"}
+2025-02-24 13:25:16 - 427f7af1-19b3-49df-890d-1cecac0aadbe - 127.0.0.1:63307 - L'utilisateur a s'est connecté à vous !
+2025-02-24 13:25:16 - 427f7af1-19b3-49df-890d-1cecac0aadbe - 127.0.0.1:63307 - Connection à a réussi !
+2025-02-24 13:25:23 - 427f7af1-19b3-49df-890d-1cecac0aadbe - 127.0.0.1:63307 - {"command":"DISCONNECTE_USERS","id":"427f7af1-19b3-49df-890d-1cecac0aadbe"}
+2025-02-24 13:25:23 - 427f7af1-19b3-49df-890d-1cecac0aadbe - 127.0.0.1:63307 - L'utilisateur a s'est déconnecté à vous !
+2025-02-24 13:25:23 - 427f7af1-19b3-49df-890d-1cecac0aadbe - 127.0.0.1:63307 - Déconnection à a réussi !
+2025-02-24 13:25:23 - 427f7af1-19b3-49df-890d-1cecac0aadbe - 127.0.0.1:63307 - GET_USERS
+2025-02-24 13:25:23 - 427f7af1-19b3-49df-890d-1cecac0aadbe - 127.0.0.1:63307 - [{"Id":"427f7af1-19b3-49df-890d-1cecac0aadbe","Name":"a","IPAddress":"127.0.0.1","Port":63307}]
+2025-02-24 13:25:43 - 8c487cdc-817c-4fed-9821-2dcea39ab3ff - 127.0.0.1:63318 - GET_USERS
+2025-02-24 13:25:43 - 8c487cdc-817c-4fed-9821-2dcea39ab3ff - 127.0.0.1:63318 - [{"Id":"8c487cdc-817c-4fed-9821-2dcea39ab3ff","Name":"a","IPAddress":"127.0.0.1","Port":63318}]
+2025-02-24 13:25:46 - 8c487cdc-817c-4fed-9821-2dcea39ab3ff - 127.0.0.1:63318 - {"command":"CONNECTE_USERS","id":"8c487cdc-817c-4fed-9821-2dcea39ab3ff"}
+2025-02-24 13:25:46 - 8c487cdc-817c-4fed-9821-2dcea39ab3ff - 127.0.0.1:63318 - L'utilisateur a s'est connecté à vous !
+2025-02-24 13:25:46 - 8c487cdc-817c-4fed-9821-2dcea39ab3ff - 127.0.0.1:63318 - Connection à a réussi !
+2025-02-24 13:25:51 - 8c487cdc-817c-4fed-9821-2dcea39ab3ff - 127.0.0.1:63318 - {"command":"GET_JOB_USERS","id":"8c487cdc-817c-4fed-9821-2dcea39ab3ff"}
+2025-02-24 13:25:51 - 8c487cdc-817c-4fed-9821-2dcea39ab3ff - 127.0.0.1:63318 - GET_JOBS
+2025-02-24 13:25:51 - 8c487cdc-817c-4fed-9821-2dcea39ab3ff - 127.0.0.1:63318 - [
+  {
+    "Id": 1,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "Backup Documents",
+    "FileSource": "C:\\Documents\\myfile.txt",
+    "FileTarget": "D:\\Backup\\myfile.txt",
+    "FileSize": "1024",
+    "FileTransferTime": "30",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-03T12:00:00"
+  },
+  {
+    "Id": 2,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "dez",
+    "FileSource": "/Users/matisbouquin/Desktop/CESI/",
+    "FileTarget": "/Users/matisbouquin/Desktop/PERSO/",
+    "FileSize": "0 KB",
+    "FileTransferTime": "0 sec",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-19T09:35:35.122046+01:00"
+  }
+]
+2025-02-24 13:25:51 - 8c487cdc-817c-4fed-9821-2dcea39ab3ff - 127.0.0.1:63318 - [
+  {
+    "Id": 1,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "Backup Documents",
+    "FileSource": "C:\\Documents\\myfile.txt",
+    "FileTarget": "D:\\Backup\\myfile.txt",
+    "FileSize": "1024",
+    "FileTransferTime": "30",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-03T12:00:00"
+  },
+  {
+    "Id": 2,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "dez",
+    "FileSource": "/Users/matisbouquin/Desktop/CESI/",
+    "FileTarget": "/Users/matisbouquin/Desktop/PERSO/",
+    "FileSize": "0 KB",
+    "FileTransferTime": "0 sec",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-19T09:35:35.122046+01:00"
+  }
+]
+2025-02-24 13:25:56 - 8c487cdc-817c-4fed-9821-2dcea39ab3ff - 127.0.0.1:63318 - {"command":"GET_JOB_USERS","id":"8c487cdc-817c-4fed-9821-2dcea39ab3ff"}
+2025-02-24 13:25:56 - 8c487cdc-817c-4fed-9821-2dcea39ab3ff - 127.0.0.1:63318 - GET_JOBS
+2025-02-24 13:25:56 - 8c487cdc-817c-4fed-9821-2dcea39ab3ff - 127.0.0.1:63318 - [
+  {
+    "Id": 1,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "Backup Documents",
+    "FileSource": "C:\\Documents\\myfile.txt",
+    "FileTarget": "D:\\Backup\\myfile.txt",
+    "FileSize": "1024",
+    "FileTransferTime": "30",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-03T12:00:00"
+  },
+  {
+    "Id": 2,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "dez",
+    "FileSource": "/Users/matisbouquin/Desktop/CESI/",
+    "FileTarget": "/Users/matisbouquin/Desktop/PERSO/",
+    "FileSize": "0 KB",
+    "FileTransferTime": "0 sec",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-19T09:35:35.122046+01:00"
+  }
+]
+2025-02-24 13:25:56 - 8c487cdc-817c-4fed-9821-2dcea39ab3ff - 127.0.0.1:63318 - [
+  {
+    "Id": 1,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "Backup Documents",
+    "FileSource": "C:\\Documents\\myfile.txt",
+    "FileTarget": "D:\\Backup\\myfile.txt",
+    "FileSize": "1024",
+    "FileTransferTime": "30",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-03T12:00:00"
+  },
+  {
+    "Id": 2,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "dez",
+    "FileSource": "/Users/matisbouquin/Desktop/CESI/",
+    "FileTarget": "/Users/matisbouquin/Desktop/PERSO/",
+    "FileSize": "0 KB",
+    "FileTransferTime": "0 sec",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-19T09:35:35.122046+01:00"
+  }
+]
+2025-02-24 13:25:57 - 8c487cdc-817c-4fed-9821-2dcea39ab3ff - 127.0.0.1:63318 - {"command":"GET_JOB_USERS","id":"8c487cdc-817c-4fed-9821-2dcea39ab3ff"}
+2025-02-24 13:25:57 - 8c487cdc-817c-4fed-9821-2dcea39ab3ff - 127.0.0.1:63318 - GET_JOBS
+2025-02-24 13:26:02 - 8c487cdc-817c-4fed-9821-2dcea39ab3ff - 127.0.0.1:63318 - {"command":"GET_JOB_USERS","id":"8c487cdc-817c-4fed-9821-2dcea39ab3ff"}
+2025-02-24 13:26:02 - 8c487cdc-817c-4fed-9821-2dcea39ab3ff - 127.0.0.1:63318 - {"command":"GET_JOB_USERS","id":"8c487cdc-817c-4fed-9821-2dcea39ab3ff"}
+2025-02-24 13:29:09 - 83b97988-309f-4f6d-9fcc-ae56febd8c01 - 127.0.0.1:63387 - GET_USERS
+2025-02-24 13:29:09 - 83b97988-309f-4f6d-9fcc-ae56febd8c01 - 127.0.0.1:63387 - [{"Id":"83b97988-309f-4f6d-9fcc-ae56febd8c01","Name":"z","IPAddress":"127.0.0.1","Port":63387}]
+2025-02-24 13:29:23 - 83b97988-309f-4f6d-9fcc-ae56febd8c01 - 127.0.0.1:63387 - GET_USERS
+2025-02-24 13:29:23 - 83b97988-309f-4f6d-9fcc-ae56febd8c01 - 127.0.0.1:63387 - [{"Id":"83b97988-309f-4f6d-9fcc-ae56febd8c01","Name":"z","IPAddress":"127.0.0.1","Port":63387}]
+2025-02-24 13:29:26 - 83b97988-309f-4f6d-9fcc-ae56febd8c01 - 127.0.0.1:63387 - {"command":"CONNECTE_USERS","id":"83b97988-309f-4f6d-9fcc-ae56febd8c01"}
+2025-02-24 13:29:26 - 83b97988-309f-4f6d-9fcc-ae56febd8c01 - 127.0.0.1:63387 - L'utilisateur z s'est connecté à vous !
+2025-02-24 13:29:26 - 83b97988-309f-4f6d-9fcc-ae56febd8c01 - 127.0.0.1:63387 - Connection à z réussi !
+2025-02-24 13:29:28 - 83b97988-309f-4f6d-9fcc-ae56febd8c01 - 127.0.0.1:63387 - {"command":"GET_JOB_USERS","id":"83b97988-309f-4f6d-9fcc-ae56febd8c01"}
+2025-02-24 13:29:28 - 83b97988-309f-4f6d-9fcc-ae56febd8c01 - 127.0.0.1:63387 - GET_JOBS
+2025-02-24 13:29:28 - 83b97988-309f-4f6d-9fcc-ae56febd8c01 - 127.0.0.1:63387 - [
+  {
+    "Id": 1,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "Backup Documents",
+    "FileSource": "C:\\Documents\\myfile.txt",
+    "FileTarget": "D:\\Backup\\myfile.txt",
+    "FileSize": "1024",
+    "FileTransferTime": "30",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-03T12:00:00"
+  },
+  {
+    "Id": 2,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "dez",
+    "FileSource": "/Users/matisbouquin/Desktop/CESI/",
+    "FileTarget": "/Users/matisbouquin/Desktop/PERSO/",
+    "FileSize": "0 KB",
+    "FileTransferTime": "0 sec",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-19T09:35:35.122046+01:00"
+  }
+]
+2025-02-24 13:29:28 - 83b97988-309f-4f6d-9fcc-ae56febd8c01 - 127.0.0.1:63387 - [
+  {
+    "Id": 1,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "Backup Documents",
+    "FileSource": "C:\\Documents\\myfile.txt",
+    "FileTarget": "D:\\Backup\\myfile.txt",
+    "FileSize": "1024",
+    "FileTransferTime": "30",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-03T12:00:00"
+  },
+  {
+    "Id": 2,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "dez",
+    "FileSource": "/Users/matisbouquin/Desktop/CESI/",
+    "FileTarget": "/Users/matisbouquin/Desktop/PERSO/",
+    "FileSize": "0 KB",
+    "FileTransferTime": "0 sec",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-19T09:35:35.122046+01:00"
+  }
+]
+2025-02-24 13:30:39 - c44592c4-ff88-41ef-805e-f200a18d0f43 - 127.0.0.1:63416 - GET_USERS
+2025-02-24 13:30:39 - c44592c4-ff88-41ef-805e-f200a18d0f43 - 127.0.0.1:63416 - [{"Id":"c44592c4-ff88-41ef-805e-f200a18d0f43","Name":"a","IPAddress":"127.0.0.1","Port":63416}]
+2025-02-24 13:30:48 - c44592c4-ff88-41ef-805e-f200a18d0f43 - 127.0.0.1:63416 - GET_USERS
+2025-02-24 13:30:48 - c44592c4-ff88-41ef-805e-f200a18d0f43 - 127.0.0.1:63416 - [{"Id":"c44592c4-ff88-41ef-805e-f200a18d0f43","Name":"a","IPAddress":"127.0.0.1","Port":63416}]
+2025-02-24 13:30:56 - c44592c4-ff88-41ef-805e-f200a18d0f43 - 127.0.0.1:63416 - {"command":"CONNECTE_USERS","id":"c44592c4-ff88-41ef-805e-f200a18d0f43"}
+2025-02-24 13:30:56 - c44592c4-ff88-41ef-805e-f200a18d0f43 - 127.0.0.1:63416 - L'utilisateur a s'est connecté à vous !
+2025-02-24 13:30:56 - c44592c4-ff88-41ef-805e-f200a18d0f43 - 127.0.0.1:63416 - Connection à a réussi !
+2025-02-24 13:30:59 - c44592c4-ff88-41ef-805e-f200a18d0f43 - 127.0.0.1:63416 - {"command":"GET_JOB_USERS","id":"c44592c4-ff88-41ef-805e-f200a18d0f43"}
+2025-02-24 13:30:59 - c44592c4-ff88-41ef-805e-f200a18d0f43 - 127.0.0.1:63416 - GET_JOBS
+2025-02-24 13:30:59 - c44592c4-ff88-41ef-805e-f200a18d0f43 - 127.0.0.1:63416 - [
+  {
+    "Id": 1,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "Backup Documents",
+    "FileSource": "C:\\Documents\\myfile.txt",
+    "FileTarget": "D:\\Backup\\myfile.txt",
+    "FileSize": "1024",
+    "FileTransferTime": "30",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-03T12:00:00"
+  },
+  {
+    "Id": 2,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "dez",
+    "FileSource": "/Users/matisbouquin/Desktop/CESI/",
+    "FileTarget": "/Users/matisbouquin/Desktop/PERSO/",
+    "FileSize": "0 KB",
+    "FileTransferTime": "0 sec",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-19T09:35:35.122046+01:00"
+  }
+]
+2025-02-24 13:30:59 - c44592c4-ff88-41ef-805e-f200a18d0f43 - 127.0.0.1:63416 - [
+  {
+    "Id": 1,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "Backup Documents",
+    "FileSource": "C:\\Documents\\myfile.txt",
+    "FileTarget": "D:\\Backup\\myfile.txt",
+    "FileSize": "1024",
+    "FileTransferTime": "30",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-03T12:00:00"
+  },
+  {
+    "Id": 2,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "dez",
+    "FileSource": "/Users/matisbouquin/Desktop/CESI/",
+    "FileTarget": "/Users/matisbouquin/Desktop/PERSO/",
+    "FileSize": "0 KB",
+    "FileTransferTime": "0 sec",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-19T09:35:35.122046+01:00"
+  }
+]
+2025-02-24 13:33:49 - bfc48bfc-1fa9-4b95-b44b-55298b54dc24 - 127.0.0.1:63509 - GET_USERS
+2025-02-24 13:33:49 - bfc48bfc-1fa9-4b95-b44b-55298b54dc24 - 127.0.0.1:63509 - [{"Id":"bfc48bfc-1fa9-4b95-b44b-55298b54dc24","Name":"a","IPAddress":"127.0.0.1","Port":63509}]
+2025-02-24 13:33:51 - bfc48bfc-1fa9-4b95-b44b-55298b54dc24 - 127.0.0.1:63509 - GET_USERS
+2025-02-24 13:33:51 - bfc48bfc-1fa9-4b95-b44b-55298b54dc24 - 127.0.0.1:63509 - [{"Id":"bfc48bfc-1fa9-4b95-b44b-55298b54dc24","Name":"a","IPAddress":"127.0.0.1","Port":63509}]
+2025-02-24 13:34:09 - bfc48bfc-1fa9-4b95-b44b-55298b54dc24 - 127.0.0.1:63509 - {"command":"CONNECTE_USERS","id":"bfc48bfc-1fa9-4b95-b44b-55298b54dc24"}
+2025-02-24 13:34:09 - bfc48bfc-1fa9-4b95-b44b-55298b54dc24 - 127.0.0.1:63509 - L'utilisateur a s'est connecté à vous !
+2025-02-24 13:34:09 - bfc48bfc-1fa9-4b95-b44b-55298b54dc24 - 127.0.0.1:63509 - Connection à a réussi !
+2025-02-24 13:34:26 - bfc48bfc-1fa9-4b95-b44b-55298b54dc24 - 127.0.0.1:63509 - {"command":"GET_JOB_USERS","id":"bfc48bfc-1fa9-4b95-b44b-55298b54dc24"}
+2025-02-24 13:34:26 - bfc48bfc-1fa9-4b95-b44b-55298b54dc24 - 127.0.0.1:63509 - GET_JOBS
+2025-02-24 13:34:41 - bfc48bfc-1fa9-4b95-b44b-55298b54dc24 - 127.0.0.1:63509 - [
+  {
+    "Id": 1,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "Backup Documents",
+    "FileSource": "C:\\Documents\\myfile.txt",
+    "FileTarget": "D:\\Backup\\myfile.txt",
+    "FileSize": "1024",
+    "FileTransferTime": "30",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-03T12:00:00"
+  },
+  {
+    "Id": 2,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "dez",
+    "FileSource": "/Users/matisbouquin/Desktop/CESI/",
+    "FileTarget": "/Users/matisbouquin/Desktop/PERSO/",
+    "FileSize": "0 KB",
+    "FileTransferTime": "0 sec",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-19T09:35:35.122046+01:00"
+  }
+]
+2025-02-24 13:34:41 - bfc48bfc-1fa9-4b95-b44b-55298b54dc24 - 127.0.0.1:63509 - [
+  {
+    "Id": 1,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "Backup Documents",
+    "FileSource": "C:\\Documents\\myfile.txt",
+    "FileTarget": "D:\\Backup\\myfile.txt",
+    "FileSize": "1024",
+    "FileTransferTime": "30",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-03T12:00:00"
+  },
+  {
+    "Id": 2,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "dez",
+    "FileSource": "/Users/matisbouquin/Desktop/CESI/",
+    "FileTarget": "/Users/matisbouquin/Desktop/PERSO/",
+    "FileSize": "0 KB",
+    "FileTransferTime": "0 sec",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-19T09:35:35.122046+01:00"
+  }
+]
+2025-02-24 13:36:28 - 51f79683-9a60-4a59-96cb-05da43792d30 - 127.0.0.1:63562 - GET_USERS
+2025-02-24 13:36:28 - 51f79683-9a60-4a59-96cb-05da43792d30 - 127.0.0.1:63562 - [{"Id":"51f79683-9a60-4a59-96cb-05da43792d30","Name":"a","IPAddress":"127.0.0.1","Port":63562}]
+2025-02-24 13:36:30 - 51f79683-9a60-4a59-96cb-05da43792d30 - 127.0.0.1:63562 - GET_USERS
+2025-02-24 13:36:30 - 51f79683-9a60-4a59-96cb-05da43792d30 - 127.0.0.1:63562 - [{"Id":"51f79683-9a60-4a59-96cb-05da43792d30","Name":"a","IPAddress":"127.0.0.1","Port":63562}]
+2025-02-24 13:36:33 - 51f79683-9a60-4a59-96cb-05da43792d30 - 127.0.0.1:63562 - GET_USERS
+2025-02-24 13:36:33 - 51f79683-9a60-4a59-96cb-05da43792d30 - 127.0.0.1:63562 - [{"Id":"51f79683-9a60-4a59-96cb-05da43792d30","Name":"a","IPAddress":"127.0.0.1","Port":63562}]
+2025-02-24 13:36:45 - 51f79683-9a60-4a59-96cb-05da43792d30 - 127.0.0.1:63562 - {"command":"CONNECTE_USERS","id":"51f79683-9a60-4a59-96cb-05da43792d30"}
+2025-02-24 13:36:45 - 51f79683-9a60-4a59-96cb-05da43792d30 - 127.0.0.1:63562 - L'utilisateur a s'est connecté à vous !
+2025-02-24 13:36:45 - 51f79683-9a60-4a59-96cb-05da43792d30 - 127.0.0.1:63562 - Connection à a réussi !
+2025-02-24 13:36:46 - 51f79683-9a60-4a59-96cb-05da43792d30 - 127.0.0.1:63562 - {"command":"GET_JOB_USERS","id":"51f79683-9a60-4a59-96cb-05da43792d30"}
+2025-02-24 13:36:46 - 51f79683-9a60-4a59-96cb-05da43792d30 - 127.0.0.1:63562 - GET_JOBS
+2025-02-24 13:36:48 - 51f79683-9a60-4a59-96cb-05da43792d30 - 127.0.0.1:63562 - {"command":"GET_JOB_USERS","id":"51f79683-9a60-4a59-96cb-05da43792d30"}
+2025-02-24 13:36:48 - 51f79683-9a60-4a59-96cb-05da43792d30 - 127.0.0.1:63562 - {"command":"GET_JOB_USERS","id":"51f79683-9a60-4a59-96cb-05da43792d30"}
+2025-02-24 13:36:48 - 51f79683-9a60-4a59-96cb-05da43792d30 - 127.0.0.1:63562 - {"command":"GET_JOB_USERS","id":"51f79683-9a60-4a59-96cb-05da43792d30"}
+2025-02-24 13:36:48 - 51f79683-9a60-4a59-96cb-05da43792d30 - 127.0.0.1:63562 - GET_JOBS
+2025-02-24 13:37:21 - 51f79683-9a60-4a59-96cb-05da43792d30 - 127.0.0.1:63562 - 
+2025-02-24 13:37:31 - e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb - 127.0.0.1:63589 - GET_USERS
+2025-02-24 13:37:31 - e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb - 127.0.0.1:63589 - [{"Id":"e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb","Name":"a","IPAddress":"127.0.0.1","Port":63589}]
+2025-02-24 13:37:36 - e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb - 127.0.0.1:63589 - GET_USERS
+2025-02-24 13:37:36 - e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb - 127.0.0.1:63589 - [{"Id":"e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb","Name":"a","IPAddress":"127.0.0.1","Port":63589}]
+2025-02-24 13:37:41 - e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb - 127.0.0.1:63589 - GET_USERS
+2025-02-24 13:37:41 - e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb - 127.0.0.1:63589 - [{"Id":"e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb","Name":"a","IPAddress":"127.0.0.1","Port":63589}]
+2025-02-24 13:37:51 - e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb - 127.0.0.1:63589 - {"command":"CONNECTE_USERS","id":"e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb"}
+2025-02-24 13:37:51 - e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb - 127.0.0.1:63589 - L'utilisateur a s'est connecté à vous !
+2025-02-24 13:37:51 - e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb - 127.0.0.1:63589 - Connection à a réussi !
+2025-02-24 13:37:58 - e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb - 127.0.0.1:63589 - {"command":"GET_JOB_USERS","id":"e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb"}
+2025-02-24 13:37:58 - e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb - 127.0.0.1:63589 - GET_JOBS
+2025-02-24 13:38:22 - e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb - 127.0.0.1:63589 - {"command":"GET_JOB_USERS","id":"e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb"}
+2025-02-24 13:38:22 - e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb - 127.0.0.1:63589 - {"command":"GET_JOB_USERS","id":"e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb"}
+2025-02-24 13:38:28 - e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb - 127.0.0.1:63589 - {"command":"GET_JOB_USERS","id":"e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb"}
+2025-02-24 13:38:28 - e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb - 127.0.0.1:63589 - GET_JOBS
+2025-02-24 13:39:21 - e161b84d-ae2f-4a87-8e9f-ab2ebb479ccb - 127.0.0.1:63589 - 
+2025-02-24 13:39:30 - 51ef0f6f-e8c9-4cc6-9d46-6e2346cbd1de - 127.0.0.1:63628 - GET_USERS
+2025-02-24 13:39:30 - 51ef0f6f-e8c9-4cc6-9d46-6e2346cbd1de - 127.0.0.1:63628 - [{"Id":"51ef0f6f-e8c9-4cc6-9d46-6e2346cbd1de","Name":"a","IPAddress":"127.0.0.1","Port":63628}]
+2025-02-24 13:39:39 - 51ef0f6f-e8c9-4cc6-9d46-6e2346cbd1de - 127.0.0.1:63628 - GET_USERS
+2025-02-24 13:39:39 - 51ef0f6f-e8c9-4cc6-9d46-6e2346cbd1de - 127.0.0.1:63628 - [{"Id":"51ef0f6f-e8c9-4cc6-9d46-6e2346cbd1de","Name":"a","IPAddress":"127.0.0.1","Port":63628}]
+2025-02-24 13:39:41 - 51ef0f6f-e8c9-4cc6-9d46-6e2346cbd1de - 127.0.0.1:63628 - GET_USERS
+2025-02-24 13:39:41 - 51ef0f6f-e8c9-4cc6-9d46-6e2346cbd1de - 127.0.0.1:63628 - [{"Id":"51ef0f6f-e8c9-4cc6-9d46-6e2346cbd1de","Name":"a","IPAddress":"127.0.0.1","Port":63628}]
+2025-02-24 13:40:01 - 51ef0f6f-e8c9-4cc6-9d46-6e2346cbd1de - 127.0.0.1:63628 - {"command":"CONNECTE_USERS","id":"51ef0f6f-e8c9-4cc6-9d46-6e2346cbd1de"}
+2025-02-24 13:40:01 - 51ef0f6f-e8c9-4cc6-9d46-6e2346cbd1de - 127.0.0.1:63628 - L'utilisateur a s'est connecté à vous !
+2025-02-24 13:40:01 - 51ef0f6f-e8c9-4cc6-9d46-6e2346cbd1de - 127.0.0.1:63628 - Connection à a réussi !
+2025-02-24 13:40:04 - 51ef0f6f-e8c9-4cc6-9d46-6e2346cbd1de - 127.0.0.1:63628 - {"command":"GET_JOB_USERS","id":"51ef0f6f-e8c9-4cc6-9d46-6e2346cbd1de"}
+2025-02-24 13:40:04 - 51ef0f6f-e8c9-4cc6-9d46-6e2346cbd1de - 127.0.0.1:63628 - GET_JOBS
+2025-02-24 13:40:41 - 51ef0f6f-e8c9-4cc6-9d46-6e2346cbd1de - 127.0.0.1:63628 - 
+2025-02-24 13:46:38 - 11bee9d8-ef36-43da-88ac-bbcd46c6026e - 127.0.0.1:63741 - GET_USERS
+2025-02-24 13:46:38 - 11bee9d8-ef36-43da-88ac-bbcd46c6026e - 127.0.0.1:63741 - [{"Id":"11bee9d8-ef36-43da-88ac-bbcd46c6026e","Name":"a","IPAddress":"127.0.0.1","Port":63741}]
+2025-02-24 13:46:42 - 11bee9d8-ef36-43da-88ac-bbcd46c6026e - 127.0.0.1:63741 - GET_USERS
+2025-02-24 13:46:42 - 11bee9d8-ef36-43da-88ac-bbcd46c6026e - 127.0.0.1:63741 - [{"Id":"11bee9d8-ef36-43da-88ac-bbcd46c6026e","Name":"a","IPAddress":"127.0.0.1","Port":63741}]
+2025-02-24 13:46:57 - 1c90c06f-996a-448d-a328-adab7dce12f0 - 127.0.0.1:63749 - GET_USERS
+2025-02-24 13:46:57 - 1c90c06f-996a-448d-a328-adab7dce12f0 - 127.0.0.1:63749 - [{"Id":"1c90c06f-996a-448d-a328-adab7dce12f0","Name":"a","IPAddress":"127.0.0.1","Port":63749}]
+2025-02-24 13:47:07 - 1c90c06f-996a-448d-a328-adab7dce12f0 - 127.0.0.1:63749 - GET_USERS
+2025-02-24 13:47:07 - 1c90c06f-996a-448d-a328-adab7dce12f0 - 127.0.0.1:63749 - [{"Id":"1c90c06f-996a-448d-a328-adab7dce12f0","Name":"a","IPAddress":"127.0.0.1","Port":63749}]
+2025-02-24 13:47:10 - 1c90c06f-996a-448d-a328-adab7dce12f0 - 127.0.0.1:63749 - GET_USERS
+2025-02-24 13:47:10 - 1c90c06f-996a-448d-a328-adab7dce12f0 - 127.0.0.1:63749 - [{"Id":"1c90c06f-996a-448d-a328-adab7dce12f0","Name":"a","IPAddress":"127.0.0.1","Port":63749}]
+2025-02-24 13:47:43 - 9729d10b-6b75-42b2-a418-885955ef13af - 127.0.0.1:63766 - GET_USERS
+2025-02-24 13:47:43 - 9729d10b-6b75-42b2-a418-885955ef13af - 127.0.0.1:63766 - [{"Id":"9729d10b-6b75-42b2-a418-885955ef13af","Name":"a","IPAddress":"127.0.0.1","Port":63766}]
+2025-02-24 13:48:53 - ac0ab470-532c-48d3-b6dd-202efa6f48d9 - 127.0.0.1:63791 - GET_USERS
+2025-02-24 13:48:53 - ac0ab470-532c-48d3-b6dd-202efa6f48d9 - 127.0.0.1:63791 - [{"Id":"ac0ab470-532c-48d3-b6dd-202efa6f48d9","Name":"y","IPAddress":"127.0.0.1","Port":63791}]
+2025-02-24 13:59:32 - 23bedb4b-3d61-408e-a2e8-6c09a1d79a13 - 127.0.0.1:63996 - GET_USERS
+2025-02-24 13:59:32 - 23bedb4b-3d61-408e-a2e8-6c09a1d79a13 - 127.0.0.1:63996 - [{"Id":"23bedb4b-3d61-408e-a2e8-6c09a1d79a13","Name":"u","IPAddress":"127.0.0.1","Port":63996}]
+2025-02-24 13:59:36 - 23bedb4b-3d61-408e-a2e8-6c09a1d79a13 - 127.0.0.1:63996 - GET_USERS
+2025-02-24 13:59:36 - 23bedb4b-3d61-408e-a2e8-6c09a1d79a13 - 127.0.0.1:63996 - [{"Id":"23bedb4b-3d61-408e-a2e8-6c09a1d79a13","Name":"u","IPAddress":"127.0.0.1","Port":63996}]
+2025-02-24 14:03:09 - ecbfb88c-d459-49fe-b313-12b250a9fea2 - 127.0.0.1:64050 - GET_USERS
+2025-02-24 14:03:09 - ecbfb88c-d459-49fe-b313-12b250a9fea2 - 127.0.0.1:64050 - [{"Id":"ecbfb88c-d459-49fe-b313-12b250a9fea2","Name":"a","IPAddress":"127.0.0.1","Port":64050}]
+2025-02-24 14:03:18 - ecbfb88c-d459-49fe-b313-12b250a9fea2 - 127.0.0.1:64050 - {"command":"CONNECTE_USERS","id":"ecbfb88c-d459-49fe-b313-12b250a9fea2"}
+2025-02-24 14:03:18 - ecbfb88c-d459-49fe-b313-12b250a9fea2 - 127.0.0.1:64050 - L'utilisateur a s'est connecté à vous !
+2025-02-24 14:03:18 - ecbfb88c-d459-49fe-b313-12b250a9fea2 - 127.0.0.1:64050 - Connection à a réussi !
+2025-02-24 14:03:23 - ecbfb88c-d459-49fe-b313-12b250a9fea2 - 127.0.0.1:64050 - {"command":"GET_JOB_USERS","id":"ecbfb88c-d459-49fe-b313-12b250a9fea2"}
+2025-02-24 14:03:23 - ecbfb88c-d459-49fe-b313-12b250a9fea2 - 127.0.0.1:64050 - GET_JOBS
+2025-02-24 14:03:33 - ecbfb88c-d459-49fe-b313-12b250a9fea2 - 127.0.0.1:64050 - 
+2025-02-24 14:06:40 - 6f9a2b08-f7ca-41a7-ae91-87fb13a075d5 - 127.0.0.1:64136 - GET_USERS
+2025-02-24 14:06:40 - 6f9a2b08-f7ca-41a7-ae91-87fb13a075d5 - 127.0.0.1:64136 - [{"Id":"6f9a2b08-f7ca-41a7-ae91-87fb13a075d5","Name":"a","IPAddress":"127.0.0.1","Port":64136}]
+2025-02-24 14:07:06 - 6f9a2b08-f7ca-41a7-ae91-87fb13a075d5 - 127.0.0.1:64136 - {"command":"CONNECTE_USERS","id":"6f9a2b08-f7ca-41a7-ae91-87fb13a075d5"}
+2025-02-24 14:07:06 - 6f9a2b08-f7ca-41a7-ae91-87fb13a075d5 - 127.0.0.1:64136 - L'utilisateur a s'est connecté à vous !
+2025-02-24 14:07:06 - 6f9a2b08-f7ca-41a7-ae91-87fb13a075d5 - 127.0.0.1:64136 - Connection à a réussi !
+2025-02-24 14:07:09 - 6f9a2b08-f7ca-41a7-ae91-87fb13a075d5 - 127.0.0.1:64136 - {"command":"GET_JOB_USERS","id":"6f9a2b08-f7ca-41a7-ae91-87fb13a075d5"}
+2025-02-24 14:07:09 - 6f9a2b08-f7ca-41a7-ae91-87fb13a075d5 - 127.0.0.1:64136 - GET_JOBS
+2025-02-24 14:07:09 - 6f9a2b08-f7ca-41a7-ae91-87fb13a075d5 - 127.0.0.1:64136 - [
+  {
+    "Id": 1,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "Backup Documents",
+    "FileSource": "C:\\Documents\\myfile.txt",
+    "FileTarget": "D:\\Backup\\myfile.txt",
+    "FileSize": "1024",
+    "FileTransferTime": "30",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-03T12:00:00"
+  },
+  {
+    "Id": 2,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "dez",
+    "FileSource": "/Users/matisbouquin/Desktop/CESI/",
+    "FileTarget": "/Users/matisbouquin/Desktop/PERSO/",
+    "FileSize": "0 KB",
+    "FileTransferTime": "0 sec",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-19T09:35:35.122046+01:00"
+  }
+]
+2025-02-24 14:07:09 - 6f9a2b08-f7ca-41a7-ae91-87fb13a075d5 - 127.0.0.1:64136 - [
+  {
+    "Id": 1,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "Backup Documents",
+    "FileSource": "C:\\Documents\\myfile.txt",
+    "FileTarget": "D:\\Backup\\myfile.txt",
+    "FileSize": "1024",
+    "FileTransferTime": "30",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-03T12:00:00"
+  },
+  {
+    "Id": 2,
+    "SaveState": "INACTIVE",
+    "SaveType": "COMPLETE",
+    "Name": "dez",
+    "FileSource": "/Users/matisbouquin/Desktop/CESI/",
+    "FileTarget": "/Users/matisbouquin/Desktop/PERSO/",
+    "FileSize": "0 KB",
+    "FileTransferTime": "0 sec",
+    "LastFullBackupPath": null,
+    "LastSaveDifferentialPath": null,
+    "Time": "2025-02-19T09:35:35.122046+01:00"
+  }
+]
+2025-02-24 14:09:15 - 92877abb-64ed-4e3c-91f6-1004870f555c - 127.0.0.1:64181 - GET_USERS
+2025-02-24 14:09:15 - 92877abb-64ed-4e3c-91f6-1004870f555c - 127.0.0.1:64181 - [{"Id":"92877abb-64ed-4e3c-91f6-1004870f555c","Name":"a","IPAddress":"127.0.0.1","Port":64181}]
+2025-02-24 14:09:17 - 92877abb-64ed-4e3c-91f6-1004870f555c - 127.0.0.1:64181 - {"command":"CONNECTE_USERS","id":"92877abb-64ed-4e3c-91f6-1004870f555c"}
+2025-02-24 14:09:17 - 92877abb-64ed-4e3c-91f6-1004870f555c - 127.0.0.1:64181 - L'utilisateur a s'est connecté à vous !
+2025-02-24 14:09:17 - 92877abb-64ed-4e3c-91f6-1004870f555c - 127.0.0.1:64181 - Connection à a réussi !
+2025-02-24 14:09:19 - 92877abb-64ed-4e3c-91f6-1004870f555c - 127.0.0.1:64181 - {"command":"GET_JOB_USERS","id":"92877abb-64ed-4e3c-91f6-1004870f555c"}
+2025-02-24 14:09:19 - 92877abb-64ed-4e3c-91f6-1004870f555c - 127.0.0.1:64181 - GET_JOBS
+2025-02-24 14:11:18 - 6d54cd78-79dd-42e4-8cad-59de32fe24ea - 127.0.0.1:64219 - GET_USERS
+2025-02-24 14:11:18 - 6d54cd78-79dd-42e4-8cad-59de32fe24ea - 127.0.0.1:64219 - [{"Id":"6d54cd78-79dd-42e4-8cad-59de32fe24ea","Name":"a","IPAddress":"127.0.0.1","Port":64219}]
+2025-02-24 14:11:22 - 6d54cd78-79dd-42e4-8cad-59de32fe24ea - 127.0.0.1:64219 - {"command":"CONNECTE_USERS","id":"6d54cd78-79dd-42e4-8cad-59de32fe24ea"}
+2025-02-24 14:11:22 - 6d54cd78-79dd-42e4-8cad-59de32fe24ea - 127.0.0.1:64219 - L'utilisateur a s'est connecté à vous !
+2025-02-24 14:11:22 - 6d54cd78-79dd-42e4-8cad-59de32fe24ea - 127.0.0.1:64219 - Connection à a réussi !
+2025-02-24 14:11:23 - 6d54cd78-79dd-42e4-8cad-59de32fe24ea - 127.0.0.1:64219 - {"command":"GET_JOB_USERS","id":"6d54cd78-79dd-42e4-8cad-59de32fe24ea"}
+2025-02-24 14:11:23 - 6d54cd78-79dd-42e4-8cad-59de32fe24ea - 127.0.0.1:64219 - GET_JOBS
+2025-02-24 14:11:26 - 6d54cd78-79dd-42e4-8cad-59de32fe24ea - 127.0.0.1:64219 - {"command":"GET_JOB_USERS","id":"6d54cd78-79dd-42e4-8cad-59de32fe24ea"}
+2025-02-24 14:11:26 - 6d54cd78-79dd-42e4-8cad-59de32fe24ea - 127.0.0.1:64219 - {"command":"GET_JOB_USERS","id":"6d54cd78-79dd-42e4-8cad-59de32fe24ea"}
+2025-02-24 14:11:26 - 6d54cd78-79dd-42e4-8cad-59de32fe24ea - 127.0.0.1:64219 - {"command":"GET_JOB_USERS","id":"6d54cd78-79dd-42e4-8cad-59de32fe24ea"}
+2025-02-24 14:11:26 - 6d54cd78-79dd-42e4-8cad-59de32fe24ea - 127.0.0.1:64219 - GET_JOBS
+2025-02-24 14:11:26 - 6d54cd78-79dd-42e4-8cad-59de32fe24ea - 127.0.0.1:64219 - {"command":"GET_JOB_USERS","id":"6d54cd78-79dd-42e4-8cad-59de32fe24ea"}
+2025-02-24 14:11:26 - 6d54cd78-79dd-42e4-8cad-59de32fe24ea - 127.0.0.1:64219 - {"command":"GET_JOB_USERS","id":"6d54cd78-79dd-42e4-8cad-59de32fe24ea"}
+2025-02-24 14:11:27 - 6d54cd78-79dd-42e4-8cad-59de32fe24ea - 127.0.0.1:64219 - {"command":"GET_JOB_USERS","id":"6d54cd78-79dd-42e4-8cad-59de32fe24ea"}
+2025-02-24 14:11:27 - 6d54cd78-79dd-42e4-8cad-59de32fe24ea - 127.0.0.1:64219 - GET_JOBS
+2025-02-24 14:23:35 - 18f9b38f-1eb8-4cae-9142-fad76186f760 - 127.0.0.1:64512 - GET_USERS
+2025-02-24 14:23:35 - 18f9b38f-1eb8-4cae-9142-fad76186f760 - 127.0.0.1:64512 - [{"Id":"18f9b38f-1eb8-4cae-9142-fad76186f760","Name":"a","IPAddress":"127.0.0.1","Port":64512}]
+2025-02-24 14:23:37 - 9e8bbb18-267f-47d3-abd7-d131add9eba0 - 127.0.0.1:64515 - GET_USERS
+2025-02-24 14:23:37 - 9e8bbb18-267f-47d3-abd7-d131add9eba0 - 127.0.0.1:64515 - [{"Id":"18f9b38f-1eb8-4cae-9142-fad76186f760","Name":"a","IPAddress":"127.0.0.1","Port":64512},{"Id":"9e8bbb18-267f-47d3-abd7-d131add9eba0","Name":"b","IPAddress":"127.0.0.1","Port":64515}]
+2025-02-24 14:24:06 - 9e8bbb18-267f-47d3-abd7-d131add9eba0 - 127.0.0.1:64515 - {"command":"CONNECTE_USERS","id":"18f9b38f-1eb8-4cae-9142-fad76186f760"}
+2025-02-24 14:24:06 - 18f9b38f-1eb8-4cae-9142-fad76186f760 - 127.0.0.1:64512 - L'utilisateur b s'est connecté à vous !
+2025-02-24 14:24:06 - 9e8bbb18-267f-47d3-abd7-d131add9eba0 - 127.0.0.1:64515 - Connection à a réussi !
+2025-02-24 14:24:40 - 439cc9ed-b415-4022-ac00-afa697d685d3 - 127.0.0.1:64544 - GET_USERS
+2025-02-24 14:24:40 - 439cc9ed-b415-4022-ac00-afa697d685d3 - 127.0.0.1:64544 - [{"Id":"18f9b38f-1eb8-4cae-9142-fad76186f760","Name":"a","IPAddress":"127.0.0.1","Port":64512},{"Id":"439cc9ed-b415-4022-ac00-afa697d685d3","Name":"a","IPAddress":"127.0.0.1","Port":64544}]
+2025-02-24 14:24:56 - 439cc9ed-b415-4022-ac00-afa697d685d3 - 127.0.0.1:64544 - {"command":"CONNECTE_USERS","id":"439cc9ed-b415-4022-ac00-afa697d685d3"}
+2025-02-24 14:24:56 - 439cc9ed-b415-4022-ac00-afa697d685d3 - 127.0.0.1:64544 - L'utilisateur a s'est connecté à vous !
+2025-02-24 14:24:56 - 439cc9ed-b415-4022-ac00-afa697d685d3 - 127.0.0.1:64544 - Connection à a réussi !
+2025-02-24 14:25:43 - 3dade874-32b2-4afe-bb97-956abe323e70 - 127.0.0.1:64576 - GET_USERS
+2025-02-24 14:25:43 - 3dade874-32b2-4afe-bb97-956abe323e70 - 127.0.0.1:64576 - [{"Id":"18f9b38f-1eb8-4cae-9142-fad76186f760","Name":"a","IPAddress":"127.0.0.1","Port":64512},{"Id":"3dade874-32b2-4afe-bb97-956abe323e70","Name":"a","IPAddress":"127.0.0.1","Port":64576}]
+2025-02-24 14:25:52 - 3dade874-32b2-4afe-bb97-956abe323e70 - 127.0.0.1:64576 - {"command":"CONNECTE_USERS","id":"3dade874-32b2-4afe-bb97-956abe323e70"}
+2025-02-24 14:25:52 - 3dade874-32b2-4afe-bb97-956abe323e70 - 127.0.0.1:64576 - L'utilisateur a s'est connecté à vous !
+2025-02-24 14:25:52 - 3dade874-32b2-4afe-bb97-956abe323e70 - 127.0.0.1:64576 - Connection à a réussi !
+2025-02-24 14:32:14 - 248b00b3-14d6-4734-bbd9-ef953251a632 - 127.0.0.1:64714 - GET_USERS
+2025-02-24 14:32:14 - 248b00b3-14d6-4734-bbd9-ef953251a632 - 127.0.0.1:64714 - [{"Id":"248b00b3-14d6-4734-bbd9-ef953251a632","Name":"a","IPAddress":"127.0.0.1","Port":64714}]
+2025-02-24 14:32:16 - 15696633-b99d-43c6-b78a-25d109f136e7 - 127.0.0.1:64715 - GET_USERS
+2025-02-24 14:32:16 - 15696633-b99d-43c6-b78a-25d109f136e7 - 127.0.0.1:64715 - [{"Id":"248b00b3-14d6-4734-bbd9-ef953251a632","Name":"a","IPAddress":"127.0.0.1","Port":64714},{"Id":"15696633-b99d-43c6-b78a-25d109f136e7","Name":"b","IPAddress":"127.0.0.1","Port":64715}]
+2025-02-24 14:32:21 - 15696633-b99d-43c6-b78a-25d109f136e7 - 127.0.0.1:64715 - {"command":"CONNECTE_USERS","id":"15696633-b99d-43c6-b78a-25d109f136e7"}
+2025-02-24 14:32:21 - 15696633-b99d-43c6-b78a-25d109f136e7 - 127.0.0.1:64715 - L'utilisateur b s'est connecté à vous !
+2025-02-24 14:32:21 - 15696633-b99d-43c6-b78a-25d109f136e7 - 127.0.0.1:64715 - Connection à b réussi !
+2025-02-24 14:33:50 - ed6cb5fb-457e-43bc-954c-d8df9ee7ce38 - 127.0.0.1:64748 - GET_USERS
+2025-02-24 14:33:50 - ed6cb5fb-457e-43bc-954c-d8df9ee7ce38 - 127.0.0.1:64748 - [{"Id":"248b00b3-14d6-4734-bbd9-ef953251a632","Name":"a","IPAddress":"127.0.0.1","Port":64714},{"Id":"ed6cb5fb-457e-43bc-954c-d8df9ee7ce38","Name":"a","IPAddress":"127.0.0.1","Port":64748}]
+2025-02-24 14:37:35 - d4a1fa89-9d32-4df2-8fd5-549dc7d0f572 - 127.0.0.1:64816 - GET_USERS
+2025-02-24 14:37:35 - d4a1fa89-9d32-4df2-8fd5-549dc7d0f572 - 127.0.0.1:64816 - [{"Id":"248b00b3-14d6-4734-bbd9-ef953251a632","Name":"a","IPAddress":"127.0.0.1","Port":64714},{"Id":"d4a1fa89-9d32-4df2-8fd5-549dc7d0f572","Name":"ez","IPAddress":"127.0.0.1","Port":64816}]
+2025-02-24 14:37:37 - d4a1fa89-9d32-4df2-8fd5-549dc7d0f572 - 127.0.0.1:64816 - {"command":"CONNECTE_USERS","id":"248b00b3-14d6-4734-bbd9-ef953251a632"}
+2025-02-24 14:37:37 - 248b00b3-14d6-4734-bbd9-ef953251a632 - 127.0.0.1:64714 - L'utilisateur ez s'est connecté à vous !
+2025-02-24 14:37:37 - d4a1fa89-9d32-4df2-8fd5-549dc7d0f572 - 127.0.0.1:64816 - Connection à a réussi !
+2025-02-24 14:39:05 - eb102aab-ff28-4642-8cfd-ea58a06fd01c - 127.0.0.1:64884 - GET_USERS
+2025-02-24 14:39:05 - eb102aab-ff28-4642-8cfd-ea58a06fd01c - 127.0.0.1:64884 - [{"Id":"248b00b3-14d6-4734-bbd9-ef953251a632","Name":"a","IPAddress":"127.0.0.1","Port":64714},{"Id":"eb102aab-ff28-4642-8cfd-ea58a06fd01c","Name":"a","IPAddress":"127.0.0.1","Port":64884}]
+2025-02-24 14:39:27 - 7d0dcfcd-2a33-40f8-ac90-1bf33449ea62 - 127.0.0.1:64901 - GET_USERS
+2025-02-24 14:39:27 - 7d0dcfcd-2a33-40f8-ac90-1bf33449ea62 - 127.0.0.1:64901 - [{"Id":"7d0dcfcd-2a33-40f8-ac90-1bf33449ea62","Name":"a","IPAddress":"127.0.0.1","Port":64901}]
+2025-02-24 14:39:42 - c0cd3bdc-3023-4292-abad-fb598a6680fc - 127.0.0.1:64908 - GET_USERS
+2025-02-24 14:39:42 - c0cd3bdc-3023-4292-abad-fb598a6680fc - 127.0.0.1:64908 - [{"Id":"7d0dcfcd-2a33-40f8-ac90-1bf33449ea62","Name":"a","IPAddress":"127.0.0.1","Port":64901},{"Id":"c0cd3bdc-3023-4292-abad-fb598a6680fc","Name":"ed","IPAddress":"127.0.0.1","Port":64908}]
+2025-02-24 14:39:44 - c0cd3bdc-3023-4292-abad-fb598a6680fc - 127.0.0.1:64908 - {"command":"CONNECTE_USERS","id":"7d0dcfcd-2a33-40f8-ac90-1bf33449ea62"}
+2025-02-24 14:39:44 - 7d0dcfcd-2a33-40f8-ac90-1bf33449ea62 - 127.0.0.1:64901 - L'utilisateur ed s'est connecté à vous !
+2025-02-24 14:39:44 - c0cd3bdc-3023-4292-abad-fb598a6680fc - 127.0.0.1:64908 - Connection à a réussi !
+2025-02-24 14:45:58 - 353b6a56-f36b-4769-a9db-ec75ed88a2a3 - 127.0.0.1:65004 - GET_USERS
+2025-02-24 14:45:58 - 353b6a56-f36b-4769-a9db-ec75ed88a2a3 - 127.0.0.1:65004 - [{"Id":"353b6a56-f36b-4769-a9db-ec75ed88a2a3","Name":"a","IPAddress":"127.0.0.1","Port":65004}]
+2025-02-24 14:46:01 - 35df14bf-43c6-43af-a6e3-57839f50954a - 127.0.0.1:65006 - GET_USERS
+2025-02-24 14:46:01 - 35df14bf-43c6-43af-a6e3-57839f50954a - 127.0.0.1:65006 - [{"Id":"353b6a56-f36b-4769-a9db-ec75ed88a2a3","Name":"a","IPAddress":"127.0.0.1","Port":65004},{"Id":"35df14bf-43c6-43af-a6e3-57839f50954a","Name":"b","IPAddress":"127.0.0.1","Port":65006}]
+2025-02-24 14:46:09 - 35df14bf-43c6-43af-a6e3-57839f50954a - 127.0.0.1:65006 - {"command":"CONNECTE_USERS","id":"353b6a56-f36b-4769-a9db-ec75ed88a2a3"}
+2025-02-24 14:46:09 - 353b6a56-f36b-4769-a9db-ec75ed88a2a3 - 127.0.0.1:65004 - L'utilisateur b s'est connecté à vous !
+2025-02-24 14:46:09 - 35df14bf-43c6-43af-a6e3-57839f50954a - 127.0.0.1:65006 - Connection à a réussi !
+2025-02-24 14:46:18 - 35df14bf-43c6-43af-a6e3-57839f50954a - 127.0.0.1:65006 - {"command":"DISCONNECTE_USERS","id":"353b6a56-f36b-4769-a9db-ec75ed88a2a3"}
+2025-02-24 14:46:18 - 353b6a56-f36b-4769-a9db-ec75ed88a2a3 - 127.0.0.1:65004 - L'utilisateur b s'est déconnecté à vous !
+2025-02-24 14:46:18 - 35df14bf-43c6-43af-a6e3-57839f50954a - 127.0.0.1:65006 - Déconnection à a réussi !
+2025-02-24 14:46:18 - 35df14bf-43c6-43af-a6e3-57839f50954a - 127.0.0.1:65006 - GET_USERS
+2025-02-24 14:46:18 - 35df14bf-43c6-43af-a6e3-57839f50954a - 127.0.0.1:65006 - [{"Id":"353b6a56-f36b-4769-a9db-ec75ed88a2a3","Name":"a","IPAddress":"127.0.0.1","Port":65004},{"Id":"35df14bf-43c6-43af-a6e3-57839f50954a","Name":"b","IPAddress":"127.0.0.1","Port":65006}]
+2025-02-24 14:50:15 - 3dbbf7a7-5b2f-415e-9ad2-e7f83a36c36b - 127.0.0.1:65091 - GET_USERS
+2025-02-24 14:50:15 - 3dbbf7a7-5b2f-415e-9ad2-e7f83a36c36b - 127.0.0.1:65091 - [{"Id":"3dbbf7a7-5b2f-415e-9ad2-e7f83a36c36b","Name":"GET_USERS","IPAddress":"127.0.0.1","Port":65091}]
+2025-02-24 14:50:21 - 10414a35-0375-4aab-a0eb-f8766b9c003e - 127.0.0.1:65095 - GET_USERS
+2025-02-24 14:50:21 - 10414a35-0375-4aab-a0eb-f8766b9c003e - 127.0.0.1:65095 - [{"Id":"3dbbf7a7-5b2f-415e-9ad2-e7f83a36c36b","Name":"GET_USERS","IPAddress":"127.0.0.1","Port":65091},{"Id":"10414a35-0375-4aab-a0eb-f8766b9c003e","Name":"b","IPAddress":"127.0.0.1","Port":65095}]
+2025-02-24 14:50:29 - 10414a35-0375-4aab-a0eb-f8766b9c003e - 127.0.0.1:65095 - {"command":"CONNECTE_USERS","id":"3dbbf7a7-5b2f-415e-9ad2-e7f83a36c36b"}
+2025-02-24 14:50:29 - 3dbbf7a7-5b2f-415e-9ad2-e7f83a36c36b - 127.0.0.1:65091 - L'utilisateur b s'est connecté à vous !
+2025-02-24 14:50:29 - 10414a35-0375-4aab-a0eb-f8766b9c003e - 127.0.0.1:65095 - Connection à GET_USERS réussi !
+2025-02-24 14:50:31 - 10414a35-0375-4aab-a0eb-f8766b9c003e - 127.0.0.1:65095 - {"command":"DISCONNECTE_USERS","id":"3dbbf7a7-5b2f-415e-9ad2-e7f83a36c36b"}
+2025-02-24 14:50:31 - 3dbbf7a7-5b2f-415e-9ad2-e7f83a36c36b - 127.0.0.1:65091 - L'utilisateur b s'est déconnecté à vous !
+2025-02-24 14:50:31 - 10414a35-0375-4aab-a0eb-f8766b9c003e - 127.0.0.1:65095 - Déconnection à GET_USERS réussi !
+2025-02-24 14:50:31 - 10414a35-0375-4aab-a0eb-f8766b9c003e - 127.0.0.1:65095 - GET_USERS
+2025-02-24 14:50:31 - 10414a35-0375-4aab-a0eb-f8766b9c003e - 127.0.0.1:65095 - [{"Id":"3dbbf7a7-5b2f-415e-9ad2-e7f83a36c36b","Name":"GET_USERS","IPAddress":"127.0.0.1","Port":65091},{"Id":"10414a35-0375-4aab-a0eb-f8766b9c003e","Name":"b","IPAddress":"127.0.0.1","Port":65095}]
+2025-02-24 14:50:50 - 3dbbf7a7-5b2f-415e-9ad2-e7f83a36c36b - 127.0.0.1:65091 - GET_USERS
+2025-02-24 14:50:50 - 3dbbf7a7-5b2f-415e-9ad2-e7f83a36c36b - 127.0.0.1:65091 - [{"Id":"3dbbf7a7-5b2f-415e-9ad2-e7f83a36c36b","Name":"GET_USERS","IPAddress":"127.0.0.1","Port":65091},{"Id":"10414a35-0375-4aab-a0eb-f8766b9c003e","Name":"b","IPAddress":"127.0.0.1","Port":65095}]
+2025-02-24 14:50:56 - 10414a35-0375-4aab-a0eb-f8766b9c003e - 127.0.0.1:65095 - {"command":"CONNECTE_USERS","id":"3dbbf7a7-5b2f-415e-9ad2-e7f83a36c36b"}
+2025-02-24 14:50:56 - 3dbbf7a7-5b2f-415e-9ad2-e7f83a36c36b - 127.0.0.1:65091 - L'utilisateur b s'est connecté à vous !
+2025-02-24 14:50:56 - 10414a35-0375-4aab-a0eb-f8766b9c003e - 127.0.0.1:65095 - Connection à GET_USERS réussi !
+2025-02-24 14:50:59 - 10414a35-0375-4aab-a0eb-f8766b9c003e - 127.0.0.1:65095 - {"command":"GET_JOB_USERS","id":"3dbbf7a7-5b2f-415e-9ad2-e7f83a36c36b"}
+2025-02-24 14:50:59 - 3dbbf7a7-5b2f-415e-9ad2-e7f83a36c36b - 127.0.0.1:65091 - GET_JOBS
+2025-02-24 14:50:59 - 3dbbf7a7-5b2f-415e-9ad2-e7f83a36c36b - 127.0.0.1:65091 - [{"Id":1,"SaveState":"INACTIVE","SaveType":"COMPLETE","Name":"Backup Documents","FileSource":"C:\\Documents\\myfile.txt","FileTarget":"D:\\Backup\\myfile.txt","FileSize":"1024","FileTransferTime":"30","LastFullBackupPath":null,"LastSaveDifferentialPath":null,"Time":"2025-02-03T12:00:00"},{"Id":2,"SaveState":"INACTIVE","SaveType":"COMPLETE","Name":"dez","FileSource":"/Users/matisbouquin/Desktop/CESI/","FileTarget":"/Users/matisbouquin/Desktop/PERSO/","FileSize":"0 KB","FileTransferTime":"0 sec","LastFullBackupPath":null,"LastSaveDifferentialPath":null,"Time":"2025-02-19T09:35:35.122046+01:00"}]
+2025-02-24 14:51:11 - 10414a35-0375-4aab-a0eb-f8766b9c003e - 127.0.0.1:65095 - 
+2025-02-24 14:51:11 - 10414a35-0375-4aab-a0eb-f8766b9c003e - 127.0.0.1:65095 - {"command":"GET_JOB_USERS","id":"3dbbf7a7-5b2f-415e-9ad2-e7f83a36c36b"}
+2025-02-24 14:51:11 - 10414a35-0375-4aab-a0eb-f8766b9c003e - 127.0.0.1:65095 - get job échoué
+2025-02-24 14:51:54 - fb8d5ef0-73db-478f-837d-18912e43d55c - 127.0.0.1:65124 - GET_USERS
+2025-02-24 14:51:54 - fb8d5ef0-73db-478f-837d-18912e43d55c - 127.0.0.1:65124 - [{"Id":"fb8d5ef0-73db-478f-837d-18912e43d55c","Name":"a","IPAddress":"127.0.0.1","Port":65124}]
+2025-02-24 14:52:06 - 70ecae15-51c1-4875-9a36-0a8a22900940 - 127.0.0.1:65137 - GET_USERS
+2025-02-24 14:52:06 - 70ecae15-51c1-4875-9a36-0a8a22900940 - 127.0.0.1:65137 - [{"Id":"fb8d5ef0-73db-478f-837d-18912e43d55c","Name":"a","IPAddress":"127.0.0.1","Port":65124},{"Id":"70ecae15-51c1-4875-9a36-0a8a22900940","Name":"b","IPAddress":"127.0.0.1","Port":65137}]
+2025-02-24 14:52:11 - 70ecae15-51c1-4875-9a36-0a8a22900940 - 127.0.0.1:65137 - {"command":"CONNECTE_USERS","id":"fb8d5ef0-73db-478f-837d-18912e43d55c"}
+2025-02-24 14:52:11 - fb8d5ef0-73db-478f-837d-18912e43d55c - 127.0.0.1:65124 - L'utilisateur b s'est connecté à vous !
+2025-02-24 14:52:11 - 70ecae15-51c1-4875-9a36-0a8a22900940 - 127.0.0.1:65137 - Connection à a réussi !
+2025-02-24 14:52:13 - 70ecae15-51c1-4875-9a36-0a8a22900940 - 127.0.0.1:65137 - {"command":"GET_JOB_USERS","id":"fb8d5ef0-73db-478f-837d-18912e43d55c"}
+2025-02-24 14:52:13 - fb8d5ef0-73db-478f-837d-18912e43d55c - 127.0.0.1:65124 - GET_JOBS
+2025-02-24 14:52:13 - fb8d5ef0-73db-478f-837d-18912e43d55c - 127.0.0.1:65124 - [{"Id":1,"SaveState":"INACTIVE","SaveType":"COMPLETE","Name":"Backup Documents","FileSource":"C:\\Documents\\myfile.txt","FileTarget":"D:\\Backup\\myfile.txt","FileSize":"1024","FileTransferTime":"30","LastFullBackupPath":null,"LastSaveDifferentialPath":null,"Time":"2025-02-03T12:00:00"},{"Id":2,"SaveState":"INACTIVE","SaveType":"COMPLETE","Name":"dez","FileSource":"/Users/matisbouquin/Desktop/CESI/","FileTarget":"/Users/matisbouquin/Desktop/PERSO/","FileSize":"0 KB","FileTransferTime":"0 sec","LastFullBackupPath":null,"LastSaveDifferentialPath":null,"Time":"2025-02-19T09:35:35.122046+01:00"}]
+2025-02-24 14:55:11 - 174848d7-00a5-41e9-9ba4-e185dca6c89b - 127.0.0.1:65198 - GET_USERS
+2025-02-24 14:55:11 - 174848d7-00a5-41e9-9ba4-e185dca6c89b - 127.0.0.1:65198 - [{"Id":"174848d7-00a5-41e9-9ba4-e185dca6c89b","Name":"a","IPAddress":"127.0.0.1","Port":65198}]
+2025-02-24 14:55:20 - 1330ba41-cc8e-4669-8610-22f9f545f779 - 127.0.0.1:65202 - GET_USERS
+2025-02-24 14:55:20 - 1330ba41-cc8e-4669-8610-22f9f545f779 - 127.0.0.1:65202 - [{"Id":"174848d7-00a5-41e9-9ba4-e185dca6c89b","Name":"a","IPAddress":"127.0.0.1","Port":65198},{"Id":"1330ba41-cc8e-4669-8610-22f9f545f779","Name":"b","IPAddress":"127.0.0.1","Port":65202}]
+2025-02-24 14:55:22 - 1330ba41-cc8e-4669-8610-22f9f545f779 - 127.0.0.1:65202 - {"command":"CONNECTE_USERS","id":"174848d7-00a5-41e9-9ba4-e185dca6c89b"}
+2025-02-24 14:55:22 - 174848d7-00a5-41e9-9ba4-e185dca6c89b - 127.0.0.1:65198 - L'utilisateur b s'est connecté à vous !
+2025-02-24 14:55:22 - 1330ba41-cc8e-4669-8610-22f9f545f779 - 127.0.0.1:65202 - Connection à a réussi !
+2025-02-24 14:55:24 - 1330ba41-cc8e-4669-8610-22f9f545f779 - 127.0.0.1:65202 - {"command":"GET_JOB_USERS","id":"174848d7-00a5-41e9-9ba4-e185dca6c89b"}
+2025-02-24 14:55:24 - 174848d7-00a5-41e9-9ba4-e185dca6c89b - 127.0.0.1:65198 - GET_JOBS
+2025-02-24 14:55:24 - 174848d7-00a5-41e9-9ba4-e185dca6c89b - 127.0.0.1:65198 - [{"Id":1,"SaveState":"INACTIVE","SaveType":"COMPLETE","Name":"Backup Documents","FileSource":"C:\\Documents\\myfile.txt","FileTarget":"D:\\Backup\\myfile.txt","FileSize":"1024","FileTransferTime":"30","LastFullBackupPath":null,"LastSaveDifferentialPath":null,"Time":"2025-02-03T12:00:00"},{"Id":2,"SaveState":"INACTIVE","SaveType":"COMPLETE","Name":"dez","FileSource":"/Users/matisbouquin/Desktop/CESI/","FileTarget":"/Users/matisbouquin/Desktop/PERSO/","FileSize":"0 KB","FileTransferTime":"0 sec","LastFullBackupPath":null,"LastSaveDifferentialPath":null,"Time":"2025-02-19T09:35:35.122046+01:00"}]
+2025-02-24 14:55:46 - 1330ba41-cc8e-4669-8610-22f9f545f779 - 127.0.0.1:65202 - 
+2025-02-24 15:09:11 - 816593af-08c9-4c5c-8102-be5b87bc8600 - 127.0.0.1:65480 - GET_USERS
+2025-02-24 15:09:11 - 816593af-08c9-4c5c-8102-be5b87bc8600 - 127.0.0.1:65480 - [{"Id":"816593af-08c9-4c5c-8102-be5b87bc8600","Name":"3","IPAddress":"127.0.0.1","Port":65480}]
+2025-02-24 15:09:16 - 7e2a3e3d-9966-4c52-9ac5-ce7f495bd524 - 127.0.0.1:65482 - GET_USERS
+2025-02-24 15:09:16 - 7e2a3e3d-9966-4c52-9ac5-ce7f495bd524 - 127.0.0.1:65482 - [{"Id":"816593af-08c9-4c5c-8102-be5b87bc8600","Name":"3","IPAddress":"127.0.0.1","Port":65480},{"Id":"7e2a3e3d-9966-4c52-9ac5-ce7f495bd524","Name":"1","IPAddress":"127.0.0.1","Port":65482}]
+2025-02-24 15:09:30 - 7e2a3e3d-9966-4c52-9ac5-ce7f495bd524 - 127.0.0.1:65482 - {"command":"CONNECTE_USERS","id":"816593af-08c9-4c5c-8102-be5b87bc8600"}
+2025-02-24 15:09:30 - 816593af-08c9-4c5c-8102-be5b87bc8600 - 127.0.0.1:65480 - L'utilisateur 1 s'est connecté à vous !
+2025-02-24 15:09:30 - 7e2a3e3d-9966-4c52-9ac5-ce7f495bd524 - 127.0.0.1:65482 - Connection à 3 réussi !
+2025-02-24 15:09:41 - 7e2a3e3d-9966-4c52-9ac5-ce7f495bd524 - 127.0.0.1:65482 - {"command":"GET_JOB_USERS","id":"816593af-08c9-4c5c-8102-be5b87bc8600"}
+2025-02-24 15:09:41 - 816593af-08c9-4c5c-8102-be5b87bc8600 - 127.0.0.1:65480 - GET_JOBS
+2025-02-24 15:09:41 - 816593af-08c9-4c5c-8102-be5b87bc8600 - 127.0.0.1:65480 - [{"Id":1,"SaveState":"INACTIVE","SaveType":"COMPLETE","Name":"Backup Documents","FileSource":"C:\\Documents\\myfile.txt","FileTarget":"D:\\Backup\\myfile.txt","FileSize":"1024","FileTransferTime":"30","LastFullBackupPath":null,"LastSaveDifferentialPath":null,"Time":"2025-02-03T12:00:00"},{"Id":2,"SaveState":"INACTIVE","SaveType":"COMPLETE","Name":"dez","FileSource":"/Users/matisbouquin/Desktop/CESI/","FileTarget":"/Users/matisbouquin/Desktop/PERSO/","FileSize":"0 KB","FileTransferTime":"0 sec","LastFullBackupPath":null,"LastSaveDifferentialPath":null,"Time":"2025-02-19T09:35:35.122046+01:00"}]
+2025-02-24 15:37:26 - 0b30a0bd-837f-4cbe-96d2-7bc6573944c2 - 127.0.0.1:49655 - GET_USERS
+2025-02-24 15:37:26 - 0b30a0bd-837f-4cbe-96d2-7bc6573944c2 - 127.0.0.1:49655 - [{"Id":"0b30a0bd-837f-4cbe-96d2-7bc6573944c2","Name":"a","IPAddress":"127.0.0.1","Port":49655}]
+2025-02-24 15:37:30 - 1c2d70e6-e893-479f-8a29-300d2e61b2ae - 127.0.0.1:49657 - GET_USERS
+2025-02-24 15:37:30 - 1c2d70e6-e893-479f-8a29-300d2e61b2ae - 127.0.0.1:49657 - [{"Id":"0b30a0bd-837f-4cbe-96d2-7bc6573944c2","Name":"a","IPAddress":"127.0.0.1","Port":49655},{"Id":"1c2d70e6-e893-479f-8a29-300d2e61b2ae","Name":"b","IPAddress":"127.0.0.1","Port":49657}]
+2025-02-24 15:37:31 - 1c2d70e6-e893-479f-8a29-300d2e61b2ae - 127.0.0.1:49657 - {"command":"CONNECTE_USERS","id":"0b30a0bd-837f-4cbe-96d2-7bc6573944c2"}
+2025-02-24 15:37:31 - 0b30a0bd-837f-4cbe-96d2-7bc6573944c2 - 127.0.0.1:49655 - L'utilisateur b s'est connecté à vous !
+2025-02-24 15:37:31 - 1c2d70e6-e893-479f-8a29-300d2e61b2ae - 127.0.0.1:49657 - Connection à a réussi !
+2025-02-24 15:37:33 - 1c2d70e6-e893-479f-8a29-300d2e61b2ae - 127.0.0.1:49657 - {"command":"GET_JOB_USERS","id":"0b30a0bd-837f-4cbe-96d2-7bc6573944c2"}
+2025-02-24 15:37:33 - 0b30a0bd-837f-4cbe-96d2-7bc6573944c2 - 127.0.0.1:49655 - GET_JOBS
+2025-02-24 15:37:33 - 0b30a0bd-837f-4cbe-96d2-7bc6573944c2 - 127.0.0.1:49655 - [{"Id":1,"SaveState":"INACTIVE","SaveType":"COMPLETE","Name":"Backup Documents","FileSource":"C:\\Documents\\myfile.txt","FileTarget":"D:\\Backup\\myfile.txt","FileSize":"1024","FileTransferTime":"30","LastFullBackupPath":null,"LastSaveDifferentialPath":null,"Time":"2025-02-03T12:00:00"},{"Id":2,"SaveState":"INACTIVE","SaveType":"COMPLETE","Name":"dez","FileSource":"/Users/matisbouquin/Desktop/CESI/","FileTarget":"/Users/matisbouquin/Desktop/PERSO/","FileSize":"0 KB","FileTransferTime":"0 sec","LastFullBackupPath":null,"LastSaveDifferentialPath":null,"Time":"2025-02-19T09:35:35.122046+01:00"}]
+2025-02-24 15:40:30 - 2423b6a0-b6a3-4bb4-8e7d-87ebcdced8db - 127.0.0.1:49709 - GET_USERS
+2025-02-24 15:40:30 - 2423b6a0-b6a3-4bb4-8e7d-87ebcdced8db - 127.0.0.1:49709 - [{"Id":"2423b6a0-b6a3-4bb4-8e7d-87ebcdced8db","Name":"a","IPAddress":"127.0.0.1","Port":49709}]
+2025-02-24 15:40:41 - f9d1820b-8908-48b5-92f9-7e4cba32695a - 127.0.0.1:49717 - GET_USERS
+2025-02-24 15:40:41 - f9d1820b-8908-48b5-92f9-7e4cba32695a - 127.0.0.1:49717 - [{"Id":"2423b6a0-b6a3-4bb4-8e7d-87ebcdced8db","Name":"a","IPAddress":"127.0.0.1","Port":49709},{"Id":"f9d1820b-8908-48b5-92f9-7e4cba32695a","Name":"b","IPAddress":"127.0.0.1","Port":49717}]
+2025-02-24 15:40:51 - f9d1820b-8908-48b5-92f9-7e4cba32695a - 127.0.0.1:49717 - {"command":"CONNECTE_USERS","id":"2423b6a0-b6a3-4bb4-8e7d-87ebcdced8db"}
+2025-02-24 15:40:51 - 2423b6a0-b6a3-4bb4-8e7d-87ebcdced8db - 127.0.0.1:49709 - L'utilisateur b s'est connecté à vous !
+2025-02-24 15:40:51 - f9d1820b-8908-48b5-92f9-7e4cba32695a - 127.0.0.1:49717 - Connection à a réussi !
+2025-02-24 15:40:52 - f9d1820b-8908-48b5-92f9-7e4cba32695a - 127.0.0.1:49717 - {"command":"GET_JOB_USERS","id":"2423b6a0-b6a3-4bb4-8e7d-87ebcdced8db"}
+2025-02-24 15:40:52 - 2423b6a0-b6a3-4bb4-8e7d-87ebcdced8db - 127.0.0.1:49709 - GET_JOBS
+2025-02-24 15:40:52 - 2423b6a0-b6a3-4bb4-8e7d-87ebcdced8db - 127.0.0.1:49709 - [{"Id":1,"SaveState":"INACTIVE","SaveType":"COMPLETE","Name":"Backup Documents","FileSource":"C:\\Documents\\myfile.txt","FileTarget":"D:\\Backup\\myfile.txt","FileSize":"1024","FileTransferTime":"30","LastFullBackupPath":null,"LastSaveDifferentialPath":null,"Time":"2025-02-03T12:00:00"},{"Id":2,"SaveState":"INACTIVE","SaveType":"COMPLETE","Name":"dez","FileSource":"/Users/matisbouquin/Desktop/CESI/","FileTarget":"/Users/matisbouquin/Desktop/PERSO/","FileSize":"0 KB","FileTransferTime":"0 sec","LastFullBackupPath":null,"LastSaveDifferentialPath":null,"Time":"2025-02-19T09:35:35.122046+01:00"}]
+2025-02-24 15:47:13 - f9d1820b-8908-48b5-92f9-7e4cba32695a - 127.0.0.1:49717 - get job échoué
+2025-02-24 16:01:36 - b8341a7f-84e0-4355-a0b8-1147a1b219d0 - 127.0.0.1:50148 - GET_USERS
+2025-02-24 16:01:36 - b8341a7f-84e0-4355-a0b8-1147a1b219d0 - 127.0.0.1:50148 - [{"Id":"d91f4a7f-bada-42b7-a3c6-9d4d063a5c14","Name":"GET_USERS","IPAddress":"127.0.0.1","Port":50146},{"Id":"b8341a7f-84e0-4355-a0b8-1147a1b219d0","Name":"b","IPAddress":"127.0.0.1","Port":50148}]
+2025-02-24 16:01:39 - b8341a7f-84e0-4355-a0b8-1147a1b219d0 - 127.0.0.1:50148 - {"command":"CONNECTE_USERS","id":"d91f4a7f-bada-42b7-a3c6-9d4d063a5c14"}
+2025-02-24 16:01:39 - d91f4a7f-bada-42b7-a3c6-9d4d063a5c14 - 127.0.0.1:50146 - L'utilisateur b s'est connecté à vous !
+2025-02-24 16:01:39 - b8341a7f-84e0-4355-a0b8-1147a1b219d0 - 127.0.0.1:50148 - Connection à GET_USERS réussi !
+2025-02-24 16:01:41 - b8341a7f-84e0-4355-a0b8-1147a1b219d0 - 127.0.0.1:50148 - {"command":"GET_JOB_USERS","id":"d91f4a7f-bada-42b7-a3c6-9d4d063a5c14"}
+2025-02-24 16:01:41 - d91f4a7f-bada-42b7-a3c6-9d4d063a5c14 - 127.0.0.1:50146 - GET_JOBS
+2025-02-24 16:01:41 - d91f4a7f-bada-42b7-a3c6-9d4d063a5c14 - 127.0.0.1:50146 - [{"Id":1,"SaveState":"INACTIVE","SaveType":"COMPLETE","Name":"Backup Documents","FileSource":"C:\\Documents\\myfile.txt","FileTarget":"D:\\Backup\\myfile.txt","FileSize":"1024","FileTransferTime":"30","LastFullBackupPath":null,"LastSaveDifferentialPath":null,"Time":"2025-02-03T12:00:00"},{"Id":2,"SaveState":"INACTIVE","SaveType":"COMPLETE","Name":"dez","FileSource":"/Users/matisbouquin/Desktop/CESI/","FileTarget":"/Users/matisbouquin/Desktop/PERSO/","FileSize":"0 KB","FileTransferTime":"0 sec","LastFullBackupPath":null,"LastSaveDifferentialPath":null,"Time":"2025-02-19T09:35:35.122046+01:00"},{"Id":3,"SaveState":"INACTIVE","SaveType":"COMPLETE","Name":"asdazs","FileSource":"/Users/matisbouquin/Desktop/CESI/","FileTarget":"/Users/matisbouquin/Desktop/CESI/","FileSize":"0 KB","FileTransferTime":"0 sec","LastFullBackupPath":null,"LastSaveDifferentialPath":null,"Time":"2025-02-24T16:01:21.846234+01:00"}]
+2025-02-24 16:01:41 - b8341a7f-84e0-4355-a0b8-1147a1b219d0 - 127.0.0.1:50148 - [{"Id":1,"SaveState":"INACTIVE","SaveType":"COMPLETE","Name":"Backup Documents","FileSource":"C:\\Documents\\myfile.txt","FileTarget":"D:\\Backup\\myfile.txt","FileSize":"1024","FileTransferTime":"30","LastFullBackupPath":null,"LastSaveDifferentialPath":null,"Time":"2025-02-03T12:00:00"},{"Id":2,"SaveState":"INACTIVE","SaveType":"COMPLETE","Name":"dez","FileSource":"/Users/matisbouquin/Desktop/CESI/","FileTarget":"/Users/matisbouquin/Desktop/PERSO/","FileSize":"0 KB","FileTransferTime":"0 sec","LastFullBackupPath":null,"LastSaveDifferentialPath":null,"Time":"2025-02-19T09:35:35.122046+01:00"},{"Id":3,"SaveState":"INACTIVE","SaveType":"COMPLETE","Name":"asdazs","FileSource":"/Users/matisbouquin/Desktop/CESI/","FileTarget":"/Users/matisbouquin/Desktop/CESI/","FileSize":"0 KB","FileTransferTime":"0 sec","LastFullBackupPath":null,"LastSaveDifferentialPath":null,"Time":"2025-02-24T16:01:21.846234+01:00"}]

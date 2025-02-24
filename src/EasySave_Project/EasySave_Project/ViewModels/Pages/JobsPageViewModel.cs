@@ -104,28 +104,30 @@ namespace EasySave_Project.ViewModels.Pages
             LoadJobs();
         }
 
-        public void LoadJobs()
+        public async void LoadJobs()
         {
             if (GlobalDataService.GetInstance().isConnecte && GlobalDataService.GetInstance().connecteTo.Item1 != null)
             {
                 try
                 {
-                    var requestData = new { command = "GET_JOB_USERS", id = GlobalDataService.GetInstance().connecteTo.Item1 };
+                    // 🔵 Construire la requête JSON
+                    var requestData = new 
+                    { 
+                        command = "GET_JOB_USERS", 
+                        id = GlobalDataService.GetInstance().connecteTo.Item1 
+                    };
                     string jsonString = JsonSerializer.Serialize(requestData);
+
+                    // 📤 Envoyer la requête au serveur
                     Utils.SendToServer(jsonString);
 
-                    // Lire la réponse du serveur
-                    string jsonResponse = Utils.ReceiveFromServer<string>();
+                    // ⏳ Attendre la réponse du serveur
+                    ObservableCollection<JobModel>? jobsReceived = await Utils.WaitForResponse<ObservableCollection<JobModel>>();
 
-                    if (!string.IsNullOrEmpty(jsonResponse))
-                    {
-                        Jobs = JsonSerializer.Deserialize<ObservableCollection<JobModel>>(jsonResponse, new JsonSerializerOptions
-                        {
-                            PropertyNameCaseInsensitive = true,
-                            ReadCommentHandling = JsonCommentHandling.Skip,
-                            AllowTrailingCommas = true
-                        }) ?? new ObservableCollection<JobModel>();
-                    }
+                    // ✅ Mise à jour de la liste des jobs
+                    Jobs = jobsReceived ?? new ObservableCollection<JobModel>();
+
+                    Console.WriteLine($"✅ {Jobs.Count} jobs reçus !");
                 }
                 catch (Exception ex)
                 {
@@ -135,6 +137,7 @@ namespace EasySave_Project.ViewModels.Pages
             }
             else
             {
+                // 🛠 Charger les jobs localement si non connecté
                 Jobs = new ObservableCollection<JobModel>(_jobService.GetAllJobs() ?? new List<JobModel>());
             }
         }
