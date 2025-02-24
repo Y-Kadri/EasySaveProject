@@ -23,7 +23,7 @@ namespace EasySave_Project.Views.Pages
 
         public void Reload()
         {
-            DataContext = new SettingPageViewModel();
+            _settingPageViewModel.Refresh();
         }
 
         private void OnLanguageChanged(object? sender, RoutedEventArgs e)
@@ -85,7 +85,7 @@ namespace EasySave_Project.Views.Pages
         private void Update()
         {
             Reload();
-            _baseLayout.reload();
+            _baseLayout.Reload();
         }
         
         private void AddEncryptedFileExtensions_Click(object sender, RoutedEventArgs e)

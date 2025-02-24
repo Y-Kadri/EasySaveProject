@@ -61,7 +61,7 @@
 
         </Grid>
     
-        <Button Classes="Large" Content="{Binding Add}" Click="valide"></Button>
+        <Button Classes="Large" Content="{Binding Add}" Click="Valide"></Button>
     
     </StackPanel>
     

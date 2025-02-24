@@ -1,6 +1,6 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
@@ -11,86 +11,66 @@ using EasySave_Project.ViewModels.Pages;
 using EasySave_Project.Views.Components;
 using EasySave_Project.Views.Layout;
 
-namespace EasySave_Project.Views.Pages;
-
-public partial class JobsPage : UserControl, IPage
+namespace EasySave_Project.Views.Pages
 {
-
-    private TranslationService _translationService;
-
-    public JobsPage()
+    public partial class JobsPage : UserControl, IPage
     {
-        InitializeComponent();
-        DataContext = new JobsPageViewModel();
-        _translationService = TranslationService.GetInstance();
-    }
+        private readonly JobsPageViewModel _viewModel;
+        private readonly TranslationService _translationService;
 
-    private void Execute(object sender, RoutedEventArgs e)
-    {
-        var selectedJobs = new List<JobModel>();
-
-        // Récupération des jobs sélectionnés
-        foreach (var row in DataGrid.GetVisualDescendants().OfType<DataGridRow>())
+        public JobsPage()
         {
-            var checkBox = row.GetVisualDescendants().OfType<CheckBox>().FirstOrDefault();
-            if (checkBox?.IsChecked == true && row.DataContext is JobModel job)
-            {
-                selectedJobs.Add(job);
-            }
+            InitializeComponent();
+            _viewModel = new JobsPageViewModel();
+            DataContext = _viewModel;
+            _translationService = TranslationService.GetInstance();
         }
 
-        // Vérifier si des jobs sont sélectionnés
-        if (selectedJobs.Count == 0)
+        private void Execute(object sender, RoutedEventArgs e)
         {
-            string message = _translationService.GetText("ErrorSelectOneJobMin");
-            Toastr.ShowNotification(message, NotificationContainer);
-            return;
-        }
-
-        if (DataContext is JobsPageViewModel viewModel)
-        {
-            viewModel.ExecuteJobsParallelThreadPool(selectedJobs,
-            (job, progress) => UpdateJobProgress(job, progress),
-            (msg, type) => Dispatcher.UIThread.Post(() =>
-            {
-                Toastr.ShowNotification(msg, NotificationContainer, type);
-            }));
-        }
-    }
-
-    private void UpdateJobProgress(JobModel job, double progress)
-    {
-        Dispatcher.UIThread.Post(() =>
-        {
-            var row = DataGrid.GetVisualDescendants()
+            var selectedJobs = DataGrid.GetVisualDescendants()
                 .OfType<DataGridRow>()
-                .FirstOrDefault(r => r.DataContext == job);
+                .Where(row => row.GetVisualDescendants().OfType<CheckBox>().FirstOrDefault()?.IsChecked == true)
+                .Select(row => row.DataContext as JobModel)
+                .Where(job => job != null)
+                .ToList();
 
-            if (row != null)
+            if (selectedJobs.Count == 0)
             {
-                var progressBar = row.GetVisualDescendants().OfType<ProgressBar>().FirstOrDefault();
-                if (progressBar != null)
-                {
-                    progressBar.Value = progress;
-                }
+                Toastr.ShowNotification(_translationService.GetText("ErrorSelectOneJobMin"), NotificationContainer);
+                return;
             }
-        });
-    }
-    
-    private void OnAddJobClick(object sender, RoutedEventArgs e)
-    {
-        var mainWindow = this.GetVisualRoot() as Window;
 
-        if (mainWindow?.FindControl<BaseLayout>("MainLayout") is BaseLayout baseLayout)
-        {
-            // Créer un bouton temporaire avec le Tag approprié pour utiliser LoadPage
-            var tempButton = new Button { Tag = "4" };
-            baseLayout.LoadPage(tempButton, e);
+            _viewModel.ExecuteJobsParallelThreadPool(selectedJobs, UpdateJobProgress, (msg, type) =>
+            {
+                Dispatcher.UIThread.Post(() => Toastr.ShowNotification(msg, NotificationContainer, type));
+            });
         }
-    }
-    
-    public void Reload()
-    {
-        DataContext = new JobsPageViewModel();
+        
+        private void OnAddJobClick(object sender, RoutedEventArgs e)
+        {
+            var mainWindow = this.GetVisualRoot() as Window;
+
+            if (mainWindow?.FindControl<BaseLayout>("MainLayout") is BaseLayout baseLayout)
+            {
+                // Créer un bouton temporaire avec le Tag approprié pour utiliser LoadPage
+                var tempButton = new Button { Tag = "4" };
+                baseLayout.LoadPage(tempButton, e);
+            }
+        }
+
+        private void UpdateJobProgress(JobModel job, double progress)
+        {
+            Dispatcher.UIThread.Post(() =>
+            {
+                var row = DataGrid.GetVisualDescendants()
+                    .OfType<DataGridRow>()
+                    .FirstOrDefault(r => r.DataContext == job);
+
+                row?.GetVisualDescendants().OfType<ProgressBar>().FirstOrDefault()?.SetValue(ProgressBar.ValueProperty, progress);
+            });
+        }
+
+        public void Reload() => _viewModel.Refresh();
     }
 }

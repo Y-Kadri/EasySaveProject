@@ -14,8 +14,8 @@ namespace EasySave_Project.ViewModels.Pages
         public ObservableCollection<string> EncryptedFileExtensions { get; }
         public ObservableCollection<string> PriorityBusinessProcess { get; }
 
-        private string _message;
-        private string _status;
+        private string _message, _status, _selectLanguage, _french, _english,
+            _chooseLogsFormat, _Json, _Xml, _add, _fileExtensionsToEncrypt, _monitoredBusinessSoftware;
 
         public string Message
         {
@@ -28,23 +28,71 @@ namespace EasySave_Project.ViewModels.Pages
             get => _status;
             set => this.RaiseAndSetIfChanged(ref _status, value);
         }
-
-        public string SelectLanguage { get; private set; }
-        public string French { get; private set; }
-        public string English { get; private set; }
-        public string ChooseLogsFormat { get; private set; }
-        public string Json { get; private set; }
-        public string Xml { get; private set; }
         
-        public string Add { get; private set; }
-        public string FileExtensionsToEncrypt { get; private set; }
-        public string MonitoredBusinessSoftware { get; private set; }
-
+        public string SelectLanguage
+        {
+            get => _selectLanguage;
+            set => this.RaiseAndSetIfChanged(ref _selectLanguage, value);
+        }
+        
+        public string French
+        {
+            get => _french;
+            set => this.RaiseAndSetIfChanged(ref _french, value);
+        }
+        
+        public string English
+        {
+            get => _english;
+            set => this.RaiseAndSetIfChanged(ref _english, value);
+        }
+        
+        public string ChooseLogsFormat
+        {
+            get => _chooseLogsFormat;
+            set => this.RaiseAndSetIfChanged(ref _chooseLogsFormat, value);
+        }
+        
+        public string Json
+        {
+            get => _Json;
+            set => this.RaiseAndSetIfChanged(ref _Json, value);
+        }
+        
+        public string Xml
+        {
+            get => _Xml;
+            set => this.RaiseAndSetIfChanged(ref _Xml, value);
+        }
+        
+        public string Add
+        {
+            get => _add;
+            set => this.RaiseAndSetIfChanged(ref _add, value);
+        }
+        
+        public string FileExtensionsToEncrypt
+        {
+            get => _fileExtensionsToEncrypt;
+            set => this.RaiseAndSetIfChanged(ref _fileExtensionsToEncrypt, value);
+        }
+        
+        public string MonitoredBusinessSoftware
+        {
+            get => _monitoredBusinessSoftware;
+            set => this.RaiseAndSetIfChanged(ref _monitoredBusinessSoftware, value);
+        }
+        
         // Constructeur qui prend un callback pour notifier la vue
         public SettingPageViewModel()
         {
             _translationService = TranslationService.GetInstance();
-            
+            EncryptedFileExtensions = new ObservableCollection<string>(SettingUtil.GetList("EncryptedFileExtensions"));
+            PriorityBusinessProcess = new ObservableCollection<string>(SettingUtil.GetList("PriorityBusinessProcess"));
+        }
+
+        public void Refresh()
+        {
             SelectLanguage = _translationService.GetText("SelectLanguage");
             French = _translationService.GetText("French");
             English = _translationService.GetText("English");
@@ -54,9 +102,6 @@ namespace EasySave_Project.ViewModels.Pages
             Add = _translationService.GetText("Add");
             FileExtensionsToEncrypt = _translationService.GetText("FileExtensionsToEncrypt");
             MonitoredBusinessSoftware = _translationService.GetText("MonitoredBusinessSoftware");
-            
-            EncryptedFileExtensions = new ObservableCollection<string>(SettingUtil.GetList("EncryptedFileExtensions"));
-            PriorityBusinessProcess = new ObservableCollection<string>(SettingUtil.GetList("PriorityBusinessProcess"));
         }
         
         public void AddEncryptedFileExtensions(string extension)

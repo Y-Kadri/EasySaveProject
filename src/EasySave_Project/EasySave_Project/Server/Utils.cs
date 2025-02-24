@@ -56,7 +56,7 @@ public class Utils
                 
                 // 🔥 Ajout du message dans les notifications du BaseLayoutViewModel
                 if (message != null)
-                    BaseLayoutViewModel.GetInstance().AddNotification(message);
+                    BaseLayoutViewModel.Instance.AddNotification(message);
             }
         }
         catch (Exception e)

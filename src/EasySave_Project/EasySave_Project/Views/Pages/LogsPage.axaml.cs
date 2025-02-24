@@ -7,14 +7,17 @@ namespace EasySave_Project.Views.Pages;
 public partial class LogsPage : UserControl, IPage
 {
 
+    private LogsPageViewModel _LogsPageViewModel;
+
     public LogsPage()
     {
+        _LogsPageViewModel = new LogsPageViewModel(); 
         InitializeComponent();
-        DataContext = new LogsPageViewModel(); 
+        DataContext = _LogsPageViewModel;
     }
     
     public void Reload()
     {
-        DataContext = new LogsPageViewModel();
+        _LogsPageViewModel.Refresh();
     }
 }
