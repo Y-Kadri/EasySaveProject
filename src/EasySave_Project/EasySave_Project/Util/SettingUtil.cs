@@ -24,7 +24,12 @@ public static class SettingUtil
     {
         return UpdateSetting(settings => settings.logFormat = format, "formatUpdated", "errorFormatLanguage");
     }
-    
+
+    public static bool SettingChangeMaxLargeFileSize(int value)
+    {
+        return UpdateSetting(settings => settings.MaxLargeFileSize = value, "formatUpdated", "errorFormatLanguage");
+    }
+
     public static bool AddToList(string key, string value)
     {
         var settings = GetSetting();

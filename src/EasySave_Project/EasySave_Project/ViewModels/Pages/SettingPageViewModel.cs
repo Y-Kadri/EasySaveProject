@@ -35,10 +35,16 @@ namespace EasySave_Project.ViewModels.Pages
         public string ChooseLogsFormat { get; private set; }
         public string Json { get; private set; }
         public string Xml { get; private set; }
-        
         public string Add { get; private set; }
         public string FileExtensionsToEncrypt { get; private set; }
         public string MonitoredBusinessSoftware { get; private set; }
+        private int _maxLargeFileSize;
+        public int MaxLargeFileSize
+        {
+            get => _maxLargeFileSize;
+            set => this.RaiseAndSetIfChanged(ref _maxLargeFileSize, value);
+        }
+        public string MaxLargeFileSizeText { get; private set; }
 
         // Constructeur qui prend un callback pour notifier la vue
         public SettingPageViewModel()
@@ -54,9 +60,11 @@ namespace EasySave_Project.ViewModels.Pages
             Add = _translationService.GetText("Add");
             FileExtensionsToEncrypt = _translationService.GetText("FileExtensionsToEncrypt");
             MonitoredBusinessSoftware = _translationService.GetText("MonitoredBusinessSoftware");
-            
+            MaxLargeFileSizeText = _translationService.GetText("MaxLargeFileSize");
+
             EncryptedFileExtensions = new ObservableCollection<string>(SettingUtil.GetList("EncryptedFileExtensions"));
             PriorityBusinessProcess = new ObservableCollection<string>(SettingUtil.GetList("PriorityBusinessProcess"));
+            MaxLargeFileSize = FileUtil.GetAppSettingsInt("MaxLargeFileSize");
         }
         
         public void AddEncryptedFileExtensions(string extension)
@@ -85,6 +93,39 @@ namespace EasySave_Project.ViewModels.Pages
             {
                 Message = "Erreur lors de l'ajout.";
             }
+        }
+
+        /// <summary>
+        /// Updates the maximum large file size setting if the new value is different.
+        /// </summary>
+        /// <param name="value">The new maximum large file size in bytes.</param>
+        /// <returns>
+        /// A tuple containing a message and status:
+        /// - message: Success or error message.
+        /// - status: "Success" if the update was successful, otherwise "Error".
+        /// </returns>
+        public (string message, string status) ChangeMaxLargeFileSize(int value)
+        {
+            // Check if the new value is different from the current one and update it in the settings
+            if (MaxLargeFileSize != value && SettingUtil.SettingChangeMaxLargeFileSize(value))
+            {
+                // Update the MaxLargeFileSize variable
+                MaxLargeFileSize = value;
+                // Notify the UI that the property has changed
+                this.RaisePropertyChanged(nameof(MaxLargeFileSize));
+                // Set the success message and status
+                _message = _translationService.GetText("AddMaxLargeFileSizeToSettings");
+                _status = "Success";
+            }
+            else
+            {
+                // Set the error message and status if the update fails
+                _message = _translationService.GetText("ErrorAddMaxLargeFileSizeToSettings");
+                _status = "Error";
+            }
+
+            // Return the message and status to trigger a notification in the view
+            return (_message, _status);
         }
 
         public void RemovPriorityBusinessProcess(string software)
