@@ -186,7 +186,7 @@ namespace EasySave_Project.Service
                         processedSize += fileSize;
 
                         // Update the backup state
-                        UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFileWithAbsolutePath, targetFile, progressPourcentage);
+                        UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFileWithAbsolutePath, targetFile, progressPourcentage, job.FileInPending.LastDateTimePath);
 
                         pathToDelete.Add(sourceFileWithAbsolutePath);
                     } else
@@ -195,7 +195,7 @@ namespace EasySave_Project.Service
                     }
                 }
                 filesToCopy.RemoveAll(path => pathToDelete.Contains(path));
-                SaveFileInPending(job, filesToCopy, processedFiles, processedSize, totalFiles, totalSize);
+                SaveFileInPending(job, filesToCopy, processedFiles, processedSize, totalFiles, totalSize, job.FileInPending.LastDateTimePath);
             }
         }
     }

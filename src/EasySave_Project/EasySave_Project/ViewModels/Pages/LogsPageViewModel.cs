@@ -21,18 +21,19 @@ namespace EasySave_Project.ViewModels.Pages
         public string TargetPath { get; }
         public string FileSize { get; }
         public string TransferTime { get; }
-        
         public string EncryptionTime { get; }
-        
+
         public LogsPageViewModel()
         {
-            AllLogs = TranslationService.GetInstance().GetText("AllLogs");
-            Timestamp = TranslationService.GetInstance().GetText("Timestamp");
-            SourcePath = TranslationService.GetInstance().GetText("SourcePath");
-            TargetPath = TranslationService.GetInstance().GetText("TargetPath");
-            FileSize = TranslationService.GetInstance().GetText("FileSize");
-            TransferTime = TranslationService.GetInstance().GetText("TransferTime");
-            EncryptionTime = TranslationService.GetInstance().GetText("EncryptionTime");
+            var translationService = TranslationService.GetInstance();
+
+            AllLogs = translationService.GetText("AllLogs");
+            Timestamp = translationService.GetText("Timestamp");
+            SourcePath = translationService.GetText("SourcePath");
+            TargetPath = translationService.GetText("TargetPath");
+            FileSize = translationService.GetText("FileSize");
+            TransferTime = translationService.GetText("TransferTime");
+            EncryptionTime = translationService.GetText("EncryptionTime");
 
             Nodes = new ObservableCollection<LogNode>();
 
@@ -61,7 +62,7 @@ namespace EasySave_Project.ViewModels.Pages
                 }
                 catch (Exception ex)
                 {
-                    LogManager.Instance.AddMessage($"Erreur de lecture du fichier {logFile}: {ex.Message}");
+                    LogManager.Instance.AddMessage($"{TranslationService.GetInstance().GetText("errorReadingJsonFile")} {logFile}: {ex.Message}");
                 }
             }
         }
@@ -74,7 +75,7 @@ namespace EasySave_Project.ViewModels.Pages
             var logs = DeserializeLogs(logFile);
             if (logs == null || !logs.Any())
             {
-                LogManager.Instance.AddMessage($"Aucun log valide trouvé dans : {logFile}");
+                LogManager.Instance.AddMessage($"{TranslationService.GetInstance().GetText("noEncryptedFormatsSet")} : {logFile}");
                 return;
             }
 
@@ -98,12 +99,12 @@ namespace EasySave_Project.ViewModels.Pages
                 {
                     ".json" => JsonSerializer.Deserialize<List<LogDataDto>>(content),
                     ".xml" => DeserializeXmlManually(content),
-                    _ => throw new NotSupportedException($"Extension non supportée : {extension}")
+                    _ => throw new NotSupportedException($"{TranslationService.GetInstance().GetText("errorFormatLanguage")} {extension}")
                 };
             }
             catch (Exception ex)
             {
-                LogManager.Instance.AddMessage($"Erreur de désérialisation pour {filePath} : {ex.Message}");
+                LogManager.Instance.AddMessage($"{TranslationService.GetInstance().GetText("errorReadingJsonFile")} {filePath} : {ex.Message}");
                 return null;
             }
         }
@@ -147,7 +148,7 @@ namespace EasySave_Project.ViewModels.Pages
             }
             catch (Exception ex)
             {
-                LogManager.Instance.AddMessage($"Erreur lors du parsing manuel du XML : {ex.Message}");
+                LogManager.Instance.AddMessage($"{TranslationService.GetInstance().GetText("errorReadingJsonFile")} : {ex.Message}");
             }
 
             return logs;
@@ -173,7 +174,7 @@ namespace EasySave_Project.ViewModels.Pages
 
         private LogNode CreateMessageNode(List<MessageDto> messages)
         {
-            var messageNode = new LogNode("Messages");
+            var messageNode = new LogNode(TranslationService.GetInstance().GetText("Messages"));
             foreach (var message in messages)
             {
                 messageNode.SubNodes.Add(new LogNode(message.Text));

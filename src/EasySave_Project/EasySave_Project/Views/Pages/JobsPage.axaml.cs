@@ -164,6 +164,7 @@ public partial class JobsPage : UserControl, IPage
         // Ensure the CommandParameter is a JobModel
         if (button?.CommandParameter is JobModel job)
         {
+            Toastr.ShowNotification(TranslationService.GetInstance().GetText("resumejob") + job.Name, NotificationContainer, "Success");
             executeJobList(new List<JobModel> { job });
         }
     }
