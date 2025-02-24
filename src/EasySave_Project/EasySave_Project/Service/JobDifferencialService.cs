@@ -166,32 +166,40 @@ namespace EasySave_Project.Service
             {
                 foreach (string sourceFileWithAbsolutePath in filesToCopy)
                 {
-                    string relativePath = FileUtil.GetRelativePath(job.FileSource, sourceFileWithAbsolutePath);
-                    string targetFile = FileUtil.CombinePath(targetDir, relativePath);
-
-                    // Ensure the target directory exists
-                    string targetFileDirectory = Path.GetDirectoryName(targetFile);
-                    FileUtil.CreateDirectory(targetFileDirectory);
-
-                    double progressPourcentage = (double)processedFiles / totalFiles * 100;
-
-                    changeJobStateIfBusinessProcessLaunching(job);
-
-                    if (!job.SaveState.Equals(JobSaveStateEnum.PENDING))
-                    {
-                        // Perform the file copy operation
-                        long fileSize = HandleFileOperation(sourceFileWithAbsolutePath, targetFile, job, progressPourcentage);
-
-                        processedFiles++;
-                        processedSize += fileSize;
-
-                        // Update the backup state
-                        UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFileWithAbsolutePath, targetFile, progressPourcentage, job.FileInPending.LastDateTimePath);
-
-                        pathToDelete.Add(sourceFileWithAbsolutePath);
-                    } else
+                    if (job.SaveState.Equals(JobSaveStateEnum.CANCEL))
                     {
                         break;
+                    }
+                    else
+                    {
+                        string relativePath = FileUtil.GetRelativePath(job.FileSource, sourceFileWithAbsolutePath);
+                        string targetFile = FileUtil.CombinePath(targetDir, relativePath);
+
+                        // Ensure the target directory exists
+                        string targetFileDirectory = Path.GetDirectoryName(targetFile);
+                        FileUtil.CreateDirectory(targetFileDirectory);
+
+                        double progressPourcentage = (double)processedFiles / totalFiles * 100;
+
+                        changeJobStateIfBusinessProcessLaunching(job);
+
+                        if (!job.SaveState.Equals(JobSaveStateEnum.PENDING))
+                        {
+                            // Perform the file copy operation
+                            long fileSize = HandleFileOperation(sourceFileWithAbsolutePath, targetFile, job, progressPourcentage);
+
+                            processedFiles++;
+                            processedSize += fileSize;
+
+                            // Update the backup state
+                            UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFileWithAbsolutePath, targetFile, progressPourcentage, job.FileInPending.LastDateTimePath);
+
+                            pathToDelete.Add(sourceFileWithAbsolutePath);
+                        }
+                        else
+                        {
+                            break;
+                        }  
                     }
                 }
                 filesToCopy.RemoveAll(path => pathToDelete.Contains(path));

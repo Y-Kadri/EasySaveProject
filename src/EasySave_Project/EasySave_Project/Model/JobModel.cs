@@ -35,6 +35,7 @@ namespace EasySave_Project.Model
                     OnPropertyChanged(nameof(CanExecute));
                     OnPropertyChanged(nameof(IsCheckBoxVisibleAndEnable));
                     OnPropertyChanged(nameof(IsJobInPending));
+                    OnPropertyChanged(nameof(IsJobInPendingOrActive));
                 }
             }
         }
@@ -130,5 +131,8 @@ namespace EasySave_Project.Model
 
         public bool IsJobInPending => SaveState == JobSaveStateEnum.PENDING;
 
+        public bool IsJobInPendingOrActive => SaveState == JobSaveStateEnum.PENDING || SaveState == JobSaveStateEnum.ACTIVE;
+
+        
     }
 }
