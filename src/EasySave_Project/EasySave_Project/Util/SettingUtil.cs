@@ -1,18 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using EasySave_Library_Log.manager;
 using EasySave_Project.Dto;
 using EasySave_Project.Model;
 using EasySave_Project.Service;
+using Tmds.DBus.Protocol;
 
 namespace EasySave_Project.Util;
 
 public static class SettingUtil
 {
+
     private static readonly string directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySave", "easySaveSetting");
     private static readonly string filePath = Path.Combine(directoryPath, "appSetting.json");
+    private static string Message;
 
     public static bool SettingChangeLanguage(LanguageEnum language)
     {
@@ -86,9 +90,20 @@ public static class SettingUtil
         {
             "EncryptedFileExtensions" => settings?.EncryptedFileExtensions ?? new List<string>(),
             "PriorityBusinessProcess" => settings?.PriorityBusinessProcess ?? new List<string>(),
-            _ => new List<string>()
+            _ => new List<string>(),
         };
     }
+
+    public static List<PriorityExtensionDTO> GetPriorityExtensionFilesList(string key)
+    {
+        var settings = GetSetting();
+        return key switch
+        {
+            "PriorityExtensionFiles" => settings?.PriorityExtensionFiles ?? new List<PriorityExtensionDTO>(),
+            _ => new List<PriorityExtensionDTO>(),
+        };
+    }
+
 
     public static void InitSetting()
     {
@@ -174,4 +189,63 @@ public static class SettingUtil
             File.WriteAllText(filePath, "{}");
         }
     }
+    public static void MovePriorityExtensionFileUp(int index)
+    {
+        var settings = GetSetting();
+        if (settings == null || settings.PriorityExtensionFiles == null || index <= 0) return;
+
+        // Trouve l'élément à l'index donné
+        var item = settings.PriorityExtensionFiles.FirstOrDefault(x => x.Index == index);
+        if (item == null) return;  // Si l'élément n'est pas trouvé, on sort
+
+        // Trouve l'élément précédent dans la liste qui a un index plus petit
+        var previousItem = settings.PriorityExtensionFiles
+            .Where(x => x.Index < index)
+            .OrderByDescending(x => x.Index)  // Trie par index décroissant
+            .FirstOrDefault();
+
+        if (previousItem != null)
+        {
+            // Échange les indices des deux objets
+            int tempIndex = item.Index;
+            item.Index = previousItem.Index;
+            previousItem.Index = tempIndex;
+
+            // Sauvegarde les paramètres
+            SaveSettings(settings, "priorityExtensionMovedUp", "errorUpdatingPriorityExtension");
+        }
+    }
+
+
+
+    public static void MovePriorityExtensionFileDown(int index)
+    {
+        var settings = GetSetting();
+        if (settings == null || settings.PriorityExtensionFiles == null || index >= settings.PriorityExtensionFiles.Count) return;
+
+        // Trouve l'élément à l'index donné
+        var item = settings.PriorityExtensionFiles.FirstOrDefault(x => x.Index == index);
+        if (item == null) return;  // Si l'élément n'est pas trouvé, on sort
+
+        // Trouve l'élément suivant dans la liste qui a un index plus grand
+        var nextItem = settings.PriorityExtensionFiles
+            .Where(x => x.Index > index)
+            .OrderBy(x => x.Index)  // Trie par index croissant
+            .FirstOrDefault();
+
+        if (nextItem != null)
+        {
+            // Échange les indices des deux objets
+            int tempIndex = item.Index;
+            item.Index = nextItem.Index;
+            nextItem.Index = tempIndex;
+
+            // Sauvegarde les paramètres
+            SaveSettings(settings, "priorityExtensionMovedDown", "errorUpdatingPriorityExtension");
+        }
+    }
+
+
+
+
 }

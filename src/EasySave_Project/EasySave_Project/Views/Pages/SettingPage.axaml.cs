@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using EasySave_Library_Log.manager;
+using EasySave_Project.Dto;
 using EasySave_Project.Model;
 using EasySave_Project.ViewModels.Pages;
 using EasySave_Project.Views.Components;
@@ -132,14 +133,15 @@ namespace EasySave_Project.Views.Pages
         private void MoveExtensionUp_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender; // Get the button that was clicked
-            var extension = (string)button.CommandParameter; // Get the current file extension from the button’s CommandParameter
-            var index = _settingPageViewModel.EncryptedFileExtensions.IndexOf(extension); // Find the index of the extension in the list
+            var extension = (PriorityExtensionDTO)button.CommandParameter; // Cast CommandParameter to PriorityExtensionDTO
+            var index = extension.Index; // Find the index of the extension in the list
 
             if (index > 0)
             {
                 _settingPageViewModel.MoveExtensionUp(index); // Call the MoveExtensionUp method in the ViewModel with the found index
                 Toastr.ShowNotification("Extension moved up.", NotificationContainer, "Success"); // Show success notification
             }
+            Reload();
         }
 
         /// <summary>
@@ -150,25 +152,34 @@ namespace EasySave_Project.Views.Pages
         private void MoveExtensionDown_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender; // Get the button that was clicked
-            var extension = (string)button.CommandParameter; // Get the current file extension from the button’s CommandParameter
-            var index = _settingPageViewModel.EncryptedFileExtensions.IndexOf(extension); // Find the index of the extension in the list
+            var extension = (PriorityExtensionDTO)button.CommandParameter; // Cast CommandParameter to PriorityExtensionDTO
+            var index = extension.Index; // Find the index of the extension in the list
 
-            if (index > 0)
+            if (index > 0 && index < _settingPageViewModel.PriorityExtensionFiles.Count)
             {
                 _settingPageViewModel.MoveExtensionDown(index); // Call the MoveExtensionDown method in the ViewModel with the found index
                 Toastr.ShowNotification("Extension moved down.", NotificationContainer, "Success"); // Show success notification
             }
+            Reload();
         }
 
         /// <summary>
-        /// Handles the click event for the "Move Software Down" button.
-        /// (This method is for future implementation related to software management.) 
+        /// Handles the click event for the "Delete" button for file extensions.
         /// </summary>
         /// <param name="sender">The sender of the event (Button).</param>
         /// <param name="e">The event arguments.</param>
         private void MoveSoftwareDown_Click(object sender, RoutedEventArgs e)
         {
-            Toastr.ShowNotification("Functionality to be implemented for software.", NotificationContainer, "Success"); // Show placeholder notification for software management
+            var button = (Button)sender; // Get the button that was clicked
+            var extension = (PriorityExtensionDTO)button.CommandParameter; // Cast CommandParameter to PriorityExtensionDTO
+            var index = _settingPageViewModel.PriorityExtensionFiles.IndexOf(extension); // Find the index of the extension in the list
+
+            if (index > 0)
+            {
+                //_settingPageViewModel.RemoveExtension(index); // Assuming you have a method to remove the extension
+                Toastr.ShowNotification("Extension removed.", NotificationContainer, "Success"); // Show success notification
+            }
         }
+
     }
 }
