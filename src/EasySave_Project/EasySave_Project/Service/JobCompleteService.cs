@@ -1,4 +1,5 @@
-﻿using EasySave_Library_Log;
+﻿using DynamicData;
+using EasySave_Library_Log;
 using EasySave_Library_Log.manager;
 using EasySave_Project.Model;
 using EasySave_Project.Util;
@@ -31,74 +32,61 @@ namespace EasySave_Project.Service
             ConsoleUtil.PrintTextconsole(message);
             LogManager.Instance.AddMessage(message);
 
-            // Retrieve total number of files and total size before starting the backup
-            var allFiles = FileUtil.GetFilesRecursively(job.FileSource);
-            int totalFiles = allFiles.Count;
-            long totalSize = allFiles.Sum(FileUtil.GetFileSize);
+            List<string> allFiles;
 
             int processedFiles = 0;
             long processedSize = 0;
+            int totalFiles = 0;
+            long totalSize = 0;
 
-            // Execute the full backup process
-            ExecuteCompleteSave(job.FileSource, backupDir, job, totalFiles, totalSize, ref processedFiles, ref processedSize);
+            if (job.SaveState.Equals(JobSaveStateEnum.PENDING))
+            {
+                allFiles = job.FileInPending.FilesInPending;
+                job.SaveState = JobSaveStateEnum.ACTIVE;
+                processedFiles = job.FileInPending.ProcessedFiles;
+                processedSize = job.FileInPending.ProcessedSize;
+                totalFiles = job.FileInPending.TotalFiles;
+                totalSize = job.FileInPending.TotalSize;
+            }
+            else
+            {
+                // Retrieve total number of files and total size before starting the backup
+                allFiles = FileUtil.GetAllFilesAndDirectories(job.FileSource);
+                totalFiles = allFiles.Count;
+                totalSize = allFiles.Sum(FileUtil.GetFileSize);
+            }
 
+            // Execute full backup process
+            ExecuteCompleteSave(allFiles, backupDir, job, totalFiles, totalSize, ref processedFiles, ref processedSize);  
+            
             // Update the last full backup path
             job.LastFullBackupPath = backupDir;
-
-            message = TranslationService.GetInstance().GetText("backupComplet") + " " + job.Name;
-            ConsoleUtil.PrintTextconsole(message);
-            LogManager.Instance.AddMessage(message);
         }
 
         /// <summary>
-        /// Recursively copies all files and directories from the source directory to the target directory.
+        /// Executes a full backup by copying all specified files to the target directory.
+        /// This method iterates through the list of files to copy, processes each file,
+        /// updates the backup state, and tracks progress. It also manages pending files
+        /// in case of an interrupted backup.
         /// </summary>
-        /// <param name="sourceDir">The source directory to back up.</param>
-        /// <param name="targetDir">The destination directory for the backup.</param>
-        /// <param name="job">The job configuration.</param>
-        /// <param name="totalFiles">Total number of files in the backup.</param>
-        /// <param name="totalSize">Total size of all files in the backup.</param>
-        /// <param name="processedFiles">Counter for processed files (used for progress tracking).</param>
-        /// <param name="processedSize">Counter for processed data size (used for progress tracking).</param>
-        private void ExecuteCompleteSave(string sourceDir, string targetDir, JobModel job, int totalFiles, long totalSize, ref int processedFiles, ref long processedSize)
+        /// <param name="filesToCopyPath">List of file paths to be backed up.</param>
+        /// <param name="targetDir">The target directory where files will be copied.</param>
+        /// <param name="job">The JobModel representing the backup job.</param>
+        /// <param name="totalFiles">The total number of files to be backed up.</param>
+        /// <param name="totalSize">The total size of all files in the backup.</param>
+        /// <param name="processedFiles">Reference to the counter tracking processed files.</param>
+        /// <param name="processedSize">Reference to the counter tracking processed file size.</param>
+        private void ExecuteCompleteSave(List<string> filesToCopyPath, string targetDir, JobModel job, int totalFiles, long totalSize, ref int processedFiles, ref long processedSize)
         {
             // Queue to store normal-sized files to be copied first
-            var files = new Queue<string>(FileUtil.GetFiles(sourceDir));
+            var files = new Queue<string>(filesToCopyPath);
             // Queue for large files that will be processed later
             var fallbackQueue = new Queue<string>();
 
             // Process the queued files
-            ProcessFilesInQueue(files, fallbackQueue, targetDir, job, ref processedFiles, ref processedSize);
+            ProcessFilesInQueue(files, fallbackQueue, targetDir, job, ref processedFiles, ref processedSize, filesToCopyPath, totalFiles, totalSize);
             // Process large files after regular ones
-            ProcessFallbackQueue(fallbackQueue, targetDir, job, ref processedFiles, ref processedSize);
-            // Recursively process subdirectories
-            ProcessSubdirectories(sourceDir, targetDir, job, totalFiles, totalSize, ref processedFiles, ref processedSize);
-        }
-
-        /// <summary>
-        /// Recursively processes subdirectories and performs a full backup for each.
-        /// </summary>
-        /// <param name="sourceDir">The source directory.</param>
-        /// <param name="targetDir">The target backup directory.</param>
-        /// <param name="job">The job configuration.</param>
-        /// <param name="totalFiles">Total number of files in the backup.</param>
-        /// <param name="totalSize">Total size of all files in the backup.</param>
-        /// <param name="processedFiles">Counter for processed files (used for progress tracking).</param>
-        /// <param name="processedSize">Counter for processed data size (used for progress tracking).</param>
-        private void ProcessSubdirectories(string sourceDir, string targetDir, JobModel job, int totalFiles, long totalSize, ref int processedFiles, ref long processedSize)
-        {
-            foreach (string subDir in FileUtil.GetDirectories(sourceDir))
-            {
-                // Get the subdirectory name and construct the target path
-                string subDirName = FileUtil.GetFileName(subDir);
-                string targetSubDir = FileUtil.CombinePath(targetDir, subDirName);
-
-                // Create the subdirectory in the target location
-                FileUtil.CreateDirectory(targetSubDir);
-
-                // Recursively back up the subdirectory
-                ExecuteCompleteSave(subDir, targetSubDir, job, totalFiles, totalSize, ref processedFiles, ref processedSize);
-            }
+            ProcessFallbackQueue(fallbackQueue, targetDir, job, ref processedFiles, ref processedSize, filesToCopyPath, totalFiles, totalSize);
         }
     }
 }

@@ -41,13 +41,16 @@
             <!-- Colonnes du DataGrid -->
             <DataGrid.Columns>
                 <!-- Checkbox -->
-                <DataGridTemplateColumn Width="40">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <CheckBox Foreground="white" x:Name="JobSelectionCheckBox"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+				<DataGridTemplateColumn Width="40">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<CheckBox Foreground="white"
+									  x:Name="JobSelectionCheckBox"
+									  IsVisible="{Binding IsCheckBoxVisibleAndEnable}"
+									  IsEnabled="{Binding IsCheckBoxVisibleAndEnable}"/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
             
                 <!-- ID -->
                 <DataGridTextColumn Foreground="white" Header="Id" Binding="{Binding Id}" Width="*" />
@@ -63,12 +66,33 @@
                 
                 <!-- Type -->
                 <DataGridTextColumn Foreground="white" Header="{Binding Type}" Binding="{Binding SaveType}" Width="2*" />
+				
+				<!-- Action -->
+				<DataGridTemplateColumn Width="80" Header="Action">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<StackPanel Orientation="Horizontal">
+								<Button Content="Pause"
+										Click="OnPendingJob"
+										CommandParameter="{Binding}"
+										IsEnabled="{Binding CanExecute}"
+										IsVisible="{Binding CanExecute}"/>
+								<Button Content="Reprendre"
+										Click="OnResumeJob"
+										CommandParameter="{Binding}"
+										IsEnabled="{Binding IsJobInPending}"
+										IsVisible="{Binding IsJobInPending}"/>
+							</StackPanel>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				
                 
                 <!-- Progressions -->
                 <DataGridTemplateColumn Width="2*" Header="{Binding Progress}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate >
-                            <ProgressBar Value="0" Classes="Primary" />
+                            <ProgressBar Value="{Binding FileInPending.Progress}" Classes="Primary" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
