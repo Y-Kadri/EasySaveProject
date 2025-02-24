@@ -114,7 +114,7 @@ namespace EasySave_Project.Service
         /// <summary>
         /// Updates the backup state in the StateManager during the backup process.
         /// </summary>
-        protected void UpdateBackupState(JobModel job, int processedFiles, long processedSize, int totalFiles, long totalSize, string currentSourceFilePath, string currentDestinationFilePath, double progressPourcentage)
+        protected void UpdateBackupState(JobModel job, int processedFiles, long processedSize, int totalFiles, long totalSize, string currentSourceFilePath, string currentDestinationFilePath, double progressPourcentage, string lastDateTimePath)
         {
             StateManager.Instance.UpdateState(new BackupJobState
             {
@@ -134,6 +134,7 @@ namespace EasySave_Project.Service
             job.FileInPending.ProcessedSize = processedSize;
             job.FileInPending.TotalFiles = totalFiles;
             job.FileInPending.TotalSize = totalSize;
+            job.FileInPending.LastDateTimePath = lastDateTimePath;
         }
 
 
@@ -149,7 +150,7 @@ namespace EasySave_Project.Service
         /// <param name="processedSize">The total size of the files that have been processed.</param>
         /// <param name="totalFiles">The total number of files in the backup job.</param>
         /// <param name="totalSize">The total size of all files in the backup job.</param>
-        protected void SaveFileInPending(JobModel job, List<string> filesToSave, int processedFiles, long processedSize, int totalFiles, long totalSize)
+        protected void SaveFileInPending(JobModel job, List<string> filesToSave, int processedFiles, long processedSize, int totalFiles, long totalSize, string lastDateTimePath)
         {
             FileInPendingJobDTO fileInPendingJobDTO = new FileInPendingJobDTO();
             fileInPendingJobDTO.FilesInPending = filesToSave;
@@ -158,6 +159,7 @@ namespace EasySave_Project.Service
             fileInPendingJobDTO.ProcessedSize = processedSize; 
             fileInPendingJobDTO.TotalFiles = totalFiles;
             fileInPendingJobDTO.TotalSize = totalSize;
+            fileInPendingJobDTO.LastDateTimePath = lastDateTimePath;
             job.FileInPending = fileInPendingJobDTO;
         }
 
@@ -189,14 +191,13 @@ namespace EasySave_Project.Service
                 if (isLargeFile && !_largeFileSemaphore.Wait(0))
                 {
                     fallbackQueue.Enqueue(file); // Fichier volumineux en attente
-                    System.Diagnostics.Debug.WriteLine($"[WAIT] {FileUtil.GetFileName(file)} attend son tour...");
                 }
                 else
                 {
                     jobInPending = CopyFileWithSemaphore(
                         file, 
                         targetDir, 
-                        job, 
+                        job,
                         isLargeFile, 
                         ref processedFiles, 
                         ref processedSize, 
@@ -230,7 +231,6 @@ namespace EasySave_Project.Service
                 else
                 {
                     fallbackQueue.Enqueue(waitingFile);
-                    System.Diagnostics.Debug.WriteLine($"[WAIT] {FileUtil.GetFileName(waitingFile)} attend encore...");
                     Thread.Sleep(500);
                 }
             }
@@ -246,15 +246,6 @@ namespace EasySave_Project.Service
 
             List<string> pathToDelete = new List<string>();
 
-            if (isLargeFile)
-            {
-                System.Diagnostics.Debug.WriteLine($"[S_COPY] Début du transfert de {sourceFile}...");
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine($"[I_COPY] {sourceFile} est copié immédiatement.");
-            }
-
             changeJobStateIfBusinessProcessLaunching(job);
 
             if (!job.SaveState.Equals(JobSaveStateEnum.PENDING))
@@ -265,21 +256,20 @@ namespace EasySave_Project.Service
 
                 processedFiles++;
                 processedSize += fileSize;
-                UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFile, targetFile, progressPourcentage);
+                UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFile, targetFile, progressPourcentage, job.FileInPending.LastDateTimePath);
+                pathToDelete.Add(sourceFileWithAbsolutePath);
 
-            } else
-            {
+            } else {
                 jobInPending = true;
             }
 
             if (isLargeFile)
             {
-                System.Diagnostics.Debug.WriteLine($"[DONE] {sourceFile} copié !");
                 _largeFileSemaphore.Release();
             }
 
             filesToCopyPath.RemoveAll(path => pathToDelete.Contains(path));
-            SaveFileInPending(job, filesToCopyPath, processedFiles, processedSize, totalFiles, totalSize);
+            SaveFileInPending(job, filesToCopyPath, processedFiles, processedSize, totalFiles, totalSize, job.FileInPending.LastDateTimePath);
 
             return jobInPending;
         }

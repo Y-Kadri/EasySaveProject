@@ -10,7 +10,7 @@ namespace EasySave_Project.Dto
     {
         public List<string> FilesInPending {  get; set; }
         public double Progress { get; set; }
-
+        public string LastDateTimePath { get; set; }
         public int ProcessedFiles { get; set; }
         public long ProcessedSize { get; set; }
         public int TotalFiles { get; set; }

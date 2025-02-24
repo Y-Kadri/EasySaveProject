@@ -139,5 +139,13 @@
   "TheJob": "Le travail",
   "successfullyCompleted": "terminé avec succès",
   "failed": "à échoué",
-  "notFileDifference": "Aucune différence de fichier trouvée pour le travail : "
+  "notFileDifference": "Aucune différence de fichier trouvée pour le travail : ",
+  "resumejob": "reprise du travail : ",
+  "EncryptionTime": "Temps de chiffrement",
+  "ErrorReadingLogFile": "Erreur de lecture du fichier {file}: {error}",
+  "NoValidLogFound": "Aucun log valide trouvé dans : {file}",
+  "UnsupportedExtension": "Extension non supportée : {extension}",
+  "ErrorDeserializingFile": "Erreur de désérialisation pour {file} : {error}",
+  "ErrorParsingXml": "Erreur lors du parsing manuel du XML : {error}",
+  "Messages": "Messages"
 }

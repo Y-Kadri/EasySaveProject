@@ -13,7 +13,6 @@ public class AppSettingDto
     
     [JsonConverter(typeof(EnumConverterUtil.JsonEnumConverter<LogFormatManager.LogFormat>))]
     public LogFormatManager.LogFormat logFormat { get; set; }
-    
     public List<string> EncryptedFileExtensions { get; set; }
     public List<string> PriorityBusinessProcess { get; set; }
     
@@ -23,6 +22,5 @@ public class AppSettingDto
         this.logFormat = logFormat;
         EncryptedFileExtensions = new List<string>();
         PriorityBusinessProcess = new List<string>();
-    }
-    
+    }   
 }

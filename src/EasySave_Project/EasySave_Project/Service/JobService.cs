@@ -57,16 +57,21 @@ namespace EasySave_Project.Service
                 FileUtil.CreateDirectory(jobBackupDir);
             }
 
-            // Create a timestamped subdirectory to differentiate backup executions
-            string timestampedBackupDir = FileUtil.CombinePath(jobBackupDir, DateUtil.GetTodayDate(DateUtil.YYYY_MM_DD_HH_MM_SS));
-            FileUtil.CreateDirectory(timestampedBackupDir);
+            string timestampedBackupDir;
 
             if (!job.SaveState.Equals(JobSaveStateEnum.PENDING))
             {
+                // Create a timestamped subdirectory to differentiate backup executions
+                timestampedBackupDir = FileUtil.CombinePath(jobBackupDir, DateUtil.GetTodayDate(DateUtil.YYYY_MM_DD_HH_MM_SS));
+                FileUtil.CreateDirectory(timestampedBackupDir);
+                job.FileInPending.LastDateTimePath = timestampedBackupDir;
                 // Mark the job as ACTIVE
                 job.SaveState = JobSaveStateEnum.ACTIVE;
                 // Notify the UI that the progress starts at 0%
                 job.FileInPending.Progress = 0;
+            } else
+            {
+                timestampedBackupDir = job.FileInPending.LastDateTimePath;
             }
 
             StateManager.Instance.UpdateState(CreateBackupJobState(job, job.FileInPending.Progress, job.FileSource, string.Empty));
@@ -226,27 +231,5 @@ namespace EasySave_Project.Service
                 return new List<string>(); // Return an empty list in case of an error
             }
         }
-
-        // /// <summary>
-        // /// Adds a file format to the list of encrypted file extensions.
-        // /// </summary>
-        // /// <param name="key">The file extension to add (e.g., "txt" or "pdf").</param>
-        // public void AddValueToJobSettingsList(string key, string value)
-        // {
-        //     try
-        //     {
-        //         // Call the utility method to add the format to settings
-        //         FileUtil.AddValueToJobSettingsList(key, value);
-        //
-        //         // Print success message
-        //         ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("elementAdded") + " " + value);
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         // Handle the exception and print an error message
-        //         ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorAddingElement") + ex.Message);
-        //     }
-        // }
-
     }
 }
