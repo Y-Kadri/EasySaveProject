@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EasySave_Project.Service;
 
 namespace EasySave_Project.Model
 {
@@ -19,7 +20,7 @@ namespace EasySave_Project.Model
         {
             // Récupère le chemin du dossier où l'exécutable est lancé
             string exeDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string resourceFolder = Path.Combine(exeDirectory, "Resource");
+            string resourceFolder = Path.Combine(exeDirectory, ConfigurationService.GetInstance().GetStringSetting("Path:Resource"));
 
             return language switch
             {

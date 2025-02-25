@@ -13,11 +13,11 @@ public class AppSettingDto
     
     [JsonConverter(typeof(EnumConverterUtil.JsonEnumConverter<LogFormatManager.LogFormat>))]
     public LogFormatManager.LogFormat logFormat { get; set; }
-    
     public List<string> EncryptedFileExtensions { get; set; }
     public List<string> PriorityBusinessProcess { get; set; }
     public List<PriorityExtensionDTO> PriorityExtensionFiles { get; set; }
 
+    public int MaxLargeFileSize { get; set; }
     public AppSettingDto(LanguageEnum language, LogFormatManager.LogFormat logFormat)
     {
         this.language = language;
