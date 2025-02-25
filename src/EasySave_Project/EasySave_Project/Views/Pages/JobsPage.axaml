@@ -72,17 +72,17 @@
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<StackPanel Orientation="Vertical">
-								<Button Content="Pause"
+								<Button Content="{Binding PendingJobButton}"
 										Click="OnPendingJob"
 										CommandParameter="{Binding}"
 										IsEnabled="{Binding CanExecute}"
 										IsVisible="{Binding CanExecute}"/>
-								<Button Content="Reprendre"
+								<Button Content="{Binding ResumeJobButton}"
 										Click="OnResumeJob"
 										CommandParameter="{Binding}"
 										IsEnabled="{Binding IsJobInPending}"
 										IsVisible="{Binding IsJobInPending}"/>
-								<Button Content="Cancel"
+								<Button Content="{Binding CancelJobButton}"
 										Click="OnCancelJob"
 										CommandParameter="{Binding}"
 										IsEnabled="{Binding IsJobInPendingOrActive}"

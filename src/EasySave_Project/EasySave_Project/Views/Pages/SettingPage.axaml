@@ -6,7 +6,7 @@
              x:DataType="pages:SettingPageViewModel">
 	<!-- Ajout de x:DataType ici -->
 
-	<Grid Background="#0D2B4D" ColumnDefinitions="*,*,*" RowDefinitions="*,*" Margin="10">
+	<Grid Background="#0D2B4D" ColumnDefinitions="*,*,*,*" RowDefinitions="*,*" Margin="10">
 		<!-- Langue -->
 		<StackPanel Margin="30" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
 			<TextBlock Text="{Binding SelectLanguage}" VerticalAlignment="Center"/>
@@ -60,12 +60,24 @@
 			</ListBox>
 		</StackPanel>
 
+		<StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="2" Grid.Row="1"
+            HorizontalAlignment="Center" VerticalAlignment="Center">
+			<TextBlock Text="{Binding MaxLargeFileSizeText}" FontWeight="Bold" Margin="10,20,0,0"/>
+			<NumericUpDown x:Name="MaxLargeFileSizeInput"
+						   Width="200"
+						   Minimum="0"
+						   Maximum="10000000000000000"
+						   Value="{Binding MaxLargeFileSize}"/>
+
+			<Button Content="{Binding Add}" Click="MaxLargeFileSize_Click"/>
+		</StackPanel>
+
 		<!-- Gestion avancée des logiciels prioritaires -->
-		<StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="3" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-			<TextBlock Text="Gestion des logiciels prioritaires" FontWeight="Bold" Margin="10,20,0,0"/>
+		<StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="4" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+			<TextBlock Text="{Binding PriorityFileManagement}" FontWeight="Bold" Margin="10,20,0,0"/>
 			<TextBox x:Name="PriorityInput" Width="200" Watermark="Ex: .txt"/>
 			<Button Content="{Binding Add}" Click="AddPriorityFileExtensions_Click"/>
-			<TextBlock x:Name="ExtensionInput2" Text="Logiciels prioritaires :" FontWeight="Bold" Margin="10,10,0,0"/>
+			<TextBlock x:Name="ExtensionInput2" Text="{Binding PriorityExtendions}" FontWeight="Bold" Margin="10,10,0,0"/>
 			<ListBox ItemsSource="{Binding PriorityExtensionFiles}">
 				<ListBox.ItemTemplate>
 					<DataTemplate>
@@ -81,17 +93,7 @@
 			</ListBox>
 		</StackPanel>
 
-		<StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="3" Grid.Row="1"
-            HorizontalAlignment="Center" VerticalAlignment="Center">
-			<TextBlock Text="{Binding MaxLargeFileSizeText}" FontWeight="Bold" Margin="10,20,0,0"/>
-			<NumericUpDown x:Name="MaxLargeFileSizeInput"
-						   Width="200"
-						   Minimum="0"
-						   Maximum="10000000000000000"
-						   Value="{Binding MaxLargeFileSize}"/>
-
-			<Button Content="{Binding Add}" Click="MaxLargeFileSize_Click"/>
-		</StackPanel>
+		
         
         <!-- Notification --> 
         <Canvas Grid.Column="2" Panel.ZIndex="9">
