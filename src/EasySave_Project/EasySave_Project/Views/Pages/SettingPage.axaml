@@ -79,17 +79,6 @@
 			</ListBox>
 		</StackPanel>
 
-		<!-- Notification -->
-		<Canvas Grid.Column="2" Panel.ZIndex="9">
-			<StackPanel x:Name="NotificationContainer"
-                        Canvas.Right="0"
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </StackPanel>
-
-
 		<StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="3" Grid.Row="1"
             HorizontalAlignment="Center" VerticalAlignment="Center">
 			<TextBlock Text="{Binding MaxLargeFileSizeText}" FontWeight="Bold" Margin="10,20,0,0"/>

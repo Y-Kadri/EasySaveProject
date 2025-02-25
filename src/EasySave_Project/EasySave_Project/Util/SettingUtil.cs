@@ -109,6 +109,38 @@ public static class SettingUtil
         };
     }
 
+    public static List<PriorityExtensionDTO> GetPriorityExtensionInOrderByIndex(string key)
+    {
+        // Retrieve the list of priority extensions
+        List<PriorityExtensionDTO> priorityExtensionFilesp = GetPriorityExtensionFilesList(key);
+
+        // Sort the list of extensions by the 'Index' property
+        // This assumes that PriorityExtensionDTO has an 'Index' property that is used to determine priority
+        var sortedList = priorityExtensionFilesp.OrderBy(p => p.Index).ToList();
+
+        return sortedList;
+    }
+
+    public static List<string> SortFilesByPriority(List<string> filePaths)
+    {
+        // Retrieve the list of sorted priority extensions
+        List<PriorityExtensionDTO> sortedPriorityExtensions = GetPriorityExtensionInOrderByIndex("PriorityExtensionFiles");
+
+        // Sort the file paths based on the priority of their extensions
+        var sortedFiles = filePaths.OrderBy(filePath =>
+        {
+            // Get the extension of the current file
+            string fileExtension = Path.GetExtension(filePath).ToLower();
+
+            // Find the priority of the extension in the sorted list
+            var priority = sortedPriorityExtensions.FirstOrDefault(p => p.ExtensionFile.Equals(fileExtension, StringComparison.OrdinalIgnoreCase));
+
+            // Return the priority index if found, or a default value (999) if the extension is not found
+            return priority?.Index ?? 999;
+        }).ToList();
+
+        return sortedFiles;
+    }
 
     public static void InitSetting()
     {
@@ -249,8 +281,5 @@ public static class SettingUtil
             SaveSettings(settings, "priorityExtensionMovedDown", "errorUpdatingPriorityExtension");
         }
     }
-
-
-
 
 }
