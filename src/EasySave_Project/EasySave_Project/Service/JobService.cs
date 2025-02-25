@@ -114,6 +114,7 @@ namespace EasySave_Project.Service
             }
             else {
                 messageForPopup = TranslationService.GetInstance().GetText("backupComplet") + " " + job.Name;
+                job.SaveState = JobSaveStateEnum.END;
                 ConsoleUtil.PrintTextconsole(messageForPopup);
                 LogManager.Instance.AddMessage(messageForPopup);
                 StateManager.Instance.UpdateState(CreateBackupJobState(job, 100, string.Empty, string.Empty));
