@@ -15,10 +15,14 @@ namespace EasySave_Project.ViewModels.Pages
         
         public ObservableCollection<string> EncryptedFileExtensions { get; }
         public ObservableCollection<string> PriorityBusinessProcess { get; }
+        
         public ObservableCollection<PriorityExtensionDTO> PriorityExtensionFiles { get; }
 
         private string _message, _status, _selectLanguage, _french, _english,
-            _chooseLogsFormat, _Json, _Xml, _add, _fileExtensionsToEncrypt, _monitoredBusinessSoftware;
+            _chooseLogsFormat, _Json, _Xml, _add, _fileExtensionsToEncrypt, 
+            _monitoredBusinessSoftware, _maxLargeFileSizeText;
+        
+        private int _maxLargeFileSize;
 
         public string Message
         {
@@ -86,6 +90,19 @@ namespace EasySave_Project.ViewModels.Pages
             set => this.RaiseAndSetIfChanged(ref _monitoredBusinessSoftware, value);
         }
         
+        public string MaxLargeFileSizeText
+        {
+            get => _maxLargeFileSizeText;
+            set => this.RaiseAndSetIfChanged(ref _maxLargeFileSizeText, value);
+        }
+        
+        public int MaxLargeFileSize
+        {
+            get => _maxLargeFileSize;
+            set => this.RaiseAndSetIfChanged(ref _maxLargeFileSize, value);
+        }
+
+        
         public SettingPageViewModel()
         {
             _translationService = TranslationService.GetInstance();
@@ -107,6 +124,7 @@ namespace EasySave_Project.ViewModels.Pages
             Add = _translationService.GetText("Add");
             FileExtensionsToEncrypt = _translationService.GetText("FileExtensionsToEncrypt");
             MonitoredBusinessSoftware = _translationService.GetText("MonitoredBusinessSoftware");
+            MaxLargeFileSizeText = _translationService.GetText("MaxLargeFileSize");
         }
         
         /// <summary>
@@ -124,6 +142,20 @@ namespace EasySave_Project.ViewModels.Pages
             else
             {
                 Message = "Erreur lors de l'ajout.";
+            }
+        }
+        
+        public void RemovePriorityFileExtensions(PriorityExtensionDTO priority)
+        {
+            if (SettingUtil.RemovePriorityExtension(priority.ExtensionFile))
+            {
+                PriorityExtensionFiles.Remove(priority);
+                this.RaisePropertyChanged(nameof(PriorityExtensionFiles));
+                Message = "Priorité supprimé avec succès.";
+            }
+            else
+            {
+                Message = "Erreur lors de la suppression.";
             }
         }
         

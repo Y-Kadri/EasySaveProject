@@ -19,27 +19,18 @@ namespace EasySave_Project.ViewModels.Pages
     /// </summary>
     public class JobsPageViewModel : ReactiveObject
     {
-        /// <summary>
-        /// Collection of backup jobs displayed in the UI.
-        /// </summary>
-        public ObservableCollection<JobModel> Jobs { get; }
-
-        /// <summary>
-        /// Service for managing backup jobs.
-        /// </summary>
-
-        public JobService JobService { get; } = new JobService();
 
         /// <summary>
         /// UI text labels retrieved from the translation service.
         /// </summary>
         public ReactiveCommand<Unit, Unit> ExecuteCommand { get; }
+        
         private List<PriorityExtensionDTO> PriorityExtensionFiles { get; set; }
         
         /// <summary>
         /// Initializes the ViewModel and loads job data.
         /// </summary>
-        private readonly JobService _jobService = new JobService();
+        private readonly JobService _jobService = new ();
         
         private readonly TranslationService _translationService = TranslationService.GetInstance();
 
@@ -47,7 +38,8 @@ namespace EasySave_Project.ViewModels.Pages
         
         private ObservableCollection<JobModel> _jobs;
         
-        private string _allJobs, _addAJob, _run, _name, _source, _destination, _type, _progress, _results, PriorityExtension;
+        private string _allJobs, _addAJob, _run, _name, _source, _destination,
+            _type, _progress, _results, _priorityExtension;
         
         public ObservableCollection<JobModel> Jobs
         {
@@ -108,6 +100,12 @@ namespace EasySave_Project.ViewModels.Pages
             get => _results;
             private set => this.RaiseAndSetIfChanged(ref _results, value);
         }
+        
+        public string PriorityExtension
+        {
+            get => _priorityExtension;
+            private set => this.RaiseAndSetIfChanged(ref _priorityExtension, value);
+        }
 
         public JobsPageViewModel()
         {
@@ -140,6 +138,11 @@ namespace EasySave_Project.ViewModels.Pages
             LoadJobs();
         }
 
+        public void CancelJobInActif(JobModel jib, Action<JobModel, double> progressCallback)
+        {
+            _jobService.CanceljobInActif(jib, progressCallback);
+        }
+        
         /// <summary>
         /// Loads jobs from the server if connected; otherwise, retrieves jobs from the local job service.
         /// </summary>
@@ -211,11 +214,6 @@ namespace EasySave_Project.ViewModels.Pages
                     }
                 });
             }
-        }
-
-        public void CancelJobInActif(JobModel jib, Action<JobModel, double> progressCallback)
-        {
-            JobService.CanceljobInActif(jib, progressCallback);
         }
     }
 }
