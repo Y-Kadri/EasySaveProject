@@ -48,6 +48,7 @@ namespace EasySave_Project.ViewModels.Pages
         public string Action { get; private set; }
         public string Progress { get; private set; }
         public string Results { get; private set; }
+        public string PriorityExtension { get; private set; }
 
         /// <summary>
         /// Initializes the ViewModel and loads job data.
@@ -68,18 +69,6 @@ namespace EasySave_Project.ViewModels.Pages
             Progress = TranslationService.GetInstance().GetText("Progress");
             Results = TranslationService.GetInstance().GetText("Results");
             PriorityExtension = TranslationService.GetInstance().GetText("PriorityExtension");
-        }
-
-        public void LoadAppSettings()
-        {
-            string settingsPath = @"C:\path\to\your\appsettings.json";  // Remplace avec le bon chemin
-            string json = File.ReadAllText(settingsPath);
-
-            // Désérialiser le fichier JSON avec System.Text.Json
-            var appSettings = JsonSerializer.Deserialize<AppSettingDto>(json);
-
-            // Charger les extensions de fichiers prioritaires, triées par index
-            PriorityExtensionFiles = appSettings.PriorityExtensionFiles.OrderBy(p => p.Index).ToList();
         }
 
         /// <summary>

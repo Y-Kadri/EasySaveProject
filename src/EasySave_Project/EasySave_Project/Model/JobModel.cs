@@ -21,6 +21,8 @@ namespace EasySave_Project.Model
         // Propriétés publiques
         public int Id { get; set; }
 
+        private JobSaveStateEnum _saveState;
+
         [JsonConverter(typeof(EnumConverterUtil.JsonEnumConverter<JobSaveStateEnum>))]
         public JobSaveStateEnum SaveState
         {

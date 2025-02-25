@@ -128,6 +128,8 @@ namespace EasySave_Project.Service
                 filesToCopy.AddRange(filesToCopyChild);
             }
 
+            filesToCopy = SettingUtil.SortFilesByPriority(filesToCopy);
+
             return (itemsToCopyCount, itemsToCopySize, filesToCopy);
         }
     }

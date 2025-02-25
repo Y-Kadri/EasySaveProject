@@ -16,7 +16,6 @@ public class AppSettingDto
     public List<string> EncryptedFileExtensions { get; set; }
     public List<string> PriorityBusinessProcess { get; set; }
     public List<PriorityExtensionDTO> PriorityExtensionFiles { get; set; }
-
     public int MaxLargeFileSize { get; set; }
     public AppSettingDto(LanguageEnum language, LogFormatManager.LogFormat logFormat)
     {
