@@ -108,6 +108,10 @@ namespace EasySave_Project.ViewModels.Pages
             _translationService = TranslationService.GetInstance();
             EncryptedFileExtensions = new ObservableCollection<string>(SettingUtil.GetList("EncryptedFileExtensions"));
             PriorityBusinessProcess = new ObservableCollection<string>(SettingUtil.GetList("PriorityBusinessProcess"));
+            
+            PriorityExtensionFiles = new ObservableCollection<PriorityExtensionDTO>(SettingUtil.GetPriorityExtensionFilesList("PriorityExtensionFiles"));
+            SortPriorityExtensions();
+            MaxLargeFileSize = FileUtil.GetAppSettingsInt("MaxLargeFileSize");
         }
 
         /// <summary>
@@ -152,6 +156,7 @@ namespace EasySave_Project.ViewModels.Pages
                 PriorityExtensionFiles.Remove(priority);
                 this.RaisePropertyChanged(nameof(PriorityExtensionFiles));
                 Message = "Priorité supprimé avec succès.";
+                Refresh();
             }
             else
             {
@@ -170,6 +175,7 @@ namespace EasySave_Project.ViewModels.Pages
                 PriorityBusinessProcess.Add(software);
                 this.RaisePropertyChanged(nameof(PriorityBusinessProcess));
                 Message = "Logiciel ajouté avec succès.";
+                Refresh();
             }
             else
             {
@@ -187,6 +193,7 @@ namespace EasySave_Project.ViewModels.Pages
             {
                 this.RaisePropertyChanged(nameof(PriorityExtensionFiles));
                 Message = "Priorité ajouté avec succès.";
+                Refresh();
             }
             else
             {
