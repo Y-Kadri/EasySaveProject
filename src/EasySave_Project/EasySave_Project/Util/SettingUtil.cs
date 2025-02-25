@@ -65,7 +65,14 @@ public static class SettingUtil
 
         if (key == "PriorityExtensionFiles")
         {
-            if (!settings.PriorityExtensionFiles.Any(e => e.ExtensionFile == value.ExtensionFile))
+            // Vérifier si la liste existe, sinon l'initialiser
+            if (settings.PriorityExtensionFiles == null)
+            {
+                settings.PriorityExtensionFiles = new List<PriorityExtensionDTO>();
+            }
+
+            // Vérifier si l'extension existe déjà dans la liste
+            if (!settings.PriorityExtensionFiles.Any(e => e.ExtensionFile.Equals(value.ExtensionFile, StringComparison.OrdinalIgnoreCase)))
             {
                 settings.PriorityExtensionFiles.Add(value);
                 return SaveSettings(settings, "itemAdded", "errorAddingItem");
@@ -74,6 +81,7 @@ public static class SettingUtil
 
         return false;
     }
+
 
     public static bool RemovePriorityExtension(string key, string extensionFile)
     {

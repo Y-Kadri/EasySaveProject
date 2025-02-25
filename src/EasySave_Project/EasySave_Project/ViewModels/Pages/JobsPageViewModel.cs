@@ -49,6 +49,7 @@ namespace EasySave_Project.ViewModels.Pages
         public string Progress { get; private set; }
         public string Results { get; private set; }
         public string PriorityExtension { get; private set; }
+        
 
         /// <summary>
         /// Initializes the ViewModel and loads job data.

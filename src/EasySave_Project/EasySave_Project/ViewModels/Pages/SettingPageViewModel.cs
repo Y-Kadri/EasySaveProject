@@ -48,8 +48,10 @@ namespace EasySave_Project.ViewModels.Pages
             set => this.RaiseAndSetIfChanged(ref _maxLargeFileSize, value);
         }
         public string MaxLargeFileSizeText { get; private set; }
+        public string PriorityFileManagement { get; private set; }
+        public string PriorityExtendions { get; private set; }
 
-        // Constructeur qui prend un callback pour notifier la vue
+        // Constructor
         public SettingPageViewModel()
         {
             _translationService = TranslationService.GetInstance();
@@ -64,26 +66,32 @@ namespace EasySave_Project.ViewModels.Pages
             FileExtensionsToEncrypt = _translationService.GetText("FileExtensionsToEncrypt");
             MonitoredBusinessSoftware = _translationService.GetText("MonitoredBusinessSoftware");
             MaxLargeFileSizeText = _translationService.GetText("MaxLargeFileSize");
+            MaxLargeFileSize = FileUtil.GetAppSettingsInt("MaxLargeFileSize");
+            PriorityFileManagement = _translationService.GetText("PriorityFileManagement");
+            PriorityExtendions = _translationService.GetText("PriorityExtendions");
 
             EncryptedFileExtensions = new ObservableCollection<string>(SettingUtil.GetList("EncryptedFileExtensions"));
             PriorityBusinessProcess = new ObservableCollection<string>(SettingUtil.GetList("PriorityBusinessProcess"));
             PriorityExtensionFiles = new ObservableCollection<PriorityExtensionDTO>(SettingUtil.GetPriorityExtensionFilesList("PriorityExtensionFiles"));
             SortPriorityExtensions();
-            MaxLargeFileSize = FileUtil.GetAppSettingsInt("MaxLargeFileSize");
         }
 
-        public void AddEncryptedFileExtensions(string extension)
+        public (string message, string status) AddEncryptedFileExtensions(string extension)
         {
+            string _message;
             if (SettingUtil.AddToList("EncryptedFileExtensions", extension))
             {
                 EncryptedFileExtensions.Add(extension);
                 this.RaisePropertyChanged(nameof(EncryptedFileExtensions));
-                Message = "Extension ajoutée avec succès.";
+                _message = _translationService.GetText("ExtensionAddedSuccessfully");
+                _status = "Success";
             }
             else
             {
-                Message = "Erreur lors de l'ajout.";
+                _message = _translationService.GetText("ErrorAddingExtension");
+                _status = "Error";
             }
+            return (_message, _status);
         }
 
         public void AddPriorityBusinessProcess(string software)
@@ -92,25 +100,24 @@ namespace EasySave_Project.ViewModels.Pages
             {
                 PriorityBusinessProcess.Add(software);
                 this.RaisePropertyChanged(nameof(PriorityBusinessProcess));
-                Message = "Logiciel ajouté avec succès.";
-            }
-            else
-            {
-                Message = "Erreur lors de l'ajout.";
             }
         }
 
-        public void AddPriorityFileExtensions(string extensionfile)
+        public (string message, string status) AddPriorityFileExtensions(string extensionfile)
         {
+            string _message;
             if (SettingUtil.AddPriorityExtension(extensionfile))
             {
                 this.RaisePropertyChanged(nameof(PriorityExtensionFiles));
-                Message = "Priorité ajouté avec succès.";
+                _message = _translationService.GetText("PriorityAddedSuccessfully");
+                _status = "Success";
             }
             else
             {
-                Message = "Erreur lors de l'ajout.";
+                _message = _translationService.GetText("ErrorAddingPriority");
+                _status = "Error";
             }
+            return (_message, _status);
         }
 
         /// <summary>
@@ -146,53 +153,63 @@ namespace EasySave_Project.ViewModels.Pages
             return (_message, _status);
         }
 
-        public void RemovPriorityBusinessProcess(string software)
+        public (string message, string status) RemovPriorityBusinessProcess(string software)
         {
             if (SettingUtil.RemoveFromList("PriorityBusinessProcess", software))
             {
                 PriorityBusinessProcess.Remove(software);
                 this.RaisePropertyChanged(nameof(PriorityBusinessProcess));
-                Message = "Logiciel supprimé avec succès.";
+                _message = _translationService.GetText("SoftwareRemovedSuccessfully");
+                _status = "Success";
             }
             else
             {
-                Message = "Erreur lors de la suppression.";
+                _message = _translationService.GetText("ErrorRemovingSoftware");
+                _status = "Error";
             }
+            return (_message, _status);
         }
 
-        public void RemoveEncryptedFileExtensions(string extension)
+        public (string message, string status) RemoveEncryptedFileExtensions(string extension)
         {
+            string _message;
             if (SettingUtil.RemoveFromList("EncryptedFileExtensions", extension))
             {
                 EncryptedFileExtensions.Remove(extension);
                 this.RaisePropertyChanged(nameof(EncryptedFileExtensions));
-                Message = "Extension supprimée avec succès.";
+                _message = _translationService.GetText("ExtensionRemovedSuccessfully");
+                _status = "Success";
             }
             else
             {
-                Message = "Erreur lors de la suppression.";
+                _message = _translationService.GetText("ErrorRemovingExtension");
+                _status = "Error";
             }
+            return (_message, _status);
         }
 
-        public void RemovePriorityFileExtensions(PriorityExtensionDTO priority)
+        public (string message, string status) RemovePriorityFileExtensions(PriorityExtensionDTO priority)
         {
+            string _message;
             if (SettingUtil.RemovePriorityExtension(priority.ExtensionFile))
             {
                 PriorityExtensionFiles.Remove(priority);
                 this.RaisePropertyChanged(nameof(PriorityExtensionFiles));
-                Message = "Priorité supprimé avec succès.";
+                _message = _translationService.GetText("PriorityRemovedSuccessfully");
+                _status = "Success";
             }
             else
             {
-                Message = "Erreur lors de la suppression.";
+                _message = _translationService.GetText("ErrorRemovingPriority");
+                _status = "Error";
             }
+            return (_message, _status);
         }
 
-
-
-        // Méthode pour changer la langue et appeler la notification
+        // Method to change the language and call the notification
         public (string message, string status) ChangeLanguage(LanguageEnum lang)
         {
+            string _message;
             if (SettingUtil.SettingChangeLanguage(lang))
             {
                 TranslationService.SetLanguage(lang);
@@ -205,12 +222,13 @@ namespace EasySave_Project.ViewModels.Pages
                 _status = "Error";
             }
 
-            // Appeler le callback pour afficher la notification dans la vue
+            // Call the callback to display the notification in the view
             return (_message, _status);
         }
 
         public (string message, string status) ChangeLogsFormat(LogFormatManager.LogFormat logsFormat)
         {
+            string _message;
             if (SettingUtil.SettingChangeFormat(logsFormat))
             {
                 _message = _translationService.GetText("LogsFormatChangeSuccess");
@@ -230,8 +248,9 @@ namespace EasySave_Project.ViewModels.Pages
         /// Moves the file extension up in the list if it is not already at the top.
         /// </summary>
         /// <param name="index">The index of the item to move.</param>
-        public void MoveExtensionUp(int index)
+        public (string message, string status) MoveExtensionUp(int index)
         {
+            string _message;
             if (index > 0) // Check if the item is not the first one in the list
             {
                 SettingUtil.MovePriorityExtensionFileUp(index);
@@ -239,34 +258,40 @@ namespace EasySave_Project.ViewModels.Pages
                 // Sort the list after moving the item
                 SortPriorityExtensions();  // Call the method to sort the list
 
-                Message = "Extension moved up.";
+                _message = _translationService.GetText("ExtensionMovedUp");
+                _status = "Success";
             }
             else
             {
-                Message = "Cannot move up further."; // Error message if it is already at the top
+                _message = _translationService.GetText("CannotMoveUpFurther"); // Error message if it is already at the top
+                _status = "Error";
             }
+            return (_message, _status);
         }
-
 
         /// <summary>
         /// Moves the file extension down in the list if it is not already at the bottom.
         /// </summary>
         /// <param name="index">The index of the item to move.</param>
-        public void MoveExtensionDown(int index)
+        public (string message, string status) MoveExtensionDown(int index)
         {
-            if (index <= PriorityExtensionFiles.Count) // Check if the item is not the last one in the list
+            string _message;
+            if (index < PriorityExtensionFiles.Count - 1) // Check if the item is not the last one in the list
             {
                 SettingUtil.MovePriorityExtensionFileDown(index);
 
                 // Sort the list after moving the item
                 SortPriorityExtensions();  // Call the method to sort the list
 
-                Message = "Extension moved down.";
+                _message = _translationService.GetText("ExtensionMovedDown");
+                _status = "Success";
             }
             else
             {
-                Message = "Cannot move down further."; // Error message if it is already at the bottom
+                _message = _translationService.GetText("CannotMoveDownFurther"); // Error message if it is already at the bottom
+                _status = "Error";
             }
+            return (_message, _status);
         }
 
         /// <summary>

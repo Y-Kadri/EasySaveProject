@@ -6,6 +6,7 @@ using EasySave_Project.Model;
 using EasySave_Project.ViewModels.Pages;
 using EasySave_Project.Views.Components;
 using EasySave_Project.Views.Layout;
+using Tmds.DBus.Protocol;
 
 namespace EasySave_Project.Views.Pages
 {
@@ -93,7 +94,8 @@ namespace EasySave_Project.Views.Pages
         {
             if (!string.IsNullOrEmpty(ExtensionInput.Text))
             {
-                _settingPageViewModel.AddEncryptedFileExtensions(ExtensionInput.Text);
+                var (message, status) = _settingPageViewModel.AddEncryptedFileExtensions(ExtensionInput.Text);
+                Toastr.ShowNotification(message, NotificationContainer, status);
                 ExtensionInput.Text = "";
                 Reload();
             }
@@ -103,7 +105,8 @@ namespace EasySave_Project.Views.Pages
         {
             var button = (Button)sender;
             var extension = (string)button.DataContext;
-            _settingPageViewModel.RemoveEncryptedFileExtensions(extension);
+            var (message, status) = _settingPageViewModel.RemoveEncryptedFileExtensions(extension);
+            Toastr.ShowNotification(message, NotificationContainer, status);
             Reload();
         }
 
@@ -111,7 +114,8 @@ namespace EasySave_Project.Views.Pages
         {
             if (!string.IsNullOrEmpty(PriorityInput.Text))
             {
-                _settingPageViewModel.AddPriorityFileExtensions(PriorityInput.Text);
+                var (message, status) = _settingPageViewModel.AddPriorityFileExtensions(PriorityInput.Text);
+                Toastr.ShowNotification(message, NotificationContainer, status);
                 PriorityInput.Text = "";
                 Reload();
             }
@@ -120,8 +124,9 @@ namespace EasySave_Project.Views.Pages
         private void RemovePriorityFileExtensions_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
-            var priority = (PriorityExtensionDTO)button.DataContext; 
-            _settingPageViewModel.RemovePriorityFileExtensions(priority); 
+            var priority = (PriorityExtensionDTO)button.DataContext;
+            var (message, status) = _settingPageViewModel.RemovePriorityFileExtensions(priority);
+            Toastr.ShowNotification(message, NotificationContainer, status);
             Reload();
         }
 
@@ -140,7 +145,8 @@ namespace EasySave_Project.Views.Pages
         {
             var button = (Button)sender;
             var software = (string)button.DataContext;
-            _settingPageViewModel.RemovPriorityBusinessProcess(software);
+            var (message, status) = _settingPageViewModel.RemovPriorityBusinessProcess(software);
+            Toastr.ShowNotification(message, NotificationContainer, status);
             Reload();
         }
 
@@ -157,8 +163,8 @@ namespace EasySave_Project.Views.Pages
 
             if (index > 0)
             {
-                _settingPageViewModel.MoveExtensionUp(index); // Call the MoveExtensionUp method in the ViewModel with the found index
-                Toastr.ShowNotification("Extension moved up.", NotificationContainer, "Success"); // Show success notification
+                var (message, status) = _settingPageViewModel.MoveExtensionUp(index); // Call the MoveExtensionUp method in the ViewModel with the found index
+                Toastr.ShowNotification(message, NotificationContainer, status);
             }
             Reload();
         }
@@ -174,30 +180,12 @@ namespace EasySave_Project.Views.Pages
             var extension = (PriorityExtensionDTO)button.CommandParameter; // Cast CommandParameter to PriorityExtensionDTO
             var index = extension.Index; // Find the index of the extension in the list
 
-            if (index > 0 && index < _settingPageViewModel.PriorityExtensionFiles.Count)
-            {
-                _settingPageViewModel.MoveExtensionDown(index); // Call the MoveExtensionDown method in the ViewModel with the found index
-                Toastr.ShowNotification("Extension moved down.", NotificationContainer, "Success"); // Show success notification
-            }
-            Reload();
-        }
-
-        /// <summary>
-        /// Handles the click event for the "Delete" button for file extensions.
-        /// </summary>
-        /// <param name="sender">The sender of the event (Button).</param>
-        /// <param name="e">The event arguments.</param>
-        private void MoveSoftwareDown_Click(object sender, RoutedEventArgs e)
-        {
-            var button = (Button)sender; // Get the button that was clicked
-            var extension = (PriorityExtensionDTO)button.CommandParameter; // Cast CommandParameter to PriorityExtensionDTO
-            var index = _settingPageViewModel.PriorityExtensionFiles.IndexOf(extension); // Find the index of the extension in the list
-
             if (index > 0)
             {
-                //_settingPageViewModel.RemoveExtension(index); // Assuming you have a method to remove the extension
-                Toastr.ShowNotification("Extension removed.", NotificationContainer, "Success"); // Show success notification
+                var (message, status) = _settingPageViewModel.MoveExtensionDown(index); // Call the MoveExtensionDown method in the ViewModel with the found index
+                Toastr.ShowNotification(message, NotificationContainer, status);
             }
+            Reload();
         }
 
         /// <summary>
