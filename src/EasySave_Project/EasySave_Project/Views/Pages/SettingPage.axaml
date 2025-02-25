@@ -58,6 +58,19 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </StackPanel>
+
+
+		<StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="3" Grid.Row="1"
+            HorizontalAlignment="Center" VerticalAlignment="Center">
+			<TextBlock Text="{Binding MaxLargeFileSizeText}" FontWeight="Bold" Margin="10,20,0,0"/>
+			<NumericUpDown x:Name="MaxLargeFileSizeInput"
+						   Width="200"
+						   Minimum="0"
+						   Maximum="10000000000000000"
+						   Value="{Binding MaxLargeFileSize}"/>
+
+			<Button Content="{Binding Add}" Click="MaxLargeFileSize_Click"/>
+		</StackPanel>
         
         <!-- Notification --> 
         <Canvas Grid.Column="2" Panel.ZIndex="9">
