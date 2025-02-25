@@ -180,58 +180,70 @@ namespace EasySave_Project.Service
 
         protected void ProcessFilesInQueue(Queue<string> files, Queue<string> fallbackQueue, string targetDir, JobModel job, ref int processedFiles, ref long processedSize, List<string> filesToCopyPath, int totalFiles, long totalSize)
         {
-            bool jobInPending = false;
+            bool end = false;
 
-            while (files.Count > 0)
+            while (files.Count > 0 && !end)
             {
-                string file = files.Dequeue();
-                long fileSize = FileUtil.GetFileSize(file);
-                bool isLargeFile = fileSize > LargeFileThreshold && LargeFileThreshold > 0;
+                if (job.SaveState.Equals(JobSaveStateEnum.CANCEL))
+                {
+                    end = true;
+                } else
+                {
+                    string file = files.Dequeue();
+                    long fileSize = FileUtil.GetFileSize(file);
+                    bool isLargeFile = fileSize > LargeFileThreshold && LargeFileThreshold > 0;
 
-                if (isLargeFile && !_largeFileSemaphore.Wait(0))
-                {
-                    fallbackQueue.Enqueue(file); // Fichier volumineux en attente
-                }
-                else
-                {
-                    jobInPending = CopyFileWithSemaphore(
-                        file, 
-                        targetDir, 
-                        job,
-                        isLargeFile, 
-                        ref processedFiles, 
-                        ref processedSize, 
-                        filesToCopyPath, 
-                        totalFiles, 
-                        totalSize);
+                    if (isLargeFile && !_largeFileSemaphore.Wait(0))
+                    {
+                        fallbackQueue.Enqueue(file);
+                    }
+                    else
+                    {
+                        end = CopyFileWithSemaphore(
+                            file,
+                            targetDir,
+                            job,
+                            isLargeFile,
+                            ref processedFiles,
+                            ref processedSize,
+                            filesToCopyPath,
+                            totalFiles,
+                            totalSize);
+                    }
                 }
             }
         }
 
         protected void ProcessFallbackQueue(Queue<string> fallbackQueue, string targetDir, JobModel job, ref int processedFiles, ref long processedSize, List<string> filesToCopyPath, int totalFiles, long totalSize)
         {
-            bool jobInPending = false;
+            bool end = false;
 
-            while (fallbackQueue.Count > 0 && !jobInPending)
+            while (fallbackQueue.Count > 0 && !end)
             {
-                string waitingFile = fallbackQueue.Dequeue();
-                if (_largeFileSemaphore.Wait(0))
+                if (job.SaveState.Equals(JobSaveStateEnum.CANCEL))
                 {
-                    jobInPending = CopyFileWithSemaphore(
-                        waitingFile, 
-                        targetDir, 
-                        job,
-                        true,
-                        ref processedFiles, 
-                        ref processedSize, 
-                        filesToCopyPath, 
-                        totalFiles,
-                        totalSize);
-                }
-                else
+                    end = true;
+                } else
                 {
-                    fallbackQueue.Enqueue(waitingFile);
-                    Thread.Sleep(500);
+                    string waitingFile = fallbackQueue.Dequeue();
+                    if (_largeFileSemaphore.Wait(0))
+                    {
+                        end = CopyFileWithSemaphore(
+                            waitingFile,
+                            targetDir,
+                            job,
+                            true,
+                            ref processedFiles,
+                            ref processedSize,
+                            filesToCopyPath,
+                            totalFiles,
+                            totalSize);
+                    }
+                    else
+                    {
+                        fallbackQueue.Enqueue(waitingFile);
+                        Thread.Sleep(500);
+                    }
                 }
             }
         }
@@ -242,13 +254,13 @@ namespace EasySave_Project.Service
             string fileName = FileUtil.GetFileName(sourceFile);
             string targetFile = FileUtil.CombinePath(targetDir, fileName);
             double progressPourcentage = (double)processedFiles / totalFiles * 100;
-            bool jobInPending = false;
+            bool end = false;
 
             List<string> pathToDelete = new List<string>();
 
             changeJobStateIfBusinessProcessLaunching(job);
 
-            if (!job.SaveState.Equals(JobSaveStateEnum.PENDING))
+            if (!job.SaveState.Equals(JobSaveStateEnum.PENDING) && !job.SaveState.Equals(JobSaveStateEnum.CANCEL))
             {
                 string targetPathComplete = FileUtil.CombinePath(targetDir, sourceFile);
 
@@ -256,12 +268,12 @@ namespace EasySave_Project.Service
 
                 processedFiles++;
                 processedSize += fileSize;
-                UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFile, targetFile, progressPourcentage, job.FileInPending.LastDateTimePath);
                 pathToDelete.Add(sourceFileWithAbsolutePath);
 
             } else {
-                jobInPending = true;
+                end = true;
             }
+            UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFile, targetFile, progressPourcentage, job.FileInPending.LastDateTimePath);
 
             if (isLargeFile)
             {
@@ -271,7 +283,7 @@ namespace EasySave_Project.Service
             filesToCopyPath.RemoveAll(path => pathToDelete.Contains(path));
             SaveFileInPending(job, filesToCopyPath, processedFiles, processedSize, totalFiles, totalSize, job.FileInPending.LastDateTimePath);
 
-            return jobInPending;
+            return end;
         }
     }
 }
