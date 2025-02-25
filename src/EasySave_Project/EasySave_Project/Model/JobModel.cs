@@ -5,19 +5,38 @@ using EasySave_Project.Util;
 using System.Collections.Generic;
 using EasySave_Project.Service;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using EasySave_Project.Dto;
 
 namespace EasySave_Project.Model
 {
     /// <summary>
     /// Represents a backup job that can be observed for changes.
     /// </summary>
-    public class JobModel
+    public class JobModel : INotifyPropertyChanged
     {
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         // Propriétés publiques
         public int Id { get; set; }
 
         [JsonConverter(typeof(EnumConverterUtil.JsonEnumConverter<JobSaveStateEnum>))]
-        public JobSaveStateEnum SaveState { get; set; } = JobSaveStateEnum.INACTIVE;
+        public JobSaveStateEnum SaveState
+        {
+            get => _saveState;
+            set
+            {
+                if (_saveState != value)
+                {
+                    _saveState = value;
+                    OnPropertyChanged(nameof(SaveState));
+                    OnPropertyChanged(nameof(CanExecute));
+                    OnPropertyChanged(nameof(IsCheckBoxVisibleAndEnable));
+                    OnPropertyChanged(nameof(IsJobInPending));
+                }
+            }
+        }
 
         [JsonConverter(typeof(EnumConverterUtil.JsonEnumConverter<JobSaveTypeEnum>))]
         public JobSaveTypeEnum SaveType { get; set; }
@@ -37,6 +56,8 @@ namespace EasySave_Project.Model
         public string LastSaveDifferentialPath { get; set; } = null;
 
         public DateTime Time { get; set; } = DateTime.Now;
+
+        public FileInPendingJobDTO FileInPending { get; set; }
 
         // Liste des extensions de fichiers prioritaires
         public ObservableCollection<string> PriorityFileExtensions { get; set; } = new ObservableCollection<string>();
@@ -62,6 +83,15 @@ namespace EasySave_Project.Model
             this.LastFullBackupPath = lastFullBackupPath;
             this.LastSaveDifferentialPath = lastSaveDifferentialPath;
             this.Id = FileUtil.GetCurrentJobIndex();
+            this.SaveState = JobSaveStateEnum.INACTIVE; // Initialise par défaut à INACTIVE
+            FileInPendingJobDTO fileInPendingJobDTO = new FileInPendingJobDTO();
+            fileInPendingJobDTO.FilesInPending = new List<string>();
+            fileInPendingJobDTO.Progress = 0;
+            fileInPendingJobDTO.ProcessedFiles = 0;
+            fileInPendingJobDTO.TotalFiles = 0;
+            fileInPendingJobDTO.TotalSize = 0;
+            this.FileInPending = fileInPendingJobDTO;
+
         }
 
         /// <summary>
@@ -84,6 +114,13 @@ namespace EasySave_Project.Model
                 translationService.GetText("type"),
                 SaveType
             );
+        }
+
+
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         // Ajout d'une extension prioritaire
@@ -117,5 +154,14 @@ namespace EasySave_Project.Model
             }
             return false; // Aucune extension prioritaire en attente
         }
+        public bool CanExecute => SaveState == JobSaveStateEnum.ACTIVE;
+
+
+        public bool IsCheckBoxVisibleAndEnable => SaveState == JobSaveStateEnum.INACTIVE
+            || SaveState == JobSaveStateEnum.END
+            || SaveState == JobSaveStateEnum.CANCEL;
+
+        public bool IsJobInPending => SaveState == JobSaveStateEnum.PENDING;
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -14,6 +15,9 @@ namespace EasySave_Project.Service
 {
     public class JobService
     {
+        
+        private ConfigurationService _configurationService = ConfigurationService.GetInstance();
+        
         public List<JobModel> GetAllJobs()
         {
             return JobManager.GetInstance().GetAll();
@@ -45,20 +49,6 @@ namespace EasySave_Project.Service
                 FileUtil.CreateDirectory(job.FileTarget);
             }
 
-            // Check if a priority process is currently running
-            var processes = FileUtil.GetAppSettingsList("PriorityBusinessProcess");
-            (bool isRunning, string PName) = ProcessUtil.IsProcessRunning(processes);
-            if (isRunning)
-            {
-                string Pmessage = TranslationService.GetInstance().GetText("interuptJob") + " " + PName;
-                ConsoleUtil.PrintTextconsole(Pmessage);
-
-                // Update the job status to SKIPPED
-                job.SaveState = JobSaveStateEnum.SKIP;
-                StateManager.Instance.UpdateState(CreateBackupJobState(job, 0, job.FileSource, string.Empty));
-
-                return (false, "A priority program killed the process");
-            }
 
             // Create a backup directory specific to the job
             string jobBackupDir = FileUtil.CombinePath(job.FileTarget, job.Name + "_" + job.Id);
@@ -67,16 +57,26 @@ namespace EasySave_Project.Service
                 FileUtil.CreateDirectory(jobBackupDir);
             }
 
-            // Create a timestamped subdirectory to differentiate backup executions
-            string timestampedBackupDir = FileUtil.CombinePath(jobBackupDir, DateUtil.GetTodayDate(DateUtil.YYYY_MM_DD_HH_MM_SS));
-            FileUtil.CreateDirectory(timestampedBackupDir);
+            string timestampedBackupDir;
 
-            // Mark the job as ACTIVE
-            job.SaveState = JobSaveStateEnum.ACTIVE;
-            StateManager.Instance.UpdateState(CreateBackupJobState(job, 0, job.FileSource, string.Empty));
+            if (!job.SaveState.Equals(JobSaveStateEnum.PENDING))
+            {
+                // Create a timestamped subdirectory to differentiate backup executions
+                timestampedBackupDir = FileUtil.CombinePath(jobBackupDir, DateUtil.GetTodayDate(DateUtil.YYYY_MM_DD_HH_MM_SS));
+                FileUtil.CreateDirectory(timestampedBackupDir);
+                job.FileInPending.LastDateTimePath = timestampedBackupDir;
+                // Mark the job as ACTIVE
+                job.SaveState = JobSaveStateEnum.ACTIVE;
+                // Notify the UI that the progress starts at 0%
+                job.FileInPending.Progress = 0;
+            } else
+            {
+                timestampedBackupDir = job.FileInPending.LastDateTimePath;
+            }
 
-            // Notify the UI that the progress starts at 0%
-            progressCallback(job, 0);
+            StateManager.Instance.UpdateState(CreateBackupJobState(job, job.FileInPending.Progress, job.FileSource, string.Empty));
+
+            progressCallback(job, job.FileInPending.Progress);
 
             // Select the backup strategy based on the job type
             IJobStrategyService strategy = job.SaveType switch
@@ -90,39 +90,43 @@ namespace EasySave_Project.Service
             strategy.OnProgressChanged += (progress) =>
             {
                 // Update the progress in real-time
-                progressCallback(job, progress);
-                StateManager.Instance.UpdateState(CreateBackupJobState(job, progress, string.Empty, string.Empty));
+                progressCallback(job, job.FileInPending.Progress);
             };
 
             // Execute the backup with the selected strategy
             strategy.Execute(job, timestampedBackupDir);
 
-            // Update the job status after execution
-            job.SaveState = JobSaveStateEnum.END;
-            progressCallback(job, 100); // Indicate the job is finished at 100%
-            StateManager.Instance.UpdateState(CreateBackupJobState(job, 100, string.Empty, string.Empty));
+            string messageForPopup;
 
-            // Generate a message indicating the job is complete
-            message = $"{translator.GetText("backupCompleted")} : {job.Name}";
-            ConsoleUtil.PrintTextconsole(message);
-            LogManager.Instance.AddMessage(message);
+            if (job.SaveState.Equals(JobSaveStateEnum.PENDING))
+            {
+                // Generate a message indicating the job is pending
+                messageForPopup = $"{translator.GetText("backupPending")} : {job.Name}";
+                ConsoleUtil.PrintTextconsole(messageForPopup);
+                LogManager.Instance.AddMessage(messageForPopup);
+            } else
+            {
+                messageForPopup = TranslationService.GetInstance().GetText("backupComplet") + " " + job.Name;
+                ConsoleUtil.PrintTextconsole(messageForPopup);
+                LogManager.Instance.AddMessage(messageForPopup);
+
+                // Update the job status after execution
+                job.SaveState = JobSaveStateEnum.END;
+                job.FileInPending.Progress = 100;
+                progressCallback(job, 100); // Indicate the job is finished at 100%
+                StateManager.Instance.UpdateState(CreateBackupJobState(job, 100, string.Empty, string.Empty));
+                job.FileInPending.Progress = 0;
+                job.FileInPending.ProcessedFiles = 0;
+                job.FileInPending.ProcessedSize = 0;
+                job.FileInPending.TotalFiles = 0;
+                job.FileInPending.TotalSize = 0;
+                progressCallback(job, 0);
+            }
 
             // Update the stored parameters for the job
             UpdateJobInFile(job);
 
-            return (true, "success"); // Return success if everything went as planned
-        }
-
-        public string StartJob(JobModel job)
-        {
-            if (job.HasPendingPriorityFiles())
-            {
-                return "Il y a des fichiers prioritaires non traités. Veuillez attendre leur traitement avant de lancer cette sauvegarde.";
-            }
-
-            // Logique de traitement de la sauvegarde ici
-            // Exemple : JobProcessingService.Process(job);
-            return "Sauvegarde démarrée avec succès.";
+            return (true, messageForPopup); // Return success if everything went as planned
         }
 
         private BackupJobState CreateBackupJobState(JobModel job, double progress, string currentSourceFilePath, string currentDestinationFilePath)
@@ -149,7 +153,10 @@ namespace EasySave_Project.Service
         /// <param name="updatedJob">Le job mis à jour.</param>
         private void UpdateJobInFile(JobModel updatedJob)
         {
-            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easysave", "easySaveSetting", "jobsSetting.json");
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                _configurationService.GetStringSetting("Path:ProjectFile"),
+                _configurationService.GetStringSetting("Path:SettingFolder"),
+                _configurationService.GetStringSetting("Path:JobSettingFile"));
             var translator = TranslationService.GetInstance();
             string message;
 
@@ -181,6 +188,8 @@ namespace EasySave_Project.Service
                 {
                     jobToUpdate.LastFullBackupPath = updatedJob.LastFullBackupPath;
                     jobToUpdate.LastSaveDifferentialPath = updatedJob.LastSaveDifferentialPath;
+                    jobToUpdate.FileInPending = updatedJob.FileInPending;
+                    jobToUpdate.SaveState = updatedJob.SaveState;
 
                     // Réécrire le JSON avec les nouvelles valeurs
                     string updatedJsonString = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });

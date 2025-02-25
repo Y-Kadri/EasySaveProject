@@ -15,7 +15,6 @@ namespace EasySave_Project.Views.Pages;
 
 public partial class JobsPage : UserControl, IPage
 {
-
     private TranslationService _translationService;
 
     public JobsPage()
@@ -25,21 +24,40 @@ public partial class JobsPage : UserControl, IPage
         _translationService = TranslationService.GetInstance();
     }
 
+    /// <summary>
+    /// Handles the execution of selected backup jobs.
+    /// </summary>
+    /// <param name="sender">The event sender (usually a button).</param>
+    /// <param name="e">Event arguments.</param>
     private void Execute(object sender, RoutedEventArgs e)
     {
         var selectedJobs = new List<JobModel>();
 
-        // Récupération des jobs sélectionnés
+        // Retrieve selected jobs from the DataGrid
         foreach (var row in DataGrid.GetVisualDescendants().OfType<DataGridRow>())
         {
             var checkBox = row.GetVisualDescendants().OfType<CheckBox>().FirstOrDefault();
-            if (checkBox?.IsChecked == true && row.DataContext is JobModel job)
+
+            // Ensure DataContext is a JobModel
+            if (row.DataContext is JobModel job)
             {
-                selectedJobs.Add(job);
+                // If the checkbox is checked, add the job to the selected list
+                if (checkBox?.IsChecked == true)
+                {
+                    if (job.SaveState.Equals(JobSaveStateEnum.ACTIVE))
+                    {
+                        Toastr.ShowNotification($"The job {job.Name} is already running", NotificationContainer, "warning");
+                    }
+                    else
+                    {
+                        checkBox.IsChecked = false;
+                        selectedJobs.Add(job);
+                    }
+                }
             }
         }
 
-        // Vérifier si des jobs sont sélectionnés
+        // Ensure at least one job is selected
         if (selectedJobs.Count == 0)
         {
             string message = _translationService.GetText("ErrorSelectOneJobMin");
@@ -47,18 +65,14 @@ public partial class JobsPage : UserControl, IPage
             return;
         }
 
-        if (DataContext is JobsPageViewModel viewModel)
-        {
-            viewModel.ExecuteJobsParallelThreadPool(selectedJobs,
-            (job, progress) => UpdateJobProgress(job, progress),
-            (msg, type) => Dispatcher.UIThread.Post(() =>
-            {
-                Toastr.ShowNotification(msg, NotificationContainer, type);
-            }));
-        }
+        executeJobList(selectedJobs);
     }
 
-    private void UpdateJobProgress(JobModel job, double progress)
+    /// <summary>
+    /// Updates the progress bar of a specific job in the UI.
+    /// </summary>
+    /// <param name="job">The JobModel representing the job being updated.</param>
+    private void UpdateJobProgress(JobModel job)
     {
         Dispatcher.UIThread.Post(() =>
         {
@@ -71,26 +85,87 @@ public partial class JobsPage : UserControl, IPage
                 var progressBar = row.GetVisualDescendants().OfType<ProgressBar>().FirstOrDefault();
                 if (progressBar != null)
                 {
-                    progressBar.Value = progress;
+                    progressBar.Value = job.FileInPending.Progress;
                 }
             }
         });
     }
-    
+
+    /// <summary>
+    /// Handles the event when the "Add Job" button is clicked.
+    /// Loads the job creation page.
+    /// </summary>
+    /// <param name="sender">The event sender (usually a button).</param>
+    /// <param name="e">Event arguments.</param>
     private void OnAddJobClick(object sender, RoutedEventArgs e)
     {
         var mainWindow = this.GetVisualRoot() as Window;
 
         if (mainWindow?.FindControl<BaseLayout>("MainLayout") is BaseLayout baseLayout)
         {
-            // Créer un bouton temporaire avec le Tag approprié pour utiliser LoadPage
+            // Create a temporary button with the appropriate Tag to use LoadPage
             var tempButton = new Button { Tag = "4" };
             baseLayout.LoadPage(tempButton, e);
         }
     }
-    
+
+    /// <summary>
+    /// Reloads the page by resetting the DataContext.
+    /// </summary>
     public void Reload()
     {
         DataContext = new JobsPageViewModel();
+    }
+
+    /// <summary>
+    /// Sets the state of a job to "Pending" when the corresponding button is clicked.
+    /// </summary>
+    /// <param name="sender">The event sender (usually a button).</param>
+    /// <param name="e">Event arguments.</param>
+    private void OnPendingJob(object sender, RoutedEventArgs e)
+    {
+        // Retrieve the clicked button
+        var button = sender as Button;
+
+        // Ensure the CommandParameter is a JobModel
+        if (button?.CommandParameter is JobModel job)
+        {
+            job.SaveState = JobSaveStateEnum.PENDING;
+        }
+    }
+
+    /// <summary>
+    /// Executes a list of selected jobs using a thread pool for parallel execution.
+    /// </summary>
+    /// <param name="selectedJobs">The list of jobs to execute.</param>
+    private void executeJobList(List<JobModel> selectedJobs)
+    {
+        if (DataContext is JobsPageViewModel viewModel)
+        {
+            viewModel.ExecuteJobsParallelThreadPool(selectedJobs,
+            (job, progress) => UpdateJobProgress(job),
+            (msg, type) => Dispatcher.UIThread.Post(() =>
+            {
+                Toastr.ShowNotification(msg, NotificationContainer, type);
+            }));
+        }
+    }
+
+    /// <summary>
+    /// Resumes a paused job when the corresponding button is clicked.
+    /// </summary>
+    /// <param name="sender">The event sender (usually a button).</param>
+    /// <param name="e">Event arguments.</param>
+    private void OnResumeJob(object sender, RoutedEventArgs e)
+    {
+        // Retrieve the clicked button
+        var button = sender as Button;
+
+        // Ensure the CommandParameter is a JobModel
+        if (button?.CommandParameter is JobModel job)
+        {
+            Toastr.ShowNotification(TranslationService.GetInstance().GetText("resumejob") + job.Name, NotificationContainer, "Success");
+            executeJobList(new List<JobModel> { job });
+        }
     }
 }

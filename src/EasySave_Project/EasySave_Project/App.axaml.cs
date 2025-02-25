@@ -20,8 +20,7 @@ public partial class App : Application
     {
         AvaloniaXamlLoader.Load(this);
         
-           
-        FileUtil.EnsureDirectoryAndFileExist("jobsSetting.json");
+        FileUtil.EnsureDirectoryAndFileExist(ConfigurationService.GetInstance().GetStringSetting("Path:JobSettingFile"));
         SettingUtil.InitSetting();
         LoadDataService loadDataService = new();
         loadDataService.LoadJobs();
