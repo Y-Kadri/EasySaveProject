@@ -45,7 +45,6 @@ namespace EasySave_Project.Service
                 new JobCompleteService().Execute(job, backupDir); // Perform a full backup
             }
             else
-            else
             {
                 ExecuteDifferentialSave(job, job.FileSource, backupDir, job.LastFullBackupPath);
             }
