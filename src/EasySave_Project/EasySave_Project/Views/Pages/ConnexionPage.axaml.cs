@@ -16,6 +16,7 @@ namespace EasySave_Project.Views.Pages
     {
         private readonly ConnexionViewModel _connexionViewModel;
         private readonly BaseLayout _baseLayout;
+        private static TranslationService _translationService = TranslationService.GetInstance();
 
         public ConnexionPage(BaseLayout baseLayout)
         {
@@ -45,6 +46,8 @@ namespace EasySave_Project.Views.Pages
             {
                 ShowLoginForm();
             }
+            
+            _connexionViewModel.Refresh();
         }
 
         private void ShowLoginForm()
@@ -67,7 +70,7 @@ namespace EasySave_Project.Views.Pages
             LoginForm.IsVisible = false;
             ConnectedToMessage.IsVisible = true;
 
-            ConnectedToTitre.Text = $"\u2705 Vous êtes connecté à {GlobalDataService.GetInstance().connecteTo.Item2} !";
+            ConnectedToTitre.Text = $"\u2705 {_translationService.GetText("Vousêtesconnectéà")} {GlobalDataService.GetInstance().connecteTo.Item2} !";
         }
 
         private void Connexion(object? sender, RoutedEventArgs e)
@@ -88,7 +91,7 @@ namespace EasySave_Project.Views.Pages
             // 🔹 Affiche le message sur l'UI Thread
             await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
             {
-                Toastr.ShowServeurNotification("Connexion en cours ...", BaseLayoutViewModel.Instance.NotificationContainer);
+                Toastr.ShowServeurNotification($"{_translationService.GetText("Connexionencours")} ...", BaseLayoutViewModel.Instance.NotificationContainer);
             });
 
             await Task.Run(() =>

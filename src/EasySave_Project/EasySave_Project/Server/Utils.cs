@@ -49,7 +49,7 @@ namespace EasySave_Project.Server
                     switch (message)
                     {
                         case "NEW_USER":
-                            BaseLayoutViewModel.Instance.AddNotification("Un nouvel utilisateur est connecté.");
+                            BaseLayoutViewModel.Instance.AddNotification($"{_translationService.GetText("Nouvelutilisateurconnecté")}.");
                             continue;
                         case "GET_JOBS":
                             SendToServer(JsonSerializer.Serialize(JobManager.GetInstance().Jobs));
@@ -71,7 +71,7 @@ namespace EasySave_Project.Server
                             // Implémenter la logique spécifique pour JobCommandDTO ici
                             if (jobCommand.command == "RUN_JOB_USERS" && !string.IsNullOrEmpty(jobCommand.id))
                             {
-                                BaseLayoutViewModel.Instance.AddNotification("Un utilisateur à lancé des jobs");
+                                BaseLayoutViewModel.Instance.AddNotification($"{_translationService.GetText("UtilisateurLanceJobs")} .");
                                 ExecuteJobs(jobCommand.obj);
                             }
                             

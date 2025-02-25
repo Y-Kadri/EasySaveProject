@@ -185,17 +185,17 @@ namespace Server
                     else
                     {
                         Console.WriteLine("❌ Aucun job reçu après plusieurs tentatives.");
-                        sendMessage(user, "Execute job à échoué");
+                        sendMessage(user, "Executejobàéchoué");
                     }
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"❌ Erreur lors de la réception des jobs : {ex.Message}");
-                    sendMessage(user, "Execute job à échoué");
+                    sendMessage(user, "Executejobàéchoué");
                 }
                 return;
             }
-            sendMessage(user, "Execute job à échoué");
+            sendMessage(user, "Executejobàéchoué");
         }
 
         private static async Task GetJobsUser(User user, string id)
@@ -221,19 +221,19 @@ namespace Server
                     else
                     {
                         Console.WriteLine("❌ Aucun job reçu après plusieurs tentatives.");
-                        sendMessage(user, "get job échoué");
+                        sendMessage(user, "getjobéchoué");
                     }
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"❌ Erreur lors de la réception des jobs : {ex.Message}");
-                    sendMessage(user, "get job échoué");
+                    sendMessage(user, "getjobéchoué");
                 }
                 return;
             }
 
             // 📢 Si l'utilisateur demandé n'est pas trouvé
-            sendMessage(user, "get job échoué");
+            sendMessage(user, "getjobéchoué");
         }
 
         private static void DisconnecteUser(User user, string id)
@@ -250,7 +250,7 @@ namespace Server
                 return;
             }
             
-            sendMessage(user, "Déconnection échoué");
+            sendMessage(user, "Déconnectionéchoué");
         }
 
         private static void ConnecteUser(User user, string id)
@@ -265,7 +265,7 @@ namespace Server
                 return;
             }
             
-            sendMessage(user, "Connection échoué");
+            sendMessage(user, "Connectionéchoué");
         }
 
         private static void sendMessage(User user, string message)
