@@ -15,16 +15,32 @@ public static class SettingUtil
     private static readonly string directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySave", "easySaveSetting");
     private static readonly string filePath = Path.Combine(directoryPath, "appSetting.json");
 
+    /// <summary>
+    /// Changes the application language setting and updates the configuration.
+    /// </summary>
+    /// <param name="language">The new language to set.</param>
+    /// <returns>True if the language was updated successfully, otherwise false.</returns>
     public static bool SettingChangeLanguage(LanguageEnum language)
     {
         return UpdateSetting(settings => settings.language = language, "languageUpdated", "errorUpdatingLanguage");
     }
 
+    /// <summary>
+    /// Changes the log format setting and updates the configuration.
+    /// </summary>
+    /// <param name="format">The new log format to apply.</param>
+    /// <returns>True if the format was updated successfully, otherwise false.</returns>
     public static bool SettingChangeFormat(EasySave_Library_Log.manager.LogFormatManager.LogFormat format)
     {
         return UpdateSetting(settings => settings.logFormat = format, "formatUpdated", "errorFormatLanguage");
     }
     
+    /// <summary>
+    /// Adds a new value to a specified settings list if it does not already exist.
+    /// </summary>
+    /// <param name="key">The key representing the list to update.</param>
+    /// <param name="value">The value to add to the list.</param>
+    /// <returns>True if the value was successfully added, otherwise false.</returns>
     public static bool AddToList(string key, string value)
     {
         var settings = GetSetting();
@@ -64,6 +80,12 @@ public static class SettingUtil
     }
 
 
+    /// <summary>
+    /// Removes a specified value from a given settings list.
+    /// </summary>
+    /// <param name="key">The key representing the list to update.</param>
+    /// <param name="value">The value to remove from the list.</param>
+    /// <returns>True if the value was successfully removed, otherwise false.</returns>
     public static bool RemoveFromList(string key, string value)
     {
         var settings = GetSetting();
@@ -86,6 +108,11 @@ public static class SettingUtil
         return SaveSettings(settings, "itemRemoved", "errorRemovingItem");
     }
 
+    /// <summary>
+    /// Retrieves a list of values from the specified settings key.
+    /// </summary>
+    /// <param name="key">The key representing the list to retrieve.</param>
+    /// <returns>A list of stored values, or an empty list if the key is not found.</returns>
     public static List<string> GetList(string key)
     {
         var settings = GetSetting();
@@ -97,6 +124,9 @@ public static class SettingUtil
         };
     }
 
+    /// <summary>
+    /// Initializes the settings file if it does not already exist.
+    /// </summary>
     public static void InitSetting()
     {
         if (File.Exists(filePath))
@@ -110,6 +140,10 @@ public static class SettingUtil
         SaveSettings(data, "jsonFileCreated", "errorWritingJsonFile");
     }
 
+    /// <summary>
+    /// Retrieves the current application settings from the configuration file.
+    /// </summary>
+    /// <returns>An <see cref="AppSettingDto"/> object if successful, otherwise null.</returns>
     public static AppSettingDto? GetSetting()
     {
         if (!File.Exists(filePath))
@@ -129,11 +163,13 @@ public static class SettingUtil
         }
     }
 
-    private static AppSettingDto? LoadSettings()
-    {
-        return GetSetting();
-    }
-
+    /// <summary>
+    /// Saves the application settings to the configuration file.
+    /// </summary>
+    /// <param name="settings">The settings object to save.</param>
+    /// <param name="successMessageKey">The translation key for the success message.</param>
+    /// <param name="errorMessageKey">The translation key for the error message.</param>
+    /// <returns>True if the settings were saved successfully, otherwise false.</returns>
     private static bool SaveSettings(AppSettingDto settings, string successMessageKey, string errorMessageKey)
     {
         try
@@ -151,6 +187,13 @@ public static class SettingUtil
         }
     }
 
+    /// <summary>
+    /// Updates a specific setting in the configuration file.
+    /// </summary>
+    /// <param name="updateAction">An action to modify the settings.</param>
+    /// <param name="successMessageKey">The translation key for the success message.</param>
+    /// <param name="errorMessageKey">The translation key for the error message.</param>
+    /// <returns>True if the update was successful, otherwise false.</returns>
     private static bool UpdateSetting(Action<AppSettingDto> updateAction, string successMessageKey, string errorMessageKey)
     {
         var settings = GetSetting();
@@ -163,6 +206,9 @@ public static class SettingUtil
         return SaveSettings(settings, successMessageKey, errorMessageKey);
     }
 
+    /// <summary>
+    /// Ensures that the settings directory and file exist.
+    /// </summary>
     private static void EnsureDirectoryAndFileExist()
     {
         if (!Directory.Exists(directoryPath))

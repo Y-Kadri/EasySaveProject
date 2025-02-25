@@ -1,4 +1,4 @@
-namespace Server;
+namespace Server.Dto;
 
 public class ClientDTO
 {

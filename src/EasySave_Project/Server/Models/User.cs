@@ -1,7 +1,6 @@
-using System;
 using System.Net.Sockets;
 
-namespace Server
+namespace Server.Models
 {
     public class User
     {

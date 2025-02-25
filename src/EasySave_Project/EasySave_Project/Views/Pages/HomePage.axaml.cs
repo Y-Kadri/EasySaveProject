@@ -8,6 +8,9 @@ namespace EasySave_Project.Views.Pages
     {
         private readonly HomePageViewModel _homePageViewModel;
 
+        /// <summary>
+        /// Initializes the HomePage, sets up the ViewModel, and assigns the DataContext.
+        /// </summary>
         public HomePage()
         {
             InitializeComponent();
@@ -15,9 +18,12 @@ namespace EasySave_Project.Views.Pages
             DataContext = _homePageViewModel;
         }
 
+        /// <summary>
+        /// Reloads the HomePage by updating the title.
+        /// </summary>
         public void Reload()
         {
-            _homePageViewModel.UpdateTitle(); // Mise à jour dynamique
+            _homePageViewModel.UpdateTitle();
         }
     }
 }

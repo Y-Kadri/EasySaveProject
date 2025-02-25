@@ -83,7 +83,6 @@ namespace EasySave_Project.ViewModels.Pages
             set => this.RaiseAndSetIfChanged(ref _monitoredBusinessSoftware, value);
         }
         
-        // Constructeur qui prend un callback pour notifier la vue
         public SettingPageViewModel()
         {
             _translationService = TranslationService.GetInstance();
@@ -91,6 +90,9 @@ namespace EasySave_Project.ViewModels.Pages
             PriorityBusinessProcess = new ObservableCollection<string>(SettingUtil.GetList("PriorityBusinessProcess"));
         }
 
+        /// <summary>
+        /// Refreshes the translations for various UI elements related to settings.
+        /// </summary>
         public void Refresh()
         {
             SelectLanguage = _translationService.GetText("SelectLanguage");
@@ -104,6 +106,10 @@ namespace EasySave_Project.ViewModels.Pages
             MonitoredBusinessSoftware = _translationService.GetText("MonitoredBusinessSoftware");
         }
         
+        /// <summary>
+        /// Adds a new file extension to the encrypted file extensions list.
+        /// </summary>
+        /// <param name="extension">The file extension to be added.</param>
         public void AddEncryptedFileExtensions(string extension)
         {
             if (SettingUtil.AddToList("EncryptedFileExtensions", extension))
@@ -118,6 +124,10 @@ namespace EasySave_Project.ViewModels.Pages
             }
         }
         
+        /// <summary>
+        /// Adds a software process to the priority business process list.
+        /// </summary>
+        /// <param name="software">The name of the software process.</param>
         public void AddPriorityBusinessProcess(string software)
         {
             if (SettingUtil.AddToList("PriorityBusinessProcess", software))
@@ -132,6 +142,10 @@ namespace EasySave_Project.ViewModels.Pages
             }
         }
 
+        /// <summary>
+        /// Removes a software process from the priority business process list.
+        /// </summary>
+        /// <param name="software">The name of the software process to be removed.</param>
         public void RemovPriorityBusinessProcess(string software)
         {
             if (SettingUtil.RemoveFromList("PriorityBusinessProcess", software))
@@ -146,6 +160,10 @@ namespace EasySave_Project.ViewModels.Pages
             }
         }
 
+        /// <summary>
+        /// Removes a file extension from the encrypted file extensions list.
+        /// </summary>
+        /// <param name="extension">The file extension to be removed.</param>
         public void RemoveEncryptedFileExtensions(string extension)
         {
             if (SettingUtil.RemoveFromList("EncryptedFileExtensions", extension))
@@ -159,8 +177,12 @@ namespace EasySave_Project.ViewModels.Pages
                 Message = "Erreur lors de la suppression.";
             }
         }
-
-        // Méthode pour changer la langue et appeler la notification
+        
+        /// <summary>
+        /// Changes the application's language setting.
+        /// </summary>
+        /// <param name="lang">The new language to be set.</param>
+        /// <returns>A tuple containing a message and status indicating success or failure.</returns>
         public  (string message, string status) ChangeLanguage(LanguageEnum lang)
         {
             if (SettingUtil.SettingChangeLanguage(lang))
@@ -175,10 +197,14 @@ namespace EasySave_Project.ViewModels.Pages
                 _status = "Error";
             }
 
-            // Appeler le callback pour afficher la notification dans la vue
             return (_message, _status);
         }
 
+        /// <summary>
+        /// Changes the log format used for storing logs.
+        /// </summary>
+        /// <param name="logsFormat">The new log format.</param>
+        /// <returns>A tuple containing a message and status indicating success or failure.</returns>
         public (string message, string status) ChangeLogsFormat(LogFormatManager.LogFormat logsFormat)
         {
             if (SettingUtil.SettingChangeFormat(logsFormat))

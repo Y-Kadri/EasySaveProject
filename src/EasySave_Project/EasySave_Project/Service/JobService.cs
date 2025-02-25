@@ -220,27 +220,5 @@ namespace EasySave_Project.Service
                 return new List<string>(); // Return an empty list in case of an error
             }
         }
-
-        // /// <summary>
-        // /// Adds a file format to the list of encrypted file extensions.
-        // /// </summary>
-        // /// <param name="key">The file extension to add (e.g., "txt" or "pdf").</param>
-        // public void AddValueToJobSettingsList(string key, string value)
-        // {
-        //     try
-        //     {
-        //         // Call the utility method to add the format to settings
-        //         FileUtil.AddValueToJobSettingsList(key, value);
-        //
-        //         // Print success message
-        //         ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("elementAdded") + " " + value);
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         // Handle the exception and print an error message
-        //         ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorAddingElement") + ex.Message);
-        //     }
-        // }
-
     }
 }

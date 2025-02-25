@@ -12,14 +12,15 @@ namespace EasySave_Project.Server
     {
         public TcpClient client;
         public NetworkStream stream { get; }
+        
         public string name;
-        private static TranslationService _translationService = TranslationService.GetInstance();
+        
+        private static readonly TranslationService _translationService = TranslationService.GetInstance();
 
         public Client(string name)
         {
             try
             {
-                // Utilise la méthode asynchrone pour la connexion avec timeout
                 client = Connexion.Conn();
                 if (client == null) 
                 {
@@ -41,10 +42,6 @@ namespace EasySave_Project.Server
                 Toastr.ShowServeurNotification($"⚠️ {_translationService.GetText("Tempsdattentedépassé")} : {ex.Message}",BaseLayoutViewModel.Instance.NotificationContainer);
             }
         }
-
-        public void Start()
-        {
-            // Reste de ton code (ou vide)
-        }
+        
     }
 }

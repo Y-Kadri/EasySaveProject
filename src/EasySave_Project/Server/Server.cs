@@ -3,19 +3,28 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
+using Server.Dto;
+using Server.Models;
+using Server.Utils;
 
 namespace Server
 {
-    class Server
+    internal static class Server
     {
         private static List<User> clients = new List<User>();
+        
         private static TcpListener listener;
+        
         public static Dictionary<string, string> pendingResponses = new Dictionary<string, string>();
 
+        /// <summary>
+        /// Main entry point for the server application.
+        /// Initializes and starts the TCP listener, accepts client connections,
+        /// and manages client interactions in separate threads.
+        /// </summary>
         static void Main()
         {
             int port = 8912;
-            // int port = 8080;
             listener = new TcpListener(IPAddress.Any, port);
             listener.Start();
             Console.WriteLine($"✅ Serveur démarré sur le port {port}");
@@ -29,14 +38,11 @@ namespace Server
                 int bytesRead = stream.Read(buffer, 0, buffer.Length);
                 string clientName = Encoding.UTF8.GetString(buffer, 0, bytesRead).Trim();
 
-                // Créer un nouvel objet Client avec le nom reçu
                 User newUser = new User(tcpClient) { Name = clientName };
                 clients.Add(newUser);
 
                 Console.WriteLine($"🔵 Nouveau client connecté: {newUser.Name} ({newUser.IPAddress}:{newUser.Port})");
-
                 
-                //Envoyer a tout les clients qu'un nouveau user est la
                 BroadCastNewConnection(newUser);
                 
                 Thread clientThread = new Thread(() => HandleClient(newUser));
@@ -44,6 +50,10 @@ namespace Server
             }
         }
 
+        /// <summary>
+        /// Broadcasts a new user connection to all connected clients except the sender.
+        /// </summary>
+        /// <param name="sender">The user who just connected.</param>
         static void BroadCastNewConnection(User sender)
         {
             string message = "NEW_USER";
@@ -58,6 +68,11 @@ namespace Server
             }
         }
 
+        /// <summary>
+        /// Retrieves a connected user by their unique identifier.
+        /// </summary>
+        /// <param name="id">The unique identifier of the user.</param>
+        /// <returns>The corresponding User object if found, otherwise null.</returns>
         static User? GetUserById(string id)
         {
             foreach (User user in clients)
@@ -69,6 +84,11 @@ namespace Server
             return null;
         }
 
+        /// <summary>
+        /// Handles client communication, processes messages, executes commands,
+        /// and manages client disconnections.
+        /// </summary>
+        /// <param name="user">The user to handle.</param>
         static void HandleClient(User user)
         {
             try
@@ -80,14 +100,12 @@ namespace Server
 
                     Console.WriteLine($"📩 Reçu du client {user.Id}: {message}");
 
-                    // Vérifier si c'est une requête spéciale "GET_USERS"
                     if (message == "GET_USERS")
                     {
                         SendClientsList(user);
-                        continue; // Passe à l'itération suivante
+                        continue;
                     }
 
-                    // Tenter la désérialisation en Dictionary<string, string>
                     try
                     {
                         var requestData = JsonSerializer.Deserialize<Dictionary<string, string>>(message);
@@ -111,15 +129,14 @@ namespace Server
                                     break;
                             }
 
-                            continue; // Évite d'ajouter aux pendingResponses
+                            continue;
                         }
                     }
                     catch (JsonException)
                     {
-                        // On ne fait rien ici, on passe à l'étape suivante
+                        
                     }
                     
-                    // Tenter la désérialisation en JobCommandDTO
                     try
                     {
                         var jobCommand = JsonSerializer.Deserialize<CommandDTO>(message);
@@ -127,22 +144,20 @@ namespace Server
                         {
                             Console.WriteLine($"✅ Message traité comme JobCommandDTO : {jobCommand.command}");
 
-                            // Implémenter la logique spécifique pour JobCommandDTO ici
                             if (jobCommand.command == "RUN_JOB_USERS" && !string.IsNullOrEmpty(jobCommand.id))
                             {
                                 Console.WriteLine($"📤 Exécution des jobs pour l'utilisateur {jobCommand.id}");
                                 ExecuteJobs(user, jobCommand);
                             }
                             
-                            continue; // Évite d'exécuter les autres tests
+                            continue;
                         }
                     }
                     catch (JsonException)
                     {
-                        // On ne fait rien ici, on tente la prochaine désérialisation
+                        
                     }
 
-                    // 3️⃣ Si aucun des deux formats ne correspond, stocker le message dans pendingResponses
                     lock (pendingResponses)
                     {
                         pendingResponses[user.Id] = message;
@@ -162,25 +177,32 @@ namespace Server
             }
         }
 
+        /// <summary>
+        /// Executes jobs for a specified user by forwarding the command
+        /// and awaiting a response from the client.
+        /// </summary>
+        /// <param name="user">The requesting user.</param>
+        /// <param name="command">The job execution command.</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         private static async Task ExecuteJobs(User user, CommandDTO command)
         {
             User? userConnect = GetUserById(command.id);
 
             if (userConnect != null)
             {
-                // 📤 Demande les jobs au Client 2
+                
                 sendMessage(userConnect, JsonSerializer.Serialize(command));
                 Console.WriteLine($"📤 Demande envoyée à {userConnect.Name} pour ses jobs.");
                 
                 try
                 {
-                    // ⏳ Attente de la réponse avec limite de temps
-                    string? response = await ServerUtils.WaitForResponse(userConnect, 5000); // Max 5s d'attente
+                    
+                    string? response = await ServerUtils.WaitForResponse(userConnect, 5000);
 
                     if (!string.IsNullOrEmpty(response))
                     {
                         Console.WriteLine($"📩 Réponse reçue de {userConnect.Name} : {response}");
-                        sendMessage(user, response); // 📤 Envoi des jobs au Client 1
+                        sendMessage(user, response);
                     }
                     else
                     {
@@ -198,25 +220,29 @@ namespace Server
             sendMessage(user, "Executejobàéchoué");
         }
 
+        /// <summary>
+        /// Requests the list of jobs from a specified user and forwards the response.
+        /// </summary>
+        /// <param name="user">The requesting user.</param>
+        /// <param name="id">The identifier of the target user.</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         private static async Task GetJobsUser(User user, string id)
         {
             User? userConnect = GetUserById(id);
 
             if (userConnect != null)
             {
-                // 📤 Demande les jobs au Client 2
                 sendMessage(userConnect, "GET_JOBS");
                 Console.WriteLine($"📤 Demande envoyée à {userConnect.Name} pour ses jobs.");
 
                 try
                 {
-                    // ⏳ Attente de la réponse avec limite de temps
-                    string? response = await ServerUtils.WaitForResponse(userConnect, 5000); // Max 5s d'attente
+                    string? response = await ServerUtils.WaitForResponse(userConnect, 5000);
 
                     if (!string.IsNullOrEmpty(response))
                     {
                         Console.WriteLine($"📩 Réponse reçue de {userConnect.Name} : {response}");
-                        sendMessage(user, response); // 📤 Envoi des jobs au Client 1
+                        sendMessage(user, response);
                     }
                     else
                     {
@@ -231,11 +257,15 @@ namespace Server
                 }
                 return;
             }
-
-            // 📢 Si l'utilisateur demandé n'est pas trouvé
+            
             sendMessage(user, "getjobéchoué");
         }
 
+        /// <summary>
+        /// Disconnects a user from another user they are connected to.
+        /// </summary>
+        /// <param name="user">The user initiating the disconnection.</param>
+        /// <param name="id">The ID of the user to disconnect from.</param>
         private static void DisconnecteUser(User user, string id)
         {
             User? disConnectTo = GetUserById(id);
@@ -253,6 +283,11 @@ namespace Server
             sendMessage(user, "Déconnectionéchoué");
         }
 
+        /// <summary>
+        /// Connects a user to another user by establishing a link between them.
+        /// </summary>
+        /// <param name="user">The user initiating the connection.</param>
+        /// <param name="id">The ID of the target user to connect to.</param>
         private static void ConnecteUser(User user, string id)
         {
             User? connectTo = GetUserById(id);
@@ -268,6 +303,12 @@ namespace Server
             sendMessage(user, "Connectionéchoué");
         }
 
+        /// <summary>
+        /// Sends a message to a specified user over their network stream.
+        /// Also logs the message for record-keeping.
+        /// </summary>
+        /// <param name="user">The recipient user.</param>
+        /// <param name="message">The message to send.</param>
         private static void sendMessage(User user, string message)
         {
             byte[] data = Encoding.UTF8.GetBytes(message);
@@ -279,12 +320,14 @@ namespace Server
             ServerUtils.WriteLog(user, message);
         }
 
-
+        /// <summary>
+        /// Sends the list of currently connected clients to a specified user.
+        /// </summary>
+        /// <param name="user">The user requesting the client list.</param>
         static void SendClientsList(User user)
         {
             try
             {
-                // 🔥 Convertir les objets `Client` en `ClientDTO`
                 var clientDTOs = clients.Select(c => new ClientDTO
                 {
                     Id = c.Id,
@@ -293,10 +336,8 @@ namespace Server
                     Port = c.Port
                 }).ToList();
 
-                // 🔥 Sérialiser en JSON
                 string jsonData = JsonSerializer.Serialize(clientDTOs);
-
-                // 🔥 Envoyer les données au client
+                
                 sendMessage(user, jsonData);
             }
             catch (Exception ex)
@@ -304,7 +345,5 @@ namespace Server
                 Console.WriteLine($"⚠️ Erreur lors de l'envoi de la liste des clients : {ex.Message}");
             }
         }
-
-
     }
 }

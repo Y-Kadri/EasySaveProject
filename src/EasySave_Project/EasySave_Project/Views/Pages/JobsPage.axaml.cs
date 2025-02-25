@@ -20,6 +20,9 @@ namespace EasySave_Project.Views.Pages
         private readonly JobsPageViewModel _viewModel;
         private readonly TranslationService _translationService;
 
+        /// <summary>
+        /// Initializes the JobsPage, sets up the ViewModel, and assigns the DataContext.
+        /// </summary>
         public JobsPage()
         {
             InitializeComponent();
@@ -28,6 +31,11 @@ namespace EasySave_Project.Views.Pages
             _translationService = TranslationService.GetInstance();
         }
 
+        /// <summary>
+        /// Executes selected jobs, either locally or by sending a request to the server.
+        /// </summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The routed event arguments.</param>
         private void Execute(object sender, RoutedEventArgs e)
         {
             var selectedJobs = DataGrid.GetVisualDescendants()
@@ -66,6 +74,11 @@ namespace EasySave_Project.Views.Pages
             }
         }
         
+        /// <summary>
+        /// Handles the click event to navigate to the Add Job page.
+        /// </summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The routed event arguments.</param>
         private void OnAddJobClick(object sender, RoutedEventArgs e)
         {
             var mainWindow = this.GetVisualRoot() as Window;
@@ -78,6 +91,11 @@ namespace EasySave_Project.Views.Pages
             }
         }
 
+        // <summary>
+        /// Updates the progress bar of a job in the UI.
+        /// </summary>
+        /// <param name="job">The job whose progress is being updated.</param>
+        /// <param name="progress">The current progress value.</param>
         private void UpdateJobProgress(JobModel job, double progress)
         {
             Dispatcher.UIThread.Post(() =>
@@ -90,6 +108,9 @@ namespace EasySave_Project.Views.Pages
             });
         }
 
+        /// <summary>
+        /// Reloads the job page, adjusting UI elements based on connection status.
+        /// </summary>
         public void Reload()
         {
             if (GlobalDataService.GetInstance().isConnecte && GlobalDataService.GetInstance().connecteTo.Item1 != null)

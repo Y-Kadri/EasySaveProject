@@ -6,6 +6,7 @@ public class GlobalDataService
 {
     
     private static GlobalDataService _instance;
+    
     private static readonly object _lock = new object();
 
     public bool isConnecte { get; set; } = false;
@@ -15,12 +16,14 @@ public class GlobalDataService
     public (string?,string?) connecteTo { get; set; } = (null,null);
     
 
-    // Constructeur privé
     private GlobalDataService()
     {
     }
 
-    // Méthode pour obtenir l'instance du singleton
+    /// <summary>
+    /// Retrieves the singleton instance of GlobalDataService, ensuring thread safety.
+    /// </summary>
+    /// <returns>The single instance of GlobalDataService.</returns>
     public static GlobalDataService GetInstance()
     {
         if (_instance == null)

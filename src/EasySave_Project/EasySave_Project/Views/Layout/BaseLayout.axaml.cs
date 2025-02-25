@@ -12,6 +12,9 @@ namespace EasySave_Project.Views.Layout
     {
         private readonly List<IPage> pages = new();
 
+        /// <summary>
+        /// Initializes the base layout, sets the data context, and loads the default page.
+        /// </summary>
         public BaseLayout()
         {
             InitializeComponent();
@@ -29,6 +32,9 @@ namespace EasySave_Project.Views.Layout
             ContentArea.Content = pages[0];
         }
 
+        /// <summary>
+        /// Reloads the layout and refreshes the logs and settings buttons.
+        /// </summary>
         public void Reload()
         {
             Button logsButton = labelLogs;
@@ -37,6 +43,11 @@ namespace EasySave_Project.Views.Layout
             BaseLayoutViewModel.RefreshInstance(logsButton, SettingButton);
         }
 
+        /// <summary>
+        /// Loads a specific page based on the button's tag value.
+        /// </summary>
+        /// <param name="sender">The button that triggered the event.</param>
+        /// <param name="e">The event arguments.</param>
         public void LoadPage(object sender, RoutedEventArgs e)
         {
             if (sender is Button button && int.TryParse(button.Tag?.ToString(), out int index))
@@ -44,11 +55,6 @@ namespace EasySave_Project.Views.Layout
                 pages[index].Reload();
                 ContentArea.Content = pages[index];
             }
-        }
-
-        public void SetContent(Control content)
-        {
-            ContentArea.Content = content;
         }
     }
 }

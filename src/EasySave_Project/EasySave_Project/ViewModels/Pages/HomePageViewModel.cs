@@ -5,7 +5,10 @@ namespace EasySave_Project.ViewModels.Pages
 {
     public class HomePageViewModel : ReactiveObject
     {
+        private readonly TranslationService _translationService = TranslationService.GetInstance();
+        
         private string _title;
+        
         public string Title
         {
             get => _title;
@@ -17,9 +20,12 @@ namespace EasySave_Project.ViewModels.Pages
             UpdateTitle();
         }
 
+        /// <summary>
+        /// Update the title display on the page
+        /// </summary>
         public void UpdateTitle()
         {
-            Title = TranslationService.GetInstance().GetText("HomePageTitle");
+            Title = _translationService.GetText("HomePageTitle");
         }
     }
 }
