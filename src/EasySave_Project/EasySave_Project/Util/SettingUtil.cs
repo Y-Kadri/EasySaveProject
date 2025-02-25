@@ -370,7 +370,7 @@ public static class SettingUtil
     {
         if (!Extension.StartsWith("."))
         {
-          Extension = "." + Extension;
+            Extension = "." + Extension;
             
         }
         int NewIndex = GetPriorityExtensionFilesList("PriorityExtensionFiles").Count + 1;
@@ -379,6 +379,7 @@ public static class SettingUtil
         NewExtensionFile.Index = NewIndex;
         return AddPriorityExtension("PriorityExtensionFiles", NewExtensionFile);
     }
+    
     public static bool RemovePriorityExtension(string Extension)
     {
         var settings = GetSetting();
@@ -405,6 +406,10 @@ public static class SettingUtil
 
         return false;
     }
-
+    
+    public static bool SettingChangeMaxLargeFileSize(int value)
+    {
+        return UpdateSetting(settings => settings.MaxLargeFileSize = value, "formatUpdated", "errorFormatLanguage");
+    }
 
 }
