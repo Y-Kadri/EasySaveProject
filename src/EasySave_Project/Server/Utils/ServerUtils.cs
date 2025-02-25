@@ -1,11 +1,16 @@
-using System;
-using System.Net.Sockets;
 using System.Text;
+using Server.Models;
 
-namespace Server
+namespace Server.Utils
 {
-    public class ServerUtils
+    public static class ServerUtils
     {
+        /// <summary>
+        /// Reads a message from the specified user's network stream.
+        /// Logs the message and returns it as a string.
+        /// </summary>
+        /// <param name="user">The user whose message is being read.</param>
+        /// <returns>The received message as a string, or an empty string if no data was read.</returns>
         public static string ReadMessage(User user)
         {
             byte[] buffer = new byte[8192];
@@ -22,6 +27,11 @@ namespace Server
             return message;
         }
         
+        /// <summary>
+        /// Writes a log entry containing the user's details and the message they sent.
+        /// </summary>
+        /// <param name="user">The user associated with the log entry.</param>
+        /// <param name="message">The message to log.</param>
         public static void WriteLog(User user, string message)
         {
             string logFilePath = "log.txt";
@@ -39,6 +49,13 @@ namespace Server
             }
         }
         
+        /// <summary>
+        /// Waits for a response from the specified user within a given timeout period.
+        /// Checks for pending responses and returns the first available response.
+        /// </summary>
+        /// <param name="user">The user from whom a response is expected.</param>
+        /// <param name="timeoutMs">The maximum time to wait for a response, in milliseconds.</param>
+        /// <returns>The received response as a string, or null if no response is received within the timeout period.</returns>
         public static async Task<string?> WaitForResponse(User user, int timeoutMs)
         {
             int elapsedTime = 0;
@@ -53,11 +70,11 @@ namespace Server
                     }
                 }
         
-                await Task.Delay(100); // Attendre 100ms avant de réessayer
+                await Task.Delay(100);
                 elapsedTime += 100;
             }
 
-            return null; // Timeout expiré
+            return null;
         }
     }
 }

@@ -13,6 +13,10 @@ namespace EasySave_Project.Views.Pages
         private BaseLayout _baseLayout;
         private SettingPageViewModel _settingPageViewModel;
 
+        /// <summary>
+        /// Initializes the settings page, setting up the ViewModel and layout reference.
+        /// </summary>
+        /// <param name="baseLayout">The main application layout.</param>
         public SettingPage(BaseLayout baseLayout)
         {
             InitializeComponent();
@@ -21,11 +25,19 @@ namespace EasySave_Project.Views.Pages
             DataContext = _settingPageViewModel;
         }
 
+        /// <summary>
+        /// Reloads the settings page, refreshing the ViewModel.
+        /// </summary>
         public void Reload()
         {
             _settingPageViewModel.Refresh();
         }
 
+        /// <summary>
+        /// Handles language change event, updating the application language based on user selection.
+        /// </summary>
+        /// <param name="sender">The event source, a RadioButton.</param>
+        /// <param name="e">Event arguments.</param>
         private void OnLanguageChanged(object? sender, RoutedEventArgs e)
         {
             if (sender is RadioButton selectedRadioButton)
@@ -54,6 +66,11 @@ namespace EasySave_Project.Views.Pages
             }
         }
         
+        /// <summary>
+        /// Handles log format change event, updating the log format to JSON or XML based on user selection.
+        /// </summary>
+        /// <param name="sender">The event source, a RadioButton.</param>
+        /// <param name="e">Event arguments.</param>
         private void OnLogsFormatChanged(object? sender, RoutedEventArgs e)
         {
             if (sender is RadioButton selectedRadioButton)
@@ -82,12 +99,20 @@ namespace EasySave_Project.Views.Pages
             }
         }
 
+        /// <summary>
+        /// Updates the settings page and reloads the main layout.
+        /// </summary>
         private void Update()
         {
             Reload();
             _baseLayout.Reload();
         }
         
+        /// <summary>
+        /// Handles the event for adding a new encrypted file extension to the list.
+        /// </summary>
+        /// <param name="sender">The event source, a Button.</param>
+        /// <param name="e">Event arguments.</param>
         private void AddEncryptedFileExtensions_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(ExtensionInput.Text))
@@ -98,6 +123,11 @@ namespace EasySave_Project.Views.Pages
             }
         }
 
+        /// <summary>
+        /// Handles the event for removing an encrypted file extension from the list.
+        /// </summary>
+        /// <param name="sender">The event source, a Button.</param>
+        /// <param name="e">Event arguments.</param>
         private void RemoveEncryptedFileExtensions_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
@@ -106,6 +136,11 @@ namespace EasySave_Project.Views.Pages
             Reload();
         }
 
+        /// <summary>
+        /// Handles the event for adding a new priority business process.
+        /// </summary>
+        /// <param name="sender">The event source, a Button.</param>
+        /// <param name="e">Event arguments.</param>
         private void AddPriorityBusinessProcess_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(SoftwareInput.Text))
@@ -116,6 +151,11 @@ namespace EasySave_Project.Views.Pages
             }
         }
 
+        /// <summary>
+        /// Handles the event for removing a priority business process.
+        /// </summary>
+        /// <param name="sender">The event source, a Button.</param>
+        /// <param name="e">Event arguments.</param>
         private void RemovePriorityBusinessProcess_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;

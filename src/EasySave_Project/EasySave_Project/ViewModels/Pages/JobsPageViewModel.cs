@@ -13,17 +13,21 @@ namespace EasySave_Project.ViewModels.Pages
 {
     public class JobsPageViewModel : ReactiveObject
     {
+        private readonly JobService _jobService = new JobService();
+        
+        private readonly TranslationService _translationService = TranslationService.GetInstance();
+
+        private readonly GlobalDataService _globalDataService = GlobalDataService.GetInstance();
+        
         private ObservableCollection<JobModel> _jobs;
+        
+        private string _allJobs, _addAJob, _run, _name, _source, _destination, _type, _progress, _results;
+        
         public ObservableCollection<JobModel> Jobs
         {
             get => _jobs;
             private set => this.RaiseAndSetIfChanged(ref _jobs, value);
         }
-
-        private readonly JobService _jobService = new JobService();
-        private readonly TranslationService _translationService = TranslationService.GetInstance();
-
-        private string _allJobs, _addAJob, _run, _name, _source, _destination, _type, _progress, _results;
 
         public string AllJobs
         {
@@ -81,10 +85,12 @@ namespace EasySave_Project.ViewModels.Pages
 
         public JobsPageViewModel()
         {
-            // Initialisation et écoute des changements de langue
             Refresh();
         }
 
+        /// <summary>
+        /// Loads translated text values for UI elements from the translation service.
+        /// </summary>
         private void LoadTranslations()
         {
             AllJobs = _translationService.GetText("AllJobs");
@@ -98,36 +104,33 @@ namespace EasySave_Project.ViewModels.Pages
             Results = _translationService.GetText("Results");
         }
 
+        /// <summary>
+        /// Refreshes translations and reloads the job list.
+        /// </summary>
         public void Refresh()
         {
             LoadTranslations();
             LoadJobs();
         }
 
-        public async void LoadJobs()
+        /// <summary>
+        /// Loads jobs from the server if connected; otherwise, retrieves jobs from the local job service.
+        /// </summary>
+        private async void LoadJobs()
         {
-            if (GlobalDataService.GetInstance().isConnecte && GlobalDataService.GetInstance().connecteTo.Item1 != null)
+            if (_globalDataService.isConnecte && _globalDataService.connecteTo.Item1 != null)
             {
                 try
                 {
-                    // 🔵 Construire la requête JSON
                     var requestData = new 
                     { 
                         command = "GET_JOB_USERS", 
-                        id = GlobalDataService.GetInstance().connecteTo.Item1 
+                        id = _globalDataService.connecteTo.Item1 
                     };
                     string jsonString = JsonSerializer.Serialize(requestData);
-
-                    // 📤 Envoyer la requête au serveur
                     Utils.SendToServer(jsonString);
-
-                    // ⏳ Attendre la réponse du serveur
                     ObservableCollection<JobModel>? jobsReceived = await Utils.WaitForResponse<ObservableCollection<JobModel>>();
-
-                    // ✅ Mise à jour de la liste des jobs
                     Jobs = jobsReceived ?? new ObservableCollection<JobModel>();
-
-                    Console.WriteLine($"✅ {Jobs.Count} jobs reçus !");
                 }
                 catch (Exception ex)
                 {
@@ -137,11 +140,16 @@ namespace EasySave_Project.ViewModels.Pages
             }
             else
             {
-                // 🛠 Charger les jobs localement si non connecté
                 Jobs = new ObservableCollection<JobModel>(_jobService.GetAllJobs() ?? new List<JobModel>());
             }
         }
 
+        /// <summary>
+        /// Executes multiple jobs in parallel using a thread pool, providing progress updates and notifications.
+        /// </summary>
+        /// <param name="jobs">The list of jobs to execute.</param>
+        /// <param name="progressCallback">Callback function to update progress.</param>
+        /// <param name="showPopup">Function to display notifications.</param>
         public void ExecuteJobsParallelThreadPool(List<JobModel> jobs, Action<JobModel, double> progressCallback, Action<string, string> showPopup)
         {
             if (jobs == null || jobs.Count == 0) return;

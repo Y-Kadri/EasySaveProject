@@ -18,6 +18,10 @@ namespace EasySave_Project.Views.Pages
         private readonly BaseLayout _baseLayout;
         private static TranslationService _translationService = TranslationService.GetInstance();
 
+        /// <summary>
+        /// Initializes the ConnexionPage, sets up the ViewModel, assigns the DataContext, and triggers an initial reload.
+        /// </summary>
+        /// <param name="baseLayout">Reference to the BaseLayout for refreshing UI elements.</param>
         public ConnexionPage(BaseLayout baseLayout)
         {
             InitializeComponent();
@@ -28,6 +32,9 @@ namespace EasySave_Project.Views.Pages
             Reload();
         }
 
+        /// <summary>
+        /// Reloads the connection state and updates the UI accordingly.
+        /// </summary>
         public void Reload()
         {
             if (GlobalDataService.GetInstance().isConnecte)
@@ -50,6 +57,9 @@ namespace EasySave_Project.Views.Pages
             _connexionViewModel.Refresh();
         }
 
+        /// <summary>
+        /// Displays the login form when the user is not connected.
+        /// </summary>
         private void ShowLoginForm()
         {
             LoginForm.IsVisible = true;
@@ -57,6 +67,9 @@ namespace EasySave_Project.Views.Pages
             ConnectedToMessage.IsVisible = false;
         }
 
+        /// <summary>
+        /// Displays the connected state when the user is logged in but not connected to another user.
+        /// </summary>
         private void ShowConnectedState()
         {
             ConnectedMessage.IsVisible = true;
@@ -64,6 +77,9 @@ namespace EasySave_Project.Views.Pages
             ConnectedToMessage.IsVisible = false;
         }
 
+        /// <summary>
+        /// Displays the state when the user is connected to another user.
+        /// </summary>
         private void ShowConnectedToState()
         {
             ConnectedMessage.IsVisible = false;
@@ -73,6 +89,11 @@ namespace EasySave_Project.Views.Pages
             ConnectedToTitre.Text = $"\u2705 {_translationService.GetText("Vousêtesconnectéà")} {GlobalDataService.GetInstance().connecteTo.Item2} !";
         }
 
+        /// <summary>
+        /// Handles the login button click event and attempts to connect using the provided username.
+        /// </summary>
+        /// <param name="sender">The UI element that triggered the event.</param>
+        /// <param name="e">Event arguments.</param>
         private void Connexion(object? sender, RoutedEventArgs e)
         {
             try
@@ -86,9 +107,13 @@ namespace EasySave_Project.Views.Pages
             }
         }
         
+        /// <summary>
+        /// Attempts to connect the user asynchronously and displays a notification during the process.
+        /// </summary>
+        /// <param name="name">The username entered by the user.</param>
+        /// <returns>A task representing the asynchronous connection process.</returns>
         public async Task Connexion(string name)
         {
-            // 🔹 Affiche le message sur l'UI Thread
             await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
             {
                 Toastr.ShowServeurNotification($"{_translationService.GetText("Connexionencours")} ...", BaseLayoutViewModel.Instance.NotificationContainer);
@@ -99,8 +124,6 @@ namespace EasySave_Project.Views.Pages
                 try
                 {
                     _connexionViewModel.Connexion(name);
-
-                    // 🔹 Mise à jour de l'UI doit être faite sur le thread UI
                     Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
                     {
                         _baseLayout.Reload();
@@ -114,7 +137,11 @@ namespace EasySave_Project.Views.Pages
             });
         }
 
-
+        /// <summary>
+        /// Handles the event when a user attempts to connect to another user from the list.
+        /// </summary>
+        /// <param name="sender">The button triggering the event.</param>
+        /// <param name="e">Event arguments.</param>
         private void ConnectTo(object? sender, RoutedEventArgs e)
         {
             if (sender is Button button && button.DataContext is User user)
@@ -125,6 +152,11 @@ namespace EasySave_Project.Views.Pages
             }
         }
 
+        /// <summary>
+        /// Handles the event when the user disconnects from another user.
+        /// </summary>
+        /// <param name="sender">The button triggering the event.</param>
+        /// <param name="e">Event arguments.</param>
         private void DisconnectTo(object? sender, RoutedEventArgs e)
         {
             _connexionViewModel.DisconnexionTo();

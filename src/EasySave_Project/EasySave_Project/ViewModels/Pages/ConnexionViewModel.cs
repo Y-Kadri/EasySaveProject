@@ -13,49 +13,53 @@ namespace EasySave_Project.ViewModels.Pages
 {
     public class ConnexionViewModel : ReactiveObject
     {
+        private readonly GlobalDataService _globalDataService = GlobalDataService.GetInstance();
+        
+        private readonly TranslationService _translationService = TranslationService.GetInstance();
+        
         private bool _isConnected;
+        
+        private ObservableCollection<User> _users = new();
+        
+        private string _connexion, _entrerVotreNom, _vousetesconnecte, 
+            _seconnecter, _sedeconnecter;
+        
         public bool IsConnected
         {
             get => _isConnected;
             private set => this.RaiseAndSetIfChanged(ref _isConnected, value);
         }
-
-        private ObservableCollection<User> _users = new();
+       
         public ObservableCollection<User> Users
         {
             get => _users;
             private set => this.RaiseAndSetIfChanged(ref _users, value);
         }
         
-        private string _connexion;
         public string connexion
         {
             get => _connexion;
             private set => this.RaiseAndSetIfChanged(ref _connexion, value);
         }
         
-        private string _entrerVotreNom;
         public string entrerVotreNom
         {
             get => _entrerVotreNom;
             private set => this.RaiseAndSetIfChanged(ref _entrerVotreNom, value);
         }
         
-        private string _vousetesconnecte;
         public string vousetesconnecte
         {
             get => _vousetesconnecte;
             private set => this.RaiseAndSetIfChanged(ref _vousetesconnecte, value);
         }
         
-        private string _seconnecter;
         public string seconnecter
         {
             get => _seconnecter;
             private set => this.RaiseAndSetIfChanged(ref _seconnecter, value);
         }
         
-        private string _sedeconnecter;
         public string sedeconnecter
         {
             get => _sedeconnecter;
@@ -68,27 +72,33 @@ namespace EasySave_Project.ViewModels.Pages
             Refresh();
         }
 
+        /// <summary>
+        /// Refreshes the connection status and updates UI text translations.
+        /// </summary>
         public void Refresh()
         {
-            IsConnected = GlobalDataService.GetInstance().isConnecte;
+            IsConnected = _globalDataService.isConnecte;
             BaseLayoutViewModel.RefreshInstance(null, null);
-            connexion = TranslationService.GetInstance().GetText("Connexion");
-            entrerVotreNom = TranslationService.GetInstance().GetText("EntrerVotreNom");
-            vousetesconnecte = $"\u2705 {TranslationService.GetInstance().GetText("Vousêtesconnecté")} !";
-            seconnecter = TranslationService.GetInstance().GetText("Seconnecter");
-            sedeconnecter = TranslationService.GetInstance().GetText("Sedeconnecter");
+            connexion = _translationService.GetText("Connexion");
+            entrerVotreNom = _translationService.GetText("EntrerVotreNom");
+            vousetesconnecte = $"\u2705 {_translationService.GetText("Vousêtesconnecté")} !";
+            seconnecter = _translationService.GetText("Seconnecter");
+            sedeconnecter = _translationService.GetText("Sedeconnecter");
         }
         
+        /// <summary>
+        /// Establishes a connection with the server using the provided username.
+        /// </summary>
+        /// <param name="name">The username for the connection.</param>
         public async Task Connexion(string name)
         {
             try
             {
-                var globalService = GlobalDataService.GetInstance();
-                globalService.client = new Client(name);
-                if (globalService.client.client != null)
+                
+                _globalDataService.client = new Client(name);
+                if (_globalDataService.client.client != null)
                 {
-                    globalService.client.Start();
-                    globalService.isConnecte = true;
+                    _globalDataService.isConnecte = true;
                     IsConnected = true;
                     Refresh();
                 }
@@ -97,11 +107,12 @@ namespace EasySave_Project.ViewModels.Pages
             catch (Exception ex)
             {
                 Console.WriteLine($"⚠️ Erreur de connexion : {ex.Message}");
-                // Gérer l'erreur (par exemple, notifier l'utilisateur via une notification)
             }
         }
 
-
+        /// <summary>
+        /// Retrieves the list of all connected users from the server.
+        /// </summary>
         public async void GetAllUserConnect()
         {
             try
@@ -116,28 +127,32 @@ namespace EasySave_Project.ViewModels.Pages
             }
         }
 
+        /// <summary>
+        /// Connects to a specific user by sending a request to the server.
+        /// </summary>
+        /// <param name="id">The ID of the user to connect to.</param>
+        /// <param name="name">The name of the user to connect to.</param>
         public void ConnexionTo(string id, string name)
         {
-            GlobalDataService.GetInstance().connecteTo = (id, name);
-
+            _globalDataService.connecteTo = (id, name);
             var requestData = new { command = "CONNECTE_USERS", id };
             string jsonString = JsonSerializer.Serialize(requestData);
             Utils.SendToServer(jsonString);
             Refresh();
         }
 
+        /// <summary>
+        /// Disconnects from the currently connected user and updates the UI.
+        /// </summary>
         public void DisconnexionTo()
         {
-            var globalService = GlobalDataService.GetInstance();
-            if (globalService.connecteTo.Item1 != null)
+            if (_globalDataService.connecteTo.Item1 != null)
             {
-                var requestData = new { command = "DISCONNECTE_USERS", id = globalService.connecteTo.Item1 };
+                var requestData = new { command = "DISCONNECTE_USERS", id = _globalDataService.connecteTo.Item1 };
                 string jsonString = JsonSerializer.Serialize(requestData);
                 Utils.SendToServer(jsonString);
-                
-                globalService.connecteTo = (null, null);
+                _globalDataService.connecteTo = (null, null);
             }
-            
             Refresh();
         }
     }

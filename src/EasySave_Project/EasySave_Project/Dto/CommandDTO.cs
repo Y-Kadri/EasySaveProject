@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Server;
+namespace EasySave_Project.Dto;
 
 public class CommandDTO<T>
 {
