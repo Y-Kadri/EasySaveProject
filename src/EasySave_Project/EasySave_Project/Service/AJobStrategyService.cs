@@ -30,7 +30,7 @@ namespace EasySave_Project.Service
 
         public event Action<double>? OnProgressChanged;
         private static readonly SemaphoreSlim _largeFileSemaphore = new SemaphoreSlim(1, 1);
-        private static int LargeFileThreshold = 100 * 1024 * 1024;
+        private static int LargeFileThreshold = FileUtil.GetAppSettingsInt("MaxLargeFileSize") * 1024; // Convert to ko
 
         /// <summary>
         /// Checks if a given file format is in the list of encrypted file extensions.
@@ -191,7 +191,7 @@ namespace EasySave_Project.Service
                 {
                     string file = files.Dequeue();
                     long fileSize = FileUtil.GetFileSize(file);
-                    bool isLargeFile = fileSize > LargeFileThreshold;
+                    bool isLargeFile = fileSize > LargeFileThreshold && LargeFileThreshold > 0;
 
                     if (isLargeFile && !_largeFileSemaphore.Wait(0))
                     {
