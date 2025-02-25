@@ -168,4 +168,26 @@ public partial class JobsPage : UserControl, IPage
             executeJobList(new List<JobModel> { job });
         }
     }
+
+    /// <summary>
+    /// Stop job when the corresponding button is clicked.
+    /// </summary>
+    /// <param name="sender">The event sender (usually a button).</param>
+    /// <param name="e">Event arguments.</param>
+    private void OnCancelJob(object sender, RoutedEventArgs e)
+    {
+        // Retrieve the clicked button
+        var button = sender as Button;
+
+        // Ensure the CommandParameter is a JobModel
+        if (button?.CommandParameter is JobModel job)
+        {
+            job.SaveState = JobSaveStateEnum.CANCEL;
+            if (DataContext is JobsPageViewModel viewModel)
+            {
+                viewModel.CancelJobInActif(job, (job, progress) => UpdateJobProgress(job));
+            }
+            
+        }
+    }
 }
