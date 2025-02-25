@@ -14,8 +14,8 @@ namespace Server
 
         static void Main()
         {
-            // int port = 8912;
-            int port = 8080;
+            int port = 8912;
+            // int port = 8080;
             listener = new TcpListener(IPAddress.Any, port);
             listener.Start();
             Console.WriteLine($"✅ Serveur démarré sur le port {port}");
