@@ -7,5 +7,6 @@
         INACTIVE,
         SKIP,
         CANCEL,
+        PENDING,
     }
 }

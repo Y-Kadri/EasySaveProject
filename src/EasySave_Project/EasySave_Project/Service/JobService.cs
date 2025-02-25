@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -48,20 +49,6 @@ namespace EasySave_Project.Service
                 FileUtil.CreateDirectory(job.FileTarget);
             }
 
-            // Check if a priority process is currently running
-            var processes = FileUtil.GetAppSettingsList("PriorityBusinessProcess");
-            (bool isRunning, string PName) = ProcessUtil.IsProcessRunning(processes);
-            if (isRunning)
-            {
-                string Pmessage = TranslationService.GetInstance().GetText("interuptJob") + " " + PName;
-                ConsoleUtil.PrintTextconsole(Pmessage);
-
-                // Update the job status to SKIPPED
-                job.SaveState = JobSaveStateEnum.SKIP;
-                StateManager.Instance.UpdateState(CreateBackupJobState(job, 0, job.FileSource, string.Empty));
-
-                return (false, "A priority program killed the process");
-            }
 
             // Create a backup directory specific to the job
             string jobBackupDir = FileUtil.CombinePath(job.FileTarget, job.Name + "_" + job.Id);
@@ -70,17 +57,27 @@ namespace EasySave_Project.Service
                 FileUtil.CreateDirectory(jobBackupDir);
             }
 
-            // Create a timestamped subdirectory to differentiate backup executions
-            string timestampedBackupDir = FileUtil.CombinePath(jobBackupDir, DateUtil.GetTodayDate(DateUtil.YYYY_MM_DD_HH_MM_SS));
-            FileUtil.CreateDirectory(timestampedBackupDir);
+            string timestampedBackupDir;
 
-            // Mark the job as ACTIVE
-            job.SaveState = JobSaveStateEnum.ACTIVE;
-            StateManager.Instance.UpdateState(CreateBackupJobState(job, 0, job.FileSource, string.Empty));
+            if (!job.SaveState.Equals(JobSaveStateEnum.PENDING))
+            {
+                // Create a timestamped subdirectory to differentiate backup executions
+                timestampedBackupDir = FileUtil.CombinePath(jobBackupDir, DateUtil.GetTodayDate(DateUtil.YYYY_MM_DD_HH_MM_SS));
+                FileUtil.CreateDirectory(timestampedBackupDir);
+                job.FileInPending.LastDateTimePath = timestampedBackupDir;
+                // Mark the job as ACTIVE
+                job.SaveState = JobSaveStateEnum.ACTIVE;
+                // Notify the UI that the progress starts at 0%
+                job.FileInPending.Progress = 0;
+            } else
+            {
+                timestampedBackupDir = job.FileInPending.LastDateTimePath;
+            }
 
-            // Notify the UI that the progress starts at 0%
+            StateManager.Instance.UpdateState(CreateBackupJobState(job, job.FileInPending.Progress, job.FileSource, string.Empty));
+
             if (progressCallback != null)
-                progressCallback(job, 0);
+                progressCallback(job, job.FileInPending.Progress);
 
             // Select the backup strategy based on the job type
             IJobStrategyService strategy = job.SaveType switch
@@ -95,28 +92,61 @@ namespace EasySave_Project.Service
             {
                 // Update the progress in real-time
                 if (progressCallback != null)
-                    progressCallback(job, progress);
-                StateManager.Instance.UpdateState(CreateBackupJobState(job, progress, string.Empty, string.Empty));
+                    progressCallback(job, job.FileInPending.Progress);
             };
 
             // Execute the backup with the selected strategy
             strategy.Execute(job, timestampedBackupDir);
 
-            // Update the job status after execution
-            job.SaveState = JobSaveStateEnum.END;
-            if (progressCallback != null)
-                progressCallback(job, 100); // Indicate the job is finished at 100%
-            StateManager.Instance.UpdateState(CreateBackupJobState(job, 100, string.Empty, string.Empty));
+            string messageForPopup;
 
-            // Generate a message indicating the job is complete
-            message = $"{translator.GetText("backupCompleted")} : {job.Name}";
-            ConsoleUtil.PrintTextconsole(message);
-            LogManager.Instance.AddMessage(message);
+            if (job.SaveState.Equals(JobSaveStateEnum.PENDING))
+            {
+                // Generate a message indicating the job is pending
+                messageForPopup = $"{translator.GetText("backupPending")} : {job.Name}";
+                ConsoleUtil.PrintTextconsole(messageForPopup);
+                LogManager.Instance.AddMessage(messageForPopup);
+            } else if (job.SaveState.Equals(JobSaveStateEnum.CANCEL))
+            {
+                messageForPopup = $"{translator.GetText("backupCancel")} : {job.Name}";
+                ConsoleUtil.PrintTextconsole(messageForPopup);
+                LogManager.Instance.AddMessage(messageForPopup);
+                StateManager.Instance.UpdateState(CreateBackupJobState(job, 0, string.Empty, string.Empty));
+                InitJobDefaultValues(job, progressCallback);
+            }
+            else {
+                messageForPopup = TranslationService.GetInstance().GetText("backupComplet") + " " + job.Name;
+                job.SaveState = JobSaveStateEnum.END;
+                ConsoleUtil.PrintTextconsole(messageForPopup);
+                LogManager.Instance.AddMessage(messageForPopup);
+                StateManager.Instance.UpdateState(CreateBackupJobState(job, 100, string.Empty, string.Empty));
+                InitJobDefaultValues(job, progressCallback);
+            }
 
             // Update the stored parameters for the job
             UpdateJobInFile(job);
 
-            return (true, "success"); // Return success if everything went as planned
+            return (true, messageForPopup); // Return success if everything went as planned
+        }
+
+        private void InitJobDefaultValues(JobModel job, Action<JobModel, double> progressCallback)
+        {
+            job.FileInPending.Progress = 0;
+            job.FileInPending.ProcessedFiles = 0;
+            job.FileInPending.ProcessedSize = 0;
+            job.FileInPending.TotalFiles = 0;
+            job.FileInPending.TotalSize = 0;
+            progressCallback(job, 0);
+        }
+
+        public void CanceljobInActif(JobModel job, Action<JobModel, double> progressCallback)
+        {
+            string messageForPopup = $"{TranslationService.GetInstance().GetText("backupCancel")} : {job.Name}";
+            ConsoleUtil.PrintTextconsole(messageForPopup);
+            StateManager.Instance.UpdateState(CreateBackupJobState(job, 0, string.Empty, string.Empty));
+            InitJobDefaultValues(job, progressCallback);
+            job.FileInPending.LastDateTimePath = null;
+            UpdateJobInFile(job);
         }
 
 
@@ -179,6 +209,8 @@ namespace EasySave_Project.Service
                 {
                     jobToUpdate.LastFullBackupPath = updatedJob.LastFullBackupPath;
                     jobToUpdate.LastSaveDifferentialPath = updatedJob.LastSaveDifferentialPath;
+                    jobToUpdate.FileInPending = updatedJob.FileInPending;
+                    jobToUpdate.SaveState = updatedJob.SaveState;
 
                     // Réécrire le JSON avec les nouvelles valeurs
                     string updatedJsonString = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
@@ -200,7 +232,7 @@ namespace EasySave_Project.Service
         }
 
         /// <summary>
-        /// Retrieves a list from the settings file based on the provided key.
+        /// Retrieve a list from the settings file based on the provided key.
         /// </summary>
         /// <param name="key">The key to retrieve the list for (e.g., "EncryptedFileExtensions" or "PriorityBusinessProcess").</param>
         /// <returns>A list of values (e.g., file extensions, business processes).</returns>
@@ -218,6 +250,92 @@ namespace EasySave_Project.Service
                 // Handle the exception and print an error message
                 ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("error" + key) + ex.Message);
                 return new List<string>(); // Return an empty list in case of an error
+            }
+        }
+
+public void AddEncryptedFileExtension(string extension)
+{
+    try
+    {
+        // Vérifie si l'extension n'est pas déjà présente dans la liste
+        if (!FileUtil.GetAppSettingsList("EncryptedFileExtensions").Contains(extension))
+        {
+            FileUtil.AddValueToJobSettingsList("EncryptedFileExtensions", extension); // Appel à la méthode FileUtil
+            ConsoleUtil.PrintTextconsole($"Extension de fichier {extension} ajoutée.");
+            LogManager.Instance.AddMessage($"Extension de fichier {extension} ajoutée.");
+        }
+        else
+        {
+            ConsoleUtil.PrintTextconsole($"L'extension {extension} est déjà présente.");
+        }
+    }
+    catch (Exception ex)
+    {
+        ConsoleUtil.PrintTextconsole($"Erreur lors de l'ajout de l'extension : {ex.Message}");
+    }
+}
+
+
+        public void RemoveEncryptedFileExtension(string extension)
+        {
+            try
+            {
+                if (FileUtil.GetAppSettingsList("EncryptedFileExtensions").Contains(extension))
+                {
+                    FileUtil.RemoveValueFromJobSettingsList("EncryptedFileExtensions", extension);
+                    ConsoleUtil.PrintTextconsole($"Extension de fichier {extension} supprimée.");
+                    LogManager.Instance.AddMessage($"Extension de fichier {extension} supprimée.");
+                }
+                else
+                {
+                    ConsoleUtil.PrintTextconsole($"L'extension {extension} n'existe pas.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleUtil.PrintTextconsole($"Erreur lors de la suppression de l'extension : {ex.Message}");
+            }
+        }
+
+        public void AddPriorityBusinessSoftware(string software)
+        {
+            try
+            {
+                if (!FileUtil.GetAppSettingsList("PriorityBusinessProcess").Contains(software))
+                {
+                    FileUtil.AddValueToJobSettingsList("PriorityBusinessProcess", software);
+                    ConsoleUtil.PrintTextconsole($"Logiciel prioritaire {software} ajouté.");
+                    LogManager.Instance.AddMessage($"Logiciel prioritaire {software} ajouté.");
+                }
+                else
+                {
+                    ConsoleUtil.PrintTextconsole($"Le logiciel {software} est déjà présent.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleUtil.PrintTextconsole($"Erreur lors de l'ajout du logiciel : {ex.Message}");
+            }
+        }
+
+        public void RemovePriorityBusinessSoftware(string software)
+        {
+            try
+            {
+                if (FileUtil.GetAppSettingsList("PriorityBusinessProcess").Contains(software))
+                {
+                    FileUtil.RemoveValueFromJobSettingsList("PriorityBusinessProcess", software);
+                    ConsoleUtil.PrintTextconsole($"Logiciel prioritaire {software} supprimé.");
+                    LogManager.Instance.AddMessage($"Logiciel prioritaire {software} supprimé.");
+                }
+                else
+                {
+                    ConsoleUtil.PrintTextconsole($"Le logiciel {software} n'existe pas.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleUtil.PrintTextconsole($"Erreur lors de la suppression du logiciel : {ex.Message}");
             }
         }
     }

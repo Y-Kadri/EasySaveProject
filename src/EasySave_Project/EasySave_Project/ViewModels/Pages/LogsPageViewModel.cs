@@ -77,7 +77,10 @@ namespace EasySave_Project.ViewModels.Pages
             Nodes = new ObservableCollection<LogNode>();
             Refresh();
         }
-
+        
+        /// <summary>
+        /// Refreshes translations and reloads the logs.
+        /// </summary>
         /// <summary>
         /// Refreshes translations and reloads the logs.
         /// </summary>
@@ -86,7 +89,7 @@ namespace EasySave_Project.ViewModels.Pages
             LoadTranslations();
             LoadLogs();
         }
-
+        
         /// <summary>
         /// Loads translated text values for log-related UI elements from the translation service.
         /// </summary>
@@ -277,7 +280,7 @@ namespace EasySave_Project.ViewModels.Pages
         /// <returns>A structured log node for messages.</returns>
         private LogNode CreateMessageNode(List<MessageDto> messages)
         {
-            var messageNode = new LogNode("Messages");
+            var messageNode = new LogNode(_translationService.GetText("Messages"));
             foreach (var message in messages)
             {
                 messageNode.SubNodes.Add(new LogNode(message.Text));
