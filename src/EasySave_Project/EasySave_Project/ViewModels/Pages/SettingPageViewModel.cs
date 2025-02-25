@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
+using System.Linq;
 using EasySave_Library_Log.manager;
+using EasySave_Project.Dto;
 using EasySave_Project.Model;
 using EasySave_Project.Service;
 using EasySave_Project.Util;
@@ -10,9 +12,10 @@ namespace EasySave_Project.ViewModels.Pages
     public class SettingPageViewModel : ReactiveObject
     {
         private readonly TranslationService _translationService;
-        
+
         public ObservableCollection<string> EncryptedFileExtensions { get; }
         public ObservableCollection<string> PriorityBusinessProcess { get; }
+        public ObservableCollection<PriorityExtensionDTO> PriorityExtensionFiles { get; }
 
         private string _message;
         private string _status;
@@ -50,7 +53,7 @@ namespace EasySave_Project.ViewModels.Pages
         public SettingPageViewModel()
         {
             _translationService = TranslationService.GetInstance();
-            
+
             SelectLanguage = _translationService.GetText("SelectLanguage");
             French = _translationService.GetText("French");
             English = _translationService.GetText("English");
@@ -64,9 +67,11 @@ namespace EasySave_Project.ViewModels.Pages
 
             EncryptedFileExtensions = new ObservableCollection<string>(SettingUtil.GetList("EncryptedFileExtensions"));
             PriorityBusinessProcess = new ObservableCollection<string>(SettingUtil.GetList("PriorityBusinessProcess"));
+            PriorityExtensionFiles = new ObservableCollection<PriorityExtensionDTO>(SettingUtil.GetPriorityExtensionFilesList("PriorityExtensionFiles"));
+            SortPriorityExtensions();
             MaxLargeFileSize = FileUtil.GetAppSettingsInt("MaxLargeFileSize");
         }
-        
+
         public void AddEncryptedFileExtensions(string extension)
         {
             if (SettingUtil.AddToList("EncryptedFileExtensions", extension))
@@ -80,7 +85,7 @@ namespace EasySave_Project.ViewModels.Pages
                 Message = "Erreur lors de l'ajout.";
             }
         }
-        
+
         public void AddPriorityBusinessProcess(string software)
         {
             if (SettingUtil.AddToList("PriorityBusinessProcess", software))
@@ -88,6 +93,19 @@ namespace EasySave_Project.ViewModels.Pages
                 PriorityBusinessProcess.Add(software);
                 this.RaisePropertyChanged(nameof(PriorityBusinessProcess));
                 Message = "Logiciel ajouté avec succès.";
+            }
+            else
+            {
+                Message = "Erreur lors de l'ajout.";
+            }
+        }
+
+        public void AddPriorityFileExtensions(string extensionfile)
+        {
+            if (SettingUtil.AddPriorityExtension(extensionfile))
+            {
+                this.RaisePropertyChanged(nameof(PriorityExtensionFiles));
+                Message = "Priorité ajouté avec succès.";
             }
             else
             {
@@ -156,8 +174,24 @@ namespace EasySave_Project.ViewModels.Pages
             }
         }
 
+        public void RemovePriorityFileExtensions(PriorityExtensionDTO priority)
+        {
+            if (SettingUtil.RemovePriorityExtension(priority.ExtensionFile))
+            {
+                PriorityExtensionFiles.Remove(priority);
+                this.RaisePropertyChanged(nameof(PriorityExtensionFiles));
+                Message = "Priorité supprimé avec succès.";
+            }
+            else
+            {
+                Message = "Erreur lors de la suppression.";
+            }
+        }
+
+
+
         // Méthode pour changer la langue et appeler la notification
-        public  (string message, string status) ChangeLanguage(LanguageEnum lang)
+        public (string message, string status) ChangeLanguage(LanguageEnum lang)
         {
             if (SettingUtil.SettingChangeLanguage(lang))
             {
@@ -187,9 +221,77 @@ namespace EasySave_Project.ViewModels.Pages
                 _message = _translationService.GetText("LogsFormatChangeError");
                 _status = "Error";
             }
-            
+
             LogFormatManager.Instance.SetLogFormat(logsFormat);
             return (_message, _status);
+        }
+
+        /// <summary>
+        /// Moves the file extension up in the list if it is not already at the top.
+        /// </summary>
+        /// <param name="index">The index of the item to move.</param>
+        public void MoveExtensionUp(int index)
+        {
+            if (index > 0) // Check if the item is not the first one in the list
+            {
+                SettingUtil.MovePriorityExtensionFileUp(index);
+
+                // Sort the list after moving the item
+                SortPriorityExtensions();  // Call the method to sort the list
+
+                Message = "Extension moved up.";
+            }
+            else
+            {
+                Message = "Cannot move up further."; // Error message if it is already at the top
+            }
+        }
+
+
+        /// <summary>
+        /// Moves the file extension down in the list if it is not already at the bottom.
+        /// </summary>
+        /// <param name="index">The index of the item to move.</param>
+        public void MoveExtensionDown(int index)
+        {
+            if (index <= PriorityExtensionFiles.Count) // Check if the item is not the last one in the list
+            {
+                SettingUtil.MovePriorityExtensionFileDown(index);
+
+                // Sort the list after moving the item
+                SortPriorityExtensions();  // Call the method to sort the list
+
+                Message = "Extension moved down.";
+            }
+            else
+            {
+                Message = "Cannot move down further."; // Error message if it is already at the bottom
+            }
+        }
+
+        /// <summary>
+        /// Sorts the list of priority extensions by their index.
+        /// This method orders the extensions in the PriorityExtensionFiles collection 
+        /// based on the 'Index' property, and updates the collection to reflect the sorted order.
+        /// </summary>
+        private void SortPriorityExtensions()
+        {
+            // Sort the list of extensions by the 'Index' property
+            // This assumes that PriorityExtensionDTO has an 'Index' property that is used to determine priority
+            var sortedList = PriorityExtensionFiles.OrderBy(p => p.Index).ToList();
+
+            // Clear the existing list in the ObservableCollection
+            PriorityExtensionFiles.Clear();
+
+            // Add the sorted extensions back to the ObservableCollection
+            foreach (var extension in sortedList)
+            {
+                PriorityExtensionFiles.Add(extension);
+            }
+
+            // Notify the view that the ObservableCollection has been updated and the list has changed
+            // This triggers a re-render of the UI elements bound to PriorityExtensionFiles
+            this.RaisePropertyChanged(nameof(PriorityExtensionFiles));
         }
     }
 }

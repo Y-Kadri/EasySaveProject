@@ -229,7 +229,7 @@ namespace EasySave_Project.Service
         }
 
         /// <summary>
-        /// Retrieves a list from the settings file based on the provided key.
+        /// Retrieve a list from the settings file based on the provided key.
         /// </summary>
         /// <param name="key">The key to retrieve the list for (e.g., "EncryptedFileExtensions" or "PriorityBusinessProcess").</param>
         /// <returns>A list of values (e.g., file extensions, business processes).</returns>
@@ -247,6 +247,92 @@ namespace EasySave_Project.Service
                 // Handle the exception and print an error message
                 ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("error" + key) + ex.Message);
                 return new List<string>(); // Return an empty list in case of an error
+            }
+        }
+
+public void AddEncryptedFileExtension(string extension)
+{
+    try
+    {
+        // Vérifie si l'extension n'est pas déjà présente dans la liste
+        if (!FileUtil.GetAppSettingsList("EncryptedFileExtensions").Contains(extension))
+        {
+            FileUtil.AddValueToJobSettingsList("EncryptedFileExtensions", extension); // Appel à la méthode FileUtil
+            ConsoleUtil.PrintTextconsole($"Extension de fichier {extension} ajoutée.");
+            LogManager.Instance.AddMessage($"Extension de fichier {extension} ajoutée.");
+        }
+        else
+        {
+            ConsoleUtil.PrintTextconsole($"L'extension {extension} est déjà présente.");
+        }
+    }
+    catch (Exception ex)
+    {
+        ConsoleUtil.PrintTextconsole($"Erreur lors de l'ajout de l'extension : {ex.Message}");
+    }
+}
+
+
+        public void RemoveEncryptedFileExtension(string extension)
+        {
+            try
+            {
+                if (FileUtil.GetAppSettingsList("EncryptedFileExtensions").Contains(extension))
+                {
+                    FileUtil.RemoveValueFromJobSettingsList("EncryptedFileExtensions", extension);
+                    ConsoleUtil.PrintTextconsole($"Extension de fichier {extension} supprimée.");
+                    LogManager.Instance.AddMessage($"Extension de fichier {extension} supprimée.");
+                }
+                else
+                {
+                    ConsoleUtil.PrintTextconsole($"L'extension {extension} n'existe pas.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleUtil.PrintTextconsole($"Erreur lors de la suppression de l'extension : {ex.Message}");
+            }
+        }
+
+        public void AddPriorityBusinessSoftware(string software)
+        {
+            try
+            {
+                if (!FileUtil.GetAppSettingsList("PriorityBusinessProcess").Contains(software))
+                {
+                    FileUtil.AddValueToJobSettingsList("PriorityBusinessProcess", software);
+                    ConsoleUtil.PrintTextconsole($"Logiciel prioritaire {software} ajouté.");
+                    LogManager.Instance.AddMessage($"Logiciel prioritaire {software} ajouté.");
+                }
+                else
+                {
+                    ConsoleUtil.PrintTextconsole($"Le logiciel {software} est déjà présent.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleUtil.PrintTextconsole($"Erreur lors de l'ajout du logiciel : {ex.Message}");
+            }
+        }
+
+        public void RemovePriorityBusinessSoftware(string software)
+        {
+            try
+            {
+                if (FileUtil.GetAppSettingsList("PriorityBusinessProcess").Contains(software))
+                {
+                    FileUtil.RemoveValueFromJobSettingsList("PriorityBusinessProcess", software);
+                    ConsoleUtil.PrintTextconsole($"Logiciel prioritaire {software} supprimé.");
+                    LogManager.Instance.AddMessage($"Logiciel prioritaire {software} supprimé.");
+                }
+                else
+                {
+                    ConsoleUtil.PrintTextconsole($"Le logiciel {software} n'existe pas.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleUtil.PrintTextconsole($"Erreur lors de la suppression du logiciel : {ex.Message}");
             }
         }
     }

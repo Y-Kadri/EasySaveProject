@@ -1,13 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
+using System.Threading;
 using Avalonia.Controls;
 using ReactiveUI;
 using EasySave_Project.Manager;
 using EasySave_Project.Model;
 using EasySave_Project.Service;
-using System.Threading;
+using EasySave_Project.Dto;
+using System.Reactive;
 
 namespace EasySave_Project.ViewModels.Pages
 {
@@ -25,11 +29,15 @@ namespace EasySave_Project.ViewModels.Pages
         /// <summary>
         /// Service for managing backup jobs.
         /// </summary>
+
         public JobService JobService { get; } = new JobService();
 
         /// <summary>
         /// UI text labels retrieved from the translation service.
         /// </summary>
+        public ReactiveCommand<Unit, Unit> ExecuteCommand { get; }
+        private List<PriorityExtensionDTO> PriorityExtensionFiles { get; set; }
+
         public string AllJobs { get; private set; }
         public string AddAJob { get; private set; }
         public string Run { get; private set; }
@@ -40,6 +48,7 @@ namespace EasySave_Project.ViewModels.Pages
         public string Action { get; private set; }
         public string Progress { get; private set; }
         public string Results { get; private set; }
+        public string PriorityExtension { get; private set; }
 
         /// <summary>
         /// Initializes the ViewModel and loads job data.
@@ -59,6 +68,7 @@ namespace EasySave_Project.ViewModels.Pages
             Action = TranslationService.GetInstance().GetText("Action");
             Progress = TranslationService.GetInstance().GetText("Progress");
             Results = TranslationService.GetInstance().GetText("Results");
+            PriorityExtension = TranslationService.GetInstance().GetText("PriorityExtension");
         }
 
         /// <summary>

@@ -56,6 +56,8 @@ namespace EasySave_Project.Service
                 totalSize = allFiles.Sum(FileUtil.GetFileSize);
             }
 
+            allFiles = SettingUtil.SortFilesByPriority(allFiles);
+
             // Execute full backup process
             ExecuteCompleteSave(allFiles, backupDir, job, totalFiles, totalSize, ref processedFiles, ref processedSize);  
             
