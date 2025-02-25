@@ -1,28 +1,32 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
+using System.Threading;
 using Avalonia.Controls;
 using ReactiveUI;
 using EasySave_Project.Manager;
 using EasySave_Project.Model;
 using EasySave_Project.Service;
-using System.Threading;
+using EasySave_Project.Dto;
+using System.Reactive;
 
 namespace EasySave_Project.ViewModels.Pages
 {
-    
     public class JobsPageViewModel : ReactiveObject
     {
-        
         public ObservableCollection<JobModel> Jobs { get; }
-        
+
         public JobService JobService { get; } = new JobService();
-        
+        public ReactiveCommand<Unit, Unit> ExecuteCommand { get; }
+        private List<PriorityExtensionDTO> PriorityExtensionFiles { get; set; }
+
         public string AllJobs { get; private set; }
         public string AddAJob { get; private set; }
         public string Run { get; private set; }
-        
+
         public string Name { get; private set; }
         public string Source { get; private set; }
         public string Destination { get; private set; }
@@ -30,7 +34,7 @@ namespace EasySave_Project.ViewModels.Pages
         public string Progress { get; private set; }
         public string Results { get; private set; }
         public string PriorityExtension { get; private set; }
-        
+
         public JobsPageViewModel()
         {
             Jobs = new ObservableCollection<JobModel>(this.JobService.GetAllJobs());
@@ -44,6 +48,18 @@ namespace EasySave_Project.ViewModels.Pages
             Progress = TranslationService.GetInstance().GetText("Progress");
             Results = TranslationService.GetInstance().GetText("Results");
             PriorityExtension = TranslationService.GetInstance().GetText("PriorityExtension");
+        }
+
+        public void LoadAppSettings()
+        {
+            string settingsPath = @"C:\path\to\your\appsettings.json";  // Remplace avec le bon chemin
+            string json = File.ReadAllText(settingsPath);
+
+            // Désérialiser le fichier JSON avec System.Text.Json
+            var appSettings = JsonSerializer.Deserialize<AppSettingDto>(json);
+
+            // Charger les extensions de fichiers prioritaires, triées par index
+            PriorityExtensionFiles = appSettings.PriorityExtensionFiles.OrderBy(p => p.Index).ToList();
         }
 
         public void ExecuteJobsParallelThreadPool(List<JobModel> jobs, Action<JobModel, double> progressCallback, Action<string, string> showPopup)
@@ -88,8 +104,5 @@ namespace EasySave_Project.ViewModels.Pages
                 });
             }
         }
-
-
-
     }
 }
