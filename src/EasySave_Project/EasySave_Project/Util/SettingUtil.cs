@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using DynamicData;
 using EasySave_Library_Log.manager;
 using EasySave_Project.Dto;
 using EasySave_Project.Model;
@@ -55,6 +56,43 @@ public static class SettingUtil
         }
 
         return SaveSettings(settings, "itemAdded", "errorAddingItem");
+    }
+
+    public static bool AddPriorityExtension(string key, PriorityExtensionDTO value)
+    {
+        var settings = GetSetting();
+        if (settings == null) return false;
+
+        if (key == "PriorityExtensionFiles")
+        {
+            if (!settings.PriorityExtensionFiles.Any(e => e.ExtensionFile == value.ExtensionFile))
+            {
+                settings.PriorityExtensionFiles.Add(value);
+                return SaveSettings(settings, "itemAdded", "errorAddingItem");
+            }
+        }
+
+        return false;
+    }
+
+    public static bool RemovePriorityExtension(string key, string extensionFile)
+    {
+        var settings = GetSetting();
+        if (settings == null) return false;
+
+        if (key == "PriorityExtensionFiles")
+        {
+            var itemToRemove = settings.PriorityExtensionFiles
+                .FirstOrDefault(e => e.ExtensionFile.Equals(extensionFile, StringComparison.OrdinalIgnoreCase));
+
+            if (itemToRemove != null)
+            {
+                settings.PriorityExtensionFiles.Remove(itemToRemove);
+                return SaveSettings(settings, "itemRemoved", "errorRemovingItem");
+            }
+        }
+
+        return false;
     }
 
     public static string checkFormat(string value, List<string> list)
@@ -281,5 +319,45 @@ public static class SettingUtil
             SaveSettings(settings, "priorityExtensionMovedDown", "errorUpdatingPriorityExtension");
         }
     }
+    public static bool AddPriorityExtension(string Extension)
+    {
+        if (!Extension.StartsWith("."))
+        {
+          Extension = "." + Extension;
+            
+        }
+        int NewIndex = GetPriorityExtensionFilesList("PriorityExtensionFiles").Count + 1;
+        PriorityExtensionDTO NewExtensionFile = new PriorityExtensionDTO();
+        NewExtensionFile.ExtensionFile = Extension;
+        NewExtensionFile.Index = NewIndex;
+        return AddPriorityExtension("PriorityExtensionFiles", NewExtensionFile);
+    }
+    public static bool RemovePriorityExtension(string Extension)
+    {
+        var settings = GetSetting();
+        if (settings == null) return false;
+
+        // Cherche l'élément à supprimer en fonction de l'extension
+        var itemToRemove = settings.PriorityExtensionFiles
+            .FirstOrDefault(e => e.ExtensionFile.Equals(Extension, StringComparison.OrdinalIgnoreCase));
+
+        if (itemToRemove != null)
+        {
+            // Supprimer l'élément trouvé
+            settings.PriorityExtensionFiles.Remove(itemToRemove);
+
+            // Réajuster les indices des éléments dont l'index est plus grand
+            foreach (var item in settings.PriorityExtensionFiles.Where(e => e.Index > itemToRemove.Index))
+            {
+                item.Index -= 1;
+            }
+
+            // Sauvegarder les paramètres après modification
+            return SaveSettings(settings, "itemRemoved", "errorRemovingItem");
+        }
+
+        return false;
+    }
+
 
 }

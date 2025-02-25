@@ -63,6 +63,8 @@
 		<!-- Gestion avancée des logiciels prioritaires -->
 		<StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="3" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
 			<TextBlock Text="Gestion des logiciels prioritaires" FontWeight="Bold" Margin="10,20,0,0"/>
+			<TextBox x:Name="PriorityInput" Width="200" Watermark="Ex: .txt"/>
+			<Button Content="{Binding Add}" Click="AddPriorityFileExtensions_Click"/>
 			<TextBlock x:Name="ExtensionInput2" Text="Logiciels prioritaires :" FontWeight="Bold" Margin="10,10,0,0"/>
 			<ListBox ItemsSource="{Binding PriorityExtensionFiles}">
 				<ListBox.ItemTemplate>
@@ -72,7 +74,7 @@
 
 							<Button Content="⬆" Click="MoveExtensionUp_Click" CommandParameter="{Binding}"/>
 							<Button Content="⬇" Click="MoveExtensionDown_Click" CommandParameter="{Binding}"/>
-							<Button Content="🗑" Click="MoveSoftwareDown_Click" CommandParameter="{Binding}"/>
+							<Button Content="🗑" Click="RemovePriorityFileExtensions_Click" CommandParameter="{Binding}"/>
 						</StackPanel>
 					</DataTemplate>
 				</ListBox.ItemTemplate>
