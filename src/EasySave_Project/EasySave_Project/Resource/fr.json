@@ -164,5 +164,16 @@
   "Seconnecter" : "Se connecter",
   "Sedeconnecter" : "Se déconnecter",
   "Connecté" : "Connecté",
-  "Nonconnecté" : "Non connecté"
+  "Nonconnecté" : "Non connecté",
+  "resumejob": "reprise du travail : ",
+  "EncryptionTime": "Temps de chiffrement",
+  "ErrorReadingLogFile": "Erreur de lecture du fichier {file}: {error}",
+  "NoValidLogFound": "Aucun log valide trouvé dans : {file}",
+  "UnsupportedExtension": "Extension non supportée : {extension}",
+  "ErrorDeserializingFile": "Erreur de désérialisation pour {file} : {error}",
+  "ErrorParsingXml": "Erreur lors du parsing manuel du XML : {error}",
+  "Messages": "Messages",
+  "MaxLargeFileSize": "Taille maximale de fichier autorisée en copie parallèle (en Ko) : ",
+  "AddMaxLargeFileSizeToSettings": "Ajout de la taille maximale de fichier.",
+  "ErrorAddMaxLargeFileSizeToSettings": "Erreur lors de l'ajout de la taille maximale de fichier"
 }

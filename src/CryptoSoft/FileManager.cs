@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text;
+using System.Threading;
 
 namespace CryptoSoft;
 
@@ -11,6 +12,8 @@ public class FileManager(string path, string key)
 {
     private string FilePath { get; } = path;
     private string Key { get; } = key;
+
+    private static readonly Mutex mutex = new(false, "CryptoSoft_GlobalMutex"); // global Mutex 
 
     /// <summary>
     /// check if the file exists
@@ -30,14 +33,22 @@ public class FileManager(string path, string key)
     /// </summary>
     public int TransformFile()
     {
-        if (!CheckFile()) return -1;
-        Stopwatch stopwatch = Stopwatch.StartNew();
-        var fileBytes = File.ReadAllBytes(FilePath);
-        var keyBytes = ConvertToByte(Key);
-        fileBytes = XorMethod(fileBytes, keyBytes);
-        File.WriteAllBytes(FilePath, fileBytes);
-        stopwatch.Stop();
-        return (int)stopwatch.ElapsedMilliseconds;
+        mutex.WaitOne();
+        try
+        {
+            if (!CheckFile()) return -1;
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            var fileBytes = File.ReadAllBytes(FilePath);
+            var keyBytes = ConvertToByte(Key);
+            fileBytes = XorMethod(fileBytes, keyBytes);
+            File.WriteAllBytes(FilePath, fileBytes);
+            stopwatch.Stop();
+            return (int)stopwatch.ElapsedMilliseconds;
+        }
+        finally
+        {
+            mutex.ReleaseMutex();
+        }
     }
 
     /// <summary>

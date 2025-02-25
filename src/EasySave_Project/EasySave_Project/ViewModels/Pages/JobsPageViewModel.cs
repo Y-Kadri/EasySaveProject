@@ -3,16 +3,42 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Threading;
-using Avalonia.Threading;
 using ReactiveUI;
 using EasySave_Project.Model;
 using EasySave_Project.Service;
+using EasySave_Project.Dto;
+using System.Reactive;
+using Avalonia.Threading;
 using EasySave_Project.Server;
 
 namespace EasySave_Project.ViewModels.Pages
 {
+    /// <summary>
+    /// ViewModel for the Jobs Page.
+    /// Manages the display and execution of backup jobs.
+    /// </summary>
     public class JobsPageViewModel : ReactiveObject
     {
+        /// <summary>
+        /// Collection of backup jobs displayed in the UI.
+        /// </summary>
+        public ObservableCollection<JobModel> Jobs { get; }
+
+        /// <summary>
+        /// Service for managing backup jobs.
+        /// </summary>
+
+        public JobService JobService { get; } = new JobService();
+
+        /// <summary>
+        /// UI text labels retrieved from the translation service.
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> ExecuteCommand { get; }
+        private List<PriorityExtensionDTO> PriorityExtensionFiles { get; set; }
+        
+        /// <summary>
+        /// Initializes the ViewModel and loads job data.
+        /// </summary>
         private readonly JobService _jobService = new JobService();
         
         private readonly TranslationService _translationService = TranslationService.GetInstance();
@@ -21,7 +47,7 @@ namespace EasySave_Project.ViewModels.Pages
         
         private ObservableCollection<JobModel> _jobs;
         
-        private string _allJobs, _addAJob, _run, _name, _source, _destination, _type, _progress, _results;
+        private string _allJobs, _addAJob, _run, _name, _source, _destination, _type, _progress, _results, PriorityExtension;
         
         public ObservableCollection<JobModel> Jobs
         {
@@ -102,6 +128,7 @@ namespace EasySave_Project.ViewModels.Pages
             Type = _translationService.GetText("Type");
             Progress = _translationService.GetText("Progress");
             Results = _translationService.GetText("Results");
+            PriorityExtension = _translationService.GetText("PriorityExtension");
         }
 
         /// <summary>
@@ -143,7 +170,7 @@ namespace EasySave_Project.ViewModels.Pages
                 Jobs = new ObservableCollection<JobModel>(_jobService.GetAllJobs() ?? new List<JobModel>());
             }
         }
-
+        
         /// <summary>
         /// Executes multiple jobs in parallel using a thread pool, providing progress updates and notifications.
         /// </summary>
@@ -152,8 +179,6 @@ namespace EasySave_Project.ViewModels.Pages
         /// <param name="showPopup">Function to display notifications.</param>
         public void ExecuteJobsParallelThreadPool(List<JobModel> jobs, Action<JobModel, double> progressCallback, Action<string, string> showPopup)
         {
-            if (jobs == null || jobs.Count == 0) return;
-
             int jobCount = jobs.Count;
             int completedJobs = 0;
             bool allSuccess = true;
@@ -186,6 +211,11 @@ namespace EasySave_Project.ViewModels.Pages
                     }
                 });
             }
+        }
+
+        public void CancelJobInActif(JobModel jib, Action<JobModel, double> progressCallback)
+        {
+            JobService.CanceljobInActif(jib, progressCallback);
         }
     }
 }

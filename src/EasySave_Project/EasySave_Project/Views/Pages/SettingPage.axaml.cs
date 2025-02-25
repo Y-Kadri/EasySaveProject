@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using EasySave_Library_Log.manager;
+using EasySave_Project.Dto;
 using EasySave_Project.Model;
 using EasySave_Project.ViewModels.Pages;
 using EasySave_Project.Views.Components;
@@ -89,7 +90,7 @@ namespace EasySave_Project.Views.Pages
                 {
                     return;
                 }
-                
+
                 // Appel de ChangeLogsFormat et décomposition du tuple
                 var (message, status) = _settingPageViewModel.ChangeLogsFormat(logsFormat);
 
@@ -141,6 +142,25 @@ namespace EasySave_Project.Views.Pages
         /// </summary>
         /// <param name="sender">The event source, a Button.</param>
         /// <param name="e">Event arguments.</param>
+        private void AddPriorityFileExtensions_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(PriorityInput.Text))
+            {
+                _settingPageViewModel.AddPriorityFileExtensions(PriorityInput.Text);
+                PriorityInput.Text = "";
+                Reload();
+            }
+        }
+
+        private void RemovePriorityFileExtensions_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            var priority = (PriorityExtensionDTO)button.DataContext; 
+            _settingPageViewModel.RemovePriorityFileExtensions(priority); 
+            Reload();
+        }
+
+
         private void AddPriorityBusinessProcess_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(SoftwareInput.Text))
@@ -162,6 +182,86 @@ namespace EasySave_Project.Views.Pages
             var software = (string)button.DataContext;
             _settingPageViewModel.RemovPriorityBusinessProcess(software);
             Reload();
+        }
+
+        /// <summary>
+        /// Handles the click event for the "Move Up" button for file extensions.
+        /// </summary>
+        /// <param name="sender">The sender of the event (Button).</param>
+        /// <param name="e">The event arguments.</param>
+        private void MoveExtensionUp_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender; // Get the button that was clicked
+            var extension = (PriorityExtensionDTO)button.CommandParameter; // Cast CommandParameter to PriorityExtensionDTO
+            var index = extension.Index; // Find the index of the extension in the list
+
+            if (index > 0)
+            {
+                _settingPageViewModel.MoveExtensionUp(index); // Call the MoveExtensionUp method in the ViewModel with the found index
+                Toastr.ShowNotification("Extension moved up.", NotificationContainer, "Success"); // Show success notification
+            }
+            Reload();
+        }
+
+        /// <summary>
+        /// Handles the click event for the "Move Down" button for file extensions.
+        /// </summary>
+        /// <param name="sender">The sender of the event (Button).</param>
+        /// <param name="e">The event arguments.</param>
+        private void MoveExtensionDown_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender; // Get the button that was clicked
+            var extension = (PriorityExtensionDTO)button.CommandParameter; // Cast CommandParameter to PriorityExtensionDTO
+            var index = extension.Index; // Find the index of the extension in the list
+
+            if (index > 0 && index < _settingPageViewModel.PriorityExtensionFiles.Count)
+            {
+                _settingPageViewModel.MoveExtensionDown(index); // Call the MoveExtensionDown method in the ViewModel with the found index
+                Toastr.ShowNotification("Extension moved down.", NotificationContainer, "Success"); // Show success notification
+            }
+            Reload();
+        }
+
+        /// <summary>
+        /// Handles the click event for the "Delete" button for file extensions.
+        /// </summary>
+        /// <param name="sender">The sender of the event (Button).</param>
+        /// <param name="e">The event arguments.</param>
+        private void MoveSoftwareDown_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender; // Get the button that was clicked
+            var extension = (PriorityExtensionDTO)button.CommandParameter; // Cast CommandParameter to PriorityExtensionDTO
+            var index = _settingPageViewModel.PriorityExtensionFiles.IndexOf(extension); // Find the index of the extension in the list
+
+            if (index > 0)
+            {
+                //_settingPageViewModel.RemoveExtension(index); // Assuming you have a method to remove the extension
+                Toastr.ShowNotification("Extension removed.", NotificationContainer, "Success"); // Show success notification
+            }
+        }
+
+        /// <summary>
+        /// Handles the click event for updating the maximum large file size setting.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void MaxLargeFileSize_Click(object sender, RoutedEventArgs e)
+        {
+            // Check if a value is set in the input field
+            if (MaxLargeFileSizeInput.Value.HasValue)
+            {
+                // Convert the decimal value to an integer
+                int value = (int)MaxLargeFileSizeInput.Value.Value;
+
+                // Call ChangeMaxLargeFileSize and deconstruct the returned tuple
+                var (message, status) = _settingPageViewModel.ChangeMaxLargeFileSize(value);
+
+                // Display the notification with the retrieved values
+                Toastr.ShowNotification(message, NotificationContainer, status);
+
+                // Update the UI or settings after the change
+                Update();
+            }
         }
     }
 }

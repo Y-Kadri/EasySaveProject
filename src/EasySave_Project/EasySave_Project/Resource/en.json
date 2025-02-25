@@ -156,5 +156,14 @@
   "Seconnecter" : "Log in",
   "Sedeconnecter" : "Log out",
   "Connecté" : "Connected",
-  "Nonconnecté" : "Not connected"
+  "Nonconnecté" : "Not connected",
+  "resumejob": "Resume Job : ",
+  "EncryptionTime": "Encryption time",
+  "ErrorReadingLogFile": "Error reading file {file}: {error}",
+  "NoValidLogFound": "No valid log found in: {file}",
+  "UnsupportedExtension": "Unsupported extension: {extension}",
+  "ErrorDeserializingFile": "Error deserializing {file}: {error}",
+  "ErrorParsingXml": "Error parsing XML: {error}",
+  "Messages": "Messages",
+  "MaxLargeFileSize": "Maximum large file size to copy (in Ko): "
 }
