@@ -26,6 +26,42 @@ namespace EasySave_Project.ViewModels.Pages
             get => _users;
             private set => this.RaiseAndSetIfChanged(ref _users, value);
         }
+        
+        private string _connexion;
+        public string connexion
+        {
+            get => _connexion;
+            private set => this.RaiseAndSetIfChanged(ref _connexion, value);
+        }
+        
+        private string _entrerVotreNom;
+        public string entrerVotreNom
+        {
+            get => _entrerVotreNom;
+            private set => this.RaiseAndSetIfChanged(ref _entrerVotreNom, value);
+        }
+        
+        private string _vousetesconnecte;
+        public string vousetesconnecte
+        {
+            get => _vousetesconnecte;
+            private set => this.RaiseAndSetIfChanged(ref _vousetesconnecte, value);
+        }
+        
+        private string _seconnecter;
+        public string seconnecter
+        {
+            get => _seconnecter;
+            private set => this.RaiseAndSetIfChanged(ref _seconnecter, value);
+        }
+        
+        private string _sedeconnecter;
+        public string sedeconnecter
+        {
+            get => _sedeconnecter;
+            private set => this.RaiseAndSetIfChanged(ref _sedeconnecter, value);
+        }
+
 
         public ConnexionViewModel()
         {
@@ -36,6 +72,11 @@ namespace EasySave_Project.ViewModels.Pages
         {
             IsConnected = GlobalDataService.GetInstance().isConnecte;
             BaseLayoutViewModel.RefreshInstance(null, null);
+            connexion = TranslationService.GetInstance().GetText("Connexion");
+            entrerVotreNom = TranslationService.GetInstance().GetText("EntrerVotreNom");
+            vousetesconnecte = $"\u2705 {TranslationService.GetInstance().GetText("Vousêtesconnecté")} !";
+            seconnecter = TranslationService.GetInstance().GetText("Seconnecter");
+            sedeconnecter = TranslationService.GetInstance().GetText("Sedeconnecter");
         }
         
         public async Task Connexion(string name)

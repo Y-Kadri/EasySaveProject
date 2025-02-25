@@ -90,8 +90,8 @@ namespace EasySave_Project.ViewModels.Layout
 
             var globalData = GlobalDataService.GetInstance();
             Conecte = globalData.isConnecte 
-                ? $"Connecté{(globalData.connecteTo.Item2 != null ? " à " + globalData.connecteTo.Item2 : "")}" 
-                : "Non connecté";
+                ? $"{translationService.GetText("Connecté")} {(globalData.connecteTo.Item2 != null ? $" {translationService.GetText("à")} " + globalData.connecteTo.Item2 : "")}" 
+                : $"{translationService.GetText("Nonconnecté")}";
 
             if (logsButton != null && SettingButton != null)
             {
@@ -116,7 +116,13 @@ namespace EasySave_Project.ViewModels.Layout
         
         public void AddNotification(string message)
         {
-            Toastr.ShowServeurNotification(message, NotificationContainer);
+            TranslationService translationService = TranslationService.GetInstance();
+            string newmessage = translationService.GetText(message);
+            if (newmessage == message)
+            {
+                newmessage = translationService.Replace(message);
+            }
+            Toastr.ShowServeurNotification(newmessage, NotificationContainer);
         }
     }
 }

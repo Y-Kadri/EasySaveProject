@@ -54,7 +54,7 @@ namespace EasySave_Project.Views.Pages
                 };
                 string jsonString = JsonSerializer.Serialize(requestData);
                 
-                Toastr.ShowServeurNotification("Envoie des jobs à run...", NotificationContainer);
+                Toastr.ShowServeurNotification($"{_translationService.GetText("Envoiedesjobsàrun")} ...", NotificationContainer);
                 Utils.SendToServer(jsonString);
             }
             else

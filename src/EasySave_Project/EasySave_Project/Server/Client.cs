@@ -2,6 +2,7 @@ using System;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using EasySave_Project.Service;
 using EasySave_Project.ViewModels.Layout;
 using EasySave_Project.Views.Components;
 
@@ -12,6 +13,7 @@ namespace EasySave_Project.Server
         public TcpClient client;
         public NetworkStream stream { get; }
         public string name;
+        private static TranslationService _translationService = TranslationService.GetInstance();
 
         public Client(string name)
         {
@@ -21,7 +23,7 @@ namespace EasySave_Project.Server
                 client = Connexion.Conn();
                 if (client == null) 
                 {
-                    Toastr.ShowServeurNotification("❌ Connexion échouée.",BaseLayoutViewModel.Instance.NotificationContainer);
+                    Toastr.ShowServeurNotification($"❌ {_translationService.GetText("Connexionéchouée")}.",BaseLayoutViewModel.Instance.NotificationContainer);
                     throw new Exception();
                 }
                 stream = client.GetStream();
@@ -36,7 +38,7 @@ namespace EasySave_Project.Server
             }
             catch (Exception ex)
             {
-                Toastr.ShowServeurNotification($"⚠️ Impossible de se connecter au serveur : {ex.Message}",BaseLayoutViewModel.Instance.NotificationContainer);
+                Toastr.ShowServeurNotification($"⚠️ {_translationService.GetText("Tempsdattentedépassé")} : {ex.Message}",BaseLayoutViewModel.Instance.NotificationContainer);
             }
         }
 

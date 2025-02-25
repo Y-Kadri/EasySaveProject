@@ -4,6 +4,10 @@
              x:Class="EasySave_Project.Views.Pages.ConnexionPage"
              x:DataType="pages:ConnexionViewModel">
 
+    <UserControl.Resources>
+        <pages:ConnexionViewModel x:Key="ConnexionVM" />
+    </UserControl.Resources>
+    
     <StackPanel Background="Transparent" Margin="20" Spacing="60" HorizontalAlignment="Center">
       
         <!-- Notification --> 
@@ -16,14 +20,14 @@
 
         <!-- Formulaire de connexion -->
         <StackPanel x:Name="LoginForm" Orientation="Vertical">
-            <TextBlock FontSize="32" FontWeight="Bold" Text="Connexion" HorizontalAlignment="Center"/>
-            <TextBox Watermark="Entrer votre nom" Margin="30" Height="40" HorizontalAlignment="Stretch" x:Name="UserName"/>
-            <Button Classes="Large" Content="Connexion" Click="Connexion"/>
+            <TextBlock FontSize="32" FontWeight="Bold" Text="{Binding connexion}" HorizontalAlignment="Center"/>
+            <TextBox Watermark="{Binding entrerVotreNom}" Margin="30" Height="40" HorizontalAlignment="Stretch" x:Name="UserName"/>
+            <Button Classes="Large" Content="{Binding connexion}" Click="Connexion"/>
         </StackPanel>
 
         <!-- Message après connexion -->
         <StackPanel x:Name="ConnectedMessage" Orientation="Vertical">
-            <TextBlock FontSize="32" FontWeight="Bold" Text="✅ Vous êtes connecté !" HorizontalAlignment="Center"/>
+            <TextBlock FontSize="32" FontWeight="Bold" Text="{Binding vousetesconnecte}" HorizontalAlignment="Center"/>
             <DataGrid ItemsSource="{Binding Users}" 
                   IsReadOnly="True" 
                   Background="Transparent"
@@ -53,7 +57,7 @@
                     <DataGridTemplateColumn Width="2*" Header="Button">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate >
-                               <Button Content="Se connecter" Click="ConnectTo"></Button>
+                                <Button Content="{Binding Source={StaticResource ConnexionVM}, Path=seconnecter}" Click="ConnectTo"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -64,7 +68,7 @@
         
         <StackPanel x:Name="ConnectedToMessage" Orientation="Vertical">
             <TextBlock FontSize="32" FontWeight="Bold" HorizontalAlignment="Center" x:Name="ConnectedToTitre"/>
-            <Button Content="Se déconnecter" Click="DisconnectTo"></Button>
+            <Button Content="{Binding sedeconnecter}" Click="DisconnectTo"></Button>
         </StackPanel>
 
     </StackPanel>

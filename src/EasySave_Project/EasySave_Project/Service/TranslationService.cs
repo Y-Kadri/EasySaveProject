@@ -73,6 +73,24 @@ namespace EasySave_Project.Service
             SetLanguage(SettingUtil.GetSetting().language);
             EasySave_Library_Log.manager.LogFormatManager.Instance.SetLogFormat(SettingUtil.GetSetting().logFormat);
         }
+
+        public string Replace(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return text;
+
+            // Séparer le texte en mots en utilisant l'espace comme séparateur
+            string[] words = text.Split(' ');
+
+            // Remplacer chaque mot par sa traduction
+            for (int i = 0; i < words.Length; i++)
+            {
+                words[i] = GetText(words[i]);
+            }
+
+            // Reconstituer la phrase avec des espaces
+            return string.Join(" ", words);
+        }
         
     }
 }
