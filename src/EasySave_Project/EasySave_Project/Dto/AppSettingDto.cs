@@ -25,5 +25,9 @@ public class AppSettingDto
         EncryptedFileExtensions = new List<string>();
         PriorityBusinessProcess = new List<string>();
     }
-    
+    public class PriorityExtensionDto
+    {
+        public int Index { get; set; }
+        public string ExtensionFile { get; set; }
+    }
 }
