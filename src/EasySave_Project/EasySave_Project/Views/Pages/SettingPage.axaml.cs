@@ -107,6 +107,25 @@ namespace EasySave_Project.Views.Pages
             Reload();
         }
 
+        private void AddPriorityFileExtensions_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(PriorityInput.Text))
+            {
+                _settingPageViewModel.AddPriorityFileExtensions(PriorityInput.Text);
+                PriorityInput.Text = "";
+                Reload();
+            }
+        }
+
+        private void RemovePriorityFileExtensions_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            var priority = (PriorityExtensionDTO)button.DataContext; 
+            _settingPageViewModel.RemovePriorityFileExtensions(priority); 
+            Reload();
+        }
+
+
         private void AddPriorityBusinessProcess_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(SoftwareInput.Text))

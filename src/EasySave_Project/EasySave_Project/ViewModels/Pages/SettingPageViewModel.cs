@@ -100,6 +100,19 @@ namespace EasySave_Project.ViewModels.Pages
             }
         }
 
+        public void AddPriorityFileExtensions(string extensionfile)
+        {
+            if (SettingUtil.AddPriorityExtension(extensionfile))
+            {
+                this.RaisePropertyChanged(nameof(PriorityExtensionFiles));
+                Message = "Priorité ajouté avec succès.";
+            }
+            else
+            {
+                Message = "Erreur lors de l'ajout.";
+            }
+        }
+
         /// <summary>
         /// Updates the maximum large file size setting if the new value is different.
         /// </summary>
@@ -160,6 +173,22 @@ namespace EasySave_Project.ViewModels.Pages
                 Message = "Erreur lors de la suppression.";
             }
         }
+
+        public void RemovePriorityFileExtensions(PriorityExtensionDTO priority)
+        {
+            if (SettingUtil.RemovePriorityExtension(priority.ExtensionFile))
+            {
+                PriorityExtensionFiles.Remove(priority);
+                this.RaisePropertyChanged(nameof(PriorityExtensionFiles));
+                Message = "Priorité supprimé avec succès.";
+            }
+            else
+            {
+                Message = "Erreur lors de la suppression.";
+            }
+        }
+
+
 
         // Méthode pour changer la langue et appeler la notification
         public (string message, string status) ChangeLanguage(LanguageEnum lang)
