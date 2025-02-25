@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using EasySave_Project.Model;
+using EasySave_Project.Server;
 using EasySave_Project.Service;
 using EasySave_Project.ViewModels.Pages;
 using EasySave_Project.Views.Components;
@@ -40,11 +42,28 @@ namespace EasySave_Project.Views.Pages
                 Toastr.ShowNotification(_translationService.GetText("ErrorSelectOneJobMin"), NotificationContainer);
                 return;
             }
-
-            _viewModel.ExecuteJobsParallelThreadPool(selectedJobs, UpdateJobProgress, (msg, type) =>
+            
+            if (GlobalDataService.GetInstance().isConnecte && GlobalDataService.GetInstance().connecteTo.Item1 != null)
             {
-                Dispatcher.UIThread.Post(() => Toastr.ShowNotification(msg, NotificationContainer, type));
-            });
+                // 🔵 Construire la requête JSON
+                var requestData = new 
+                { 
+                    command = "RUN_JOB_USERS", 
+                    id = GlobalDataService.GetInstance().connecteTo.Item1,
+                    obj = selectedJobs
+                };
+                string jsonString = JsonSerializer.Serialize(requestData);
+                
+                Toastr.ShowServeurNotification("Envoie des jobs à run...", NotificationContainer);
+                Utils.SendToServer(jsonString);
+            }
+            else
+            {
+                _viewModel.ExecuteJobsParallelThreadPool(selectedJobs, UpdateJobProgress, (msg, type) =>
+                {
+                    Dispatcher.UIThread.Post(() => Toastr.ShowNotification(msg, NotificationContainer, type));
+                });
+            }
         }
         
         private void OnAddJobClick(object sender, RoutedEventArgs e)
@@ -71,6 +90,17 @@ namespace EasySave_Project.Views.Pages
             });
         }
 
-        public void Reload() => _viewModel.Refresh();
+        public void Reload()
+        {
+            if (GlobalDataService.GetInstance().isConnecte && GlobalDataService.GetInstance().connecteTo.Item1 != null)
+            {
+                buttonAdd.IsVisible = false;
+            }
+            else
+            {
+                buttonAdd.IsVisible = true;
+            }
+            _viewModel.Refresh(); 
+        }
     }
 }

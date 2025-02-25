@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
+
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
-using System.Threading;
 
 namespace Server
 {
@@ -16,8 +14,8 @@ namespace Server
 
         static void Main()
         {
-            int port = 8912;
-            // int port = 8080;
+            // int port = 8912;
+            int port = 8080;
             listener = new TcpListener(IPAddress.Any, port);
             listener.Start();
             Console.WriteLine($"✅ Serveur démarré sur le port {port}");
@@ -82,50 +80,75 @@ namespace Server
 
                     Console.WriteLine($"📩 Reçu du client {user.Id}: {message}");
 
-                    // Vérifier si c'est une requête pour obtenir la liste des utilisateurs
+                    // Vérifier si c'est une requête spéciale "GET_USERS"
                     if (message == "GET_USERS")
                     {
                         SendClientsList(user);
                         continue; // Passe à l'itération suivante
                     }
 
+                    // Tenter la désérialisation en Dictionary<string, string>
                     try
                     {
-                        // Désérialisation JSON en un objet dynamique
                         var requestData = JsonSerializer.Deserialize<Dictionary<string, string>>(message);
-
-                        // Vérification de la présence de la clé "command"
                         if (requestData != null && requestData.TryGetValue("command", out string command) && requestData.TryGetValue("id", out string id))
                         {
-                            if (command == "CONNECTE_USERS" && id != null)
+                            Console.WriteLine($"✅ Message traité comme Dictionary<string, string> : {command}");
+
+                            switch (command)
                             {
-                                ConnecteUser(user,id);
+                                case "CONNECTE_USERS":
+                                    ConnecteUser(user, id);
+                                    break;
+                                case "DISCONNECTE_USERS":
+                                    DisconnecteUser(user, id);
+                                    break;
+                                case "GET_JOB_USERS":
+                                    GetJobsUser(user, id);
+                                    break;
+                                default:
+                                    Console.WriteLine("❌ Commande invalide.");
+                                    break;
                             }
-                            
-                            if (command == "DISCONNECTE_USERS" && id != null)
-                            {
-                                DisconnecteUser(user, id);
-                            }
-                            
-                            if (command == "GET_JOB_USERS" && id != null)
-                            {
-                                GetJobsUser(user,id);
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine("❌ Erreur: Commande invalide.");
+
+                            continue; // Évite d'ajouter aux pendingResponses
                         }
                     }
-                    catch (JsonException ex)
+                    catch (JsonException)
                     {
-                        lock (pendingResponses)
-                        {
-                            pendingResponses[user.Id] = message;
-                        }
-                        Console.WriteLine($"❌ Erreur de parsing JSON: {ex.Message}");
-                        continue;
+                        // On ne fait rien ici, on passe à l'étape suivante
                     }
+                    
+                    // Tenter la désérialisation en JobCommandDTO
+                    try
+                    {
+                        var jobCommand = JsonSerializer.Deserialize<CommandDTO>(message);
+                        if (jobCommand != null)
+                        {
+                            Console.WriteLine($"✅ Message traité comme JobCommandDTO : {jobCommand.command}");
+
+                            // Implémenter la logique spécifique pour JobCommandDTO ici
+                            if (jobCommand.command == "RUN_JOB_USERS" && !string.IsNullOrEmpty(jobCommand.id))
+                            {
+                                Console.WriteLine($"📤 Exécution des jobs pour l'utilisateur {jobCommand.id}");
+                                ExecuteJobs(user, jobCommand);
+                            }
+                            
+                            continue; // Évite d'exécuter les autres tests
+                        }
+                    }
+                    catch (JsonException)
+                    {
+                        // On ne fait rien ici, on tente la prochaine désérialisation
+                    }
+
+                    // 3️⃣ Si aucun des deux formats ne correspond, stocker le message dans pendingResponses
+                    lock (pendingResponses)
+                    {
+                        pendingResponses[user.Id] = message;
+                    }
+
+                    Console.WriteLine($"⚠️ Message non reconnu, ajouté à pendingResponses.");
                 }
             }
             catch (Exception ex)
@@ -137,6 +160,42 @@ namespace Server
                 clients.Remove(user);
                 user.TcpClient.Close();
             }
+        }
+
+        private static async Task ExecuteJobs(User user, CommandDTO command)
+        {
+            User? userConnect = GetUserById(command.id);
+
+            if (userConnect != null)
+            {
+                // 📤 Demande les jobs au Client 2
+                sendMessage(userConnect, JsonSerializer.Serialize(command));
+                Console.WriteLine($"📤 Demande envoyée à {userConnect.Name} pour ses jobs.");
+                
+                try
+                {
+                    // ⏳ Attente de la réponse avec limite de temps
+                    string? response = await ServerUtils.WaitForResponse(userConnect, 5000); // Max 5s d'attente
+
+                    if (!string.IsNullOrEmpty(response))
+                    {
+                        Console.WriteLine($"📩 Réponse reçue de {userConnect.Name} : {response}");
+                        sendMessage(user, response); // 📤 Envoi des jobs au Client 1
+                    }
+                    else
+                    {
+                        Console.WriteLine("❌ Aucun job reçu après plusieurs tentatives.");
+                        sendMessage(user, "Execute job à échoué");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"❌ Erreur lors de la réception des jobs : {ex.Message}");
+                    sendMessage(user, "Execute job à échoué");
+                }
+                return;
+            }
+            sendMessage(user, "Execute job à échoué");
         }
 
         private static async Task GetJobsUser(User user, string id)
@@ -215,7 +274,7 @@ namespace Server
             NetworkStream stream = user.TcpClient.GetStream();
     
             stream.Write(data, 0, data.Length);
-            stream.Flush(); // 🔥 Assurer l'envoi immédiat
+            stream.Flush();
 
             ServerUtils.WriteLog(user, message);
         }
