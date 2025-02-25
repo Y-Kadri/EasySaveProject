@@ -667,5 +667,49 @@ namespace EasySave_Project.Util
 
             return Uri.UnescapeDataString(relativeUri.ToString().Replace('/', Path.DirectorySeparatorChar));
         }
+
+        /// <summary>
+        /// Retrieves a specified integer value from the AppSettingDto object.
+        /// If the key is not present or invalid, it returns a default value.
+        /// </summary>
+        /// <param name="key">The property name of the integer value (e.g., "MaxLargeFileSize").</param>
+        /// <returns>The integer value stored in the specified property, or 0 if not found.</returns>
+        public static int GetAppSettingsInt(string key)
+        {
+            // Define the file path for the settings JSON file
+            string settingFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                "easySave", "easySaveSetting", "appSetting.json");
+
+            int retrievedValue = 0; // Valeur par défaut
+
+            try
+            {
+                // Check if the JSON file exists
+                if (File.Exists(settingFilePath))
+                {
+                    // Read the content of the JSON file
+                    string jsonString = File.ReadAllText(settingFilePath);
+                    AppSettingDto data = JsonSerializer.Deserialize<AppSettingDto>(jsonString);
+
+                    // Vérifier si la clé existe
+                    EnsureKeyExists(data, settingFilePath, key);
+
+                    // Retrieve the integer value dynamically
+                    var property = typeof(AppSettingDto).GetProperty(key);
+                    if (property != null && property.GetValue(data) is int value)
+                    {
+                        retrievedValue = value;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Print error message if an exception occurs
+                ConsoleUtil.PrintTextconsole(TranslationService.GetInstance().GetText("errorReadingFormat") + ex.Message);
+            }
+
+            return retrievedValue;
+        }
+
     }
 }
