@@ -11,11 +11,11 @@ namespace EasySave_Project.Server
 {
     public class Connexion
     {
-        private static string serverIp = "127.0.0.1"; 
-        private static int port = 8080;
+        // private static string serverIp = "127.0.0.1"; 
+        // private static int port = 8080;
         
-        // private static string serverIp = "82.112.255.157"; 
-        // private static int port = 8912;
+        private static string serverIp = "82.112.255.157"; 
+        private static int port = 8912;
         
         private static int timeoutMs = 3000; // ⏳ Timeout de 3s
 
