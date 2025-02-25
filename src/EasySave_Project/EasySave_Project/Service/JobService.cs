@@ -79,7 +79,8 @@ namespace EasySave_Project.Service
             StateManager.Instance.UpdateState(CreateBackupJobState(job, 0, job.FileSource, string.Empty));
 
             // Notify the UI that the progress starts at 0%
-            progressCallback(job, 0);
+            if (progressCallback != null)
+                progressCallback(job, 0);
 
             // Select the backup strategy based on the job type
             IJobStrategyService strategy = job.SaveType switch
@@ -93,7 +94,8 @@ namespace EasySave_Project.Service
             strategy.OnProgressChanged += (progress) =>
             {
                 // Update the progress in real-time
-                progressCallback(job, progress);
+                if (progressCallback != null)
+                    progressCallback(job, progress);
                 StateManager.Instance.UpdateState(CreateBackupJobState(job, progress, string.Empty, string.Empty));
             };
 
@@ -102,7 +104,8 @@ namespace EasySave_Project.Service
 
             // Update the job status after execution
             job.SaveState = JobSaveStateEnum.END;
-            progressCallback(job, 100); // Indicate the job is finished at 100%
+            if (progressCallback != null)
+                progressCallback(job, 100); // Indicate the job is finished at 100%
             StateManager.Instance.UpdateState(CreateBackupJobState(job, 100, string.Empty, string.Empty));
 
             // Generate a message indicating the job is complete

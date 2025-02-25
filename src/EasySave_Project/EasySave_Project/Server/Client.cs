@@ -26,8 +26,6 @@ namespace EasySave_Project.Server
                 }
                 stream = client.GetStream();
                 this.name = name;
-                Toastr.ShowServeurNotification("✅ Connecté au serveur !",BaseLayoutViewModel.Instance.NotificationContainer);
-
                 Utils.SendToServer(name, stream);
 
                 Thread receiveThread = new Thread(() => Utils.StartListening(stream))
@@ -39,7 +37,6 @@ namespace EasySave_Project.Server
             catch (Exception ex)
             {
                 Toastr.ShowServeurNotification($"⚠️ Impossible de se connecter au serveur : {ex.Message}",BaseLayoutViewModel.Instance.NotificationContainer);
-                // Tu peux éventuellement relancer une exception ou gérer différemment ici
             }
         }
 

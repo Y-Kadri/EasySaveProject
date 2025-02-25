@@ -1,18 +1,27 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using EasySave_Project.Manager;
+using EasySave_Project.Model;
 using EasySave_Project.Service;
 using EasySave_Project.ViewModels.Layout;
+using EasySave_Project.Views.Components;
+using Server;
 
 namespace EasySave_Project.Server
 {
     public class Utils
     {
+        public static JobService _jobService = new JobService();
+        public static TranslationService _translationService = TranslationService.GetInstance();
+
         public static event Action<ObservableCollection<User>>? OnUsersReceived;
 
         // 📌 Queue pour stocker tous les messages reçus
@@ -54,6 +63,28 @@ namespace EasySave_Project.Server
                         continue;
                     }
 
+                    try
+                    {
+                        var jobCommand = JsonSerializer.Deserialize<CommandDTO<JobModel>>(message);
+                        if (jobCommand != null)
+                        {
+                            Console.WriteLine($"✅ Message traité comme JobCommandDTO : {jobCommand.command}");
+
+                            // Implémenter la logique spécifique pour JobCommandDTO ici
+                            if (jobCommand.command == "RUN_JOB_USERS" && !string.IsNullOrEmpty(jobCommand.id))
+                            {
+                                BaseLayoutViewModel.Instance.AddNotification("Un utilisateur à lancé des jobs");
+                                ExecuteJobs(jobCommand.obj);
+                            }
+                            
+                            continue; // Évite d'exécuter les autres tests
+                        }
+                    }
+                    catch (JsonException)
+                    {
+                        // On ne fait rien ici, on tente la prochaine désérialisation
+                    }
+
                     // ✅ Stocker dans la file d'attente
                     messageQueue.Enqueue(message);
                 }
@@ -61,6 +92,22 @@ namespace EasySave_Project.Server
             catch (Exception e)
             {
                 Console.WriteLine($"⚠️ Erreur de connexion : {e.Message}");
+            }
+        }
+
+        private static void ExecuteJobs(List<JobModel> jobCommand)
+        {
+            SendToServer("Job lancé");
+            foreach (JobModel job in jobCommand)
+            {
+                ThreadPool.QueueUserWorkItem(_ =>
+                {
+                    var (success, message) = _jobService.ExecuteOneJobThreaded((JobModel) job, null);
+                    if (!success)
+                    {
+                        SendToServer(message);
+                    }
+                });
             }
         }
 
