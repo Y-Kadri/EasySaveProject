@@ -46,7 +46,10 @@ namespace EasySave_Project.Service
             }
             else
             {
-                ExecuteDifferentialSave(job, job.FileSource, backupDir, job.LastFullBackupPath); // Perform a differential backup
+                int processedFiles = 0;
+                long processedSize = 0;
+
+                ExecuteDifferentialSave(job, job.FileSource, backupDir, job.LastFullBackupPath, ref processedFiles, ref processedSize); // Perform a differential backup
             }
 
             job.LastSaveDifferentialPath = backupDir;
@@ -61,35 +64,23 @@ namespace EasySave_Project.Service
         /// <param name="lastFullBackupDir">The directory of the last full backup.</param>
         /// <param name="processedFiles">Reference to the number of processed files.</param>
         /// <param name="processedSize">Reference to the total size of processed files.</param>
-        private void ExecuteDifferentialSave(JobModel job, string fileSource, string targetDir, string lastFullBackupDir)
+        private void ExecuteDifferentialSave(JobModel job, string fileSource, string targetDir, string lastFullBackupDir, ref int processedFiles, ref long processedSize)
         {
             // Log the start of the backup process
             string message = TranslationService.GetInstance().GetText("startingBackup") + job.Name;
             LogManager.Instance.AddMessage(message);
             ConsoleUtil.PrintTextconsole(message);
 
-            List<string> filesToCopy;
-            int processedFiles = 0;
-            long processedSize = 0;
-            int totalFiles = 0;
-            long totalSize = 0;
+            // Retrieve the list of files to copy along with their count and size
+            (int filesToCopyCount, long filesToCopySize, List<string> filesToCopy) = CalculateFilesToCopy(fileSource, lastFullBackupDir);
 
-            if (job.SaveState.Equals(JobSaveStateEnum.PENDING))
-            {
-                filesToCopy = job.FileInPending.FilesInPending;
-                job.SaveState = JobSaveStateEnum.ACTIVE;
-                processedFiles = job.FileInPending.ProcessedFiles;
-                processedSize = job.FileInPending.ProcessedSize;
-                totalFiles = job.FileInPending.TotalFiles;
-                totalSize = job.FileInPending.TotalSize;
-            } else
-            {
-                // Retrieve the list of files to copy along with their count and size
-                (totalFiles, totalSize, filesToCopy) = CalculateFilesToCopy(fileSource, lastFullBackupDir);
-            }
-
-            // Copy modified files using the precomputed list
-            CopyModifiedFiles(job, filesToCopy, targetDir, ref processedFiles, ref processedSize, totalFiles, totalSize);
+            var files = new Queue<string>(filesToCopy);
+            // Queue for large files that will be processed later
+            var fallbackQueue = new Queue<string>();
+            // Process the queued files
+            ProcessFilesInQueue(files, fallbackQueue, targetDir, job, ref processedFiles, ref processedSize, filesToCopy, filesToCopyCount, filesToCopySize);
+            // Process large files after regular ones
+            ProcessFallbackQueue(fallbackQueue, targetDir, job, ref processedFiles, ref processedSize, filesToCopy, filesToCopyCount, filesToCopySize);
 
             // Log the completion of the backup
             message = TranslationService.GetInstance().GetText("backupCompleted") + job.Name;
@@ -138,65 +129,6 @@ namespace EasySave_Project.Service
             }
 
             return (itemsToCopyCount, itemsToCopySize, filesToCopy);
-        }
-
-
-        /// <summary>
-        /// Copies the modified files from the precomputed list to the target directory,
-        /// updating the processed files and size counters.
-        /// </summary>
-        /// <param name="job">The JobModel representing the backup job.</param>
-        /// <param name="filesToCopy">The list of files that need to be copied.</param>
-        /// <param name="targetDir">The target directory where the backup will be stored.</param>
-        /// <param name="processedFiles">Reference to the number of processed files.</param>
-        /// <param name="processedSize">Reference to the total size of processed files.</param>
-        /// <param name="totalFiles">Total number of files to be processed.</param>
-        /// <param name="totalSize">Total size of the files to be backed up.</param>
-        private void CopyModifiedFiles(JobModel job, List<string> filesToCopy, string targetDir, ref int processedFiles, ref long processedSize, int totalFiles, long totalSize)
-        {
-            List<string> pathToDelete = new List<string>();
-
-            if (filesToCopy.Count <= 0)
-            {
-                string message = TranslationService.GetInstance().GetText("notFileDifference") + " " + job.Name;
-                LogManager.Instance.AddMessage(message);
-                LogManager.Instance.UpdateState(job.Name, job.FileSource, job.FileTarget, 0, 0, 0);
-            }
-            else
-            {
-                foreach (string sourceFileWithAbsolutePath in filesToCopy)
-                {
-                    string relativePath = FileUtil.GetRelativePath(job.FileSource, sourceFileWithAbsolutePath);
-                    string targetFile = FileUtil.CombinePath(targetDir, relativePath);
-
-                    // Ensure the target directory exists
-                    string targetFileDirectory = Path.GetDirectoryName(targetFile);
-                    FileUtil.CreateDirectory(targetFileDirectory);
-
-                    double progressPourcentage = (double)processedFiles / totalFiles * 100;
-
-                    changeJobStateIfBusinessProcessLaunching(job);
-
-                    if (!job.SaveState.Equals(JobSaveStateEnum.PENDING))
-                    {
-                        // Perform the file copy operation
-                        long fileSize = HandleFileOperation(sourceFileWithAbsolutePath, targetFile, job, progressPourcentage);
-
-                        processedFiles++;
-                        processedSize += fileSize;
-
-                        // Update the backup state
-                        UpdateBackupState(job, processedFiles, processedSize, totalFiles, totalSize, sourceFileWithAbsolutePath, targetFile, progressPourcentage, job.FileInPending.LastDateTimePath);
-
-                        pathToDelete.Add(sourceFileWithAbsolutePath);
-                    } else
-                    {
-                        break;
-                    }
-                }
-                filesToCopy.RemoveAll(path => pathToDelete.Contains(path));
-                SaveFileInPending(job, filesToCopy, processedFiles, processedSize, totalFiles, totalSize, job.FileInPending.LastDateTimePath);
-            }
         }
     }
 }
