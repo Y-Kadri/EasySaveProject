@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using EasySave_Library_Log.manager;
@@ -212,14 +213,8 @@ namespace EasySave_Project.ViewModels.Pages
         /// </returns>
         public (string message, string status) ChangeMaxLargeFileSize(int value)
         {
-            // Check if the new value is different from the current one and update it in the settings
-            if (MaxLargeFileSize != value && SettingUtil.SettingChangeMaxLargeFileSize(value))
+            if (SettingUtil.SettingChangeMaxLargeFileSize(value))
             {
-                // Update the MaxLargeFileSize variable
-                MaxLargeFileSize = value;
-                // Notify the UI that the property has changed
-                this.RaisePropertyChanged(nameof(MaxLargeFileSize));
-                // Set the success message and status
                 _message = _translationService.GetText("AddMaxLargeFileSizeToSettings");
                 _status = "Success";
             }
