@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using EasySave_Project.Util;
 using System.Collections.Generic;
 using EasySave_Project.Service;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using EasySave_Project.Dto;
 
@@ -60,6 +61,9 @@ namespace EasySave_Project.Model
         public DateTime Time { get; set; } = DateTime.Now;
 
         public FileInPendingJobDTO FileInPending { get; set; }
+
+        // Liste des extensions de fichiers prioritaires
+        public ObservableCollection<string> PriorityFileExtensions { get; set; } = new ObservableCollection<string>();
 
         /// <summary>
         /// Mandatory constructor for .NET JSON Deserialization use
@@ -122,6 +126,37 @@ namespace EasySave_Project.Model
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        // Ajout d'une extension prioritaire
+        public void AddPriorityFileExtension(string extension)
+        {
+            if (!PriorityFileExtensions.Contains(extension))
+            {
+                PriorityFileExtensions.Add(extension);
+            }
+        }
+
+        // Suppression d'une extension prioritaire
+        public void RemovePriorityFileExtension(string extension)
+        {
+            if (PriorityFileExtensions.Contains(extension))
+            {
+                PriorityFileExtensions.Remove(extension);
+            }
+        }
+
+        // Vérifie si le job contient des extensions prioritaires non traitées
+        public bool HasPendingPriorityFiles()
+        {
+            // Vérifier si le job contient des extensions prioritaires qui n'ont pas été traitées
+            foreach (var extension in PriorityFileExtensions)
+            {
+                if (SettingUtil.IsExtensionPriority(extension)) // Vous aurez une méthode pour vérifier si l'extension est prioritaire
+                {
+                    return true; // Il y a des fichiers prioritaires en attente
+                }
+            }
+            return false; // Aucune extension prioritaire en attente
+        }
         public bool CanExecute => SaveState == JobSaveStateEnum.ACTIVE;
 
 

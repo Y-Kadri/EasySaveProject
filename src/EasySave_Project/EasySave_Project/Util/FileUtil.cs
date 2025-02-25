@@ -668,6 +668,100 @@ namespace EasySave_Project.Util
             return Uri.UnescapeDataString(relativeUri.ToString().Replace('/', Path.DirectorySeparatorChar));
         }
 
+        public static void AddValueToJobSettingsList(string key, string value)
+        {
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easysave", "easySaveSetting", "settings.json");
+
+            try
+            {
+                // Lire le fichier JSON existant
+                if (File.Exists(filePath))
+                {
+                    string jsonString = File.ReadAllText(filePath);
+                    var settings = JsonSerializer.Deserialize<Dictionary<string, List<string>>>(jsonString);
+
+                    if (settings == null)
+                    {
+                        settings = new Dictionary<string, List<string>>();
+                    }
+
+                    // Vérifier si la clé existe déjà, sinon l'ajouter
+                    if (!settings.ContainsKey(key))
+                    {
+                        settings[key] = new List<string>();
+                    }
+
+                    // Ajouter la valeur si elle n'est pas déjà présente
+                    if (!settings[key].Contains(value))
+                    {
+                        settings[key].Add(value);
+                    }
+
+                    // Réécrire le fichier JSON avec la nouvelle valeur ajoutée
+                    string updatedJsonString = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
+                    File.WriteAllText(filePath, updatedJsonString);
+                }
+                else
+                {
+                    // Créer un fichier avec une nouvelle clé si le fichier n'existe pas
+                    var settings = new Dictionary<string, List<string>>()
+            {
+                { key, new List<string> { value } }
+            };
+
+                    string updatedJsonString = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
+                    File.WriteAllText(filePath, updatedJsonString);
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleUtil.PrintTextconsole($"Erreur lors de l'ajout de la valeur dans le fichier JSON : {ex.Message}");
+            }
+        }
+        public static void RemoveValueFromJobSettingsList(string key, string value)
+        {
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easysave", "easySaveSetting", "settings.json");
+
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    // Lire le fichier JSON existant
+                    string jsonString = File.ReadAllText(filePath);
+                    var settings = JsonSerializer.Deserialize<Dictionary<string, List<string>>>(jsonString);
+
+                    if (settings == null || !settings.ContainsKey(key))
+                    {
+                        ConsoleUtil.PrintTextconsole($"Clé '{key}' non trouvée dans le fichier JSON.");
+                        return;
+                    }
+
+                    // Supprimer la valeur si elle existe
+                    if (settings[key].Contains(value))
+                    {
+                        settings[key].Remove(value);
+
+                        // Réécrire le fichier JSON avec la valeur supprimée
+                        string updatedJsonString = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
+                        File.WriteAllText(filePath, updatedJsonString);
+                    }
+                    else
+                    {
+                        ConsoleUtil.PrintTextconsole($"La valeur '{value}' n'existe pas pour la clé '{key}' dans le fichier JSON.");
+                    }
+                }
+                else
+                {
+                    ConsoleUtil.PrintTextconsole($"Le fichier {filePath} n'existe pas.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleUtil.PrintTextconsole($"Erreur lors de la suppression de la valeur du fichier JSON : {ex.Message}");
+            }
+        }
+
+
         /// <summary>
         /// Retrieves a specified integer value from the AppSettingDto object.
         /// If the key is not present or invalid, it returns a default value.
