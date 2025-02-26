@@ -1,10 +1,15 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Avalonia.Controls;
 using EasySave_Library_Log.manager;
 using EasySave_Project.Dto;
 using EasySave_Project.Model;
 using EasySave_Project.Service;
 using EasySave_Project.Util;
+using EasySave_Project.Views.Components;
+using EasySave_Project.Views.Layout;
+using Microsoft.VisualBasic.CompilerServices;
 using ReactiveUI;
 
 namespace EasySave_Project.ViewModels.Pages
@@ -12,13 +17,19 @@ namespace EasySave_Project.ViewModels.Pages
     public class SettingPageViewModel : ReactiveObject
     {
         private readonly TranslationService _translationService;
-
+        
         public ObservableCollection<string> EncryptedFileExtensions { get; }
         public ObservableCollection<string> PriorityBusinessProcess { get; }
-        public ObservableCollection<PriorityExtensionDTO> PriorityExtensionFiles { get; }
+        
+        private ObservableCollection<PriorityExtensionDTO> _priorityExtensionFiles;
+        
+        private string _message, _status, _selectLanguage, _french, _english,
+            _chooseLogsFormat, _Json, _Xml, _add, _fileExtensionsToEncrypt, 
+            _monitoredBusinessSoftware, _maxLargeFileSizeText;
+        
+        private int _maxLargeFileSize;
 
-        private string _message;
-        private string _status;
+        private StackPanel NotificationContainer;
 
         public string Message
         {
@@ -31,29 +42,101 @@ namespace EasySave_Project.ViewModels.Pages
             get => _status;
             set => this.RaiseAndSetIfChanged(ref _status, value);
         }
-
-        public string SelectLanguage { get; private set; }
-        public string French { get; private set; }
-        public string English { get; private set; }
-        public string ChooseLogsFormat { get; private set; }
-        public string Json { get; private set; }
-        public string Xml { get; private set; }
-        public string Add { get; private set; }
-        public string FileExtensionsToEncrypt { get; private set; }
-        public string MonitoredBusinessSoftware { get; private set; }
-        private int _maxLargeFileSize;
+        
+        public string SelectLanguage
+        {
+            get => _selectLanguage;
+            set => this.RaiseAndSetIfChanged(ref _selectLanguage, value);
+        }
+        
+        public string French
+        {
+            get => _french;
+            set => this.RaiseAndSetIfChanged(ref _french, value);
+        }
+        
+        public string English
+        {
+            get => _english;
+            set => this.RaiseAndSetIfChanged(ref _english, value);
+        }
+        
+        public string ChooseLogsFormat
+        {
+            get => _chooseLogsFormat;
+            set => this.RaiseAndSetIfChanged(ref _chooseLogsFormat, value);
+        }
+        
+        public string Json
+        {
+            get => _Json;
+            set => this.RaiseAndSetIfChanged(ref _Json, value);
+        }
+        
+        public string Xml
+        {
+            get => _Xml;
+            set => this.RaiseAndSetIfChanged(ref _Xml, value);
+        }
+        
+        public string Add
+        {
+            get => _add;
+            set => this.RaiseAndSetIfChanged(ref _add, value);
+        }
+        
+        public string FileExtensionsToEncrypt
+        {
+            get => _fileExtensionsToEncrypt;
+            set => this.RaiseAndSetIfChanged(ref _fileExtensionsToEncrypt, value);
+        }
+        
+        public string MonitoredBusinessSoftware
+        {
+            get => _monitoredBusinessSoftware;
+            set => this.RaiseAndSetIfChanged(ref _monitoredBusinessSoftware, value);
+        }
+        
+        public string MaxLargeFileSizeText
+        {
+            get => _maxLargeFileSizeText;
+            set => this.RaiseAndSetIfChanged(ref _maxLargeFileSizeText, value);
+        }
+        
         public int MaxLargeFileSize
         {
             get => _maxLargeFileSize;
             set => this.RaiseAndSetIfChanged(ref _maxLargeFileSize, value);
         }
-        public string MaxLargeFileSizeText { get; private set; }
+        
+        public ObservableCollection<PriorityExtensionDTO> PriorityExtensionFiles
+        {
+            get => _priorityExtensionFiles;
+            set => this.RaiseAndSetIfChanged(ref _priorityExtensionFiles, value);
+        }
 
-        // Constructeur qui prend un callback pour notifier la vue
-        public SettingPageViewModel()
+        
+        public SettingPageViewModel(StackPanel notificationContainer)
         {
             _translationService = TranslationService.GetInstance();
+            EncryptedFileExtensions = new ObservableCollection<string>(SettingUtil.GetList("EncryptedFileExtensions"));
+            PriorityBusinessProcess = new ObservableCollection<string>(SettingUtil.GetList("PriorityBusinessProcess"));
+            
+            PriorityExtensionFiles = new ObservableCollection<PriorityExtensionDTO>(
+                SettingUtil.GetPriorityExtensionFilesList("PriorityExtensionFiles")
+                    .OrderBy(p => p.Index));
+            MaxLargeFileSize = FileUtil.GetAppSettingsInt("MaxLargeFileSize");
 
+            NotificationContainer = notificationContainer;
+        }
+        
+        
+
+        /// <summary>
+        /// Refreshes the translations for various UI elements related to settings.
+        /// </summary>
+        public void Refresh()
+        {
             SelectLanguage = _translationService.GetText("SelectLanguage");
             French = _translationService.GetText("French");
             English = _translationService.GetText("English");
@@ -64,53 +147,84 @@ namespace EasySave_Project.ViewModels.Pages
             FileExtensionsToEncrypt = _translationService.GetText("FileExtensionsToEncrypt");
             MonitoredBusinessSoftware = _translationService.GetText("MonitoredBusinessSoftware");
             MaxLargeFileSizeText = _translationService.GetText("MaxLargeFileSize");
-
-            EncryptedFileExtensions = new ObservableCollection<string>(SettingUtil.GetList("EncryptedFileExtensions"));
-            PriorityBusinessProcess = new ObservableCollection<string>(SettingUtil.GetList("PriorityBusinessProcess"));
-            PriorityExtensionFiles = new ObservableCollection<PriorityExtensionDTO>(SettingUtil.GetPriorityExtensionFilesList("PriorityExtensionFiles"));
-            SortPriorityExtensions();
-            MaxLargeFileSize = FileUtil.GetAppSettingsInt("MaxLargeFileSize");
         }
-
+        
+        /// <summary>
+        /// Adds a new file extension to the encrypted file extensions list.
+        /// </summary>
+        /// <param name="extension">The file extension to be added.</param>
         public void AddEncryptedFileExtensions(string extension)
         {
             if (SettingUtil.AddToList("EncryptedFileExtensions", extension))
             {
                 EncryptedFileExtensions.Add(extension);
                 this.RaisePropertyChanged(nameof(EncryptedFileExtensions));
-                Message = "Extension ajoutée avec succès.";
+                Message = $"{_translationService.GetText("Extensionajoutéesuccès")}.";
+                Toastr.ShowNotification(Message, NotificationContainer, "Success");
             }
             else
             {
-                Message = "Erreur lors de l'ajout.";
+                Message = $"{_translationService.GetText("Erreurajout")}.";
+                Toastr.ShowNotification(Message, NotificationContainer);
             }
         }
-
+        
+        public void RemovePriorityFileExtensions(PriorityExtensionDTO priority)
+        {
+            if (SettingUtil.RemovePriorityExtension(priority.ExtensionFile))
+            {
+                PriorityExtensionFiles.Remove(priority);
+                this.RaisePropertyChanged(nameof(PriorityExtensionFiles));
+                Message = $"{_translationService.GetText("Prioritésupprimésuccès")}.";
+                Toastr.ShowNotification(Message, NotificationContainer, "Success");
+            }
+            else
+            {
+                Message = $"{_translationService.GetText("Erreursuppression")}.";
+                Toastr.ShowNotification(Message, NotificationContainer);
+            }
+        }
+        
+        /// <summary>
+        /// Adds a software process to the priority business process list.
+        /// </summary>
+        /// <param name="software">The name of the software process.</param>
         public void AddPriorityBusinessProcess(string software)
         {
             if (SettingUtil.AddToList("PriorityBusinessProcess", software))
             {
                 PriorityBusinessProcess.Add(software);
                 this.RaisePropertyChanged(nameof(PriorityBusinessProcess));
-                Message = "Logiciel ajouté avec succès.";
+                Message = $"{_translationService.GetText("Logicielajoutésuccès")}.";
+                Toastr.ShowNotification(Message, NotificationContainer, "Success");
             }
             else
             {
-                Message = "Erreur lors de l'ajout.";
+                Message = $"{_translationService.GetText("Erreurajout")}.";
+                Toastr.ShowNotification(Message, NotificationContainer);
             }
         }
 
+        /// <summary>
+        /// Removes a software process from the priority business process list.
+        /// </summary>
+        /// <param name="software">The name of the software process to be removed.</param>
         public void AddPriorityFileExtensions(string extensionfile)
         {
-            if (SettingUtil.AddPriorityExtension(extensionfile))
+            (bool reponse, PriorityExtensionDTO pdo) = SettingUtil.AddPriorityExtension(extensionfile);
+            if (reponse)
             {
+                PriorityExtensionFiles.Add(pdo);
                 this.RaisePropertyChanged(nameof(PriorityExtensionFiles));
-                Message = "Priorité ajouté avec succès.";
+                Message = $"{_translationService.GetText("Prioritéajoutésuccès")}.";
+                Toastr.ShowNotification(Message, NotificationContainer, "Success");
             }
             else
             {
-                Message = "Erreur lors de l'ajout.";
+                Message = $"{_translationService.GetText("Erreurajout")}.";
+                Toastr.ShowNotification(Message, NotificationContainer);
             }
+            
         }
 
         /// <summary>
@@ -124,14 +238,8 @@ namespace EasySave_Project.ViewModels.Pages
         /// </returns>
         public (string message, string status) ChangeMaxLargeFileSize(int value)
         {
-            // Check if the new value is different from the current one and update it in the settings
-            if (MaxLargeFileSize != value && SettingUtil.SettingChangeMaxLargeFileSize(value))
+            if (SettingUtil.SettingChangeMaxLargeFileSize(value))
             {
-                // Update the MaxLargeFileSize variable
-                MaxLargeFileSize = value;
-                // Notify the UI that the property has changed
-                this.RaisePropertyChanged(nameof(MaxLargeFileSize));
-                // Set the success message and status
                 _message = _translationService.GetText("AddMaxLargeFileSizeToSettings");
                 _status = "Success";
             }
@@ -160,6 +268,10 @@ namespace EasySave_Project.ViewModels.Pages
             }
         }
 
+        /// <summary>
+        /// Removes a file extension from the encrypted file extensions list.
+        /// </summary>
+        /// <param name="extension">The file extension to be removed.</param>
         public void RemoveEncryptedFileExtensions(string extension)
         {
             if (SettingUtil.RemoveFromList("EncryptedFileExtensions", extension))
@@ -173,25 +285,13 @@ namespace EasySave_Project.ViewModels.Pages
                 Message = "Erreur lors de la suppression.";
             }
         }
-
-        public void RemovePriorityFileExtensions(PriorityExtensionDTO priority)
-        {
-            if (SettingUtil.RemovePriorityExtension(priority.ExtensionFile))
-            {
-                PriorityExtensionFiles.Remove(priority);
-                this.RaisePropertyChanged(nameof(PriorityExtensionFiles));
-                Message = "Priorité supprimé avec succès.";
-            }
-            else
-            {
-                Message = "Erreur lors de la suppression.";
-            }
-        }
-
-
-
-        // Méthode pour changer la langue et appeler la notification
-        public (string message, string status) ChangeLanguage(LanguageEnum lang)
+        
+        /// <summary>
+        /// Changes the application's language setting.
+        /// </summary>
+        /// <param name="lang">The new language to be set.</param>
+        /// <returns>A tuple containing a message and status indicating success or failure.</returns>
+        public  (string message, string status) ChangeLanguage(LanguageEnum lang)
         {
             if (SettingUtil.SettingChangeLanguage(lang))
             {
@@ -205,10 +305,14 @@ namespace EasySave_Project.ViewModels.Pages
                 _status = "Error";
             }
 
-            // Appeler le callback pour afficher la notification dans la vue
             return (_message, _status);
         }
 
+        /// <summary>
+        /// Changes the log format used for storing logs.
+        /// </summary>
+        /// <param name="logsFormat">The new log format.</param>
+        /// <returns>A tuple containing a message and status indicating success or failure.</returns>
         public (string message, string status) ChangeLogsFormat(LogFormatManager.LogFormat logsFormat)
         {
             if (SettingUtil.SettingChangeFormat(logsFormat))
@@ -232,18 +336,15 @@ namespace EasySave_Project.ViewModels.Pages
         /// <param name="index">The index of the item to move.</param>
         public void MoveExtensionUp(int index)
         {
-            if (index > 0) // Check if the item is not the first one in the list
+            if (index > 0)
             {
                 SettingUtil.MovePriorityExtensionFileUp(index);
-
-                // Sort the list after moving the item
-                SortPriorityExtensions();  // Call the method to sort the list
-
+                SortPriorityExtensions(index, true);
                 Message = "Extension moved up.";
             }
             else
             {
-                Message = "Cannot move up further."; // Error message if it is already at the top
+                Message = "Cannot move up further.";
             }
         }
 
@@ -259,7 +360,7 @@ namespace EasySave_Project.ViewModels.Pages
                 SettingUtil.MovePriorityExtensionFileDown(index);
 
                 // Sort the list after moving the item
-                SortPriorityExtensions();  // Call the method to sort the list
+                SortPriorityExtensions(index, false);  // Call the method to sort the list
 
                 Message = "Extension moved down.";
             }
@@ -274,23 +375,25 @@ namespace EasySave_Project.ViewModels.Pages
         /// This method orders the extensions in the PriorityExtensionFiles collection 
         /// based on the 'Index' property, and updates the collection to reflect the sorted order.
         /// </summary>
-        private void SortPriorityExtensions()
+        private void SortPriorityExtensions(int index, bool up)
         {
-            // Sort the list of extensions by the 'Index' property
-            // This assumes that PriorityExtensionDTO has an 'Index' property that is used to determine priority
-            var sortedList = PriorityExtensionFiles.OrderBy(p => p.Index).ToList();
+            if (index < 0 || index >= PriorityExtensionFiles.Count)
+                return; // Vérification pour éviter les erreurs
 
-            // Clear the existing list in the ObservableCollection
-            PriorityExtensionFiles.Clear();
+            int newIndex = up ? index - 1 : index + 1;
 
-            // Add the sorted extensions back to the ObservableCollection
-            foreach (var extension in sortedList)
-            {
-                PriorityExtensionFiles.Add(extension);
-            }
+            if (newIndex < 0 || newIndex >= PriorityExtensionFiles.Count)
+                return; // Vérification pour éviter les dépassements
 
-            // Notify the view that the ObservableCollection has been updated and the list has changed
-            // This triggers a re-render of the UI elements bound to PriorityExtensionFiles
+            // Échanger les éléments
+            var temp = PriorityExtensionFiles[index];
+            PriorityExtensionFiles[index] = PriorityExtensionFiles[newIndex];
+            PriorityExtensionFiles[newIndex] = temp;
+
+            // Mettre à jour les indices
+            PriorityExtensionFiles[index].Index = index;
+            PriorityExtensionFiles[newIndex].Index = newIndex;
+
             this.RaisePropertyChanged(nameof(PriorityExtensionFiles));
         }
     }

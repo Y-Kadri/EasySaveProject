@@ -23,10 +23,6 @@ public class AppSettingDto
         this.logFormat = logFormat;
         EncryptedFileExtensions = new List<string>();
         PriorityBusinessProcess = new List<string>();
-    }
-    public class PriorityExtensionDto
-    {
-        public int Index { get; set; }
-        public string ExtensionFile { get; set; }
+        PriorityExtensionFiles = new List<PriorityExtensionDTO>();
     }
 }

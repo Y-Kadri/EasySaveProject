@@ -76,7 +76,8 @@ namespace EasySave_Project.Service
 
             StateManager.Instance.UpdateState(CreateBackupJobState(job, job.FileInPending.Progress, job.FileSource, string.Empty));
 
-            progressCallback(job, job.FileInPending.Progress);
+            if (progressCallback != null)
+                progressCallback(job, job.FileInPending.Progress);
 
             // Select the backup strategy based on the job type
             IJobStrategyService strategy = job.SaveType switch
@@ -90,7 +91,8 @@ namespace EasySave_Project.Service
             strategy.OnProgressChanged += (progress) =>
             {
                 // Update the progress in real-time
-                progressCallback(job, job.FileInPending.Progress);
+                if (progressCallback != null)
+                    progressCallback(job, job.FileInPending.Progress);
             };
 
             // Execute the backup with the selected strategy
@@ -146,6 +148,7 @@ namespace EasySave_Project.Service
             job.FileInPending.LastDateTimePath = null;
             UpdateJobInFile(job);
         }
+
 
         private BackupJobState CreateBackupJobState(JobModel job, double progress, string currentSourceFilePath, string currentDestinationFilePath)
         {
