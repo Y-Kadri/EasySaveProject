@@ -18,7 +18,7 @@ namespace EasySave_Project.Service
     /// </summary>
     public class JobCompleteService : AJobStrategyService
     {
-        public event Action<double> OnProgressChanged;
+        //public event Action<double> OnProgressChanged;
 
         /// <summary>
         /// Executes the complete backup job for the given JobModel.
