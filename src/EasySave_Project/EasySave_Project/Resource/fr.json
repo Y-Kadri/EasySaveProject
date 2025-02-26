@@ -175,5 +175,14 @@
   "Messages": "Messages",
   "MaxLargeFileSize": "Taille maximale de fichier autorisée en copie parallèle (en Ko) : ",
   "AddMaxLargeFileSizeToSettings": "Ajout de la taille maximale de fichier.",
-  "ErrorAddMaxLargeFileSizeToSettings": "Erreur lors de l'ajout de la taille maximale de fichier"
+  "ErrorAddMaxLargeFileSizeToSettings": "Erreur lors de l'ajout de la taille maximale de fichier",
+  "Extensionmovedup" : "L'extension a été déplacée vers le haut",
+  "Extensionmoveddown" : "L'extension a été déplacée vers le bas",
+  "Extensionremoved" : "L'extension a été supprimé",
+  "Extensionajoutéesuccès" : "Extension ajoutée avec succès",
+  "Erreurajout" : "Erreur lors de l'ajout",
+  "Erreursuppression" : "Erreur lors de la suppression",
+  "Prioritésupprimésuccès" : "Priorité supprimé avec succès",
+  "Logicielajoutésuccès" : "Logiciel ajouté avec succès.",
+  "Prioritéajoutésuccès" : "Priorité ajouté avec succès"
 }

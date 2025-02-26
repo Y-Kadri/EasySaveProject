@@ -165,5 +165,14 @@
   "ErrorDeserializingFile": "Error deserializing {file}: {error}",
   "ErrorParsingXml": "Error parsing XML: {error}",
   "Messages": "Messages",
-  "MaxLargeFileSize": "Maximum large file size to copy (in Ko): "
+  "MaxLargeFileSize": "Maximum large file size to copy (in Ko): ",
+  "Extensionmovedup" : "Extension moved up",
+  "Extensionmoveddown" : "Extension moved down",
+  "Extensionremoved" : "Extension removed",
+  "Extensionajoutéesuccès": "Extension added successfully",
+  "Erreurajout": "Error during addition",
+  "Erreursuppression": "Error during deletion",
+  "Prioritésupprimésuccès": "Priority deleted successfully",
+  "Logicielajoutésuccès": "Software added successfully.",
+  "Prioritéajoutésuccès": "Priority added successfully"
 }

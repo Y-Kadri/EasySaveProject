@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using DynamicData;
 using EasySave_Library_Log.manager;
 using EasySave_Project.Dto;
 using EasySave_Project.Model;
 using EasySave_Project.Service;
-using Tmds.DBus.Protocol;
 
 namespace EasySave_Project.Util;
 
@@ -366,18 +364,18 @@ public static class SettingUtil
             SaveSettings(settings, "priorityExtensionMovedDown", "errorUpdatingPriorityExtension");
         }
     }
-    public static bool AddPriorityExtension(string Extension)
+    public static (bool, PriorityExtensionDTO) AddPriorityExtension(string Extension)
     {
         if (!Extension.StartsWith("."))
         {
             Extension = "." + Extension;
             
         }
-        int NewIndex = GetPriorityExtensionFilesList("PriorityExtensionFiles").Count + 1;
+        int NewIndex = GetPriorityExtensionFilesList("PriorityExtensionFiles").Count;
         PriorityExtensionDTO NewExtensionFile = new PriorityExtensionDTO();
         NewExtensionFile.ExtensionFile = Extension;
         NewExtensionFile.Index = NewIndex;
-        return AddPriorityExtension("PriorityExtensionFiles", NewExtensionFile);
+        return (AddPriorityExtension("PriorityExtensionFiles", NewExtensionFile),NewExtensionFile);
     }
     
     public static bool RemovePriorityExtension(string Extension)
