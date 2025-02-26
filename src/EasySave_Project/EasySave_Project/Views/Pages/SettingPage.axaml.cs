@@ -3,6 +3,7 @@ using Avalonia.Interactivity;
 using EasySave_Library_Log.manager;
 using EasySave_Project.Dto;
 using EasySave_Project.Model;
+using EasySave_Project.Service;
 using EasySave_Project.ViewModels.Pages;
 using EasySave_Project.Views.Components;
 using EasySave_Project.Views.Layout;
@@ -13,6 +14,7 @@ namespace EasySave_Project.Views.Pages
     {
         private BaseLayout _baseLayout;
         private SettingPageViewModel _settingPageViewModel;
+        private readonly TranslationService _translationService = TranslationService.GetInstance();
 
         /// <summary>
         /// Initializes the settings page, setting up the ViewModel and layout reference.
@@ -22,7 +24,7 @@ namespace EasySave_Project.Views.Pages
         {
             InitializeComponent();
             _baseLayout = baseLayout;
-            _settingPageViewModel = new SettingPageViewModel();
+            _settingPageViewModel = new SettingPageViewModel(NotificationContainer);
             DataContext = _settingPageViewModel;
         }
 
@@ -148,8 +150,8 @@ namespace EasySave_Project.Views.Pages
             {
                 _settingPageViewModel.AddPriorityFileExtensions(PriorityInput.Text);
                 PriorityInput.Text = "";
-                Reload();
             }
+            Reload();
         }
 
         private void RemovePriorityFileExtensions_Click(object sender, RoutedEventArgs e)
@@ -198,7 +200,7 @@ namespace EasySave_Project.Views.Pages
             if (index > 0)
             {
                 _settingPageViewModel.MoveExtensionUp(index); // Call the MoveExtensionUp method in the ViewModel with the found index
-                Toastr.ShowNotification("Extension moved up.", NotificationContainer, "Success"); // Show success notification
+                Toastr.ShowNotification($"{_translationService.GetText("Extensionmovedup")}.", NotificationContainer, "Success"); // Show success notification
             }
             Reload();
         }
@@ -214,10 +216,10 @@ namespace EasySave_Project.Views.Pages
             var extension = (PriorityExtensionDTO)button.CommandParameter; // Cast CommandParameter to PriorityExtensionDTO
             var index = extension.Index; // Find the index of the extension in the list
 
-            if (index > 0 && index < _settingPageViewModel.PriorityExtensionFiles.Count)
+            if (index >= 0 && index < _settingPageViewModel.PriorityExtensionFiles.Count)
             {
                 _settingPageViewModel.MoveExtensionDown(index); // Call the MoveExtensionDown method in the ViewModel with the found index
-                Toastr.ShowNotification("Extension moved down.", NotificationContainer, "Success"); // Show success notification
+                Toastr.ShowNotification($"{_translationService.GetText("Extensionmoveddown")}.", NotificationContainer, "Success"); // Show success notification
             }
             Reload();
         }
@@ -236,7 +238,7 @@ namespace EasySave_Project.Views.Pages
             if (index > 0)
             {
                 //_settingPageViewModel.RemoveExtension(index); // Assuming you have a method to remove the extension
-                Toastr.ShowNotification("Extension removed.", NotificationContainer, "Success"); // Show success notification
+                Toastr.ShowNotification($"{_translationService.GetText("Extensionremoved")}.", NotificationContainer, "Success"); // Show success notification
             }
         }
 
