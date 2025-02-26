@@ -61,7 +61,7 @@
     "createdOn": "créé le",
     "type": "type",
     "startingBackUpComplete": "Lancement du travail pour",
-    "backupComplet": "Sauvegarde complète pour",
+    "backupComplet": "Sauvegarde terminée pour",
     "jobNameCannotBeEmpty": "Le nom du job ne peut pas être vide",
     "maxJobLimitReached": "Impossible de créer plus de 5 jobs",
     "enterLogFormatChoose": "Veuillez choisir le format du journal :",

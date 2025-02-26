@@ -78,13 +78,28 @@ namespace EasySave_Project.Service
 
             progressCallback(job, job.FileInPending.Progress);
 
-            // Select the backup strategy based on the job type
-            IJobStrategyService strategy = job.SaveType switch
+            IJobStrategyService strategy;
+
+            if (job.SaveType.Equals(JobSaveTypeEnum.COMPLETE))
             {
-                JobSaveTypeEnum.COMPLETE => new JobCompleteService(),       // Full backup
-                JobSaveTypeEnum.DIFFERENTIAL => new JobDifferencialService(), // Differential backup
-                _ => throw new InvalidOperationException("Invalid job type") // Handle unknown job types
-            };
+                strategy = new JobCompleteService();
+            } else if (job.SaveType.Equals(JobSaveTypeEnum.DIFFERENTIAL))
+            {
+                if (string.IsNullOrEmpty(job.LastFullBackupPath) || !FileUtil.ExistsDirectory(job.LastFullBackupPath))
+                {
+                    strategy = new JobCompleteService();
+                    message = translator.GetText("noPreviousFullBackup");
+                    ConsoleUtil.PrintTextconsole(message);
+                    LogManager.Instance.AddMessage(message);
+                    job.LastFullBackupPath = null; // Reset full backup pat
+                } else
+                {
+                    strategy = new JobDifferencialService();
+                }
+            } else
+            {
+                throw new InvalidOperationException("Invalid job type");
+            }
 
             // Handle the job progress
             strategy.OnProgressChanged += (progress) =>
