@@ -25,7 +25,8 @@ namespace EasySave_Project.ViewModels.Pages
         
         private string _message, _status, _selectLanguage, _french, _english,
             _chooseLogsFormat, _Json, _Xml, _add, _fileExtensionsToEncrypt, 
-            _monitoredBusinessSoftware, _maxLargeFileSizeText;
+            _monitoredBusinessSoftware, _maxLargeFileSizeText, _priorityFileManagement,
+            _PriorityExtendions;
         
         private int _maxLargeFileSize;
 
@@ -115,7 +116,18 @@ namespace EasySave_Project.ViewModels.Pages
             set => this.RaiseAndSetIfChanged(ref _priorityExtensionFiles, value);
         }
 
+        public string PriorityFileManagement
+        {
+            get => _priorityFileManagement;
+            set => this.RaiseAndSetIfChanged(ref _priorityFileManagement, value);
+        }
         
+        public string PriorityExtendions
+        {
+            get => _PriorityExtendions;
+            set => this.RaiseAndSetIfChanged(ref _PriorityExtendions, value);
+        }
+
         public SettingPageViewModel(StackPanel notificationContainer)
         {
             _translationService = TranslationService.GetInstance();
@@ -147,6 +159,8 @@ namespace EasySave_Project.ViewModels.Pages
             FileExtensionsToEncrypt = _translationService.GetText("FileExtensionsToEncrypt");
             MonitoredBusinessSoftware = _translationService.GetText("MonitoredBusinessSoftware");
             MaxLargeFileSizeText = _translationService.GetText("MaxLargeFileSize");
+            PriorityFileManagement = _translationService.GetText("PriorityFileManagement");
+            PriorityExtendions = _translationService.GetText("PriorityExtendions");
         }
         
         /// <summary>
