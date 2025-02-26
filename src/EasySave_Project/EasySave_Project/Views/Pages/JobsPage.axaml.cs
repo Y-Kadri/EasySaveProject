@@ -1,11 +1,13 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text.Json;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using EasySave_Project.Model;
+using EasySave_Project.Server;
 using EasySave_Project.Service;
 using EasySave_Project.ViewModels.Pages;
 using EasySave_Project.Views.Components;
@@ -15,12 +17,14 @@ namespace EasySave_Project.Views.Pages;
 
 public partial class JobsPage : UserControl, IPage
 {
-    private TranslationService _translationService;
+    private readonly TranslationService _translationService;
+    private readonly JobsPageViewModel _viewModel;
 
     public JobsPage()
     {
         InitializeComponent();
-        DataContext = new JobsPageViewModel();
+        _viewModel = new JobsPageViewModel();
+        DataContext = _viewModel;
         _translationService = TranslationService.GetInstance();
     }
 
@@ -64,8 +68,25 @@ public partial class JobsPage : UserControl, IPage
             Toastr.ShowNotification(message, NotificationContainer);
             return;
         }
-
-        executeJobList(selectedJobs);
+        
+        if (GlobalDataService.GetInstance().isConnecte && GlobalDataService.GetInstance().connecteTo.Item1 != null)
+        {
+            // 🔵 Construire la requête JSON
+            var requestData = new 
+            { 
+                command = "RUN_JOB_USERS", 
+                id = GlobalDataService.GetInstance().connecteTo.Item1,
+                obj = selectedJobs
+            };
+            string jsonString = JsonSerializer.Serialize(requestData);
+                
+            Toastr.ShowServeurNotification($"{_translationService.GetText("Envoiedesjobsàrun")} ...", NotificationContainer);
+            Utils.SendToServer(jsonString);
+        }
+        else
+        {
+            executeJobList(selectedJobs);
+        }
     }
 
     /// <summary>
@@ -114,7 +135,15 @@ public partial class JobsPage : UserControl, IPage
     /// </summary>
     public void Reload()
     {
-        DataContext = new JobsPageViewModel();
+        if (GlobalDataService.GetInstance().isConnecte && GlobalDataService.GetInstance().connecteTo.Item1 != null)
+        {
+            buttonAdd.IsVisible = false;
+        }
+        else
+        {
+            buttonAdd.IsVisible = true;
+        }
+        _viewModel.Refresh(); 
     }
 
     /// <summary>

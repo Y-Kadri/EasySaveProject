@@ -10,15 +10,17 @@ namespace EasySave_Project.Service
 {
     public class LoadDataService
     {
-        private JobManager _jobManager;
-        private ConfigurationService _configurationService;
+        private readonly JobManager _jobManager = JobManager.GetInstance();
+        
+        private readonly ConfigurationService _configurationService = ConfigurationService.GetInstance();
 
         public LoadDataService()
         {
-            this._configurationService = ConfigurationService.GetInstance();
-            this._jobManager = JobManager.GetInstance();
         }
 
+        /// <summary>
+        /// Loads job configurations from a JSON file and initializes job instances.
+        /// </summary>
         public void LoadJobs()
         {
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
@@ -29,10 +31,8 @@ namespace EasySave_Project.Service
 
             try
             {
-                // Check if the JSON file exists
                 if (File.Exists(filePath))
                 {
-                    // Read the JSON file
                     string jsonString = File.ReadAllText(filePath);
 
                     try

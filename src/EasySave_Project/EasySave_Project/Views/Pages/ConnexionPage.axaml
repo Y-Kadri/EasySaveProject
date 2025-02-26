@@ -1,0 +1,75 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:pages="clr-namespace:EasySave_Project.ViewModels.Pages"
+             x:Class="EasySave_Project.Views.Pages.ConnexionPage"
+             x:DataType="pages:ConnexionViewModel">
+
+    <UserControl.Resources>
+        <pages:ConnexionViewModel x:Key="ConnexionVM" />
+    </UserControl.Resources>
+    
+    <StackPanel Background="Transparent" Margin="20" Spacing="60" HorizontalAlignment="Center">
+      
+        <!-- Notification --> 
+        <Canvas Panel.ZIndex="9">
+            <StackPanel x:Name="NotificationContainer"
+                        Canvas.Right="0" 
+                        Canvas.Top="0"
+                        Spacing="10" />
+        </Canvas>
+
+        <!-- Formulaire de connexion -->
+        <StackPanel x:Name="LoginForm" Orientation="Vertical">
+            <TextBlock FontSize="32" FontWeight="Bold" Text="{Binding connexion}" HorizontalAlignment="Center"/>
+            <TextBox Watermark="{Binding entrerVotreNom}" Margin="30" Height="40" HorizontalAlignment="Stretch" x:Name="UserName"/>
+            <Button Classes="Large" Content="{Binding connexion}" Click="Connexion"/>
+        </StackPanel>
+
+        <!-- Message après connexion -->
+        <StackPanel x:Name="ConnectedMessage" Orientation="Vertical">
+            <TextBlock FontSize="32" FontWeight="Bold" Text="{Binding vousetesconnecte}" HorizontalAlignment="Center"/>
+            <DataGrid ItemsSource="{Binding Users}" 
+                  IsReadOnly="True" 
+                  Background="Transparent"
+                  AutoGenerateColumns="False"
+                  GridLinesVisibility="All"
+                  HeadersVisibility="Column"
+                  BorderThickness="1"
+                  Margin="0,0,0,10"
+                  x:Name="DataGrid">
+
+                <!-- Colonnes du DataGrid -->
+                <DataGrid.Columns>
+                
+                    <!-- ID -->
+                    <DataGridTextColumn Foreground="white" Header="Id" Binding="{Binding Id}" Width="*" />
+                
+                    <!-- Nom -->
+                    <DataGridTextColumn Foreground="white" Header="Name" Binding="{Binding Name}" Width="2*" />
+                    
+                    <!-- Ip -->
+                    <DataGridTextColumn Foreground="white" Header="Ip" Binding="{Binding IPAddress}" Width="2*" />
+                    
+                    <!-- Port -->
+                    <DataGridTextColumn Foreground="white" Header="Port" Binding="{Binding Port}" Width="2*" />
+                    
+                    <!-- Button -->
+                    <DataGridTemplateColumn Width="2*" Header="Button">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate >
+                                <Button Content="{Binding Source={StaticResource ConnexionVM}, Path=seconnecter}" Click="ConnectTo"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+        
+        <StackPanel x:Name="ConnectedToMessage" Orientation="Vertical">
+            <TextBlock FontSize="32" FontWeight="Bold" HorizontalAlignment="Center" x:Name="ConnectedToTitre"/>
+            <Button Content="{Binding sedeconnecter}" Click="DisconnectTo"></Button>
+        </StackPanel>
+
+    </StackPanel>
+</UserControl>

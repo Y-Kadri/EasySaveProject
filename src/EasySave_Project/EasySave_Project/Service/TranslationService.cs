@@ -12,17 +12,13 @@ namespace EasySave_Project.Service
         private static TranslationService _instance;
         private static readonly object _lock = new object();
         private Dictionary<string, string> translations;
-
-        // Propriété statique pour stocker la langue choisie
         public static LanguageEnum Language { get; private set; }
 
-        // Constructeur privé
         private TranslationService()
         {
             LoadTranslations();
         }
 
-        // Méthode pour obtenir l'instance du singleton
         public static TranslationService GetInstance()
         {
             if (_instance == null)
@@ -38,16 +34,13 @@ namespace EasySave_Project.Service
             return _instance;
         }
 
-        // Méthode pour définir la langue
         public static void SetLanguage(LanguageEnum language)
         {
             Language = language;
-            // Recharger les traductions chaque fois que la langue est définie
             var instance = GetInstance();
             instance.LoadTranslations();
         }
 
-        // Charger les traductions à partir du fichier JSON
         private void LoadTranslations()
         {
             try
@@ -58,20 +51,43 @@ namespace EasySave_Project.Service
             catch (Exception ex)
             {
                 Console.WriteLine($"Erreur lors du chargement des traductions : {ex.Message}");
-                translations = new Dictionary<string, string>(); // Initialiser à vide en cas d'erreur
+                translations = new Dictionary<string, string>();
             }
         }
 
-        // Récupérer le texte en fonction de la clé
         public string GetText(string key)
         {
-            return translations.TryGetValue(key, out var value) ? value : key; // Renvoie la clé si elle n'existe pas
+            return translations.TryGetValue(key, out var value) ? value : key;
         }
 
+        /// <summary>
+        /// Initializes application settings by setting the language and log format 
+        /// based on the stored configuration.
+        /// </summary>
         public static void InitSetting()
         {
             SetLanguage(SettingUtil.GetSetting().language);
             EasySave_Library_Log.manager.LogFormatManager.Instance.SetLogFormat(SettingUtil.GetSetting().logFormat);
+        }
+
+        /// <summary>
+        /// Replaces each word in a given text with its corresponding translation.
+        /// </summary>
+        /// <param name="text">The input text to be translated.</param>
+        /// <returns>The translated text with each word replaced.</returns>
+        public string Replace(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return text;
+            
+            string[] words = text.Split(' ');
+            
+            for (int i = 0; i < words.Length; i++)
+            {
+                words[i] = GetText(words[i]);
+            }
+
+            return string.Join(" ", words);
         }
         
     }

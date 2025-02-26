@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -250,7 +251,16 @@ namespace EasySave_Project.Service
 
         protected bool CopyFileWithSemaphore(string sourceFileWithAbsolutePath, string targetDir, JobModel job, bool isLargeFile, ref int processedFiles, ref long processedSize, List<string> filesToCopyPath, int totalFiles, long totalSize)
         {
-            string sourceFile = sourceFileWithAbsolutePath.Split(job.FileSource + "\\")[1];
+            string sourceFile;
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                sourceFile = sourceFileWithAbsolutePath;
+            }
+            else
+            {
+                sourceFile = sourceFileWithAbsolutePath.Split(job.FileSource + "\\")[1];
+            }
             string fileName = FileUtil.GetFileName(sourceFile);
             string targetFile = FileUtil.CombinePath(targetDir, fileName);
             double progressPourcentage = (double)processedFiles / totalFiles * 100;

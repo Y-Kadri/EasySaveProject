@@ -6,24 +6,32 @@
              xmlns:layout="clr-namespace:EasySave_Project.ViewModels.Layout"
              x:DataType="layout:BaseLayoutViewModel">
 
-    <!-- Liaison explicite au ViewModel -->
     <UserControl.DataContext>
         <layout:BaseLayoutViewModel />
     </UserControl.DataContext>
 
-    <DockPanel>
+    <Grid>
+        <Canvas Panel.ZIndex="9">
+            <StackPanel x:Name="NotificationContainer"
+                        Canvas.Right="0" 
+                        Canvas.Top="0"
+                        Spacing="10" />
+        </Canvas>
+        <!-- Définition des lignes : Header (60px), Contenu dynamique (*), Footer (60px) -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>  <!-- Header -->
+            <RowDefinition Height="*"/>   <!-- Contenu dynamique prend tout l’espace restant -->
+            <RowDefinition Height="60"/>  <!-- Footer -->
+        </Grid.RowDefinitions>
 
-        <!-- Header similaire au HTML -->
-        <Border Background="#041232" Height="60" DockPanel.Dock="Top" Padding="10">
+        <!-- Header -->
+        <Border Background="#041232" Grid.Row="0" Padding="10">
             <Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center">
-
-                <!-- Logo -->
                 <TextBlock Text="EasySaveProject"
                            Foreground="White"
                            FontSize="18"
                            VerticalAlignment="Center" />
 
-                <!-- Navigation Links -->
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Center"
                             Spacing="20"
@@ -31,11 +39,10 @@
                             Grid.Column="1">
                     <Button Content="{Binding Home}" Foreground="White" Background="Transparent" Tag="0" Click="LoadPage" Padding="10" Cursor="Hand"/>
                     <Button Content="{Binding Jobs}" Foreground="White" Background="Transparent" Tag="1" Click="LoadPage" Padding="10" Cursor="Hand"/>
-                    <Button Content="{Binding Logs}" Foreground="White" Background="Transparent" Tag="2" Click="LoadPage" Padding="10" Cursor="Hand"/>
-                    <Button Content="{Binding Settings}" Foreground="White" Background="Transparent" Tag="3" Click="LoadPage" Padding="10" Cursor="Hand"/>
+                    <Button x:Name="labelLogs" Content="{Binding Logs}" Foreground="White" Background="Transparent" Tag="2" Click="LoadPage" Padding="10" Cursor="Hand"/>
+                    <Button x:Name="labelSetting" Content="{Binding Settings}" Foreground="White" Background="Transparent" Tag="3" Click="LoadPage" Padding="10" Cursor="Hand"/>
                 </StackPanel>
 
-                <!-- Date dynamique -->
                 <TextBlock Text="{Binding CurrentDate}"
                            Foreground="White"
                            FontSize="16"
@@ -44,8 +51,14 @@
             </Grid>
         </Border>
 
-        <!-- Contenu dynamique -->
-        <ContentControl x:Name="ContentArea" Background="#0d2b4d"/>
-        
-    </DockPanel>
+        <!-- Contenu dynamique qui prend l’espace restant -->
+        <ContentControl x:Name="ContentArea" Background="#0d2b4d" Grid.Row="1"/>
+
+        <!-- Footer -->
+        <Border Background="#041232" Grid.Row="2" Padding="10">
+            <Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center">
+                <Button Content="{Binding Conecte}" Foreground="White" Background="Transparent" Tag="5" Click="LoadPage" Padding="10" Cursor="Hand"/>
+            </Grid>
+        </Border>
+    </Grid>
 </UserControl>
