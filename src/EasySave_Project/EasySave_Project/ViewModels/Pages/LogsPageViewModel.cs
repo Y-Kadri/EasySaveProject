@@ -1,55 +1,130 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using EasySave_Project.Dto;
-using EasySave_Project.Service;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Xml;
-using System.Xml.Serialization;
+using Avalonia.Threading;
+using ReactiveUI;
+using EasySave_Project.Dto;
+using EasySave_Project.Service;
 using EasySave_Library_Log.manager;
 
 namespace EasySave_Project.ViewModels.Pages
 {
-    public class LogsPageViewModel
+    public class LogsPageViewModel : ReactiveObject
     {
-        public ObservableCollection<LogNode> Nodes { get; }
-        public string AllLogs { get; }
-        public string Timestamp { get; }
-        public string SourcePath { get; }
-        public string TargetPath { get; }
-        public string FileSize { get; }
-        public string TransferTime { get; }
-        public string EncryptionTime { get; }
+        private readonly LogManager _logManager = LogManager.Instance; 
+        
+        private readonly TranslationService _translationService = TranslationService.GetInstance();
+        
+        private ObservableCollection<LogNode> _nodes;
+        
+        private string _allLogs, _timestamp, _sourcePath, _targetPath, 
+            _fileSize, _transferTime, _encryptionTime;
+        
+        public ObservableCollection<LogNode> Nodes
+        {
+            get => _nodes;
+            private set => this.RaiseAndSetIfChanged(ref _nodes, value);
+        }
+
+        public string AllLogs
+        {
+            get => _allLogs;
+            private set => this.RaiseAndSetIfChanged(ref _allLogs, value);
+        }
+
+        public string Timestamp
+        {
+            get => _timestamp;
+            private set => this.RaiseAndSetIfChanged(ref _timestamp, value);
+        }
+
+        public string SourcePath
+        {
+            get => _sourcePath;
+            private set => this.RaiseAndSetIfChanged(ref _sourcePath, value);
+        }
+
+        public string TargetPath
+        {
+            get => _targetPath;
+            private set => this.RaiseAndSetIfChanged(ref _targetPath, value);
+        }
+
+        public string FileSize
+        {
+            get => _fileSize;
+            private set => this.RaiseAndSetIfChanged(ref _fileSize, value);
+        }
+
+        public string TransferTime
+        {
+            get => _transferTime;
+            private set => this.RaiseAndSetIfChanged(ref _transferTime, value);
+        }
+
+        public string EncryptionTime
+        {
+            get => _encryptionTime;
+            private set => this.RaiseAndSetIfChanged(ref _encryptionTime, value);
+        }
 
         public LogsPageViewModel()
         {
-            var translationService = TranslationService.GetInstance();
-
-            AllLogs = translationService.GetText("AllLogs");
-            Timestamp = translationService.GetText("Timestamp");
-            SourcePath = translationService.GetText("SourcePath");
-            TargetPath = translationService.GetText("TargetPath");
-            FileSize = translationService.GetText("FileSize");
-            TransferTime = translationService.GetText("TransferTime");
-            EncryptionTime = translationService.GetText("EncryptionTime");
-
             Nodes = new ObservableCollection<LogNode>();
-
+            Refresh();
+        }
+        
+        /// <summary>
+        /// Refreshes translations and reloads the logs.
+        /// </summary>
+        /// <summary>
+        /// Refreshes translations and reloads the logs.
+        /// </summary>
+        public void Refresh()
+        {
+            LoadTranslations();
             LoadLogs();
         }
-
+        
+        /// <summary>
+        /// Loads translated text values for log-related UI elements from the translation service.
+        /// </summary>
+        private void LoadTranslations()
+        {
+            Dispatcher.UIThread.Post(() =>
+            {
+                AllLogs = _translationService.GetText("AllLogs");
+                Timestamp = _translationService.GetText("Timestamp");
+                SourcePath = _translationService.GetText("SourcePath");
+                TargetPath = _translationService.GetText("TargetPath");
+                FileSize = _translationService.GetText("FileSize");
+                TransferTime = _translationService.GetText("TransferTime");
+                EncryptionTime = _translationService.GetText("EncryptionTime");
+            });
+        }
+        
+        /// <summary>
+        /// Loads log files from the designated directory and processes them into a structured format.
+        /// </summary>
         private void LoadLogs()
         {
             string logsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySave", "Logs");
 
             if (!Directory.Exists(logsDirectory))
+            {
+                Nodes.Clear();
                 return;
+            }
 
             var files = Directory.GetFiles(logsDirectory)
                 .Where(file => file.EndsWith(".json") || file.EndsWith(".xml"))
                 .ToList();
+
+            var newNodes = new ObservableCollection<LogNode>();
 
             foreach (var logFile in files)
             {
@@ -58,16 +133,27 @@ namespace EasySave_Project.ViewModels.Pages
 
                 try
                 {
-                    AddLogFileToTree(logFile);
+                    var node = CreateLogNode(logFile);
+                    if (node != null)
+                    {
+                        newNodes.Add(node);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    LogManager.Instance.AddMessage($"{TranslationService.GetInstance().GetText("errorReadingJsonFile")} {logFile}: {ex.Message}");
+                    _logManager.AddMessage($"Erreur de lecture du fichier {logFile}: {ex.Message}");
                 }
             }
+
+            Dispatcher.UIThread.Post(() => Nodes = newNodes);
         }
 
-        private void AddLogFileToTree(string logFile)
+        /// <summary>
+        /// Creates a log node representation for a given log file.
+        /// </summary>
+        /// <param name="logFile">The path of the log file.</param>
+        /// <returns>A structured log node or null if the log file is invalid.</returns>
+        private LogNode CreateLogNode(string logFile)
         {
             string fileName = Path.GetFileNameWithoutExtension(logFile);
             var dateNode = new LogNode(fileName);
@@ -75,8 +161,8 @@ namespace EasySave_Project.ViewModels.Pages
             var logs = DeserializeLogs(logFile);
             if (logs == null || !logs.Any())
             {
-                LogManager.Instance.AddMessage($"{TranslationService.GetInstance().GetText("noEncryptedFormatsSet")} : {logFile}");
-                return;
+                _logManager.AddMessage($"Aucun log valide trouvé dans : {logFile}");
+                return null;
             }
 
             foreach (var log in logs)
@@ -85,9 +171,14 @@ namespace EasySave_Project.ViewModels.Pages
                 dateNode.SubNodes.Add(jobNode);
             }
 
-            Nodes.Add(dateNode);
+            return dateNode;
         }
 
+        /// <summary>
+        /// Deserializes logs from JSON or XML format.
+        /// </summary>
+        /// <param name="filePath">The path of the log file.</param>
+        /// <returns>A list of log data objects or null if deserialization fails.</returns>
         private List<LogDataDto> DeserializeLogs(string filePath)
         {
             try
@@ -99,16 +190,21 @@ namespace EasySave_Project.ViewModels.Pages
                 {
                     ".json" => JsonSerializer.Deserialize<List<LogDataDto>>(content),
                     ".xml" => DeserializeXmlManually(content),
-                    _ => throw new NotSupportedException($"{TranslationService.GetInstance().GetText("errorFormatLanguage")} {extension}")
+                    _ => throw new NotSupportedException($"Extension non supportée : {extension}")
                 };
             }
             catch (Exception ex)
             {
-                LogManager.Instance.AddMessage($"{TranslationService.GetInstance().GetText("errorReadingJsonFile")} {filePath} : {ex.Message}");
+                _logManager.AddMessage($"Erreur de désérialisation pour {filePath} : {ex.Message}");
                 return null;
             }
         }
 
+        /// <summary>
+        /// Manually deserializes log data from an XML string.
+        /// </summary>
+        /// <param name="xmlContent">The XML content as a string.</param>
+        /// <returns>A list of deserialized log entries.</returns>
         private List<LogDataDto> DeserializeXmlManually(string xmlContent)
         {
             var logs = new List<LogDataDto>();
@@ -148,12 +244,17 @@ namespace EasySave_Project.ViewModels.Pages
             }
             catch (Exception ex)
             {
-                LogManager.Instance.AddMessage($"{TranslationService.GetInstance().GetText("errorReadingJsonFile")} : {ex.Message}");
+                _logManager.AddMessage($"Erreur lors du parsing manuel du XML : {ex.Message}");
             }
 
             return logs;
         }
 
+        /// <summary>
+        /// Creates a job-specific log node containing relevant log details.
+        /// </summary>
+        /// <param name="log">The log data object.</param>
+        /// <returns>A structured log node for the job.</returns>
         private LogNode CreateJobNode(LogDataDto log)
         {
             var jobNode = new LogNode(log.JobName)
@@ -172,9 +273,14 @@ namespace EasySave_Project.ViewModels.Pages
             return jobNode;
         }
 
+        /// <summary>
+        /// Creates a log node containing messages related to a job.
+        /// </summary>
+        /// <param name="messages">The list of message data objects.</param>
+        /// <returns>A structured log node for messages.</returns>
         private LogNode CreateMessageNode(List<MessageDto> messages)
         {
-            var messageNode = new LogNode(TranslationService.GetInstance().GetText("Messages"));
+            var messageNode = new LogNode(_translationService.GetText("Messages"));
             foreach (var message in messages)
             {
                 messageNode.SubNodes.Add(new LogNode(message.Text));

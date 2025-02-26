@@ -3,6 +3,7 @@ using Avalonia.Interactivity;
 using EasySave_Library_Log.manager;
 using EasySave_Project.Dto;
 using EasySave_Project.Model;
+using EasySave_Project.Service;
 using EasySave_Project.ViewModels.Pages;
 using EasySave_Project.Views.Components;
 using EasySave_Project.Views.Layout;
@@ -13,20 +14,33 @@ namespace EasySave_Project.Views.Pages
     {
         private BaseLayout _baseLayout;
         private SettingPageViewModel _settingPageViewModel;
+        private readonly TranslationService _translationService = TranslationService.GetInstance();
 
+        /// <summary>
+        /// Initializes the settings page, setting up the ViewModel and layout reference.
+        /// </summary>
+        /// <param name="baseLayout">The main application layout.</param>
         public SettingPage(BaseLayout baseLayout)
         {
             InitializeComponent();
             _baseLayout = baseLayout;
-            _settingPageViewModel = new SettingPageViewModel();
+            _settingPageViewModel = new SettingPageViewModel(NotificationContainer);
             DataContext = _settingPageViewModel;
         }
 
+        /// <summary>
+        /// Reloads the settings page, refreshing the ViewModel.
+        /// </summary>
         public void Reload()
         {
-            DataContext = new SettingPageViewModel();
+            _settingPageViewModel.Refresh();
         }
 
+        /// <summary>
+        /// Handles language change event, updating the application language based on user selection.
+        /// </summary>
+        /// <param name="sender">The event source, a RadioButton.</param>
+        /// <param name="e">Event arguments.</param>
         private void OnLanguageChanged(object? sender, RoutedEventArgs e)
         {
             if (sender is RadioButton selectedRadioButton)
@@ -45,7 +59,7 @@ namespace EasySave_Project.Views.Pages
                 {
                     return;
                 }
-
+                
                 // Appel de ChangeLanguage et décomposition du tuple
                 var (message, status) = _settingPageViewModel.ChangeLanguage(lang);
 
@@ -54,7 +68,12 @@ namespace EasySave_Project.Views.Pages
                 Update();
             }
         }
-
+        
+        /// <summary>
+        /// Handles log format change event, updating the log format to JSON or XML based on user selection.
+        /// </summary>
+        /// <param name="sender">The event source, a RadioButton.</param>
+        /// <param name="e">Event arguments.</param>
         private void OnLogsFormatChanged(object? sender, RoutedEventArgs e)
         {
             if (sender is RadioButton selectedRadioButton)
@@ -83,12 +102,20 @@ namespace EasySave_Project.Views.Pages
             }
         }
 
+        /// <summary>
+        /// Updates the settings page and reloads the main layout.
+        /// </summary>
         private void Update()
         {
             Reload();
-            _baseLayout.reload();
+            _baseLayout.Reload();
         }
-
+        
+        /// <summary>
+        /// Handles the event for adding a new encrypted file extension to the list.
+        /// </summary>
+        /// <param name="sender">The event source, a Button.</param>
+        /// <param name="e">Event arguments.</param>
         private void AddEncryptedFileExtensions_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(ExtensionInput.Text))
@@ -99,6 +126,11 @@ namespace EasySave_Project.Views.Pages
             }
         }
 
+        /// <summary>
+        /// Handles the event for removing an encrypted file extension from the list.
+        /// </summary>
+        /// <param name="sender">The event source, a Button.</param>
+        /// <param name="e">Event arguments.</param>
         private void RemoveEncryptedFileExtensions_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
@@ -107,14 +139,19 @@ namespace EasySave_Project.Views.Pages
             Reload();
         }
 
+        /// <summary>
+        /// Handles the event for adding a new priority business process.
+        /// </summary>
+        /// <param name="sender">The event source, a Button.</param>
+        /// <param name="e">Event arguments.</param>
         private void AddPriorityFileExtensions_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(PriorityInput.Text))
             {
                 _settingPageViewModel.AddPriorityFileExtensions(PriorityInput.Text);
                 PriorityInput.Text = "";
-                Reload();
             }
+            Reload();
         }
 
         private void RemovePriorityFileExtensions_Click(object sender, RoutedEventArgs e)
@@ -136,6 +173,11 @@ namespace EasySave_Project.Views.Pages
             }
         }
 
+        /// <summary>
+        /// Handles the event for removing a priority business process.
+        /// </summary>
+        /// <param name="sender">The event source, a Button.</param>
+        /// <param name="e">Event arguments.</param>
         private void RemovePriorityBusinessProcess_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
@@ -158,7 +200,7 @@ namespace EasySave_Project.Views.Pages
             if (index > 0)
             {
                 _settingPageViewModel.MoveExtensionUp(index); // Call the MoveExtensionUp method in the ViewModel with the found index
-                Toastr.ShowNotification("Extension moved up.", NotificationContainer, "Success"); // Show success notification
+                Toastr.ShowNotification($"{_translationService.GetText("Extensionmovedup")}.", NotificationContainer, "Success"); // Show success notification
             }
             Reload();
         }
@@ -174,10 +216,10 @@ namespace EasySave_Project.Views.Pages
             var extension = (PriorityExtensionDTO)button.CommandParameter; // Cast CommandParameter to PriorityExtensionDTO
             var index = extension.Index; // Find the index of the extension in the list
 
-            if (index > 0 && index < _settingPageViewModel.PriorityExtensionFiles.Count)
+            if (index >= 0 && index < _settingPageViewModel.PriorityExtensionFiles.Count)
             {
                 _settingPageViewModel.MoveExtensionDown(index); // Call the MoveExtensionDown method in the ViewModel with the found index
-                Toastr.ShowNotification("Extension moved down.", NotificationContainer, "Success"); // Show success notification
+                Toastr.ShowNotification($"{_translationService.GetText("Extensionmoveddown")}.", NotificationContainer, "Success"); // Show success notification
             }
             Reload();
         }
@@ -196,7 +238,7 @@ namespace EasySave_Project.Views.Pages
             if (index > 0)
             {
                 //_settingPageViewModel.RemoveExtension(index); // Assuming you have a method to remove the extension
-                Toastr.ShowNotification("Extension removed.", NotificationContainer, "Success"); // Show success notification
+                Toastr.ShowNotification($"{_translationService.GetText("Extensionremoved")}.", NotificationContainer, "Success"); // Show success notification
             }
         }
 

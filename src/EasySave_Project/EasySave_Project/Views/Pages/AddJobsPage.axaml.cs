@@ -1,4 +1,3 @@
-using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using EasySave_Project.Manager;
@@ -7,132 +6,145 @@ using EasySave_Project.Service;
 using EasySave_Project.ViewModels.Pages;
 using EasySave_Project.Views.Components;
 
-namespace EasySave_Project.Views.Pages;
-
-public partial class AddJobsPage : UserControl, IPage
+namespace EasySave_Project.Views.Pages
 {
+    public partial class AddJobsPage : UserControl, IPage
+    {
+        private readonly AddJobsPageViewModel _viewModel;
 
-    public AddJobsPage()
-    {
-        InitializeComponent();
-        DataContext = new AddJobsPageViewModel(); 
-    }
-    
-    public void Reload()
-    {
-        string aucundossier = TranslationService.GetInstance().GetText("NoFolderSelected");
+        /// <summary>
+        /// Initializes the AddJobsPage, sets up the ViewModel, and assigns the DataContext.
+        /// </summary>
+        public AddJobsPage()
+        {
+            InitializeComponent();
+            _viewModel = new AddJobsPageViewModel();
+            DataContext = _viewModel;
+        }
         
-        JobName.Text = "";
-        SelectedFileSourcePath.Text = aucundossier;
-        SelectedFileTargetPath.Text = aucundossier;
-        FirstType.IsChecked = false;
-        SecondType.IsChecked = false;
-        DataContext = new AddJobsPageViewModel();
-    }
-
-
-    private void valide(object sender, RoutedEventArgs e)
-    {
-        // Récupère le nom saisi
-        string name = JobName.Text;
-
-        // Vérifie quelle option radio est sélectionnée
-        JobSaveTypeEnum type;
-        if (FirstType.IsChecked == true)
+        /// <summary>
+        /// Resets the form fields and refreshes translations.
+        /// </summary>
+        public void Reload()
         {
-            type = JobSaveTypeEnum.COMPLETE;
+            JobName.Text = "";
+            SelectedFileSourcePath.Text = _viewModel.NoFolderSelected;
+            SelectedFileTargetPath.Text = _viewModel.NoFolderSelected;
+            FirstType.IsChecked = false;
+            SecondType.IsChecked = false;
+            
+            _viewModel.RefreshTranslations();
         }
-        else if (SecondType.IsChecked == true)
+
+        /// <summary>
+        /// Validates user input and creates a new job if all fields are correctly filled.
+        /// </summary>
+        /// <param name="sender">The button triggering the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void Valide(object sender, RoutedEventArgs e)
         {
-            type = JobSaveTypeEnum.DIFFERENTIAL;
+            string name = JobName.Text;
+
+            JobSaveTypeEnum? type = FirstType.IsChecked == true ? JobSaveTypeEnum.COMPLETE
+                                : SecondType.IsChecked == true ? JobSaveTypeEnum.DIFFERENTIAL
+                                : (JobSaveTypeEnum?)null;
+
+            if (type == null)
+            {
+                ShowError("ErrorNoTypeSelected");
+                return;
+            }
+
+            string source = SelectedFileSourcePath.Text;
+            string target = SelectedFileTargetPath.Text;
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                ShowError("ErrorNoName");
+                return;
+            }
+
+            if (IsFolderNotSelected(source))
+            {
+                ShowError("ErrorNoSourceFolder");
+                return;
+            }
+
+            if (IsFolderNotSelected(target))
+            {
+                ShowError("ErrorNoTargetFolder");
+                return;
+            }
+
+            JobManager.GetInstance().CreateAndAddJob(name, source, target, type.Value);
+            ShowSuccess("JobAddedSuccess");
         }
-        else
+
+        /// <summary>
+        /// Displays an error notification based on the given message key.
+        /// </summary>
+        /// <param name="messageKey">The translation key for the error message.</param>
+        private void ShowError(string messageKey)
         {
-            string message = TranslationService.GetInstance().GetText("ErrorNoTypeSelected");
+            string message = TranslationService.GetInstance().GetText(messageKey);
             Toastr.ShowNotification(message, NotificationContainer);
-            return;
         }
 
-        // Récupère les chemins des dossiers
-        string source = SelectedFileSourcePath.Text;
-        string target = SelectedFileTargetPath.Text;
-
-        // Vérifie que les champs ne sont pas vides
-        if (string.IsNullOrWhiteSpace(name))
+        /// <summary>
+        /// Displays a success notification based on the given message key.
+        /// </summary>
+        /// <param name="messageKey">The translation key for the success message.</param>
+        private void ShowSuccess(string messageKey)
         {
-            string message = TranslationService.GetInstance().GetText("ErrorNoName");
-            Toastr.ShowNotification(message,NotificationContainer);
-            return;
+            string message = TranslationService.GetInstance().GetText(messageKey);
+            Toastr.ShowNotification(message, NotificationContainer, "Success");
         }
 
-        if (source == TranslationService.GetInstance().GetText("NoFolderSelected") || string.IsNullOrWhiteSpace(source))
+        /// <summary>
+        /// Checks if the given folder path is invalid or not selected.
+        /// </summary>
+        /// <param name="path">The folder path to check.</param>
+        /// <returns>True if the folder is not selected; otherwise, false.</returns>
+        private bool IsFolderNotSelected(string path)
         {
-            string message = TranslationService.GetInstance().GetText("ErrorNoSourceFolder");
-            Toastr.ShowNotification(message,NotificationContainer);
-            return;
+            return string.IsNullOrWhiteSpace(path) || path == _viewModel.NoFolderSelected;
         }
 
-        if (target == TranslationService.GetInstance().GetText("NoFolderSelected") || string.IsNullOrWhiteSpace(target))
+        /// <summary>
+        /// Opens a folder selection dialog for the target path.
+        /// </summary>
+        /// <param name="sender">The button triggering the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private async void OnOpenFolderTargetDialogClick(object sender, RoutedEventArgs e)
         {
-            string message = TranslationService.GetInstance().GetText("ErrorNoTargetFolder");
-            Toastr.ShowNotification(message, NotificationContainer);
-            return;
+            await OpenFolderDialog(SelectedFileTargetPath);
         }
-        
-        // Crée un nouvel objet Job
-        JobManager.GetInstance().CreateAndAddJob(name, source, target, type);
-        
-        // Affiche une notification de succès
-        string messageSuccess = TranslationService.GetInstance().GetText("JobAddedSuccess");
-        Toastr.ShowNotification(messageSuccess, NotificationContainer, "Success");
-    }
 
-    private async void OnOpenFolderTargetDialogClick(object sender, RoutedEventArgs e)
-    {
-        var dialog = new OpenFolderDialog
+        /// <summary>
+        /// Opens a folder selection dialog for the source path.
+        /// </summary>
+        /// <param name="sender">The button triggering the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private async void OnOpenFolderSourceDialogClick(object sender, RoutedEventArgs e)
         {
-            Title = TranslationService.GetInstance().GetText("ChooseFolder")
-        };
+            await OpenFolderDialog(SelectedFileSourcePath);
+        }
 
-        // Récupère la fenêtre parente du UserControl
-        var window = this.VisualRoot as Window;
-
-        if (window != null)
+        /// <summary>
+        /// Opens a folder selection dialog and updates the target TextBlock with the selected path.
+        /// </summary>
+        /// <param name="targetTextBlock">The TextBlock to update with the selected folder path.</param>
+        private async System.Threading.Tasks.Task OpenFolderDialog(TextBlock targetTextBlock)
         {
-            var result = await dialog.ShowAsync(window);
-
-            if (!string.IsNullOrEmpty(result))
+            var dialog = new OpenFolderDialog
             {
-                SelectedFileTargetPath.Text = result;  // Affiche le chemin du dossier dans le TextBlock
-            }
-            else
-            {
-                SelectedFileTargetPath.Text = TranslationService.GetInstance().GetText("NoFolderSelected");
-            }
-        }
-    }
-    
-    private async void OnOpenFolderSourceDialogClick(object sender, RoutedEventArgs e)
-    {
-        var dialog = new OpenFolderDialog
-        {
-            Title =  TranslationService.GetInstance().GetText("ChooseFolder")
-        };
+                Title = TranslationService.GetInstance().GetText("ChooseFolder")
+            };
 
-        // Récupère la fenêtre parente du UserControl
-        var window = this.VisualRoot as Window;
-
-        if (window != null)
-        {
-            var result = await dialog.ShowAsync(window);
-
-            if (!string.IsNullOrEmpty(result))
+            if (this.VisualRoot is Window window)
             {
-                SelectedFileSourcePath.Text = result;  // Affiche le chemin du dossier dans le TextBlock
-            }
-            else
-            {
-                SelectedFileSourcePath.Text = TranslationService.GetInstance().GetText("NoFolderSelected");
+                var result = await dialog.ShowAsync(window);
+                targetTextBlock.Text = !string.IsNullOrEmpty(result) ? result : _viewModel.NoFolderSelected;
             }
         }
     }

@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using DynamicData;
 using EasySave_Library_Log.manager;
 using EasySave_Project.Dto;
 using EasySave_Project.Model;
 using EasySave_Project.Service;
-using Tmds.DBus.Protocol;
 
 namespace EasySave_Project.Util;
 
@@ -19,21 +17,32 @@ public static class SettingUtil
     private static readonly string filePath = Path.Combine(directoryPath, "appSetting.json");
     private static string Message;
 
+    /// <summary>
+    /// Changes the application language setting and updates the configuration.
+    /// </summary>
+    /// <param name="language">The new language to set.</param>
+    /// <returns>True if the language was updated successfully, otherwise false.</returns>
     public static bool SettingChangeLanguage(LanguageEnum language)
     {
         return UpdateSetting(settings => settings.language = language, "languageUpdated", "errorUpdatingLanguage");
     }
 
+    /// <summary>
+    /// Changes the log format setting and updates the configuration.
+    /// </summary>
+    /// <param name="format">The new log format to apply.</param>
+    /// <returns>True if the format was updated successfully, otherwise false.</returns>
     public static bool SettingChangeFormat(EasySave_Library_Log.manager.LogFormatManager.LogFormat format)
     {
         return UpdateSetting(settings => settings.logFormat = format, "formatUpdated", "errorFormatLanguage");
     }
-
-    public static bool SettingChangeMaxLargeFileSize(int value)
-    {
-        return UpdateSetting(settings => settings.MaxLargeFileSize = value, "formatUpdated", "errorFormatLanguage");
-    }
-
+    
+    /// <summary>
+    /// Adds a new value to a specified settings list if it does not already exist.
+    /// </summary>
+    /// <param name="key">The key representing the list to update.</param>
+    /// <param name="value">The value to add to the list.</param>
+    /// <returns>True if the value was successfully added, otherwise false.</returns>
     public static bool AddToList(string key, string value)
     {
         var settings = GetSetting();
@@ -96,7 +105,7 @@ public static class SettingUtil
     }
 
     public static string checkFormat(string value, List<string> list)
-    {
+    { 
         if (!string.IsNullOrWhiteSpace(value) && !value.StartsWith('.'))
         {
             value = "." + value;
@@ -104,6 +113,13 @@ public static class SettingUtil
         return value;
     }
 
+
+    /// <summary>
+    /// Removes a specified value from a given settings list.
+    /// </summary>
+    /// <param name="key">The key representing the list to update.</param>
+    /// <param name="value">The value to remove from the list.</param>
+    /// <returns>True if the value was successfully removed, otherwise false.</returns>
     public static bool RemoveFromList(string key, string value)
     {
         var settings = GetSetting();
@@ -126,6 +142,11 @@ public static class SettingUtil
         return SaveSettings(settings, "itemRemoved", "errorRemovingItem");
     }
 
+    /// <summary>
+    /// Retrieves a list of values from the specified settings key.
+    /// </summary>
+    /// <param name="key">The key representing the list to retrieve.</param>
+    /// <returns>A list of stored values, or an empty list if the key is not found.</returns>
     public static List<string> GetList(string key)
     {
         var settings = GetSetting();
@@ -133,7 +154,7 @@ public static class SettingUtil
         {
             "EncryptedFileExtensions" => settings?.EncryptedFileExtensions ?? new List<string>(),
             "PriorityBusinessProcess" => settings?.PriorityBusinessProcess ?? new List<string>(),
-            _ => new List<string>(),
+            _ => new List<string>()
         };
     }
 
@@ -180,6 +201,9 @@ public static class SettingUtil
         return sortedFiles;
     }
 
+    /// <summary>
+    /// Initializes the settings file if it does not already exist.
+    /// </summary>
     public static void InitSetting()
     {
         if (File.Exists(filePath))
@@ -193,6 +217,10 @@ public static class SettingUtil
         SaveSettings(data, "jsonFileCreated", "errorWritingJsonFile");
     }
 
+    /// <summary>
+    /// Retrieves the current application settings from the configuration file.
+    /// </summary>
+    /// <returns>An <see cref="AppSettingDto"/> object if successful, otherwise null.</returns>
     public static AppSettingDto? GetSetting()
     {
         if (!File.Exists(filePath))
@@ -212,6 +240,13 @@ public static class SettingUtil
         }
     }
 
+    /// <summary>
+    /// Saves the application settings to the configuration file.
+    /// </summary>
+    /// <param name="settings">The settings object to save.</param>
+    /// <param name="successMessageKey">The translation key for the success message.</param>
+    /// <param name="errorMessageKey">The translation key for the error message.</param>
+    /// <returns>True if the settings were saved successfully, otherwise false.</returns>
     public static bool IsExtensionPriority(string extension)
     {
         var priorityExtensions = GetSetting()?.EncryptedFileExtensions ?? new List<string>();
@@ -240,6 +275,13 @@ public static class SettingUtil
         }
     }
 
+    /// <summary>
+    /// Updates a specific setting in the configuration file.
+    /// </summary>
+    /// <param name="updateAction">An action to modify the settings.</param>
+    /// <param name="successMessageKey">The translation key for the success message.</param>
+    /// <param name="errorMessageKey">The translation key for the error message.</param>
+    /// <returns>True if the update was successful, otherwise false.</returns>
     private static bool UpdateSetting(Action<AppSettingDto> updateAction, string successMessageKey, string errorMessageKey)
     {
         var settings = GetSetting();
@@ -252,6 +294,9 @@ public static class SettingUtil
         return SaveSettings(settings, successMessageKey, errorMessageKey);
     }
 
+    /// <summary>
+    /// Ensures that the settings directory and file exist.
+    /// </summary>
     private static void EnsureDirectoryAndFileExist()
     {
         if (!Directory.Exists(directoryPath))
@@ -269,24 +314,24 @@ public static class SettingUtil
         var settings = GetSetting();
         if (settings == null || settings.PriorityExtensionFiles == null || index <= 0) return;
 
-        // Trouve l'élément à l'index donné
+        // Trouve l'ï¿½lï¿½ment ï¿½ l'index donnï¿½
         var item = settings.PriorityExtensionFiles.FirstOrDefault(x => x.Index == index);
-        if (item == null) return;  // Si l'élément n'est pas trouvé, on sort
+        if (item == null) return;  // Si l'ï¿½lï¿½ment n'est pas trouvï¿½, on sort
 
-        // Trouve l'élément précédent dans la liste qui a un index plus petit
+        // Trouve l'ï¿½lï¿½ment prï¿½cï¿½dent dans la liste qui a un index plus petit
         var previousItem = settings.PriorityExtensionFiles
             .Where(x => x.Index < index)
-            .OrderByDescending(x => x.Index)  // Trie par index décroissant
+            .OrderByDescending(x => x.Index)  // Trie par index dï¿½croissant
             .FirstOrDefault();
 
         if (previousItem != null)
         {
-            // Échange les indices des deux objets
+            // ï¿½change les indices des deux objets
             int tempIndex = item.Index;
             item.Index = previousItem.Index;
             previousItem.Index = tempIndex;
 
-            // Sauvegarde les paramètres
+            // Sauvegarde les paramï¿½tres
             SaveSettings(settings, "priorityExtensionMovedUp", "errorUpdatingPriorityExtension");
         }
     }
@@ -298,11 +343,11 @@ public static class SettingUtil
         var settings = GetSetting();
         if (settings == null || settings.PriorityExtensionFiles == null || index >= settings.PriorityExtensionFiles.Count) return;
 
-        // Trouve l'élément à l'index donné
+        // Trouve l'ï¿½lï¿½ment ï¿½ l'index donnï¿½
         var item = settings.PriorityExtensionFiles.FirstOrDefault(x => x.Index == index);
-        if (item == null) return;  // Si l'élément n'est pas trouvé, on sort
+        if (item == null) return;  // Si l'ï¿½lï¿½ment n'est pas trouvï¿½, on sort
 
-        // Trouve l'élément suivant dans la liste qui a un index plus grand
+        // Trouve l'ï¿½lï¿½ment suivant dans la liste qui a un index plus grand
         var nextItem = settings.PriorityExtensionFiles
             .Where(x => x.Index > index)
             .OrderBy(x => x.Index)  // Trie par index croissant
@@ -310,54 +355,59 @@ public static class SettingUtil
 
         if (nextItem != null)
         {
-            // Échange les indices des deux objets
+            // ï¿½change les indices des deux objets
             int tempIndex = item.Index;
             item.Index = nextItem.Index;
             nextItem.Index = tempIndex;
 
-            // Sauvegarde les paramètres
+            // Sauvegarde les paramï¿½tres
             SaveSettings(settings, "priorityExtensionMovedDown", "errorUpdatingPriorityExtension");
         }
     }
-    public static bool AddPriorityExtension(string Extension)
+    public static (bool, PriorityExtensionDTO) AddPriorityExtension(string Extension)
     {
         if (!Extension.StartsWith("."))
         {
-          Extension = "." + Extension;
+            Extension = "." + Extension;
             
         }
-        int NewIndex = GetPriorityExtensionFilesList("PriorityExtensionFiles").Count + 1;
+        int NewIndex = GetPriorityExtensionFilesList("PriorityExtensionFiles").Count;
         PriorityExtensionDTO NewExtensionFile = new PriorityExtensionDTO();
         NewExtensionFile.ExtensionFile = Extension;
         NewExtensionFile.Index = NewIndex;
-        return AddPriorityExtension("PriorityExtensionFiles", NewExtensionFile);
+        return (AddPriorityExtension("PriorityExtensionFiles", NewExtensionFile),NewExtensionFile);
     }
+    
     public static bool RemovePriorityExtension(string Extension)
     {
         var settings = GetSetting();
         if (settings == null) return false;
 
-        // Cherche l'élément à supprimer en fonction de l'extension
+        // Cherche l'ï¿½lï¿½ment ï¿½ supprimer en fonction de l'extension
         var itemToRemove = settings.PriorityExtensionFiles
             .FirstOrDefault(e => e.ExtensionFile.Equals(Extension, StringComparison.OrdinalIgnoreCase));
 
         if (itemToRemove != null)
         {
-            // Supprimer l'élément trouvé
+            // Supprimer l'ï¿½lï¿½ment trouvï¿½
             settings.PriorityExtensionFiles.Remove(itemToRemove);
 
-            // Réajuster les indices des éléments dont l'index est plus grand
+            // Rï¿½ajuster les indices des ï¿½lï¿½ments dont l'index est plus grand
             foreach (var item in settings.PriorityExtensionFiles.Where(e => e.Index > itemToRemove.Index))
             {
                 item.Index -= 1;
             }
 
-            // Sauvegarder les paramètres après modification
+            // Sauvegarder les paramï¿½tres aprï¿½s modification
             return SaveSettings(settings, "itemRemoved", "errorRemovingItem");
         }
 
         return false;
     }
-
+    
+    public static bool SettingChangeMaxLargeFileSize(int value)
+    {
+        return UpdateSetting(settings => settings.MaxLargeFileSize = value, "formatUpdated", "errorFormatLanguage");
+    }
 
 }

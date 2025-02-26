@@ -3,22 +3,28 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Threading;
 
 namespace EasySave_Project.Views.Components
 {
     public class Toastr
     {
+        /// <summary>
+        /// Displays a notification message in the specified container with different styles based on the type (Success, Warning, Info, Error).
+        /// </summary>
+        /// <param name="message">The notification message to display.</param>
+        /// <param name="notificationContainer">The container where the notification will be displayed.</param>
+        /// <param name="type">The type of notification (Success, Warning, Info, Error).</param>
+        /// <exception cref="ArgumentNullException">Thrown when notificationContainer is null.</exception>
         public static async void ShowNotification(string message, StackPanel notificationContainer = null, string type = "Error")
         {
             if (notificationContainer == null)
                 throw new ArgumentNullException(nameof(notificationContainer), "Notification container is required.");
 
-            // Déclaration des couleurs par défaut
             Color backgroundColor = Colors.LightGray;
             Color foregroundColor = Colors.Black;
             Color borderColor = Colors.Gray;
 
-            // Gestion des couleurs selon le type de notification
             switch (type)
             {
                 case "Success":
@@ -39,15 +45,12 @@ namespace EasySave_Project.Views.Components
                     borderColor = Color.Parse("#bee5eb");
                     break;
 
-                case "Error":
                 default:
                     backgroundColor = Color.Parse("#f8d7da");
                     foregroundColor = Color.Parse("#721c24");
                     borderColor = Color.Parse("#f5c6cb");
                     break;
             }
-
-            // Crée la NotificationCard avec le style adapté
             var notificationCard = new Border
             {
                 Child = new TextBlock
@@ -66,15 +69,57 @@ namespace EasySave_Project.Views.Components
                 Margin = new Thickness(10),
                 HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Right
             };
-
-            // Ajoute la notification au conteneur
             notificationContainer.Children.Add(notificationCard);
-
-            // Affiche la notification pendant 5 secondes
             await Task.Delay(5000);
-
-            // Retire la notification après le délai
             notificationContainer.Children.Remove(notificationCard);
+        }
+        
+        /// <summary>
+        /// Displays a notification message in the specified container with a predefined style. Use for server notification
+        /// </summary>
+        /// <param name="message">The notification message to display.</param>
+        /// <param name="notificationContainer">The container where the notification will be displayed.</param>
+        /// <exception cref="ArgumentNullException">Thrown when notificationContainer is null.</exception>
+        public static async void ShowServeurNotification(string message, StackPanel notificationContainer = null)
+        {
+            if (notificationContainer == null)
+                throw new ArgumentNullException(nameof(notificationContainer), "Notification container is required.");
+
+            Color backgroundColor, foregroundColor, borderColor;
+            backgroundColor = Color.Parse("#d1ecf1");
+            foregroundColor = Color.Parse("#0c5460");
+            borderColor = Color.Parse("#bee5eb");
+            
+            Border notificationCard = null;
+            await Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                notificationCard = new Border
+                {
+                    Child = new TextBlock
+                    {
+                        Text = message,
+                        Foreground = new SolidColorBrush(foregroundColor),
+                        FontSize = 14,
+                        VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+                        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center
+                    },
+                    Background = new SolidColorBrush(backgroundColor),
+                    BorderBrush = new SolidColorBrush(borderColor),
+                    BorderThickness = new Thickness(1),
+                    CornerRadius = new CornerRadius(8),
+                    Padding = new Thickness(15),
+                    Margin = new Thickness(10),
+                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Right
+                };
+
+                notificationContainer.Children.Add(notificationCard);
+            });
+
+            await Task.Delay(5000);
+            await Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                notificationContainer.Children.Remove(notificationCard);
+            });
         }
     }
 }
