@@ -1,30 +1,90 @@
-using Avalonia.Controls;
-using EasySave_Project.Service;
 using ReactiveUI;
+using EasySave_Project.Service;
 
 namespace EasySave_Project.ViewModels.Pages
 {
     public class AddJobsPageViewModel : ReactiveObject
     {
-        public string EnterName { get; private set; }
-        public string Complete { get; private set; }
-        public string Differential { get; private set; }
-        public string ChooseASourceFolder { get; private set; }
-        public string ChooseADestinationFolder { get; private set; }
-        public string NoFolderSelected { get; private set; }
-        public string Add { get; private set; }
-        public string AddAJob { get; private set; }
+        private readonly TranslationService _translationService = TranslationService.GetInstance();
+            
+        private string _enterName, _complete, _differential, 
+            _chooseASourceFolder, _chooseADestinationFolder, _noFolderSelected, 
+            _add, _addAJob;
+        
+        public string EnterName
+        {
+            get => _enterName;
+            set => this.RaiseAndSetIfChanged(ref _enterName, value);
+        }
+
+        public string Complete
+        {
+            get => _complete;
+            set => this.RaiseAndSetIfChanged(ref _complete, value);
+        }
+
+        public string Differential
+        {
+            get => _differential;
+            set => this.RaiseAndSetIfChanged(ref _differential, value);
+        }
+
+        public string ChooseASourceFolder
+        {
+            get => _chooseASourceFolder;
+            set => this.RaiseAndSetIfChanged(ref _chooseASourceFolder, value);
+        }
+
+        public string ChooseADestinationFolder
+        {
+            get => _chooseADestinationFolder;
+            set => this.RaiseAndSetIfChanged(ref _chooseADestinationFolder, value);
+        }
+
+        public string NoFolderSelected
+        {
+            get => _noFolderSelected;
+            set => this.RaiseAndSetIfChanged(ref _noFolderSelected, value);
+        }
+
+        public string Add
+        {
+            get => _add;
+            set => this.RaiseAndSetIfChanged(ref _add, value);
+        }
+
+        public string AddAJob
+        {
+            get => _addAJob;
+            set => this.RaiseAndSetIfChanged(ref _addAJob, value);
+        }
         
         public AddJobsPageViewModel()
         {
-            EnterName = TranslationService.GetInstance().GetText("EnterName");
-            AddAJob = TranslationService.GetInstance().GetText("AddAJob");
-            Complete = TranslationService.GetInstance().GetText("Complete");
-            Differential = TranslationService.GetInstance().GetText("Differential");
-            ChooseASourceFolder = TranslationService.GetInstance().GetText("ChooseASourceFolder");
-            ChooseADestinationFolder = TranslationService.GetInstance().GetText("ChooseADestinationFolder");
-            NoFolderSelected = TranslationService.GetInstance().GetText("NoFolderSelected");
-            Add = TranslationService.GetInstance().GetText("Add");
+            LoadTranslations();
+        }
+
+        /// <summary>
+        /// Loads translated text for UI elements from the translation service.
+        /// </summary>
+        public void LoadTranslations()
+        {
+            EnterName = _translationService.GetText("EnterName");
+            AddAJob = _translationService.GetText("AddAJob");
+            Complete = _translationService.GetText("Complete");
+            Differential = _translationService.GetText("Differential");
+            ChooseASourceFolder = _translationService.GetText("ChooseASourceFolder");
+            ChooseADestinationFolder = _translationService.GetText("ChooseADestinationFolder");
+            NoFolderSelected = _translationService.GetText("NoFolderSelected");
+            Add = _translationService.GetText("Add");
+        }
+
+        /// <summary>
+        /// Refreshes translations when the language setting changes.
+        /// </summary>
+        public void RefreshTranslations()
+        {
+            LoadTranslations();
         }
     }
 }

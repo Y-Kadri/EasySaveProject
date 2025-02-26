@@ -21,7 +21,7 @@
                        FontWeight="Bold" Grid.Column="0" Text="{Binding AllJobs}" VerticalAlignment="Center"/>
             
             <StackPanel Grid.Column="1" Orientation="Horizontal">
-                <Button Tag="4" Click="OnAddJobClick"  Cursor="Hand" Content="{Binding AddAJob}" FontSize="16" Foreground="White" Background="#1A3B57" Padding="10,5" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                <Button x:Name="buttonAdd" Tag="4" Click="OnAddJobClick"  Cursor="Hand" Content="{Binding AddAJob}" FontSize="16" Foreground="White" Background="#1A3B57" Padding="10,5" Margin="10,0,0,0" VerticalAlignment="Center"/>
                 <Button Click="Execute" Cursor="Hand" Content="{Binding Run}" FontSize="16" Foreground="White" Background="#1A3B57" Padding="10,5" Margin="10,0,0,0" VerticalAlignment="Center"/>
             </StackPanel>
             
