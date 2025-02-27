@@ -8,8 +8,8 @@
 
 	<Grid Background="#0D2B4D" ColumnDefinitions="*,*,*" RowDefinitions="*,*" Margin="10">
 		<!-- Langue -->
-		<StackPanel Margin="30" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
-			<TextBlock Text="{Binding SelectLanguage}" VerticalAlignment="Center"/>
+		<StackPanel Margin="30" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top" Spacing="20">
+			<TextBlock Text="{Binding SelectLanguage}" FontWeight="Bold" Margin="10,20,0,0"/>
 			<!-- RadioButton pour le français -->
 			<RadioButton GroupName="SettingLangue" Content="{Binding French}" x:Name="FirstLangue"
                          Checked="OnLanguageChanged"/>
@@ -20,70 +20,76 @@
 		</StackPanel>
 
 		<!-- Format -->
-		<StackPanel Margin="30" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
-			<TextBlock Text="{Binding ChooseLogsFormat}" VerticalAlignment="Center"/>
+		<StackPanel Margin="30" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top" Spacing="20">
+			<TextBlock Text="{Binding ChooseLogsFormat}" FontWeight="Bold" Margin="10,20,0,0"/>
 			<RadioButton GroupName="SettingFormat" Content="{Binding Json}" x:Name="FirstFormat" Checked="OnLogsFormatChanged"/>
 			<RadioButton GroupName="SettingFormat" Content="{Binding Xml}" x:Name="SecondFormat" Checked="OnLogsFormatChanged"/>
 		</StackPanel>
 
-		<StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-			<TextBlock Text="{Binding FileExtensionsToEncrypt}" FontWeight="Bold" />
+		<StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top">
+			<TextBlock Text="{Binding FileExtensionsToEncrypt}" FontWeight="Bold" Margin="10,20,0,0"/>
 			<TextBox x:Name="ExtensionInput" Width="200" Watermark="Ex: .txt" />
 			<Button Content="{Binding Add}" Click="AddEncryptedFileExtensions_Click"/>
-			<ListBox ItemsSource="{Binding EncryptedFileExtensions}">
-				<ListBox.ItemTemplate>
-					<DataTemplate>
-						<StackPanel Orientation="Horizontal">
-							<TextBlock Text="{Binding}" Width="150"/>
-							<Button Content="🗑"
-                                    Tag="{Binding}" Click="RemoveEncryptedFileExtensions_Click"/>
-						</StackPanel>
-					</DataTemplate>
-				</ListBox.ItemTemplate>
-			</ListBox>
+			<ScrollViewer Height="150" VerticalScrollBarVisibility="Auto">
+				<ListBox ItemsSource="{Binding EncryptedFileExtensions}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Text="{Binding}" Width="150"/>
+								<Button Content="🗑"
+	                                    Tag="{Binding}" Click="RemoveEncryptedFileExtensions_Click"/>
+							</StackPanel>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</ScrollViewer>
 		</StackPanel>
 
-		<StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+		<StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top">
 			<TextBlock Text="{Binding MonitoredBusinessSoftware}" FontWeight="Bold" Margin="10,20,0,0"/>
 			<TextBox x:Name="SoftwareInput" Width="200" Watermark="Ex: Calculator"/>
 			<Button Content="{Binding Add}" Click="AddPriorityBusinessProcess_Click"/>
-			<ListBox ItemsSource="{Binding PriorityBusinessProcess}">
-				<ListBox.ItemTemplate>
-					<DataTemplate>
-						<StackPanel Orientation="Horizontal">
-							<TextBlock Text="{Binding}" Width="150"/>
-							<Button Content="🗑"
-                                    Tag="{Binding}" Click="RemovePriorityBusinessProcess_Click"/>
-						</StackPanel>
-					</DataTemplate>
-				</ListBox.ItemTemplate>
-			</ListBox>
+			<ScrollViewer Height="150" VerticalScrollBarVisibility="Auto">
+				<ListBox ItemsSource="{Binding PriorityBusinessProcess}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Text="{Binding}" Width="150"/>
+								<Button Content="🗑"
+	                                    Tag="{Binding}" Click="RemovePriorityBusinessProcess_Click"/>
+							</StackPanel>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</ScrollViewer>
 		</StackPanel>
 
 		<!-- Gestion avancée des logiciels prioritaires -->
-		<StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="3" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-			<TextBlock Text="Gestion des logiciels prioritaires" FontWeight="Bold" Margin="10,20,0,0"/>
+		<StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="3" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top">
+			<TextBlock Text="{Binding PriorityFileManagement}" FontWeight="Bold" Margin="10,20,0,0"/>
 			<TextBox x:Name="PriorityInput" Width="200" Watermark="Ex: .txt"/>
 			<Button Content="{Binding Add}" Click="AddPriorityFileExtensions_Click"/>
-			<TextBlock x:Name="ExtensionInput2" Text="Logiciels prioritaires :" FontWeight="Bold" Margin="10,10,0,0"/>
-			<ListBox ItemsSource="{Binding PriorityExtensionFiles}">
-				<ListBox.ItemTemplate>
-					<DataTemplate>
-						<StackPanel Orientation="Horizontal">
-							<TextBlock Text="{Binding ExtensionFile}" Width="120"/>
-
-							<Button Content="⬆" Click="MoveExtensionUp_Click" CommandParameter="{Binding}"/>
-							<Button Content="⬇" Click="MoveExtensionDown_Click" CommandParameter="{Binding}"/>
-							<Button Content="🗑" Click="RemovePriorityFileExtensions_Click" CommandParameter="{Binding}"/>
-						</StackPanel>
-					</DataTemplate>
-				</ListBox.ItemTemplate>
-			</ListBox>
+			<TextBlock x:Name="ExtensionInput2" Text="{Binding PriorityExtendions}" FontWeight="Bold" Margin="10,10,0,0"/>
+			<ScrollViewer Height="150" VerticalScrollBarVisibility="Auto">
+				<ListBox ItemsSource="{Binding PriorityExtensionFiles}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Text="{Binding ExtensionFile}" Width="120"/>
+								<Button Content="⬆" Click="MoveExtensionUp_Click" CommandParameter="{Binding}"/>
+								<Button Content="⬇" Click="MoveExtensionDown_Click" CommandParameter="{Binding}"/>
+								<Button Content="🗑" Click="RemovePriorityFileExtensions_Click" CommandParameter="{Binding}"/>
+							</StackPanel>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</ScrollViewer>
 		</StackPanel>
 
 		<StackPanel Orientation="Vertical" Spacing="20" Margin="30" Grid.Column="3" Grid.Row="1"
-            HorizontalAlignment="Center" VerticalAlignment="Center">
+            HorizontalAlignment="Center" VerticalAlignment="Top">
 			<TextBlock Text="{Binding MaxLargeFileSizeText}" FontWeight="Bold" Margin="10,20,0,0"/>
+
 			<NumericUpDown x:Name="MaxLargeFileSizeInput"
 						   Width="200"
 						   Minimum="0"
