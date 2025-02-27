@@ -27,6 +27,11 @@ namespace EasySave_Library_Log.manager
         /// </summary>
         private LogManager()
         {
+           initFolders();
+        }
+
+        private void initFolders()
+        {
             string logsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "easySave", "Logs");
             string fileExtension = LogFormatManager.Instance.Format == LogFormatManager.LogFormat.JSON ? ".json" : ".xml";
             logFilePath = FileUtil.CombinePaths(logsDirectory, $"{DateTime.Now:yyyy-MM-dd}{fileExtension}");
@@ -54,7 +59,7 @@ namespace EasySave_Library_Log.manager
         /// <param name="targetPath">The target file path.</param>
         /// <param name="fileSize">The size of the file being copied.</param>
         /// <param name="transferTime">The time taken to transfer the file.</param>
-        public void UpdateState(string jobName, string sourcePath, string targetPath, long fileSize, double transferTime)
+        public void UpdateState(string jobName, string sourcePath, string targetPath, long fileSize, double transferTime, double? encryptionTime = null)
         {
             lock (_lock)
             {
@@ -66,7 +71,8 @@ namespace EasySave_Library_Log.manager
                     TargetPath = targetPath,
                     FileSize = fileSize,
                     TransferTime = transferTime,
-                    Messages = messageBuffer.ConvertAll(m => new LogMessage { Text = m })
+                    Messages = messageBuffer.ConvertAll(m => new LogMessage { Text = m }),
+                    EncryptionTime = encryptionTime ?? 0
                 };
 
                 SaveToFile(logEntry);
@@ -84,6 +90,7 @@ namespace EasySave_Library_Log.manager
             {
                 try
                 {
+                    initFolders();
                     if (LogFormatManager.Instance.Format == LogFormatManager.LogFormat.JSON)
                     {
                         string jsonString = FileUtil.ReadFromFile(logFilePath);
@@ -132,6 +139,9 @@ namespace EasySave_Library_Log.manager
 
         [XmlElement("TransferTime")]
         public double TransferTime { get; set; }
+
+        [XmlElement("EncryptionTime")]
+        public double EncryptionTime { get; set; }
 
         [XmlArray("Messages")]
         [XmlArrayItem("Message")]

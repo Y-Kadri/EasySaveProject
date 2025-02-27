@@ -2,12 +2,59 @@ name: Build and Quality Check
 
 on: [push, pull_request]
 
+permissions:
+  actions: read
+  pages: write
+  id-token: write
+
 env:
   SOLUTION_PATH: src/EasySave_Project/EasySave_Project.sln
   FOLDER_TEST_PATH:  src/EasySave_Project/EasySave_Project_Test
   DOTNET_VERSION: '8.0'
 
 jobs:
+  publish-docs:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.SOLUTION_PATH }}
+
+      - name: Build project
+        run: dotnet build ${{ env.SOLUTION_PATH }} --no-restore --configuration Release
+
+      - run: dotnet tool update -g docfx
+      - run: docfx src/EasySave_Project/EasySave_Project/docfx.json
+      - name: Disable Jekyll
+        run: touch src/EasySave_Project/EasySave_Project/_site/.nojekyll
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload entire repository
+          path: 'src/EasySave_Project/EasySave_Project/_site'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
   build:
     runs-on: ubuntu-latest
     steps:
@@ -62,6 +109,13 @@ jobs:
       - name: Run test
         run: dotnet test ${{ env.SOLUTION_PATH }}
 
+      - name: Ensure /tmp directory exists
+        run: mkdir -p /tmp
+
+      - name: Run Test Coverage
+        run: dotnet test ${{ env.SOLUTION_PATH }}  /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./coverage/coverage.cobertura.xml
+
+
   commit_message_validation:
     runs-on: ubuntu-latest
     name: Commit Message Validation
@@ -75,6 +129,7 @@ jobs:
   
   sonar:
     name: Sonar Cloud
+    needs: test
     runs-on: windows-latest
 
     steps:
@@ -119,11 +174,32 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore ${{ env.SOLUTION_PATH }}
 
+      - name: Create /tmp directory
+        run: mkdir -p /tmp
+
+      - name: Create /raport directory
+        run: mkdir -p ${{ env.FOLDER_TEST_PATH }}/coverage/reports
+
+      - name: Install tools
+        run: dotnet tool install -g dotnet-reportgenerator-globaltool
+
+      - name: Run Tests and Generate HTML Report
+        run: dotnet test ${{ env.SOLUTION_PATH }} /p:CollectCoverage=true /p:CoverletOutput=./coverage/ /p:CoverletOutputFormat=opencover
+      
+      - name: Run Convert rapport
+        run: reportgenerator -reports:${{ env.FOLDER_TEST_PATH }}/coverage/coverage.opencover.xml -targetdir:${{ env.FOLDER_TEST_PATH }}/coverage/reports -reporttypes:Html
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: Test-Results
+          path: ${{ env.FOLDER_TEST_PATH }}/coverage/
+
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"Y-Kadri_EasySaveProject" /o:"y-kadri" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"Y-Kadri_EasySaveProject" /o:"y-kadri" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage/coverage.cobertura.xml
           dotnet build ${{ env.SOLUTION_PATH }} --configuration Release
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"

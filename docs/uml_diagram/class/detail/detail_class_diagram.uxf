@@ -1,0 +1,2544 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.0.0">
+  <help_text>Space for diagram notes
+--
++Text : string
+--
+</help_text>
+  <zoom_level>8</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1488</x>
+      <y>1784</y>
+      <w>200</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Sealed&gt;&gt;
+TranslationService
+--
+__-translations : Dictionary&lt;string, string&gt;__
+__-_lock : Object__
+--
+-TranslationService()
+__+GetInstance() : TranslationService__
+__+SetLanguage(LanguageEnum) : void__
+-LoadTranslations() : void
+__+GetText(string) : string__
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>816</x>
+      <y>2032</y>
+      <w>168</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Sealed&gt;&gt;
+JobManager
+--
+__-jobManager : JobManager = null__
+__+MAX_JOB : in =55__
+--
+__+GetInstance() : JobManager__
++AddJob(JobModel) : void
++CreateAndAddJob(string, string, string, 
+JobSaveTypeEnum) : JobModel
++GetAll() : List&lt;JobModel&gt;
++GetJobById(int) : JobModel?
+
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>400</x>
+      <y>2152</y>
+      <w>368</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>JobSettingsDto
+--
++index: int
+--
+__+CreateJobModel(string, string, string, JobSaveTypeEnum) : JobModel__</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1112</x>
+      <y>2008</y>
+      <w>360</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>JobService
+--
+--
++ GetAllJobs() : List&lt;JobModel&gt;
++ ExecuteOneJobThreaded(job : JobModel, progressCallback : Action&lt;JobModel, double&gt;) : (bool, string)
++ CanceljobInActif(job : JobModel, progressCallback : Action&lt;JobModel, double&gt;) : void
++ GetJobSettingsList(key : string) : List&lt;string&gt;
++ AddEncryptedFileExtension(extension : string) : void
++ RemoveEncryptedFileExtension(extension : string) : void
++ AddPriorityBusinessSoftware(software : string) : void
++ RemovePriorityBusinessSoftware(software : string) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>840</x>
+      <y>2224</y>
+      <w>208</w>
+      <h>304</h>
+    </coordinates>
+    <panel_attributes>JobModel
+--
++ Id : int
++ Name : string
++ FileSource : string
++ FileTarget : string
++ FileSize : string
++ FileTransferTime : string
++ LastFullBackupPath : string
++ LastSaveDifferentialPath : string
++ Time : DateTime
++ PriorityFileExtensions : 
+ObservableCollection&lt;string&gt;
++ CancelJobButton : string
++ PendingJobButton : string
++ ResumeJobButton : string
+--
++ JobModel()
++ JobModel(string, string, string, 
+JobSaveTypeEnum, string, string)
++ ToString() : string
++ AddPriorityFileExtension(string) : void
++ RemovePriorityFileExtension(string) : void
++ HasPendingPriorityFiles() : bool</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>760</x>
+      <y>2168</y>
+      <w>88</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;40.0;90.0;40.0;90.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>872</x>
+      <y>2168</y>
+      <w>40</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..5
+r1=jobs</panel_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>712</x>
+      <y>2208</y>
+      <w>144</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..*
+r1=jobs
+</panel_attributes>
+    <additional_attributes>160.0;60.0;10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>960</x>
+      <y>2600</y>
+      <w>112</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Enum&gt;&gt;
+JobSaveType
+--
+COMPLETE
+DIFFERENTIAL
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>992</x>
+      <y>2520</y>
+      <w>64</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1=jobType</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1496</x>
+      <y>2080</y>
+      <w>168</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+IJobStrategyService
+--
+--
+Execute(JobModel, string) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>824</x>
+      <y>2576</y>
+      <w>104</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Enum&gt;&gt;
+JobSaveState
+--
+END
+ACTIVE
+INACTIVE
+SKIP
+CANCEL
+PENDING</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>856</x>
+      <y>2520</y>
+      <w>88</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1=jobSaveState</panel_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1624</x>
+      <y>1664</y>
+      <w>216</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Static&gt;&gt;
+LanguageEnumExtensions
+--
+--
+__+GetLanguagePath(LanguageEnum) : string__</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1440</x>
+      <y>1664</y>
+      <w>80</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Enum&gt;&gt;
+LanguageEnum
+--
+FR
+EN</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1496</x>
+      <y>1720</y>
+      <w>72</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1=__Language__</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1648</x>
+      <y>1720</y>
+      <w>56</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>976</x>
+      <y>2048</y>
+      <w>152</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;20.0;170.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>696</x>
+      <y>1664</y>
+      <w>240</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Static&gt;&gt;
+ConsoleUtil
+--
+--
+__+PrintTextconsole(string) : void__
+__+GetInputJobSaveTypeEnum() : JobSaveTypeEnum__
+__+GetInputString() : string__
+__+GetInputInt() : int__
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1528</x>
+      <y>1992</y>
+      <w>176</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Static&gt;&gt;
+DateUtil
+--
+__+YYYY_MM_DD_HH_MM_SS : string__
+--
+__+GetTodayDate(string) : string</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1432</x>
+      <y>2136</y>
+      <w>56</w>
+      <h>232</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;270.0;10.0;50.0;20.0;50.0;20.0;30.0;10.0;30.0;10.0;10.0;10.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1040</x>
+      <y>2128</y>
+      <w>480</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;use&gt;&gt;
+lt=&lt;&lt;&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;140.0;440.0;140.0;440.0;50.0;580.0;50.0;580.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1464</x>
+      <y>2104</y>
+      <w>48</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>40.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1464</x>
+      <y>2296</y>
+      <w>56</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1512</x>
+      <y>2336</y>
+      <w>200</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;130.0;230.0;130.0;230.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1464</x>
+      <y>2016</y>
+      <w>80</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>80.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1520</x>
+      <y>2848</y>
+      <w>224</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Sealed&gt;&gt;
+LogManager
+--
+__-instance :  readonly Lazy&lt;LogManager&gt;
+-_lock : readonly  object
+-logFilePath: string
+-messageBuffer : List&lt;string&gt; messageBuffer
+--
+-LogManager()
++AddMessage(string) : void*
++UpdateState(string, string, string, long) : void
+-SaveToFile(LogEntry) : void
+
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1144</x>
+      <y>2848</y>
+      <w>144</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Sealed&gt;&gt;
+StateManager
+--
+__-instance :  readonly Lazy&lt;StateManager&gt;
+-_lock : readonly  object
+-stateFilePath : string
+--
+-StateManager()
+__+Instance : StateManager__
++UpdateState(BackupJobState) : void
+
+
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1200</x>
+      <y>2344</y>
+      <w>656</w>
+      <h>776</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>20.0;780.0;20.0;910.0;10.0;910.0;10.0;930.0;20.0;930.0;20.0;950.0;760.0;950.0;760.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1624</x>
+      <y>2544</y>
+      <w>56</w>
+      <h>320</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;380.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1168</x>
+      <y>2136</y>
+      <w>32</w>
+      <h>720</h>
+    </coordinates>
+    <panel_attributes>lt=.
+</panel_attributes>
+    <additional_attributes>10.0;880.0;10.0;140.0;20.0;140.0;20.0;120.0;10.0;120.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1544</x>
+      <y>2296</y>
+      <w>32</w>
+      <h>272</h>
+    </coordinates>
+    <panel_attributes>lt=.
+</panel_attributes>
+    <additional_attributes>10.0;320.0;10.0;190.0;20.0;190.0;20.0;170.0;10.0;170.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1544</x>
+      <y>2536</y>
+      <w>192</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=.
+</panel_attributes>
+    <additional_attributes>10.0;20.0;220.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1712</x>
+      <y>2336</y>
+      <w>24</w>
+      <h>232</h>
+    </coordinates>
+    <panel_attributes>lt=.
+</panel_attributes>
+    <additional_attributes>10.0;270.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1480</x>
+      <y>2744</y>
+      <w>56</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>50.0;150.0;10.0;150.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>872</x>
+      <y>2824</y>
+      <w>920</w>
+      <h>488</h>
+    </coordinates>
+    <panel_attributes>EasySave_Library_Log (DLL)
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>888</x>
+      <y>2848</y>
+      <w>200</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Static&gt;&gt;
+FileUtil
+--
+--
+__+CreateDirectoryIfNotExists(strnig) : void__
+__+ReadFromFile(string) : string__
+__+WriteToFile(string, string) : void__
+__+CombinePaths(params string[]) : string__
+__+CreateFileIfNotExists(string, string) : void__</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1080</x>
+      <y>2848</y>
+      <w>80</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;20.0;80.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>984</x>
+      <y>2952</y>
+      <w>632</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;160.0;770.0;160.0;770.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>968</x>
+      <y>1480</y>
+      <w>136</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>LoadDataService
+--
+--
++LoadDataService()
++LoadJobs() : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>672</x>
+      <y>1528</y>
+      <w>312</w>
+      <h>544</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1=_jobManager</panel_attributes>
+    <additional_attributes>180.0;650.0;10.0;650.0;10.0;10.0;370.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>720</x>
+      <y>2328</y>
+      <w>80</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>JobSettingsDto
+--
++index : int
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1320</x>
+      <y>2896</y>
+      <w>160</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>BackupJobState
+--
++JobName : string
++LastActionTimestamp : string
++JobStatus : string
++TotalEligibleFiles : int
++TotalFileSize : long
++Progress : double
++RemainingFiles : int
++RemainingFileSize : long
++CurrentSourceFilePath: string
++CurrentSourceFilePath: string
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1240</x>
+      <y>2960</y>
+      <w>96</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>100.0;60.0;10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1496</x>
+      <y>3144</y>
+      <w>184</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>LogEntry
+--
++Timestamp : string
++JobName : string
++SourcePath : string
++TargetPath : string
++FileSize : long
++TransferTime : double
++EncryptionTime : double
+
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1376</x>
+      <y>3168</y>
+      <w>136</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..*
+r1=Messages</panel_attributes>
+    <additional_attributes>10.0;20.0;150.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1240</x>
+      <y>3152</y>
+      <w>144</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>LogManager
+--
++Text : string
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1640</x>
+      <y>2992</y>
+      <w>56</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;190.0;10.0;150.0;20.0;150.0;20.0;130.0;10.0;130.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>792</x>
+      <y>2328</y>
+      <w>64</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..*
+r1=jobs</panel_attributes>
+    <additional_attributes>60.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>552</x>
+      <y>1504</y>
+      <w>432</w>
+      <h>664</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;810.0;10.0;10.0;520.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>232</x>
+      <y>1440</y>
+      <w>1336</w>
+      <h>1000</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;1230.0;20.0;20.0;1390.0;20.0;1390.0;60.0;1650.0;60.0;1650.0;430.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>2424</y>
+      <w>344</w>
+      <h>320</h>
+    </coordinates>
+    <panel_attributes>SettingUtil
+--
+__+ SettingChangeLanguage(LanguageEnum) : bool__
+__+ SettingChangeFormat(LogFormat) : bool__
+__+ AddToList(string, string) : bool__
+__+ AddPriorityExtension(string, PriorityExtensionDTO) : bool__
+__+ RemovePriorityExtension(string, string) : bool__
+__+ checkFormat(string, List&lt;string&gt;) : string__
+__+ RemoveFromList(string, string) : bool__
+__+ GetList(string) : List&lt;string&gt;__
+__+ GetPriorityExtensionFilesList(string) : List&lt;PriorityExtensionDTO&gt;__
+__+ GetPriorityExtensionInOrderByIndex(string) : List&lt;PriorityExtensionDTO&gt;__
+__+ SortFilesByPriority(List&lt;string&gt;) : List&lt;string&gt;__
+__+ InitSetting() : void__
+__+ GetSetting() : AppSettingDto?__
+__+ IsExtensionPriority(string) : bool__
+__- LoadSettings() : AppSettingDto?__
+__- SaveSettings(AppSettingDto, string, string) : bool__
+__- UpdateSetting(Action&lt;AppSettingDto&gt;, string, string) : bool__
+__- EnsureDirectoryAndFileExist() : void__
+__+ MovePriorityExtensionFileUp(int) : void__
+__+ MovePriorityExtensionFileDown(int) : void__
+__+ AddPriorityExtension(string) : (bool, PriorityExtensionDTO)__
+__+ RemovePriorityExtension(string) : bool__
+__+ SettingChangeMaxLargeFileSize(int) : bool__</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>376</x>
+      <y>2432</y>
+      <w>128</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>100.0;100.0;100.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>432</x>
+      <y>2512</y>
+      <w>384</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>AppSettingDto
+--
+__- language : LanguageEnum__
+__- logFormat : LogFormatManager.LogFormat__
+__- EncryptedFileExtensions : List&lt;string&gt;__
+__- PriorityBusinessProcess : List&lt;string&gt;__
+--
+__+ AppSettingDto(LanguageEnum, LogFormatManager.LogFormat) : AppSettingDto__
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>272</x>
+      <y>2328</y>
+      <w>424</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>EnumConverterUtil
+--
+__+ class JsonEnumConverter&lt;T&gt; : JsonConverter&lt;T&gt;__
+--
+__+ T(Read(ref Utf8JsonReader, Type, JsonSerializerOptions)) : T__
+__+ void(Write(Utf8JsonWriter, T, JsonSerializerOptions)) : void__
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>528</x>
+      <y>2288</y>
+      <w>328</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>390.0;20.0;10.0;20.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>496</x>
+      <y>2400</y>
+      <w>56</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1720</x>
+      <y>1976</y>
+      <w>440</w>
+      <h>232</h>
+    </coordinates>
+    <panel_attributes>AJobStrategyService
+--
++ OnProgressChanged : event Action&lt;double&gt;
++ _largeFileSemaphore : static SemaphoreSlim
++ LargeFileThreshold : static int
+--
++ Execute(JobModel, string) : void
++ IsEncryptedFileFormat(string) : bool
++ HandleFileOperation(string, string, JobModel, double) : long
++ UpdateBackupState(JobModel, int, long, int, long, string, string, double, string) : void
++ SaveFileInPending(JobModel, List&lt;string&gt;, int, long, int, long, string) : void
++ changeJobStateIfBusinessProcessLaunching(JobModel) : void
++ ProcessFilesInQueue(Queue&lt;string&gt;, Queue&lt;string&gt;, string, JobModel, ref int, 
+ref long, List&lt;string&gt;, int, long) : void
++ ProcessFallbackQueue(Queue&lt;string&gt;, string, JobModel, ref int, 
+ref long, List&lt;string&gt;, int, long) : void
++ CopyFileWithSemaphore(string, string, JobModel, bool, ref int, ref long, 
+List&lt;string&gt;, int, long) : bool</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1624</x>
+      <y>2240</y>
+      <w>208</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>JobDifferencielService
+--
+--
+-ExecuteDifferentialSave(jobModel,
+string, string) : void
+-CalculateFilesToCopy(string, string) : 
+(int, long, List&lt;string&gt;)
+-CopyModifiedFiles(JobModel, List&lt;string&gt;, 
+string, ref int, red long, int, long)
+
+
+
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1456</x>
+      <y>2240</y>
+      <w>144</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>JobCompleteService
+--
+--
++ExecuteCompleteSave(string,
+ string, JobModel)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1528</x>
+      <y>2184</y>
+      <w>208</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>240.0;10.0;10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1824</x>
+      <y>2200</y>
+      <w>88</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>90.0;10.0;90.0;100.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1656</x>
+      <y>2112</y>
+      <w>80</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1224</x>
+      <y>2352</y>
+      <w>296</w>
+      <h>400</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Static&gt;&gt;
+FileUtil
+--
+__+ CreateDirectory(string) : void__
+__+ ExistsDirectory(string) : bool__
+__+ EnsureDirectoryAndFileExist(string) : void__
+__+ CopyFile(string, string, bool) : void__
+__+ EncryptFile(string, string) : void__
+__+ ExistsFile(string) : bool__
+__+ GetFileName(string) : string__
+__+ CombinePath(string, string) : string__
+__+ GetJobIndex() : int__
+__+ GetCurrentJobIndex() : int__
+__+ GetFiles(string) : List&lt;string&gt;__
+__+ AddJobInFile(string, string, string, JobSaveTypeEnum) : void__
+__+ GetDirectories(string) : IEnumerable&lt;string&gt;__
+__+ IncrementJobIndex(JobSettingsDto) : void__
+__+ GetLastWriteTime(string) : DateTime__
+__+ GetDirectoryName(string) : string__
+__+ GetFileSize(string) : long__
+__+ CalculateTransferTime(string, string) : double__
+__+ CalculateTotalSize(string) : long__
+__- CreateDefaultJsonFile(string) : void__
+__+ EnsureKeyExists(AppSettingDto, string, string) : void__
+__+ GetAppSettingsList(string) : List&lt;string&gt;__
+__+ GetFileExtension(string) : string__
+__+ GetAllFilesAndDirectories(string) : List&lt;string&gt;__
+__+ GetRelativePath(string, string) : string__
+__+ AddValueToJobSettingsList(string, string) : void__
+__+ RemoveValueFromJobSettingsList(string, string) : void__
+__+ GetAppSettingsInt(string) : int__</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1104</x>
+      <y>968</y>
+      <w>120</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>MainWindow
+--
++ MainWindow() : void
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1080</x>
+      <y>1008</y>
+      <w>176</w>
+      <h>776</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1=mainWindow</panel_attributes>
+    <additional_attributes>120.0;10.0;120.0;890.0;10.0;890.0;10.0;950.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1024</x>
+      <y>1536</y>
+      <w>104</w>
+      <h>184</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1=loadDataService</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;210.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>992</x>
+      <y>1704</y>
+      <w>80</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>MainEasySave</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1024</x>
+      <y>1720</y>
+      <w>56</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>960</x>
+      <y>1768</y>
+      <w>136</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>App.axaml</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1024</x>
+      <y>1784</y>
+      <w>56</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>960</x>
+      <y>1832</y>
+      <w>136</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>SettingUtil</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>936</x>
+      <y>1776</y>
+      <w>304</w>
+      <h>648</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>360.0;790.0;320.0;790.0;320.0;770.0;280.0;770.0;280.0;790.0;160.0;790.0;160.0;600.0;180.0;600.0;180.0;570.0;160.0;570.0;160.0;470.0;180.0;470.0;180.0;430.0;160.0;430.0;160.0;180.0;10.0;180.0;10.0;10.0;30.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1088</x>
+      <y>1768</y>
+      <w>416</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>500.0;70.0;300.0;70.0;300.0;50.0;260.0;50.0;260.0;70.0;60.0;70.0;60.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1304</x>
+      <y>968</y>
+      <w>224</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>BaseLayoutViewModel
+--
+--
+__+ Instance : BaseLayoutViewModel__
++ NotificationContainer : StackPanel
++ IsLogsVisible : bool
++ CurrentDate : string
++ Home : string
++ Jobs : string
++ Logs : string
++ Settings : string
++ Conecte : string
+- BaseLayoutViewModel() : void
++ UpdateValues(Button?, Button?) : void
+__+ RefreshInstance(Button?, Button?) : void__
++ AddNotification(string) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1640</x>
+      <y>488</y>
+      <w>152</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>HomePage
+--
+--
++ HomePage() : void
++ Reload() : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1616</x>
+      <y>752</y>
+      <w>264</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>JobsPage
+--
+_-translationService : TranslationService_
+--
++ JobsPage() : void
++ Execute(object, RoutedEventArgs) : void
++ UpdateJobProgress(JobModel) : void
++ OnAddJobClick(object, RoutedEventArgs) : void
++ Reload() : void
++ OnPendingJob(object, RoutedEventArgs) : void
++ executeJobList(List&lt;JobModel&gt;) : void
++ OnResumeJob(object, RoutedEventArgs) : void
++ OnCancelJob(object, RoutedEventArgs) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1520</x>
+      <y>512</y>
+      <w>136</w>
+      <h>480</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>150.0;10.0;80.0;10.0;80.0;580.0;10.0;580.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1672</x>
+      <y>976</y>
+      <w>128</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>LogsPage
+--
+--
++ LogsPage() : void
++ Reload() : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1616</x>
+      <y>1056</y>
+      <w>256</w>
+      <h>248</h>
+    </coordinates>
+    <panel_attributes>SettingPage
+--
+--
++ SettingPage(BaseLayout) : void
++ Reload() : void
++ OnLanguageChanged(object, RoutedEventArgs) : void
++ OnLogsFormatChanged(object, RoutedEventArgs) 
+: void
++ Update() : void
++ AddEncryptedFileExtensions_Click(object, 
+RoutedEventArgs) : void
++ RemoveEncryptedFileExtensions_Click(object, 
+RoutedEventArgs) : void
++ AddPriorityBusinessProcess_Click(object, 
+RoutedEventArgs) : void
++ RemovePriorityBusinessProcess_Click(object, 
+RoutedEventArgs) : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1576</x>
+      <y>1456</y>
+      <w>312</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>AddJobsPage
+--
+--
++ AddJobsPage() : void
++ Reload() : void
++ Valide(object, RoutedEventArgs) : void
++ ShowError(string) : void
++ ShowSuccess(string) : void
++ IsFolderNotSelected(string) : bool
++ OnOpenFolderTargetDialogClick(object, RoutedEventArgs) : void
++ OnOpenFolderSourceDialogClick(object, RoutedEventArgs) : void
+- OpenFolderDialog(TextBlock) : Task</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1416</x>
+      <y>688</y>
+      <w>288</w>
+      <h>296</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>340.0;80.0;340.0;40.0;230.0;40.0;230.0;10.0;160.0;10.0;160.0;40.0;10.0;40.0;10.0;350.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1520</x>
+      <y>968</y>
+      <w>168</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>190.0;60.0;80.0;60.0;80.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1576</x>
+      <y>1072</y>
+      <w>56</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>50.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1520</x>
+      <y>968</y>
+      <w>320</w>
+      <h>504</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>380.0;610.0;380.0;550.0;80.0;550.0;80.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1896</x>
+      <y>424</y>
+      <w>144</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>Toastr
+--
+--
++ ShowNotification() : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2120</x>
+      <y>368</y>
+      <w>192</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>HomePageViewModel
+--
++ Title : string
+--
+- HomePageViewModel() : void
++ UpdateTitle() : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1992</x>
+      <y>488</y>
+      <w>552</w>
+      <h>248</h>
+    </coordinates>
+    <panel_attributes>JobsPageViewModel
+--
++ Jobs : ObservableCollection&lt;JobModel&gt;
++ AllJobs : string
++ AddAJob : string
++ Run : string
++ Name : string
++ Source : string
++ Destination : string
++ Type : string
++ Progress : string
++ Results : string
++ PriorityExtension : string
+--
+- JobsPageViewModel() : void
+- LoadTranslations() : void
++ Refresh() : void
++ CancelJobInActif(JobModel, Action&lt;JobModel, double&gt;) : void
+- LoadJobs() : void
++ ExecuteJobsParallelThreadPool(List&lt;JobModel&gt;, Action&lt;JobModel, double&gt;, Action&lt;string, string&gt;) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1984</x>
+      <y>784</y>
+      <w>256</w>
+      <h>248</h>
+    </coordinates>
+    <panel_attributes>LogsPageViewModel
+--
++ Nodes : ObservableCollection&lt;LogNode&gt;
++ AllLogs : string
++ Timestamp : string
++ SourcePath : string
++ TargetPath : string
++ FileSize : string
++ TransferTime : string
++ EncryptionTime : string
+--
+- LogsPageViewModel() : void
++ Refresh() : void
+- LoadTranslations() : void
+- LoadLogs() : void
+- CreateLogNode(string) : LogNode
+- DeserializeLogs(string) : List&lt;LogDataDto&gt;
+- DeserializeXmlManually(string) : List&lt;LogDataDto&gt;
+- CreateJobNode(LogDataDto) : LogNode
+- CreateMessageNode(List&lt;MessageDto&gt;) : LogNode</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1984</x>
+      <y>1048</y>
+      <w>216</w>
+      <h>440</h>
+    </coordinates>
+    <panel_attributes>SettingPageViewModel
+--
++ EncryptedFileExtensions : ObservableCollection&lt;string&gt;
++ PriorityBusinessProcess : ObservableCollection&lt;string&gt;
++ Message : string
++ Status : string
++ SelectLanguage : string
++ French : string
++ English : string
++ ChooseLogsFormat : string
++ Json : string
++ Xml : string
++ Add : string
++ FileExtensionsToEncrypt : string
++ MonitoredBusinessSoftware : string
++ MaxLargeFileSizeText : string
++ MaxLargeFileSize : int
++ PriorityExtensionFiles : ObservableCollection&lt;PriorityExtensionDTO&gt;
++ PriorityFileManagement : string
++ PriorityExtendions : string
+--
++ SettingPageViewModel(StackPanel) : void
++ Refresh() : void
++ AddEncryptedFileExtensions(string) : void
++ RemovePriorityFileExtensions(PriorityExtensionDTO) : void
++ AddPriorityBusinessProcess(string) : void
++ AddPriorityFileExtensions(string) : void
++ ChangeMaxLargeFileSize(int) : (string, string)
++ RemovPriorityBusinessProcess(string) : void
++ RemoveEncryptedFileExtensions(string) : void
++ ChangeLanguage(LanguageEnum) : (string, string)
++ ChangeLogsFormat(LogFormatManager.LogFormat) : (string, string)
++ MoveExtensionUp(int) : void
++ MoveExtensionDown(int) : void
+- SortPriorityExtensions(int, bool) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1992</x>
+      <y>1512</y>
+      <w>168</w>
+      <h>176</h>
+    </coordinates>
+    <panel_attributes>AddJobsPageViewModel
+--
++ EnterName : string
++ Complete : string
++ Differential : string
++ ChooseASourceFolder : string
++ ChooseADestinationFolder : string
++ NoFolderSelected : string
++ Add : string
++ AddAJob : string
+--
+- AddJobsPageViewModel() : void
++ LoadTranslations() : void
++ RefreshTranslations() : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1656</x>
+      <y>376</y>
+      <w>480</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1=homePageViewModel</panel_attributes>
+    <additional_attributes>580.0;20.0;10.0;20.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1792</x>
+      <y>608</y>
+      <w>216</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1=jobsPageViewModel</panel_attributes>
+    <additional_attributes>250.0;20.0;10.0;20.0;10.0;180.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1792</x>
+      <y>1000</y>
+      <w>208</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1=logsPageViewModel</panel_attributes>
+    <additional_attributes>240.0;30.0;150.0;30.0;150.0;10.0;110.0;10.0;110.0;30.0;10.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1848</x>
+      <y>1072</y>
+      <w>152</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1=settingPageViewModel</panel_attributes>
+    <additional_attributes>170.0;20.0;30.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1848</x>
+      <y>1568</y>
+      <w>160</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1=addJobsPageViewModel</panel_attributes>
+    <additional_attributes>180.0;20.0;50.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1712</x>
+      <y>424</y>
+      <w>200</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>230.0;20.0;10.0;20.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1872</x>
+      <y>464</y>
+      <w>72</w>
+      <h>368</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>30.0;10.0;30.0;440.0;10.0;440.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1792</x>
+      <y>464</y>
+      <w>152</w>
+      <h>552</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>130.0;10.0;130.0;670.0;10.0;670.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1864</x>
+      <y>464</y>
+      <w>80</w>
+      <h>616</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>40.0;10.0;40.0;750.0;10.0;750.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1544</x>
+      <y>400</y>
+      <w>592</w>
+      <h>1400</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>30.0;1730.0;30.0;1300.0;10.0;1300.0;10.0;1220.0;30.0;1220.0;30.0;730.0;10.0;730.0;10.0;710.0;30.0;710.0;30.0;10.0;720.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2232</x>
+      <y>1016</y>
+      <w>120</w>
+      <h>648</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..*
+r1=Logs</panel_attributes>
+    <additional_attributes>102.0;790.0;100.0;270.0;110.0;270.0;110.0;250.0;100.0;250.0;100.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2304</x>
+      <y>1648</y>
+      <w>232</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>LogDataDto
+--
++ Timestamp : DateTime {get; set;}
++ JobName : string {get; set;}
++ SourcePath : string {get; set;}
++ TargetPath : string {get; set;}
++ FileSize : long {get; set;}
++ TransferTime : double {get; set;}
++ Messages : List&lt;MessageDto&gt; {get; set;}
++ EncryptionTime : double {get; set;}
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2296</x>
+      <y>1832</y>
+      <w>152</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>MessageDto
+--
++ Text : string {get; set;}
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2336</x>
+      <y>1768</y>
+      <w>72</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..*
+r1=Messages</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2312</x>
+      <y>920</y>
+      <w>224</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>LogNode
+--
++ Title : string
++ SubNodes : ObservableCollection&lt;LogNode&gt;
+--
++ LogNode() : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2232</x>
+      <y>1000</y>
+      <w>224</w>
+      <h>664</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..*
+r1=Entries</panel_attributes>
+    <additional_attributes>222.0;810.0;220.0;290.0;230.0;290.0;230.0;270.0;220.0;270.0;220.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2232</x>
+      <y>912</y>
+      <w>96</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>100.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1736</x>
+      <y>1024</y>
+      <w>528</w>
+      <h>1928</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;2370.0;70.0;2370.0;70.0;2390.0;100.0;2390.0;100.0;2370.0;610.0;2370.0;600.0;670.0;600.0;680.0;600.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1736</x>
+      <y>1184</y>
+      <w>576</w>
+      <h>1816</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;2230.0;70.0;2230.0;70.0;2250.0;100.0;2250.0;100.0;2230.0;670.0;2230.0;660.0;10.0;580.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1216</x>
+      <y>968</y>
+      <w>104</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>110.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1304</x>
+      <y>672</y>
+      <w>1288</w>
+      <h>1352</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1=jobService</panel_attributes>
+    <additional_attributes>10.0;1670.0;10.0;1200.0;290.0;1200.0;290.0;1180.0;350.0;1180.0;350.0;1200.0;770.0;1200.0;770.0;1310.0;1100.0;1310.0;1100.0;1090.0;1590.0;1090.0;1590.0;10.0;1550.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>632</x>
+      <y>1408</y>
+      <w>1184</w>
+      <h>720</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>230.0;880.0;10.0;880.0;10.0;20.0;1460.0;20.0;1460.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>200</x>
+      <y>1368</y>
+      <w>1808</w>
+      <h>1072</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;1320.0;20.0;30.0;1720.0;30.0;1720.0;10.0;1740.0;10.0;1740.0;30.0;2150.0;30.0;2150.0;230.0;2240.0;230.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1088</x>
+      <y>1840</y>
+      <w>1144</w>
+      <h>1064</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>830.0;1290.0;880.0;1290.0;880.0;1310.0;920.0;1310.0;920.0;1290.0;1370.0;1290.0;1370.0;160.0;300.0;170.0;300.0;150.0;260.0;150.0;260.0;170.0;50.0;170.0;50.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>2920</x>
+      <y>312</y>
+      <w>1000</w>
+      <h>680</h>
+    </coordinates>
+    <panel_attributes>Server
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2936</x>
+      <y>344</y>
+      <w>168</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>ClientDTO
+--
++Id: string
++Name: string
++IPAddress: string
++Port: int
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3224</x>
+      <y>344</y>
+      <w>168</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>CommandDTO
+--
++id: string
++command: string
++obj: List&lt;Object&gt;
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3496</x>
+      <y>344</y>
+      <w>168</w>
+      <h>184</h>
+    </coordinates>
+    <panel_attributes>JobDTO
+--
++Id: int
++SaveSate: string
++SaveType: string
++Name: string
++FileSource: string
++FileTarget: string
++FileSize: string
++FileTransferTime: string
++LastFullBackupPath: string?
++LastSaveDifferentialPath: string?
++Time: DateTime
+
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3320</x>
+      <y>848</y>
+      <w>168</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>User
+--
++Id: string
++Name: string
++IPAddress: string
++Port: int
++TcpClient: TcpClient
++ConnectTo: User? = null
+
+--
+User(TcpClient): User
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3632</x>
+      <y>584</y>
+      <w>240</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;static&gt;&gt;
+ServerUtils
+--
+--
+_+ReadMessage(User): string_
+_+WriteLog(User, string): void_
+_+WaitForResponse(User, int): Task&lt;String?&gt;_
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2960</x>
+      <y>592</y>
+      <w>240</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;static&gt;&gt;
+Server
+--
+_-listener: TcpClient_
+_+pendingResponses: Dictionary&lt;string, string&gt;_
+--
++Main(): void
+_+BroadCastNewConnection(User): void_
+_+GetUserById(string): User?_
+_+HandleClient(User): void_
+_-ExecuteJobs(User, CommandDTO): Task_
+_-GetJobsUser(User, string): Task_
+_DisconnecteUser(User, string): void_
+_-ConnecteUser(User, string):void_
+_-sendMessage(User, string):void_
+_~SendClientsList(User): void_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3192</x>
+      <y>616</y>
+      <w>256</w>
+      <h>248</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..*
+r1=clients</panel_attributes>
+    <additional_attributes>260.0;290.0;260.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3192</x>
+      <y>656</y>
+      <w>224</w>
+      <h>208</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>220.0;240.0;220.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3192</x>
+      <y>592</y>
+      <w>456</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>550.0;20.0;330.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3168</x>
+      <y>400</y>
+      <w>152</w>
+      <h>208</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>170.0;10.0;170.0;170.0;10.0;170.0;10.0;240.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3016</x>
+      <y>416</y>
+      <w>56</w>
+      <h>192</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;220.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>496</x>
+      <y>2776</y>
+      <w>128</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>PriorityExtensionDTO
+--
++Index: int
++ExtensionFile: string</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>536</x>
+      <y>2608</y>
+      <w>128</w>
+      <h>184</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..*
+r1=PriorityExtensionFiles</panel_attributes>
+    <additional_attributes>10.0;210.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>680</x>
+      <y>2760</y>
+      <w>128</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>FileInPendingJobDTO
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>776</x>
+      <y>2520</y>
+      <w>192</w>
+      <h>256</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..1
+r1=FileInPending</panel_attributes>
+    <additional_attributes>10.0;300.0;10.0;230.0;220.0;230.0;220.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>800</x>
+      <y>2200</y>
+      <w>1152</w>
+      <h>584</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;710.0;1420.0;710.0;1420.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>232</x>
+      <y>2736</y>
+      <w>280</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>330.0;80.0;10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>0</x>
+      <y>344</y>
+      <w>2408</w>
+      <h>2512</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..1
+r1=PriorityExtensionFiles</panel_attributes>
+    <additional_attributes>620.0;3110.0;10.0;3110.0;20.0;10.0;2990.0;20.0;2990.0;180.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>568</x>
+      <y>1216</y>
+      <w>2136</w>
+      <h>2120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..*
+r1=_priorityExtensionFiles</panel_attributes>
+    <additional_attributes>10.0;2020.0;10.0;2630.0;2650.0;2620.0;2640.0;10.0;2040.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1832</x>
+      <y>1784</y>
+      <w>192</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>ConfigurationService
+--
+_-_lock: readonly object_
+-configuration: IConfigurationRoot
+--
+-ConfigurationService()
++GetInstance(): ConfigurationService
++GetStringSetting(string) : string</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1768</x>
+      <y>1800</y>
+      <w>80</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..1
+r1=__instance_</panel_attributes>
+    <additional_attributes>80.0;20.0;50.0;20.0;50.0;70.0;80.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1232</x>
+      <y>1872</y>
+      <w>888</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1=_configurationService</panel_attributes>
+    <additional_attributes>960.0;10.0;960.0;100.0;10.0;100.0;10.0;170.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1096</x>
+      <y>1520</y>
+      <w>880</w>
+      <h>432</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1=_configurationService</panel_attributes>
+    <additional_attributes>950.0;450.0;950.0;520.0;180.0;520.0;180.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1504</x>
+      <y>1832</y>
+      <w>776</w>
+      <h>792</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>650.0;10.0;910.0;10.0;920.0;970.0;10.0;970.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1080</x>
+      <y>696</y>
+      <w>192</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>GlobalDataService
+--
+__instance : GlobalDataService_
+__lock : object_
+isConnecte : bool
+connecteTo : (string?, string?)
+--
++ GetInstance() : GlobalDataService</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1352</x>
+      <y>592</y>
+      <w>88</w>
+      <h>392</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1= _globalData</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;470.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1016</x>
+      <y>688</y>
+      <w>80</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..1
+r1=__instance_</panel_attributes>
+    <additional_attributes>80.0;20.0;60.0;20.0;60.0;70.0;80.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1256</x>
+      <y>408</y>
+      <w>168</w>
+      <h>192</h>
+    </coordinates>
+    <panel_attributes>ConnexionViewModel
+--
++ IsConnected : bool
++ connexion : string
++ entrerVotreNom : string
++ vousetesconnecte : string
++ seconnecter : string
++ sedeconnecter : string
+--
+- ConnexionViewModel() : void
++ Refresh() : void
++ Connexion(string) : Task
++ GetAllUserConnect() : void
++ ConnexionTo(string, string) : void
++ DisconnexionTo() : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1112</x>
+      <y>568</y>
+      <w>160</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1= _globalDataService</panel_attributes>
+    <additional_attributes>10.0;160.0;10.0;10.0;180.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1416</x>
+      <y>568</y>
+      <w>592</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1..1
+r1= _globalDataService</panel_attributes>
+    <additional_attributes>10.0;20.0;720.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>936</x>
+      <y>112</y>
+      <w>376</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>ConnexionPage
+--
+--
++ ConnexionPage(BaseLayout) : void
++ Reload() : void
+- ShowLoginForm() : void
+- ShowConnectedState() : void
+- ShowConnectedToState() : void
++ Connexion(object?, RoutedEventArgs) : void
++ Connexion(string) : Task
++ ConnectTo(object?, RoutedEventArgs) : void
++ DisconnectTo(object?, RoutedEventArgs) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1080</x>
+      <y>264</y>
+      <w>56</w>
+      <h>448</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;540.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1112</x>
+      <y>800</y>
+      <w>520</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0;630.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2360</x>
+      <y>2056</y>
+      <w>272</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>ProcessUtil
+--
+--
+__+ IsProcessRunning(List&lt;string&gt;) : (bool, string)__</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1352</x>
+      <y>232</y>
+      <w>1984</w>
+      <h>704</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..*
+r1= users</panel_attributes>
+    <additional_attributes>2460.0;850.0;1620.0;850.0;1620.0;10.0;10.0;10.0;10.0;220.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>512</x>
+      <y>704</y>
+      <w>136</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Client
+--
+- client : TcpClient
+- stream : NetworkStream
+- name : string
+--
++ Client(name : string)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>512</x>
+      <y>552</y>
+      <w>192</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Connexion
+--
+_- serverIp : string_
+_- port : int_
+_- timeoutMs : int_
+--
++ Conn() : TcpClient</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3152</x>
+      <y>144</y>
+      <w>208</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>User
+--
+--
+- Id : string
+- Name : string
+- IPAddress : string
+- Port : in
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2744</x>
+      <y>144</y>
+      <w>344</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>Utils
+--
+_-messageQueue : ConcurrentQueue&lt;string&gt;_
+--
+__+ StartListening(stream : NetworkStream) : Task_
+_+ ExecuteJobs(jobCommand : List&lt;JobModel&gt;) : void_
+_+ SendToServer(message : string, stream : NetworkStream) : void_
+_+ WaitForResponse&lt;T&gt;() : Task&lt;T&gt;_
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>752</x>
+      <y>0</y>
+      <w>2280</w>
+      <h>2024</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m2=_jobService
+r2=0..1</panel_attributes>
+    <additional_attributes>2830.0;180.0;2830.0;10.0;10.0;10.0;10.0;1540.0;580.0;1540.0;570.0;2510.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>600</x>
+      <y>2976</y>
+      <w>200</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>SettingsService
+--
+- filePath : string
+--
++ LoadAppSettings() : AppSettingDto</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1280</x>
+      <y>264</y>
+      <w>136</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=_connexionViewModel
+r1=0..1</panel_attributes>
+    <additional_attributes>10.0;180.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1520</x>
+      <y>1112</y>
+      <w>112</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=_baseLayout
+r1=0..1</panel_attributes>
+    <additional_attributes>10.0;20.0;120.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1304</x>
+      <y>160</y>
+      <w>272</w>
+      <h>824</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=_connexionViewModel
+r1=0..1</panel_attributes>
+    <additional_attributes>180.0;1010.0;180.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>656</x>
+      <y>2608</y>
+      <w>80</w>
+      <h>384</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;270.0;80.0;270.0;80.0;460.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>640</x>
+      <y>752</y>
+      <w>456</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..1
+r1=client</panel_attributes>
+    <additional_attributes>10.0;20.0;550.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1392</x>
+      <y>24</y>
+      <w>1912</w>
+      <h>400</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..*
+r1=users</panel_attributes>
+    <additional_attributes>2340.0;150.0;2340.0;10.0;10.0;10.0;10.0;480.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>552</x>
+      <y>624</y>
+      <w>56</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;use&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+</diagram>

@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using EasySave_Project.Manager;
 using EasySave_Project.Model;
 using System.Text.Json;
@@ -8,24 +10,29 @@ namespace EasySave_Project.Service
 {
     public class LoadDataService
     {
-        private JobManager _jobManager;
+        private readonly JobManager _jobManager = JobManager.GetInstance();
+        
+        private readonly ConfigurationService _configurationService = ConfigurationService.GetInstance();
 
         public LoadDataService()
         {
-            this._jobManager = JobManager.GetInstance();
         }
 
+        /// <summary>
+        /// Loads job configurations from a JSON file and initializes job instances.
+        /// </summary>
         public void LoadJobs()
         {
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                 "easySave", "easySaveSetting", "jobsSetting.json");
+                _configurationService.GetStringSetting("Path:ProjectFile"),
+                _configurationService.GetStringSetting("Path:SettingFolder"),
+                _configurationService.GetStringSetting("Path:JobSettingFile"));
+
 
             try
             {
-                // Check if the JSON file exists
                 if (File.Exists(filePath))
                 {
-                    // Read the JSON file
                     string jsonString = File.ReadAllText(filePath);
 
                     try
@@ -48,7 +55,8 @@ namespace EasySave_Project.Service
                                     FileTransferTime = jobData.FileTransferTime,
                                     Time = jobData.Time,
                                     LastFullBackupPath = jobData.LastFullBackupPath,
-                                    LastSaveDifferentialPath = jobData.LastSaveDifferentialPath
+                                    LastSaveDifferentialPath = jobData.LastSaveDifferentialPath,
+                                    FileInPending = jobData.FileInPending
                                 };
 
                                 _jobManager.AddJob(job);

@@ -4,6 +4,9 @@
     {
         END,
         ACTIVE,
-        INACTIVE
+        INACTIVE,
+        SKIP,
+        CANCEL,
+        PENDING,
     }
 }

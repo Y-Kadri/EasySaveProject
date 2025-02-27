@@ -1,9 +1,13 @@
-﻿using EasySave_Library_Log;
+﻿using DynamicData;
+using EasySave_Library_Log;
 using EasySave_Library_Log.manager;
 using EasySave_Project.Model;
 using EasySave_Project.Util;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 
 namespace EasySave_Project.Service
 {
@@ -12,95 +16,79 @@ namespace EasySave_Project.Service
     /// This class implements the IJobStrategy interface and provides
     /// the functionality to execute a full backup of the specified job.
     /// </summary>
-    public class JobCompleteService : IJobStrategyService
+    public class JobCompleteService : AJobStrategyService
     {
+        //public event Action<double> OnProgressChanged;
+
         /// <summary>
         /// Executes the complete backup job for the given JobModel.
         /// </summary>
         /// <param name="job">The JobModel object representing the job to execute.</param>
         /// <param name="backupDir">The directory where the backup will be stored.</param>
-        public void Execute(JobModel job, string backupDir)
+        public override void Execute(JobModel job, string backupDir)
         {
             string message = TranslationService.GetInstance().GetText("startingBackUpComplete") + job.Name;
-           
+
             ConsoleUtil.PrintTextconsole(message);
             LogManager.Instance.AddMessage(message);
 
-            ExecuteCompleteSave(job.FileSource, backupDir, job); // Perform the complete backup
+            List<string> allFiles;
 
-            job.LastFullBackupPath = backupDir; // Update the last full backup path
+            int processedFiles = 0;
+            long processedSize = 0;
+            int totalFiles = 0;
+            long totalSize = 0;
 
-            message = TranslationService.GetInstance().GetText("backupComplet") + " " + job.Name;
-            ConsoleUtil.PrintTextconsole(message);
-            LogManager.Instance.AddMessage(message);
+            if (job.SaveState.Equals(JobSaveStateEnum.PENDING))
+            {
+                allFiles = job.FileInPending.FilesInPending;
+                job.SaveState = JobSaveStateEnum.ACTIVE;
+                processedFiles = job.FileInPending.ProcessedFiles;
+                processedSize = job.FileInPending.ProcessedSize;
+                totalFiles = job.FileInPending.TotalFiles;
+                totalSize = job.FileInPending.TotalSize;
+            }
+            else
+            {
+                // Retrieve total number of files and total size before starting the backup
+                allFiles = FileUtil.GetAllFilesAndDirectories(job.FileSource);
+                totalFiles = allFiles.Count;
+                totalSize = allFiles.Sum(FileUtil.GetFileSize);
+            }
+
+            allFiles = SettingUtil.SortFilesByPriority(allFiles);
+
+            // Execute full backup process
+            ExecuteCompleteSave(allFiles, backupDir, job, totalFiles, totalSize, ref processedFiles, ref processedSize);  
+            
+            // Update the last full backup path
+            job.LastFullBackupPath = backupDir;
         }
 
         /// <summary>
-        /// Implements the logic for performing a complete backup.
-        /// This method copies all files and subdirectories from the source directory
-        /// to the target directory.
+        /// Executes a full backup by copying all specified files to the target directory.
+        /// This method iterates through the list of files to copy, processes each file,
+        /// updates the backup state, and tracks progress. It also manages pending files
+        /// in case of an interrupted backup.
         /// </summary>
-        /// <param name="sourceDir">The source directory to back up.</param>
-        /// <param name="targetDir">The target directory where the backup will be stored.</param>
+        /// <param name="filesToCopyPath">List of file paths to be backed up.</param>
+        /// <param name="targetDir">The target directory where files will be copied.</param>
         /// <param name="job">The JobModel representing the backup job.</param>
-        private void ExecuteCompleteSave(string sourceDir, string targetDir, JobModel job)
+        /// <param name="totalFiles">The total number of files to be backed up.</param>
+        /// <param name="totalSize">The total size of all files in the backup.</param>
+        /// <param name="processedFiles">Reference to the counter tracking processed files.</param>
+        /// <param name="processedSize">Reference to the counter tracking processed file size.</param>
+        private void ExecuteCompleteSave(List<string> filesToCopyPath, string targetDir, JobModel job, int totalFiles, long totalSize, ref int processedFiles, ref long processedSize)
         {
-            var files = FileUtil.GetFiles(sourceDir);
-            int totalFiles = files.Count();
-            int processedFiles = 0;
-            long totalSize = FileUtil.CalculateTotalSize(sourceDir); // Use the new method
-            long processedSize = 0;
+            // Queue to store normal-sized files to be copied first
+            var files = new Queue<string>(filesToCopyPath);
+            // Queue for large files that will be processed later
+            var fallbackQueue = new Queue<string>();
 
-            // Copy all files from the source directory
-            foreach (string sourceFile in files)
-            {
-                string fileName = FileUtil.GetFileName(sourceFile);
-                string targetFile = FileUtil.CombinePath(targetDir, fileName);
-
-                FileUtil.CopyFile(sourceFile, targetFile, true); // Copy file to target
-
-                // Calculate file size and transfer time
-                long fileSize = FileUtil.GetFileSize(sourceFile);
-                double transferTime = FileUtil.CalculateTransferTime(sourceFile, targetFile);
-
-                // Log the operation
-                LogManager.Instance.UpdateState(
-                    jobName: job.Name,
-                    sourcePath: sourceFile,
-                    targetPath: targetFile,
-                    fileSize: fileSize,
-                    transferTime: transferTime
-                );
-
-                // Update processed files and sizes
-                processedFiles++;
-                processedSize += fileSize;
-
-                // Update the state in the StateManager
-                StateManager.Instance.UpdateState(new BackupJobState
-                {
-                    JobName = job.Name,
-                    LastActionTimestamp = DateUtil.GetTodayDate(DateUtil.YYYY_MM_DD_HH_MM_SS),
-                    JobStatus = job.SaveState.ToString(),
-                    TotalEligibleFiles = totalFiles,
-                    TotalFileSize = totalSize,
-                    Progress = (double)processedFiles / totalFiles * 100,
-                    RemainingFiles = totalFiles - processedFiles,
-                    RemainingFileSize = totalSize - processedSize,
-                    CurrentSourceFilePath = sourceFile,
-                    CurrentDestinationFilePath = targetFile
-                });
-            }
-
-            // Recursively copy all subdirectories
-            foreach (string subDir in FileUtil.GetDirectories(sourceDir))
-            {
-                string subDirName = FileUtil.GetDirectoryName(subDir);
-                string targetSubDir = FileUtil.CombinePath(targetDir, subDirName);
-
-                FileUtil.CreateDirectory(targetSubDir);
-                ExecuteCompleteSave(subDir, targetSubDir, job); // Recursive call
-            }
+            // Process the queued files
+            ProcessFilesInQueue(files, fallbackQueue, targetDir, job, ref processedFiles, ref processedSize, filesToCopyPath, totalFiles, totalSize);
+            // Process large files after regular ones
+            ProcessFallbackQueue(fallbackQueue, targetDir, job, ref processedFiles, ref processedSize, filesToCopyPath, totalFiles, totalSize);
         }
     }
 }

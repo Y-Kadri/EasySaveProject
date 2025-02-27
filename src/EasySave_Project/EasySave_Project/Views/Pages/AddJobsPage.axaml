@@ -1,0 +1,69 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:pages="clr-namespace:EasySave_Project.ViewModels.Pages"
+             xmlns:components="clr-namespace:EasySave_Project.Views.Components"
+             x:Class="EasySave_Project.Views.Pages.AddJobsPage"
+             x:DataType="pages:AddJobsPageViewModel"> <!-- Ajout de x:DataType ici -->
+
+    
+    
+    
+    <StackPanel Background="Transparent" Margin="20" Spacing="60" HorizontalAlignment="Center">
+      
+    <!-- Notification --> 
+    <Canvas Panel.ZIndex="9">
+        <StackPanel x:Name="NotificationContainer"
+                    Canvas.Right="0" 
+                    Canvas.Top="0"
+                    Spacing="10" />
+    </Canvas>
+        
+    <!-- Titre -->
+        <TextBlock FontSize="32" FontWeight="Bold" Text="{Binding AddAJob}" HorizontalAlignment="Center"/>
+
+        <!-- Formulaire -->
+        <Grid ColumnDefinitions="1*,1*" RowDefinitions="Auto,Auto,Auto">
+            
+            <!-- Champ de texte pour le nom -->
+            <TextBox Grid.Column="0"
+                     Grid.Row="0"
+                     Watermark="{Binding EnterName}"
+                     Margin="30"
+                     Height="40"
+                     HorizontalAlignment="Stretch"
+                     x:Name="JobName"/>
+            
+            <!-- Options Radio -->
+            <StackPanel Margin="30" Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
+                <RadioButton GroupName="JobType" Content="{Binding Complete}" x:Name="FirstType"/>
+                <RadioButton GroupName="JobType" Content="{Binding Differential}" x:Name="SecondType"/>
+            </StackPanel>
+
+            <!-- Sélection dossier source -->
+            <StackPanel Margin="30" Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Spacing="20" VerticalAlignment="Center">
+                <Button Content="{Binding ChooseASourceFolder}" 
+                        Click="OnOpenFolderSourceDialogClick" 
+                        Width="200" Height="40"/>
+                <TextBlock x:Name="SelectedFileSourcePath" 
+                           Text="{Binding NoFolderSelected}" 
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Sélection dossier cible -->
+            <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" Spacing="20" Margin="30" VerticalAlignment="Center">
+                <Button Content="{Binding ChooseADestinationFolder}" 
+                        Click="OnOpenFolderTargetDialogClick" 
+                        Width="200" Height="40"/>
+                <TextBlock x:Name="SelectedFileTargetPath" 
+                           Text="{Binding NoFolderSelected}" 
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+
+        </Grid>
+    
+        <Button Classes="Large" Content="{Binding Add}" Click="Valide"></Button>
+    
+    </StackPanel>
+    
+
+</UserControl>

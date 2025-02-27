@@ -1,16 +1,12 @@
 ## Nouveautés de cette version
 
-- Fonctionnalités disponibles :
-    - Création de travail de sauvegarde de type COMPLETE
-    - Création de travail de sauvegarde de type DIFFERENTIELLE
-    - Limitation du nombre de travaux crées fixées à 5
-    - Afficher les travaux crées
-    - Quitter le programme
-    - Exécuter un ou plusieurs travaux (ex: 1;4, 1-4)
-    - Exécuter tout les travaux
-    - Fichier log de l'état d'avancement des travaux de sauvegarde et l'action en cours
-    - Fichier log journalier toutes les actions réalisées durant les sauvegardes
 
-- Guide d'utilisations et de spécifications
+- Fonctionnalités disponibles :
+    - Connexion et interaction entre utilisateurs : Possibilité de se connecter à d'autres utilisateurs et d'interagir avec leurs tâches via un serveur centralisé.  
+    - Gestion avancée des sauvegardes :
+        - Mettre en pause une sauvegarde en cours.
+        - Arrêter une sauvegarde à tout moment.
+        - Définir une taille maximale par fichier téléchargeable en parallèle.
+        - Ajouter une priorité de sauvegarde en fonction des extensions de fichiers.
 
 ---
