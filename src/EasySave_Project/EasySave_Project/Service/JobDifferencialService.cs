@@ -19,7 +19,7 @@ namespace EasySave_Project.Service
     /// </summary>
     public class JobDifferencialService : AJobStrategyService
     {
-        public event Action<double> OnProgressChanged;
+        //public event Action<double> OnProgressChanged;
         
         /// <summary>
         /// Executes the differential backup job for the given JobModel.

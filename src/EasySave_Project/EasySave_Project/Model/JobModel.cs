@@ -168,6 +168,8 @@ namespace EasySave_Project.Model
 
         public bool IsJobInPendingOrActive => SaveState == JobSaveStateEnum.PENDING || SaveState == JobSaveStateEnum.ACTIVE;
 
-        
+        public string CancelJobButton => TranslationService.GetInstance().GetText("CancelJobButton");
+        public string PendingJobButton => TranslationService.GetInstance().GetText("PendingJobButton");
+        public string ResumeJobButton => TranslationService.GetInstance().GetText("ResumeJobButton");
     }
 }
