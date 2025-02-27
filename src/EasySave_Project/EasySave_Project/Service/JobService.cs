@@ -151,7 +151,8 @@ namespace EasySave_Project.Service
             job.FileInPending.ProcessedSize = 0;
             job.FileInPending.TotalFiles = 0;
             job.FileInPending.TotalSize = 0;
-            progressCallback(job, 0);
+            if (progressCallback != null)
+                progressCallback(job, 0);
         }
 
         public void CanceljobInActif(JobModel job, Action<JobModel, double> progressCallback)
